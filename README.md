@@ -1,11 +1,11 @@
-<p align="center">
+<!-- <p align="center">
   <a>
     <img
       width="15%"
       src="https://github.com/SeekSaveServe/Easylink/blob/main/Assets/Easylink%20Logo%20Full.png"
     />
   </a>
-</p>
+</p> -->
 
 <!-- <div align="center">
   Made with 💙 using <br/><br/>
@@ -15,8 +15,8 @@
 </div> -->
 
 
-![-----------------------------------------------------------------](https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/water.png)
-
+<!-- ![-----------------------------------------------------------------](https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/water.png)
+ -->
 <div align="center">
   <img src="https://github.com/SeekSaveServe/Easylink/blob/main/Assets/EasyLink%20Poster%20Lift%20Off.png" width="480" height="720">
 </div>
