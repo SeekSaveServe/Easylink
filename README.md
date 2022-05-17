@@ -28,7 +28,7 @@
 | Proposal      | [Docs Link](https://docs.google.com/document/d/1i9sCMypnuhqIIi9esRn1u5517_oENjyscRTttlhFQLM/edit?usp=sharing) |
 | Poster       | [Poster Link](https://raw.githubusercontent.com/SeekSaveServe/Easylink/main/Assets/EasyLink%20Poster%20Lift%20Off.png) |
 | Video Overview | [Video Link](https://youtu.be/96NB5PJIMrk) |
-| Figma Prototype | [Video Link](https://tinyurl.com/Easylink-figma) |
+| Figma Prototype | [Figma Link](https://tinyurl.com/Easylink-figma) |
 <br/>
 
 <p>Developed by <a href="https://github.com/SeekSaveServe">Pei Cheng yi</a> & <a href="https://github.com/huzaifa1712">Huzaifa Raghav</a></p>
