@@ -7,15 +7,6 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
-:root {
-  --primary: #25B2EF;
-  --secondary: #F69E3F;
-  --bg: #F6F6F6;
-  --text-light: white;
-  --text-dark: black;
-  --bg-gray: #DEE2E6; /* for gray bg around project/user tag */
-}
-
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
