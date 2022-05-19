@@ -5,6 +5,10 @@
   --tag-grey: #DEE2E6; /* for Project/IG/ tag bg*/
 }
 
+* {
+  box-sizing: border-box;
+}
+
 
 body {
   margin: 0;
