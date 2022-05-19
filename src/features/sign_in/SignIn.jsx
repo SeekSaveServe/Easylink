@@ -1,33 +1,63 @@
-import React from "react";
+import { useState, React} from "react";
 import logo from '../../Assets/Easylink Logo Full.png';
+import './signIn.css';
 
 function SignIn() {
-    return (
-        <div>
-            <div className="left">
-                <img src={logo} alt="Logo" style={{width:"20%"}} />
+    const [formState, setFormState] = useState({email: "", password: ""});
+    const [msg, setMsg] = useState("Your Account");
 
-                <p> Sign into</p>
-                <p> Your Account </p>
+    function updateState(evt){
+        setFormState({
+            ...formState,
+            [evt.target.getAttribute('name')]: evt.target.value
+        });
+    }
+
+    function clearState() {
+        const newObj = {};
+        for (const key of Object.keys(formState)) {
+            newObj[key] = "";
+        }
+        setFormState(newObj);
+    }
+   
+    function handleSignIn(evt) {
+        setMsg(`Welcome, ${formState["email"]}`);
+        clearState();
+    }
+
+    return (
+        <div className="page">
+            <div className="left">
+                <img src={logo} alt="Logo" style={{width:"20%"}} className="App-logo"/>
+
+                <h1 className="sign_into"> Sign into</h1>
+                <h4 className="your_account"> {msg} </h4>
 
                 <form>
-                    <label for="email">Email</label>
-                    <input type="email" id="email" name="email"></input>
+                    <label htmlFor="email">Email</label>
+                    <input type="email" id="email" name="email" value={formState.email}
+                        onChange={updateState}
+                    ></input>
 
-                    <label for="password">Password</label>
-                    <input type="password" id="password" name="password"></input>
+                    <label htmlFor="password">Password</label>
+                    <input type="password" id="password" name="password" value={formState.password}
+                        onChange={updateState}
+                    ></input>
 
-                    <label for="remember-me">Remember Me</label>
-                    <input type="checkbox" id="remember-me" name="remember-me"></input>
+                    <div style={{marginBottom: "1rem"}}>
+                        <label htmlFor="remember-me">Remember Me</label>
+                        <input type="checkbox" id="remember-me" name="remember-me"></input>
+                    </div>
 
-                    <button type="button">Sign In</button>
+                    <button type="button" onClick={handleSignIn}>Sign In</button>
                 </form>
             </div>
             
             
             <div className="right">
-                <h1>Join us now!</h1>
-                <h1> Discover new opportuniites!</h1>
+                <h1 className="join">Join us now!</h1>
+                <h1 className="discover"> Discover new opportunities!</h1>
 
                 <button type="button">Sign Up</button>
             </div>
