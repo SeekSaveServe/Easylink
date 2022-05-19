@@ -29,8 +29,9 @@ function SignIn() {
     return (
         <div className="page">
             <div className="left">
-                <img src={logo} alt="Logo" style={{width:"20%"}} className="App-logo"/>
 
+                <img src={logo} alt="Logo" style={{width:"20%"}} className="logo"/>
+   
                 <h1 className="sign_into"> Sign into</h1>
                 <h4 className="your_account"> {msg} </h4>
 
