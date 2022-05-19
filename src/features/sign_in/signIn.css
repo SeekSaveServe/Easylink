@@ -11,7 +11,7 @@ img {
 
 .left {
     background-color: var(--bg-grey);
-    max-width: 60%;
+    width: 60%;
     min-height: 100vh;
     
     display: flex;
@@ -24,11 +24,20 @@ img {
     width: 40%;
     min-height: 100vh;
     text-align: center;
-    padding: 10rem;
+    padding-top:12rem;
+
+    display: flex;
+    flex-direction: column;
 }
 
 .right h1 {
     color: white;
+}
+
+.right * {
+    width: 80%;
+    margin: 2rem auto;
+    flex-shrink:0;
 }
 
 .join {

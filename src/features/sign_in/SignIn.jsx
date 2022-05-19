@@ -46,8 +46,8 @@ function SignIn() {
                     ></input>
 
                     <div style={{marginBottom: "1rem"}}>
-                        <label htmlFor="remember-me">Remember Me</label>
                         <input type="checkbox" id="remember-me" name="remember-me"></input>
+                        <label htmlFor="remember-me">Remember Me</label>
                     </div>
 
                     <button type="button" onClick={handleSignIn}>Sign In</button>
