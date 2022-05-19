@@ -1,9 +1,7 @@
 import React from "react";
-import logo from "./Assets/Easylink Logo Full.png";
-import { Form } from "./sign up/Form";
-import "./sign up/sign up.css";
-import "./sign up/HaveAccount";
-import { HaveAccount } from "./sign up/HaveAccount";
+import logo from "./../../Assets/Easylink Logo Full.png";
+import { Form } from "./Form";
+import { HaveAccount } from "./HaveAccount";
 
 function SignUp() {
   return (
