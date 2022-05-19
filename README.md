@@ -2,7 +2,7 @@
   <a>
     <img
       width="15%"
-      src="https://github.com/SeekSaveServe/Easylink/blob/main/Assets/Easylink%20Logo%20Full.png"
+      src="https://github.com/SeekSaveServe/Easylink/blob/main/src/Assets/EasyLink%20Poster%20Lift%20Off.png"
     />
   </a>
 </p> -->
