@@ -5,7 +5,7 @@ import "./sign up/sign up.css";
 import "./sign up/HaveAccount";
 import { HaveAccount } from "./sign up/HaveAccount";
 
-function App() {
+function SignUp() {
   return (
     <>
       <div className="App">
@@ -20,4 +20,4 @@ function App() {
   );
 }
 
-export default App;
+export default SignUp;
