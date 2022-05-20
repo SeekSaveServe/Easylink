@@ -2,7 +2,7 @@
   <a>
     <img
       width="15%"
-      src="https://raw.githubusercontent.com/SeekSaveServe/Easylink/main/.github/images/EasyLink Poster Lift Off.png"
+      src="https://raw.githubusercontent.com/SeekSaveServe/Easylink/main/src/Assets/Easylink%20Logo%20Full.png"
     />
   </a>
 </p> -->
@@ -18,7 +18,7 @@
 <!-- ![-----------------------------------------------------------------](https://raw.githubusercontent.com/andreasbm/readme/master/assets/lines/water.png)
  -->
 <div align="center">
-  <img src="https://github.com/SeekSaveServe/Easylink/blob/main/Assets/EasyLink%20Poster%20Lift%20Off.png" width="480" height="720">
+  <img src="https://raw.githubusercontent.com/SeekSaveServe/Easylink/main/.github/images/EasyLink%20Poster%20Lift%20Off.png" width="480" height="720">
 </div>
 
 <br/><br/>
