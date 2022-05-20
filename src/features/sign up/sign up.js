@@ -2,6 +2,7 @@ import React from "react";
 import logo from "./../../Assets/Easylink Logo Full.png";
 import { Form } from "./Form";
 import { HaveAccount } from "./HaveAccount";
+import "./sign up.css";
 
 function SignUp() {
   return (
