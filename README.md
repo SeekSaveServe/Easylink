@@ -2,7 +2,7 @@
   <a>
     <img
       width="15%"
-      src="[https://raw.githubusercontent.com/SeekSaveServe/Easylink/main/src/main/src/Assets/EasyLink%20Poster%20Lift%20Off.png](https://raw.githubusercontent.com/SeekSaveServe/Easylink/main/src/Assets/EasyLink%20Poster%20Lift%20Off.png)"
+      src="https://raw.githubusercontent.com/SeekSaveServe/Easylink/main/src/Assets/EasyLink%20Poster%20Lift%20Off.png"
     />
   </a>
 </p> -->
