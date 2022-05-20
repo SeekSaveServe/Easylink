@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Link } from "react-router-dom";
 
 export function HaveAccount() {
   // States for login button
@@ -29,10 +30,14 @@ export function HaveAccount() {
         {" "}
         <h1>Already Have an account?</h1>
       </div>
-      <button onClick={handleLoginButton} className="button" type="submit">
-        {" "}
-        Login{" "}
-      </button>
+
+      <Link to="/" style={{textDecoration:"none"}}>
+        <button onClick={handleLoginButton} className="button" type="submit"
+        >
+          {" "}
+          Login{" "}
+        </button>
+      </Link>
       <div className="messages">{showLogin()}</div>
     </div>
   );
