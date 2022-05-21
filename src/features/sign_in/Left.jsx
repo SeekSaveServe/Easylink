@@ -30,7 +30,7 @@ function Left({ logo, msg, formState, updateState, handleSignIn }) {
       <h1 className="sign_into"> Sign into</h1>
       <h4 className="your_account"> {msg} </h4>
 
-      <form onSubmit={handleLogin}>
+      <form>
         <label htmlFor="email">Email</label>
         <input
           type="email"
