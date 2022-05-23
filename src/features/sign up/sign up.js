@@ -3,11 +3,12 @@ import logo from "./../../Assets/Easylink Logo Full.png";
 import "./sign up.css";
 import Left from "./Left";
 import Right from "./Right";
+import styles from "./../components/left/Left.module.css";
 
 function SignUp() {
   return (
     <>
-      <div className="App">
+      <div className={styles.page}>
         <Left />
         <Right logo={logo} />
       </div>

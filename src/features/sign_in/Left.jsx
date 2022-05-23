@@ -1,6 +1,9 @@
 import { useState } from "react";
 import { React } from "react";
+import BasicButton from "../../components/BasicButton";
+import BasicTextField from "../../components/Basic Textfield";
 import { supabase } from "../../supabaseClient";
+import styles from "./../components/left/Left.module.css";
 
 function Left({ logo, msg, formState, updateState, handleSignIn }) {
   const [loading, setLoading] = useState(false); // awaiting authentication
@@ -9,7 +12,7 @@ function Left({ logo, msg, formState, updateState, handleSignIn }) {
 
     try {
       setLoading(true);
-      const { user, session, error } = await supabase.auth.signIn({
+      const { error } = await supabase.auth.signIn({
         email: formState.email,
         password: formState.password,
       });
@@ -24,39 +27,41 @@ function Left({ logo, msg, formState, updateState, handleSignIn }) {
   };
 
   return (
-    <div className="left">
-      <img src={logo} alt="Logo" style={{ width: "20%" }} className="logo" />
+    <div className={styles.left}>
+      <img src={logo} alt="Logo" className={styles.logo} />
 
-      <h1 className="sign_into"> Sign into</h1>
-      <h4 className="your_account"> {msg} </h4>
+      <h1 className={styles.firstMessage}> Sign into</h1>
+      <h4 className={styles.secondMessage}> {msg} </h4>
 
       <form>
         <label htmlFor="email">Email</label>
-        <input
-          type="email"
-          id="email"
+        <BasicTextField
           name="email"
+          type="email"
+          id="outlined-email-input"
+          size="small"
           value={formState.email}
           onChange={updateState}
-        ></input>
+        ></BasicTextField>
 
         <label htmlFor="password">Password</label>
-        <input
-          type="password"
-          id="password"
+        <BasicTextField
           name="password"
+          size="small"
+          type="password"
+          id="outlined-password-input"
           value={formState.password}
           onChange={updateState}
-        ></input>
+        ></BasicTextField>
 
         <div style={{ marginBottom: "1rem" }}>
           <input type="checkbox" id="remember-me" name="remember-me"></input>
           <label htmlFor="remember-me">Remember Me</label>
         </div>
 
-        <button type="button" onClick={handleLogin}>
-          Sign In
-        </button>
+        <BasicButton bg="secondary" onClick={handleLogin}>
+          Sign in
+        </BasicButton>
       </form>
     </div>
   );
