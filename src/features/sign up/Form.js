@@ -1,5 +1,8 @@
+import { StylesProvider } from "@chakra-ui/react";
+import { style } from "@mui/system";
 import { useState } from "react";
 import { supabase } from "../../supabaseClient";
+import styles from "./../components/left/Left.module.css";
 
 export function Form() {
   // States for registration
@@ -63,7 +66,7 @@ export function Form() {
   };
 
   return (
-    <div>
+    <div className={styles.Left}>
       <form onSubmit={handleSubmit}>
         <label>Username</label>
         <input

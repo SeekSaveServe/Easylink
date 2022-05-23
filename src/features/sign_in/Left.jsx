@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { React } from "react";
 import { supabase } from "../../supabaseClient";
-import { styles } from "./../components/left";
+import styles from "./../components/left/Left.module.css";
 
 function Left({ logo, msg, formState, updateState, handleSignIn }) {
   const [loading, setLoading] = useState(false); // awaiting authentication
@@ -10,7 +10,7 @@ function Left({ logo, msg, formState, updateState, handleSignIn }) {
 
     try {
       setLoading(true);
-      const { user, session, error } = await supabase.auth.signIn({
+      const { error } = await supabase.auth.signIn({
         email: formState.email,
         password: formState.password,
       });

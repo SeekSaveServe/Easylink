@@ -1,6 +1,6 @@
 import { React } from "react";
 import { Form } from "./Form";
-import { styles } from "./../components/left";
+import styles from "./../components/left/Left.module.css";
 
 function Right({ logo }) {
   return (

@@ -1,6 +1,6 @@
 import { React } from "react";
 import { Link } from "react-router-dom";
-import { styles } from "./../components/right";
+import styles from "./../components/right/Right.module.css";
 
 function Right() {
   return (
