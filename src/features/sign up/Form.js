@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { supabase } from "../../supabaseClient";
 
 export function Form() {
   // States for registration
@@ -10,6 +11,9 @@ export function Form() {
   // States for checking errors
   const [submitted, setSubmitted] = useState(false);
   const [error, setError] = useState(false);
+
+  // state for loading
+  const [loading, setLoading] = useState(false);
 
   // Handling name change
   const handleNameChange = (e) => {
@@ -36,7 +40,7 @@ export function Form() {
   };
 
   // Handling the form submission
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (
       userName === "" ||
@@ -49,6 +53,22 @@ export function Form() {
     } else {
       setSubmitted(true);
       setError(false);
+      // signing up
+      try {
+        setLoading(true);
+        const { error } = await supabase.auth.signUp({
+          email: email,
+          password: password,
+        });
+
+        if (error) throw error;
+        // console.log(user);
+        alert("Success!");
+      } catch (error) {
+        alert(error.error_description || error.message);
+      } finally {
+        setLoading(false);
+      }
     }
   };
 
@@ -61,7 +81,7 @@ export function Form() {
           display: submitted ? "" : "none",
         }}
       >
-        <h1> Hi {userName}, </h1>
+        <h1> Hi {userName}! </h1>
       </div>
     );
   };
@@ -86,7 +106,7 @@ export function Form() {
         {errorMessage()}
         {successMessage()}
       </div>
-      <form>
+      <form onSubmit={handleSubmit}>
         <label className="label">Username</label>
         <input
           onChange={handleNameChange}
@@ -119,10 +139,7 @@ export function Form() {
           type="password"
         />
 
-        <button onClick={handleSubmit} className="button" type="submit">
-          {" "}
-          Create Account{" "}
-        </button>
+        <button className="button"> Create Account </button>
       </form>
     </div>
   );
