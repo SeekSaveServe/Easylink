@@ -16,3 +16,8 @@
 .secondMessage {
   font-size: 3.5rem;
 }
+
+.page {
+  line-height: 1.2;
+  display: flex;
+}

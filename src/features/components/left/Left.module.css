@@ -27,3 +27,8 @@
   font-weight: bold;
   margin: 0;
 }
+
+.page {
+  line-height: 1.2;
+  display: flex;
+}
