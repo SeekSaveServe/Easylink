@@ -34,7 +34,6 @@ function Left({ logo, msg, formState, updateState, handleSignIn }) {
       <h4 className={styles.secondMessage}> {msg} </h4>
 
       <form>
-        <label htmlFor="email">Email</label>
         <BasicTextField
           margin="normal"
           label="Password"
