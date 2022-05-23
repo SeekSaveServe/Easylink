@@ -3,8 +3,6 @@ import logo from "../../Assets/Easylink Logo Full.png";
 import "./signIn.css";
 import Left from "./Left";
 import Right from "./Right";
-import { StylesProvider } from "@chakra-ui/react";
-import { style } from "@mui/system";
 import styles from "./../components/left/Left.module.css";
 
 function SignIn() {

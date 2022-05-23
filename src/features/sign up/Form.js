@@ -1,5 +1,4 @@
-import { StylesProvider } from "@chakra-ui/react";
-import { style } from "@mui/system";
+import BasicTextField from "../../components/Basic Textfield";
 import { useState } from "react";
 import { supabase } from "../../supabaseClient";
 import BasicButton from "../../components/BasicButton";
@@ -70,7 +69,8 @@ export function Form() {
     <div className={styles.Left}>
       <form onSubmit={handleSubmit}>
         <label>Username</label>
-        <input
+        <BasicTextField
+          size="small"
           onChange={handleNameChange}
           className="input"
           value={userName}
@@ -78,7 +78,8 @@ export function Form() {
         />
 
         <label htmlFor="email">Email</label>
-        <input
+        <BasicTextField
+          size="small"
           onChange={handleEmailChange}
           className="input"
           value={email}
@@ -86,23 +87,24 @@ export function Form() {
         />
 
         <label htmlFor="password">Password</label>
-        <input
+        <BasicTextField
+          size="small"
           onChange={handlePasswordChange}
           value={password}
           type="password"
         />
 
         <label htmlFor="password">Confirm Password</label>
-        <input
+        <BasicTextField
+          size="small"
           onChange={handleConfirmPasswordChage}
           className="input"
           value={confirmPassword}
           type="password"
+          margin="normal"
         />
 
-        <BasicButton bg="secondary">
-          Create Account
-        </BasicButton>
+        <BasicButton bg="secondary">Create Account</BasicButton>
       </form>
     </div>
   );

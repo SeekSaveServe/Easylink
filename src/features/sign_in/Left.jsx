@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { React } from "react";
 import BasicButton from "../../components/BasicButton";
+import BasicTextField from "../../components/Basic Textfield";
 import { supabase } from "../../supabaseClient";
 import styles from "./../components/left/Left.module.css";
 
@@ -34,22 +35,24 @@ function Left({ logo, msg, formState, updateState, handleSignIn }) {
 
       <form>
         <label htmlFor="email">Email</label>
-        <input
-          type="email"
-          id="email"
+        <BasicTextField
           name="email"
+          type="email"
+          id="outlined-email-input"
+          size="small"
           value={formState.email}
           onChange={updateState}
-        ></input>
+        ></BasicTextField>
 
         <label htmlFor="password">Password</label>
-        <input
-          type="password"
-          id="password"
+        <BasicTextField
           name="password"
+          size="small"
+          type="password"
+          id="outlined-password-input"
           value={formState.password}
           onChange={updateState}
-        ></input>
+        ></BasicTextField>
 
         <div style={{ marginBottom: "1rem" }}>
           <input type="checkbox" id="remember-me" name="remember-me"></input>
