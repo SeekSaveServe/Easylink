@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { React } from "react";
+import BasicButton from "../../components/BasicButton";
 import { supabase } from "../../supabaseClient";
 import styles from "./../components/left/Left.module.css";
 
@@ -55,9 +56,9 @@ function Left({ logo, msg, formState, updateState, handleSignIn }) {
           <label htmlFor="remember-me">Remember Me</label>
         </div>
 
-        {/* <button type="button" onClick={handleLogin}>
-          Sign In
-        </button> */}
+        <BasicButton bg="secondary" onClick={handleLogin}>
+          Sign in
+        </BasicButton>
       </form>
     </div>
   );

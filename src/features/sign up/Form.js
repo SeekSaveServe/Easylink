@@ -2,6 +2,7 @@ import { StylesProvider } from "@chakra-ui/react";
 import { style } from "@mui/system";
 import { useState } from "react";
 import { supabase } from "../../supabaseClient";
+import BasicButton from "../../components/BasicButton";
 import styles from "./../components/left/Left.module.css";
 
 export function Form() {
@@ -99,7 +100,9 @@ export function Form() {
           type="password"
         />
 
-        <button className="button"> Create Account </button>
+        <BasicButton bg="secondary">
+          Create Account
+        </BasicButton>
       </form>
     </div>
   );
