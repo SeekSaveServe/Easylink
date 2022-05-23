@@ -55,9 +55,9 @@ function Left({ logo, msg, formState, updateState, handleSignIn }) {
           <label htmlFor="remember-me">Remember Me</label>
         </div>
 
-        <button type="button" onClick={handleLogin}>
+        {/* <button type="button" onClick={handleLogin}>
           Sign In
-        </button>
+        </button> */}
       </form>
     </div>
   );
