@@ -36,6 +36,8 @@ function Left({ logo, msg, formState, updateState, handleSignIn }) {
       <form>
         <label htmlFor="email">Email</label>
         <BasicTextField
+          margin="normal"
+          label="Password"
           name="email"
           type="email"
           id="outlined-email-input"
@@ -44,8 +46,9 @@ function Left({ logo, msg, formState, updateState, handleSignIn }) {
           onChange={updateState}
         ></BasicTextField>
 
-        <label htmlFor="password">Password</label>
         <BasicTextField
+          margin="normal"
+          label="Password"
           name="password"
           size="small"
           type="password"

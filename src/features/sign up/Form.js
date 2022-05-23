@@ -68,37 +68,38 @@ export function Form() {
   return (
     <div className={styles.Left}>
       <form onSubmit={handleSubmit}>
-        <label>Username</label>
         <BasicTextField
+          label="Username"
           size="small"
           onChange={handleNameChange}
           className="input"
           value={userName}
           type="text"
+          margin="normal"
         />
 
-        <label htmlFor="email">Email</label>
         <BasicTextField
+          label="Email"
           size="small"
           onChange={handleEmailChange}
-          className="input"
           value={email}
           type="email"
+          margin="normal"
         />
 
-        <label htmlFor="password">Password</label>
         <BasicTextField
+          label="Password"
           size="small"
           onChange={handlePasswordChange}
           value={password}
           type="password"
+          margin="normal"
         />
 
-        <label htmlFor="password">Confirm Password</label>
         <BasicTextField
+          label="Confrim Password"
           size="small"
           onChange={handleConfirmPasswordChage}
-          className="input"
           value={confirmPassword}
           type="password"
           margin="normal"
