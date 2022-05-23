@@ -9,6 +9,17 @@
   flex-direction: column;
 }
 
+.right h1 {
+  color: white;
+}
+
+.right * {
+  width: 80%;
+  margin: 2rem auto;
+  flex-shrink: 0;
+}
+
+
 .message {
   font-size: 4rem;
 }

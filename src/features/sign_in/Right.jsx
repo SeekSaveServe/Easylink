@@ -9,7 +9,7 @@ function Right() {
       <h1 className={styles.secondMessage}> Discover new opportunities!</h1>
 
       <Link to="/signup">
-        <button className="button" type="button">
+        <button type="button">
           Sign Up
         </button>
       </Link>
