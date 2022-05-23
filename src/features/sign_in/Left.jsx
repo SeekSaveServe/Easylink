@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { React } from "react";
 import { supabase } from "../../supabaseClient";
+import { styles } from "./../components/left";
 
 function Left({ logo, msg, formState, updateState, handleSignIn }) {
   const [loading, setLoading] = useState(false); // awaiting authentication
@@ -24,11 +25,11 @@ function Left({ logo, msg, formState, updateState, handleSignIn }) {
   };
 
   return (
-    <div className="left">
-      <img src={logo} alt="Logo" style={{ width: "20%" }} className="logo" />
+    <div className={styles.left}>
+      <img src={logo} alt="Logo" className={styles.logo} />
 
-      <h1 className="sign_into"> Sign into</h1>
-      <h4 className="your_account"> {msg} </h4>
+      <h1 className={styles.firstMessage}> Sign into</h1>
+      <h4 className={styles.secondMessage}> {msg} </h4>
 
       <form>
         <label htmlFor="email">Email</label>

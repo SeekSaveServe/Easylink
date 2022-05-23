@@ -1,17 +1,20 @@
-import { React } from 'react';
-import { Link } from 'react-router-dom';
+import { React } from "react";
+import { Link } from "react-router-dom";
+import { styles } from "./../components/right";
 
 function Right() {
-    return (
-        <div className="right">
-            <h1 className="join">Join us now!</h1>
-            <h1 className="discover"> Discover new opportunities!</h1>
+  return (
+    <div className={styles.right}>
+      <h1 className={styles.message}>Join us now!</h1>
+      <h1 className={styles.secondMessage}> Discover new opportunities!</h1>
 
-            <Link to="/signup">
-                <button type="button">Sign Up</button>
-            </Link>
-        </div>
-    )
+      <Link to="/signup">
+        <button className="button" type="button">
+          Sign Up
+        </button>
+      </Link>
+    </div>
+  );
 }
 
 export default Right;

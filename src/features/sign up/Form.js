@@ -8,35 +8,27 @@ export function Form() {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
 
-  // States for checking errors
-  const [submitted, setSubmitted] = useState(false);
-  const [error, setError] = useState(false);
-
   // state for loading
   const [loading, setLoading] = useState(false);
 
   // Handling name change
   const handleNameChange = (e) => {
     setUserName(e.target.value);
-    setSubmitted(false);
   };
 
   // Handling email change
   const handleEmailChange = (e) => {
     setEmail(e.target.value);
-    setSubmitted(false);
   };
 
   // Handling password change
   const handlePasswordChange = (e) => {
     setPassword(e.target.value);
-    setSubmitted(false);
   };
 
   // Handling confirm password change
   const handleConfirmPasswordChage = (e) => {
     setConfirmPassword(e.target.value);
-    setSubmitted(false);
   };
 
   // Handling the form submission
@@ -49,10 +41,8 @@ export function Form() {
       confirmPassword === "" ||
       !(confirmPassword === password)
     ) {
-      setError(true);
+      alert("Please fill in all fields!");
     } else {
-      setSubmitted(true);
-      setError(false);
       // signing up
       try {
         setLoading(true);
@@ -72,42 +62,10 @@ export function Form() {
     }
   };
 
-  // Show success message
-  const successMessage = () => {
-    return (
-      <div
-        className="successMessage"
-        style={{
-          display: submitted ? "" : "none",
-        }}
-      >
-        <h1> Hi {userName}! </h1>
-      </div>
-    );
-  };
-
-  // Show error message
-  const errorMessage = () => {
-    return (
-      <div
-        className="errorMessage"
-        style={{
-          display: error ? "" : "none",
-        }}
-      >
-        <h1> Please enter all fields</h1>
-      </div>
-    );
-  };
-
   return (
-    <div className="form">
-      <div className="messages">
-        {errorMessage()}
-        {successMessage()}
-      </div>
+    <div>
       <form onSubmit={handleSubmit}>
-        <label className="label">Username</label>
+        <label>Username</label>
         <input
           onChange={handleNameChange}
           className="input"
@@ -115,7 +73,7 @@ export function Form() {
           type="text"
         />
 
-        <label className="label">Email</label>
+        <label htmlFor="email">Email</label>
         <input
           onChange={handleEmailChange}
           className="input"
@@ -123,15 +81,14 @@ export function Form() {
           type="email"
         />
 
-        <label className="label">Password</label>
+        <label htmlFor="password">Password</label>
         <input
           onChange={handlePasswordChange}
-          className="input"
           value={password}
           type="password"
         />
 
-        <label className="label">Confirm Password</label>
+        <label htmlFor="password">Confirm Password</label>
         <input
           onChange={handleConfirmPasswordChage}
           className="input"
