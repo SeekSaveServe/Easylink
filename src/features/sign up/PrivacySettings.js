@@ -57,35 +57,36 @@ function PrivacySettings() {
   const [loading, setLoading] = useState(false);
   let navigate = useNavigate();
   // selectors
-  const email = useSelector((state) => state.email);
-  const password = useSelector((state) => state.password);
-  const userName = useSelector((state) => state.userName);
-  const telegram = useSelector((state) => state.telegram);
-  const tags = useSelector((state) => state.tags);
+  const email = useSelector((state) => state.user.email);
+  const password = useSelector((state) => state.user.password);
+  const userName = useSelector((state) => state.user.username);
+  const telegram = useSelector((state) => state.user.telegram);
+  const tags = useSelector((state) => state.user.tags);
 
   async function handleSubmit(e) {
     e.preventDefault();
-    console.log("PASSWORD:");
-    console.log(password);
     // signing up
     try {
       setLoading(true);
       // 1. Creates account
-      const { user, error } = supabase.auth.signUp({
+      const { user, error } = await supabase.auth.signUp({
         email: email,
         password: password,
       });
       if (error) throw error;
     } catch (error) {
       alert(error.error_description || error.message);
+      return;
     }
+    const user = supabase.auth.user();
+
     // 2. Update user information
     try {
       console.log("USER:");
-      console.log(supabase.auth.user());
-      const { error } = supabase.from("users").insert([
+      console.log(user);
+      const { error } = await supabase.from("users").insert([
         {
-          id: supabase.auth.uid(),
+          id: user.id,
           username: userName,
           avatar_url: "www.google.com",
           email: email,
@@ -95,28 +96,29 @@ function PrivacySettings() {
       if (error) throw error;
     } catch (error) {
       alert(error.error_description || error.message);
+      return;
     }
     // 3. Update interest, skills, and communities table
-    const arr = ["user_intrests", "user_skills", "user_communities"];
+    const arr = ["user_skills", "user_interests", "user_communities"];
     for (let i = 0; i < 3; i++) {
       for (let j = 0; j < tags[i].length; j++) {
         try {
-          const [error] = supabase.from(arr[i]).insert([
+          const { error } = await supabase.from(arr[i]).insert([
             {
-              uid: supabase.auth.uid(),
+              uid: user.id,
               name: tags[i][j],
             },
           ]);
-        } catch {
-        } finally {
-          alert("success!");
-          setLoading(false);
+          if (error) throw error;
+        } catch (error) {
+          alert(error.error_description || error.message);
+          return;
         }
       }
     }
-    // console.log(user);
-    alert("Success!");
-    navigate("/feed", { replace: true });
+    // Add a check for error or smth
+    // alert("Success!");
+    // navigate("/feed", { replace: true });
   }
   return (
     <div

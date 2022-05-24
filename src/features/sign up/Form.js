@@ -6,13 +6,13 @@ import styles from "./../components/left/Left.module.css";
 import { Link, useNavigate } from "react-router-dom";
 import { PersonOutline, Email, LockOutlined } from "@mui/icons-material";
 
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector, useDispatch } from "react-redux";
 import { update } from "../user/userSlice";
 
 export function Form() {
   // States for registration
   const dispatch = useDispatch();
- 
+
   const [userName, setUserName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -50,11 +50,10 @@ export function Form() {
       email === "" ||
       password === "" ||
       confirmPassword === "" ||
-      !(confirmPassword === password)
+      !(confirmPassword === password) // TODO: Make unique alert for this
     ) {
       alert("Please fill in all fields!");
     } else {
-
       // signing up
       try {
         setLoading(true);
@@ -67,7 +66,7 @@ export function Form() {
         // // console.log(user);
         // alert("Success!");
         navigate("/Registration_Tags", { replace: true });
-        dispatch(update({username: userName, email, password}))
+        dispatch(update({ username: userName, email, password }));
       } catch (error) {
         alert(error.error_description || error.message);
       } finally {
@@ -86,7 +85,7 @@ export function Form() {
           value={userName}
           type="text"
           margin="normal"
-          icon={<PersonOutline/>}
+          icon={<PersonOutline />}
         />
 
         <BasicTextField
@@ -95,7 +94,7 @@ export function Form() {
           value={email}
           type="email"
           margin="normal"
-          icon={<Email/>}
+          icon={<Email />}
         />
 
         <BasicTextField
@@ -104,7 +103,7 @@ export function Form() {
           value={password}
           type="password"
           margin="normal"
-          icon={<LockOutlined/>}
+          icon={<LockOutlined />}
         />
 
         <BasicTextField
@@ -113,9 +112,12 @@ export function Form() {
           value={confirmPassword}
           type="password"
           margin="normal"
-          icon={<LockOutlined/>}
+          icon={<LockOutlined />}
         />
-        <Link to="/Registration_Tags " style={{ textDecoration: "none", marginTop:10 }}>
+        <Link
+          to="/Registration_Tags "
+          style={{ textDecoration: "none", marginTop: 10 }}
+        >
           <BasicButton bg="secondary" onClick={handleSubmit}>
             Create Account
           </BasicButton>
