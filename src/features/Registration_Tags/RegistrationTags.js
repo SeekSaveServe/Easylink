@@ -1,3 +1,4 @@
+import { Box } from "@mui/system";
 import { useState } from "react";
 import { React } from "react";
 import { Link } from "react-router-dom";
@@ -5,6 +6,7 @@ import BasicTextfield from "../../components/Basic Textfield";
 import BasicAvatar from "../../components/BasicAvatar/BasicAvatar";
 import BasicButton from "../../components/BasicButton";
 import Checkmarks from "../../components/Checkmarks";
+
 import { supabase } from "../../supabaseClient";
 import styles from "./Registration.module.css";
 import { useNavigate } from "react-router-dom";
@@ -53,10 +55,12 @@ export default function RegistrationTags() {
   return (
     <div className={styles.centre}>
       <form>
-        <BasicAvatar
-          sx={{ width: 66, height: 66 }}
-          className={styles.avatar}
-        ></BasicAvatar>
+        <Box className={styles.avatar}>
+          <BasicAvatar
+            sx={{ width: 66, height: 66 }}
+            // className={styles.avatar}
+          ></BasicAvatar>
+        </Box>
         <h6 className={styles.firstMessage}> Upload your profile picture</h6>
         <Checkmarks
           newTags={skills}
