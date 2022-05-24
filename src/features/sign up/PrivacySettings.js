@@ -54,10 +54,10 @@ function PrivacySettings() {
                         <Typography variant="h5" color="black">How would you like to be contacted by linked users?</Typography>
                     </FormLabel>
 
-                    <RadioGroup row value={contact} onChange={radioChange}>    
-                        <RadioWithLabel label="Only after linking"/>
-                        <RadioWithLabel label="Everyone"/>
-                    </RadioGroup>
+                    <FormGroup row>
+                        <CheckboxWithLabel label="Telegram" name="telegram" value={visibility.telegram} onChange={visChange}/>
+                        <CheckboxWithLabel label="Email" name="email" value={visibility.email} onChange={visChange}/>
+                    </FormGroup>
                 </Box>
                 
                 <Box mt={6} sx={{display: "flex", flexDirection: "column", alignItems: "center"}}>
@@ -65,10 +65,12 @@ function PrivacySettings() {
                         <Typography variant="h5" color="black">Contact details visibility:</Typography>
                     </FormLabel>
 
-                    <FormGroup row>
-                        <CheckboxWithLabel label="Telegram" name="telegram" value={visibility.telegram} onChange={visChange}/>
-                        <CheckboxWithLabel label="Email" name="email" value={visibility.email} onChange={visChange}/>
-                    </FormGroup>
+
+                    <RadioGroup row value={contact} onChange={radioChange}>    
+                        <RadioWithLabel label="Only after linking"/>
+                        <RadioWithLabel label="Everyone"/>
+                    </RadioGroup>
+
                 </Box>
 
                 <BasicButton bg="primary" sx={{width: "50%", mt: 2}} >Start Linking!</BasicButton>
