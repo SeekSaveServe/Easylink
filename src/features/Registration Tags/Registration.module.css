@@ -2,7 +2,7 @@
   background-color: var(--bg-grey);
   min-height: 00vh;
   align-items: center;
-  justify-conent: center;
+  justify-content: center;
   display: flex;
   padding: 5rem 6rem;
   line-height: 1.2;
@@ -30,6 +30,7 @@
 }
 
 .avatar {
-  justifycontent: "center";
-  display: "flex";
+  display: flex;
+  justify-content: center;
+  width: 100%;
 }
