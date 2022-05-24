@@ -4,6 +4,7 @@ import BasicButton from "../../components/BasicButton";
 import BasicTextField from "../../components/Basic Textfield";
 import { supabase } from "../../supabaseClient";
 import styles from "./../components/left/Left.module.css";
+import { FormGroup, FormControlLabel, Checkbox } from "@mui/material";
 
 function Left({ logo, msg, formState, updateState, handleSignIn }) {
   const [loading, setLoading] = useState(false); // awaiting authentication
@@ -36,7 +37,7 @@ function Left({ logo, msg, formState, updateState, handleSignIn }) {
       <form>
         <BasicTextField
           margin="normal"
-          label="Password"
+          label="Email"
           name="email"
           type="email"
           id="outlined-email-input"
@@ -55,11 +56,15 @@ function Left({ logo, msg, formState, updateState, handleSignIn }) {
           value={formState.password}
           onChange={updateState}
         ></BasicTextField>
-
+{/* 
         <div style={{ marginBottom: "1rem" }}>
           <input type="checkbox" id="remember-me" name="remember-me"></input>
           <label htmlFor="remember-me">Remember Me</label>
-        </div>
+        </div> */}
+
+        <FormGroup>
+          <FormControlLabel control={<Checkbox />} label="Remember Me"></FormControlLabel>
+        </FormGroup>
 
         <BasicButton bg="secondary" onClick={handleLogin}>
           Sign in

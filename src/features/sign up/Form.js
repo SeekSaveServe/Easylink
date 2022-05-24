@@ -100,7 +100,7 @@ export function Form() {
         />
 
         <BasicTextField
-          label="Confrim Password"
+          label="Confirm Password"
           size="small"
           onChange={handleConfirmPasswordChage}
           value={confirmPassword}
