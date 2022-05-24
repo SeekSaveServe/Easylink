@@ -3,6 +3,7 @@ import { useState } from "react";
 import { supabase } from "../../supabaseClient";
 import BasicButton from "../../components/BasicButton";
 import styles from "./../components/left/Left.module.css";
+import { Link, useNavigate } from "react-router-dom";
 
 export function Form() {
   // States for registration
@@ -35,7 +36,8 @@ export function Form() {
   };
 
   // Handling the form submission
-  const handleSubmit = async (e) => {
+  let navigate = useNavigate();
+  async function handleSubmit(e) {
     e.preventDefault();
     if (
       userName === "" ||
@@ -57,13 +59,14 @@ export function Form() {
         if (error) throw error;
         // console.log(user);
         alert("Success!");
+        navigate("/Registration_Tags", { replace: true });
       } catch (error) {
         alert(error.error_description || error.message);
       } finally {
         setLoading(false);
       }
     }
-  };
+  }
 
   return (
     <div className={styles.Left}>
@@ -104,10 +107,11 @@ export function Form() {
           type="password"
           margin="normal"
         />
-
-        <BasicButton bg="secondary" onClick={handleSubmit}>
-          Create Account
-        </BasicButton>
+        <Link to="/Registration_Tags " style={{ textDecoration: "none" }}>
+          <BasicButton bg="secondary" onClick={handleSubmit}>
+            Create Account
+          </BasicButton>
+        </Link>
       </form>
     </div>
   );

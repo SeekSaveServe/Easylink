@@ -1,11 +1,13 @@
 import { useState } from "react";
 import { React } from "react";
+import { Link } from "react-router-dom";
 import BasicTextfield from "../../components/Basic Textfield";
 import BasicAvatar from "../../components/BasicAvatar/BasicAvatar";
 import BasicButton from "../../components/BasicButton";
 import Checkmarks from "../../components/Checkmarks";
 import { supabase } from "../../supabaseClient";
 import styles from "./Registration.module.css";
+import { useNavigate } from "react-router-dom";
 
 export default function RegistrationTags() {
   const [loading, setLoading] = useState(false);
@@ -20,15 +22,18 @@ export default function RegistrationTags() {
   const skills = ["Art", "History", "Java"]; // this should be retrieving tags from the DB ideally
   const interests = ["Art", "History", "Java"]; // this should be retrieving tags from the DB ideally
   const communities = ["NUS", "SOC", "USP", "Tembusu", "CAPT", "RC4", "RVRC"]; // this should be retrieving tags from the DB ideally
+  let navigate = useNavigate();
 
   // Updates telegram display
   const handleTelegramChange = (e) => {
     setTelegram(e.target.value);
   };
-  const handleSubmit = async (e) => {
+
+  async function handleSubmit(e) {
     e.preventDefault();
     console.log(selectedCommunities);
     console.log(telegram);
+    navigate("/privacy", { replace: true });
     //     try {
     //       setLoading(true);
     //       const { error } = await supabase.auth.signIn({
@@ -43,7 +48,7 @@ export default function RegistrationTags() {
     //     } finally {
     //       setLoading(false);
     //     }
-  };
+  }
 
   return (
     <div className={styles.centre}>
@@ -80,9 +85,11 @@ export default function RegistrationTags() {
           onChange={handleTelegramChange}
           sx={{ m: 1 }}
         />
-        <BasicButton bg="secondary" onClick={handleSubmit}>
-          Next
-        </BasicButton>
+        <Link to="/privacy " style={{ textDecoration: "none" }}>
+          <BasicButton bg="secondary" onClick={handleSubmit}>
+            Next
+          </BasicButton>
+        </Link>
       </form>
     </div>
   );
