@@ -47,7 +47,7 @@ export default function Checkmarks({
           multiple
           value={selectedTags}
           onChange={handleChange}
-          input={<OutlinedInput label="Tag" />}
+          input={<OutlinedInput label={label} />}
           renderValue={(selected) => selected.join(", ")}
           MenuProps={MenuProps}
         >

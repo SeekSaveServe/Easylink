@@ -1,6 +1,6 @@
 .centre {
   background-color: var(--bg-grey);
-  min-height: 00vh;
+  min-height: 100vh;
   align-items: center;
   justify-content: center;
   display: flex;
@@ -34,5 +34,5 @@
   justify-content: center;
   width: 100%;
   align-items: center;
-  flexdirection: column;
+  flex-direction: column;
 }
