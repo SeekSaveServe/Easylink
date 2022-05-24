@@ -116,7 +116,10 @@ function PrivacySettings() {
         }
       }
     }
-    // Add a check for error or smth
+    // TODO: Add a check for error or smth
+    // TODO: Unique communities categories
+    // TODO: Get the unique communities/skills/etc from db
+    // TODO: Loading
     // alert("Success!");
     // navigate("/feed", { replace: true });
   }
