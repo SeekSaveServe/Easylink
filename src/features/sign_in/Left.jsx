@@ -5,6 +5,8 @@ import BasicTextField from "../../components/Basic Textfield";
 import { supabase } from "../../supabaseClient";
 import styles from "./../components/left/Left.module.css";
 import { FormGroup, FormControlLabel, Checkbox } from "@mui/material";
+import { Email, LockOutlined } from "@mui/icons-material";
+
 
 function Left({ logo, msg, formState, updateState, handleSignIn }) {
   const [loading, setLoading] = useState(false); // awaiting authentication
@@ -41,20 +43,20 @@ function Left({ logo, msg, formState, updateState, handleSignIn }) {
           name="email"
           type="email"
           id="outlined-email-input"
-          size="small"
           value={formState.email}
           onChange={updateState}
+          icon={<Email/>}
         ></BasicTextField>
 
         <BasicTextField
           margin="normal"
           label="Password"
           name="password"
-          size="small"
           type="password"
           id="outlined-password-input"
           value={formState.password}
           onChange={updateState}
+          icon={<LockOutlined/>}
         ></BasicTextField>
 {/* 
         <div style={{ marginBottom: "1rem" }}>

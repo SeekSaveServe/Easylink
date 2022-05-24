@@ -10,6 +10,7 @@ import Checkmarks from "../../components/Checkmarks";
 import { supabase } from "../../supabaseClient";
 import styles from "./Registration.module.css";
 import { useNavigate } from "react-router-dom";
+import { Telegram } from "@mui/icons-material";
 
 export default function RegistrationTags() {
   const [loading, setLoading] = useState(false);
@@ -84,10 +85,10 @@ export default function RegistrationTags() {
         <BasicTextfield
           label="Telegram"
           margin="normal"
-          size="small"
           value={telegram}
           onChange={handleTelegramChange}
           sx={{ m: 1 }}
+          icon={<Telegram />}
         />
         <Link to="/privacy " style={{ textDecoration: "none" }}>
           <BasicButton bg="secondary" onClick={handleSubmit}>

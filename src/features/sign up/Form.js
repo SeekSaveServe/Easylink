@@ -4,6 +4,7 @@ import { supabase } from "../../supabaseClient";
 import BasicButton from "../../components/BasicButton";
 import styles from "./../components/left/Left.module.css";
 import { Link, useNavigate } from "react-router-dom";
+import { PersonOutline, Email, LockOutlined } from "@mui/icons-material";
 
 export function Form() {
   // States for registration
@@ -73,41 +74,41 @@ export function Form() {
       <form>
         <BasicTextField
           label="Username"
-          size="small"
           onChange={handleNameChange}
           className="input"
           value={userName}
           type="text"
           margin="normal"
+          icon={<PersonOutline/>}
         />
 
         <BasicTextField
           label="Email"
-          size="small"
           onChange={handleEmailChange}
           value={email}
           type="email"
           margin="normal"
+          icon={<Email/>}
         />
 
         <BasicTextField
           label="Password"
-          size="small"
           onChange={handlePasswordChange}
           value={password}
           type="password"
           margin="normal"
+          icon={<LockOutlined/>}
         />
 
         <BasicTextField
           label="Confirm Password"
-          size="small"
           onChange={handleConfirmPasswordChage}
           value={confirmPassword}
           type="password"
           margin="normal"
+          icon={<LockOutlined/>}
         />
-        <Link to="/Registration_Tags " style={{ textDecoration: "none" }}>
+        <Link to="/Registration_Tags " style={{ textDecoration: "none", marginTop:10 }}>
           <BasicButton bg="secondary" onClick={handleSubmit}>
             Create Account
           </BasicButton>
