@@ -55,8 +55,6 @@ export function Form() {
       alert("Please fill in all fields!");
     } else {
 
-      
-
       // signing up
       try {
         setLoading(true);
@@ -69,7 +67,7 @@ export function Form() {
         // // console.log(user);
         // alert("Success!");
         navigate("/Registration_Tags", { replace: true });
-        dispatch(update({userName, email, password}))
+        dispatch(update({username: userName, email, password}))
       } catch (error) {
         alert(error.error_description || error.message);
       } finally {
