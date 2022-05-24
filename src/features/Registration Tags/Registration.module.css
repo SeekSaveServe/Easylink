@@ -1,0 +1,28 @@
+.centre {
+  background-color: var(--bg-grey);
+  min-height: 00vh;
+
+  display: flex;
+  padding: 5rem 6rem;
+  line-height: 1.2;
+}
+
+.logo {
+  pointer-events: none;
+  width: 20%;
+}
+
+.firstMessage {
+  color: var(--primary);
+  font-size: 3rem;
+  font-weight: bold;
+  margin: 0;
+  margin-bottom: 0.2rem;
+}
+
+.secondMessage {
+  font-size: 1.5rem;
+  color: var(--secondary);
+  font-weight: bold;
+  margin: 0;
+}
