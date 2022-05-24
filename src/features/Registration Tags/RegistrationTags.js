@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { React } from "react";
 import BasicTextfield from "../../components/Basic Textfield";
+import BasicAvatar from "../../components/BasicAvatar/BasicAvatar";
 import BasicButton from "../../components/BasicButton";
 import Checkmarks from "../../components/Checkmarks";
 import { supabase } from "../../supabaseClient";
@@ -47,6 +48,10 @@ export default function RegistrationTags() {
   return (
     <div className={styles.centre}>
       <form>
+        <BasicAvatar
+          sx={{ width: 66, height: 66 }}
+          className={styles.avatar}
+        ></BasicAvatar>
         <h6 className={styles.firstMessage}> Upload your profile picture</h6>
         <Checkmarks
           newTags={skills}

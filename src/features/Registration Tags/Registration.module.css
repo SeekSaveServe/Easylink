@@ -1,10 +1,12 @@
 .centre {
   background-color: var(--bg-grey);
   min-height: 00vh;
-
+  align-items: center;
+  justify-conent: center;
   display: flex;
   padding: 5rem 6rem;
   line-height: 1.2;
+  text-align: center;
 }
 
 .logo {
@@ -25,4 +27,9 @@
   color: var(--secondary);
   font-weight: bold;
   margin: 0;
+}
+
+.avatar {
+  justifycontent: "center";
+  display: "flex";
 }
