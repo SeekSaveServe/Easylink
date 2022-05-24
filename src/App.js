@@ -5,7 +5,7 @@ import RegistrationTags from "./features/Registration_Tags/RegistrationTags";
 function App() {
   return (
     <div>
-      <RegistrationTags />
+      <SignIn />
     </div>
   );
 }
