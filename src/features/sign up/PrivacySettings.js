@@ -35,12 +35,9 @@ function PrivacySettings() {
 
     const visChange = (evt) => setVisibility({...visibility, [evt.target.name]: evt.target.checked})
 
-    
-
-    
-
     return (
-        <Container sx={{display: "flex", flexDirection: "column", alignItems: "center", marginTop: 4}}>
+        <div style={{height: "100vh", backgroundColor: "var(--bg-grey)", paddingTop: 40}}>
+        <Container sx={{display: "flex", flexDirection: "column", alignItems: "center", marginTop: 0}}>
             <Box sx={{display: "flex", width: "100%"}}>
                 <div style={{flex: 1}}><Person fontSize="large"/> </div>
                 <img src={logo} alt="Logo" style={{width: "200px"}} />
@@ -76,7 +73,8 @@ function PrivacySettings() {
 
                 <BasicButton bg="primary" sx={{width: "50%", mt: 2}} >Start Linking!</BasicButton>
             </Paper>
-        </Container>    
+        </Container>  
+        </div>  
     )
 }
 
