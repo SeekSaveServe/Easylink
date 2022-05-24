@@ -6,8 +6,13 @@ import styles from "./../components/left/Left.module.css";
 import { Link, useNavigate } from "react-router-dom";
 import { PersonOutline, Email, LockOutlined } from "@mui/icons-material";
 
+import { useSelector, useDispatch } from 'react-redux';
+import { update } from "../user/userSlice";
+
 export function Form() {
   // States for registration
+  const dispatch = useDispatch();
+ 
   const [userName, setUserName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -49,18 +54,22 @@ export function Form() {
     ) {
       alert("Please fill in all fields!");
     } else {
+
+      
+
       // signing up
       try {
         setLoading(true);
-        const { error } = await supabase.auth.signUp({
-          email: email,
-          password: password,
-        });
+        // const { error } = await supabase.auth.signUp({
+        //   email: email,
+        //   password: password,
+        // });
 
-        if (error) throw error;
-        // console.log(user);
-        alert("Success!");
+        // if (error) throw error;
+        // // console.log(user);
+        // alert("Success!");
         navigate("/Registration_Tags", { replace: true });
+        dispatch(update({userName, email, password}))
       } catch (error) {
         alert(error.error_description || error.message);
       } finally {
