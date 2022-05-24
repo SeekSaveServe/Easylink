@@ -8,12 +8,9 @@ export const userSlice = createSlice({
     reducers: {
         // action.payload should contain new values
         update: (state, action) => {
-            // state = {...state, ...action.payload};
             for (const [key, val] of Object.entries(action.payload)) {
                 state[key] = val
             }
-            // state['name'] = action.payload['name'];
-            console.log(state);
         }
     }
 })
