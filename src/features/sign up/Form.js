@@ -67,7 +67,7 @@ export function Form() {
 
   return (
     <div className={styles.Left}>
-      <form onSubmit={handleSubmit}>
+      <form>
         <BasicTextField
           label="Username"
           size="small"
@@ -105,7 +105,9 @@ export function Form() {
           margin="normal"
         />
 
-        <BasicButton bg="secondary">Create Account</BasicButton>
+        <BasicButton bg="secondary" onClick={handleSubmit}>
+          Create Account
+        </BasicButton>
       </form>
     </div>
   );
