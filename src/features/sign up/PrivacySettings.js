@@ -2,8 +2,11 @@ import { Person } from "@mui/icons-material";
 import { Paper, Typography, Checkbox, FormControlLabel, 
     FormControl, FormLabel, FormGroup, Radio, RadioGroup, Box, Container } from "@mui/material";
 import { useState } from "react";
+import { useDispatch } from "react-redux";
 import logo from "../../Assets/Easylink Logo Full.png";
 import BasicButton from "../../components/BasicButton";
+import { update } from "../user/userSlice";
+
 
 // rest is props for Checkbox, not FCL
 function CheckboxWithLabel({ label, ...rest }) {
@@ -15,25 +18,34 @@ function CheckboxWithLabel({ label, ...rest }) {
     );
 }
 
-function RadioWithLabel({ label, ...rest}) {
+function RadioWithLabel({ value, label, ...rest}) {
     return (
         <FormControlLabel
           label={label}
-          value={label}
+          value={value}
           control={<Radio {...rest}/>}
         />
     )
 }
 function PrivacySettings() {
-    const [contact, setContact] = useState("Only after linking");
-    const radioChange = (evt) => setContact(evt.target.value);
-
-    const [visibility, setVisibility] = useState({
-        telegram: false,
-        email: false
+    const dispatch = useDispatch();
+    const [contact, setContact] = useState({
+        telegram_visibility: "afterlink",
+        email_visibility: "afterlink"
     });
 
-    const visChange = (evt) => setVisibility({...visibility, [evt.target.name]: evt.target.checked})
+    // update field with key = name attribute, to value = value attribute
+    const radioChange = (evt) => {
+         setContact({
+             ...contact,
+             [evt.target.name]: evt.target.value 
+        } ); 
+    };
+
+
+    const startLinking = async () => {
+        dispatch(update(contact));
+    };
 
     return (
         <div style={{height: "100vh", backgroundColor: "var(--bg-grey)", paddingTop: 40}}>
@@ -51,29 +63,31 @@ function PrivacySettings() {
                 
                 <Box sx={{display: "flex", flexDirection: "column", alignItems: "center"}}>
                     <FormLabel>
-                        <Typography variant="h5" color="black">How would you like to be contacted by linked users?</Typography>
+                        <Typography variant="h5" color="black">Telegram visibility:</Typography>
                     </FormLabel>
 
-                    <FormGroup row>
-                        <CheckboxWithLabel label="Telegram" name="telegram" value={visibility.telegram} onChange={visChange}/>
-                        <CheckboxWithLabel label="Email" name="email" value={visibility.email} onChange={visChange}/>
-                    </FormGroup>
+
+                    <RadioGroup row value={contact.telegram_visibility} onChange={radioChange} name="telegram_visibility">    
+                        <RadioWithLabel value="afterlink" label="Only after linking"/>
+                        <RadioWithLabel value="everyone" label="Everyone"/>
+                    </RadioGroup>
                 </Box>
                 
+
                 <Box mt={6} sx={{display: "flex", flexDirection: "column", alignItems: "center"}}>
                     <FormLabel>
-                        <Typography variant="h5" color="black">Contact details visibility:</Typography>
+                        <Typography variant="h5" color="black">Email visibility:</Typography>
                     </FormLabel>
 
 
-                    <RadioGroup row value={contact} onChange={radioChange}>    
-                        <RadioWithLabel label="Only after linking"/>
-                        <RadioWithLabel label="Everyone"/>
+                    <RadioGroup row value={contact.email_visibility} onChange={radioChange} name="email_visibility">    
+                        <RadioWithLabel value="afterlink" label="Only after linking"/>
+                        <RadioWithLabel value="everyone" label="Everyone"/>
                     </RadioGroup>
 
                 </Box>
 
-                <BasicButton bg="primary" sx={{width: "50%", mt: 2}} >Start Linking!</BasicButton>
+                <BasicButton bg="primary" sx={{width: "50%", mt: 2}} onClick={startLinking} >Start Linking!</BasicButton>
             </Paper>
         </Container>  
         </div>  
