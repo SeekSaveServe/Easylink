@@ -25,18 +25,26 @@ export function BasicAlert({ message, severity, open, setOpen }) {
 }
 
 // Usage: 
-    // const { open, setOpen, severity, setSeverity, BasicAlert } = useBasicAlert(initialSeverity) at top of function
-    // in component: <BasicAlert open={open} setOpen={setOpen} severity={severity}/>
+    // const { showAlert, BasicAlert } = useBasicAlert(initialSeverity) at top of function
+    // in component: <BasicAlert /> somewhere
+    // showAlert(message, severity?) wherever needed
 // https://dev.to/droopytersen/new-react-hooks-pattern-return-a-component-31bh
 export function useBasicAlert(initialSeverity) {
     const [open, setOpen] = useState(false);
     const [severity, setSeverity] = useState(initialSeverity);
+    const [msg, setMsg] = useState("");
+
+    function showAlert(newMsg, newSeverity) {
+        setMsg(newMsg);
+        setOpen(true);
+        if (newSeverity) {
+            setSeverity(newSeverity);
+        }
+    }
     
     return {
-        open,
-        setOpen,
-        severity,
-        setSeverity,
-        BasicAlert
+        showAlert,
+        // a functional component is just a function returning a JSX element -> we can set props immediately
+        BasicAlert: () => <BasicAlert message={msg} severity={severity} open={open} setOpen={setOpen} />
     };
 }
