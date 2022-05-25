@@ -6,10 +6,16 @@ import { supabase } from "../../supabaseClient";
 import styles from "./../components/left/Left.module.css";
 import { FormGroup, FormControlLabel, Checkbox } from "@mui/material";
 import { Email, LockOutlined } from "@mui/icons-material";
+import useBasicAlert from "../../components/Alert";
+import { useAlertType } from "../../components/Alert/Alert";
+
 
 
 function Left({ logo, msg, formState, updateState, handleSignIn }) {
+    const { showAlert, BasicAlert } = useBasicAlert("error");
+
   const [loading, setLoading] = useState(false); // awaiting authentication
+  
   const handleLogin = async (e) => {
     e.preventDefault();
 
@@ -21,9 +27,10 @@ function Left({ logo, msg, formState, updateState, handleSignIn }) {
       });
 
       if (error) throw error;
-      alert("Successful!");
+      showAlert("Signed in!", "success");
     } catch (error) {
-      alert(error.error_description || error.message);
+      showAlert(error.error_description || error.message, "error");
+
     } finally {
       setLoading(false);
     }
@@ -58,11 +65,6 @@ function Left({ logo, msg, formState, updateState, handleSignIn }) {
           onChange={updateState}
           icon={<LockOutlined/>}
         ></BasicTextField>
-{/* 
-        <div style={{ marginBottom: "1rem" }}>
-          <input type="checkbox" id="remember-me" name="remember-me"></input>
-          <label htmlFor="remember-me">Remember Me</label>
-        </div> */}
 
         <FormGroup>
           <FormControlLabel control={<Checkbox />} label="Remember Me"></FormControlLabel>
@@ -71,6 +73,8 @@ function Left({ logo, msg, formState, updateState, handleSignIn }) {
         <BasicButton bg="secondary" onClick={handleLogin}>
           Sign in
         </BasicButton>
+
+        <BasicAlert />        
       </form>
     </div>
   );
