@@ -10,8 +10,6 @@ import { useSelector, useDispatch } from "react-redux";
 import { update } from "../user/userSlice";
 import useBasicAlert from "../../components/Alert";
 
-
-
 export function Form() {
   // States for registration
   const dispatch = useDispatch();
@@ -47,50 +45,49 @@ export function Form() {
 
   // Validate form fields + appropriate alerts
   // Return true if form valid else false
-  const validForm = async() => {
-      const haveBlank = [userName, email, password, confirmPassword].some((str) => str.trim() == "");
-      const passNotEqual = !(password == confirmPassword); // no reason to exclude spaces from passwords
-      const passNotMinLength = (password.length < 6); // assume check after password equal
+  const validForm = async () => {
+    const haveBlank = [userName, email, password, confirmPassword].some(
+      (str) => str.trim() == ""
+    );
+    const passNotEqual = !(password == confirmPassword); // no reason to exclude spaces from passwords
+    const passNotMinLength = password.length < 6; // assume check after password equal
 
-      if (haveBlank && passNotEqual) {
-          showAlert("Please fill in all fields and ensure passwords are the same");
-          return false;
-      }
+    if (haveBlank && passNotEqual) {
+      showAlert("Please fill in all fields and ensure passwords are the same");
+      return false;
+    }
 
-      if (haveBlank) {
-          showAlert("Please fill in all fields");
-          return false;
-      }
+    if (haveBlank) {
+      showAlert("Please fill in all fields");
+      return false;
+    }
 
-      if (passNotEqual) {
-          showAlert("Please ensure passwords are the same")
-          return false;
-      }
+    if (passNotEqual) {
+      showAlert("Please ensure passwords are the same");
+      return false;
+    }
 
-      if (passNotMinLength) {
-        showAlert("Password should be at least 6 characters");
-        return false;
-      }
+    if (passNotMinLength) {
+      showAlert("Password should be at least 6 characters");
+      return false;
+    }
 
-      // DB check only after everything else has passed
-      const { data, error } = await supabase
-        .from('users')
-        .select('username,email')
-        .or(`username.eq.${userName},email.eq.${email}`)
-      
-      if (error) {
-        showAlert(error.error_description || error.message, "error");
-        return false;
-      } 
-      
-      else {
-        if (data.length == 0) return true;
+    // DB check only after everything else has passed
+    const { data, error } = await supabase
+      .from("users")
+      .select("username,email")
+      .or(`username.eq.${userName},email.eq.${email}`);
 
-        showAlert("Username or email already exists!", "error");
-        return false;
-      }
-      
-  }
+    if (error) {
+      showAlert(error.error_description || error.message, "error");
+      return false;
+    } else {
+      if (data.length == 0) return true;
+
+      showAlert("Username or email already exists!", "error");
+      return false;
+    }
+  };
 
   // Handling the form submission
   let navigate = useNavigate();
@@ -98,19 +95,11 @@ export function Form() {
     e.preventDefault();
 
     const formValid = await validForm();
-    
-     if(formValid) {
+
+    if (formValid) {
       // signing up
       try {
         setLoading(true);
-        // const { error } = await supabase.auth.signUp({
-        //   email: email,
-        //   password: password,
-        // });
-
-        // if (error) throw error;
-        // // console.log(user);
-        // alert("Success!");
         navigate("/Registration_Tags", { replace: true });
         dispatch(update({ username: userName, email, password }));
       } catch (error) {
@@ -119,7 +108,6 @@ export function Form() {
         setLoading(false);
       }
     }
-
   }
 
   return (
