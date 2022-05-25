@@ -7,16 +7,6 @@ import { getUserProfile } from "../user/userSlice";
 function Feed() {
     const dispatch = useDispatch();
     const userProfile = useSelector(state => state.user);
-    console.log("Userprofile", userProfile);
-
-    useEffect(() => {
-        console.log("Feed useEffect");
-        const authUser = supabase.auth.user();
-        console.log(authUser);
-        dispatch(getUserProfile(authUser.id))
-    }, [supabase.auth.user()]);
-
-    
 
     const signOut = async() => {
         await supabase.auth.signOut();
