@@ -7,7 +7,6 @@ import styles from "./../components/left/Left.module.css";
 import { FormGroup, FormControlLabel, Checkbox } from "@mui/material";
 import { Email, LockOutlined } from "@mui/icons-material";
 import useBasicAlert from "../../components/Alert";
-import { useAlertType } from "../../components/Alert/Alert";
 
 
 
@@ -15,7 +14,7 @@ function Left({ logo, msg, formState, updateState, handleSignIn }) {
     const { showAlert, BasicAlert } = useBasicAlert("error");
 
   const [loading, setLoading] = useState(false); // awaiting authentication
-  
+
   const handleLogin = async (e) => {
     e.preventDefault();
 
