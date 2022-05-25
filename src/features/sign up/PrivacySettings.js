@@ -17,6 +17,7 @@ import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import logo from "../../Assets/Easylink Logo Full.png";
+import useBasicAlert from "../../components/Alert";
 import BasicButton from "../../components/BasicButton";
 import BasicLoadingButton from "../../components/BasicLoadingButton/BasicLoadingButton";
 import { supabase } from "../../supabaseClient";
@@ -37,6 +38,8 @@ function RadioWithLabel({ value, label, ...rest }) {
   );
 }
 function PrivacySettings() {
+  const { BasicAlert, showAlert } = useBasicAlert("error");
+
   const dispatch = useDispatch();
   const [contact, setContact] = useState({
     telegram_visibility: "afterlink",
@@ -76,7 +79,7 @@ function PrivacySettings() {
       });
       if (error) throw error;
     } catch (error) {
-      alert(error.error_description || error.message);
+      showAlert(error.error_description || error.message, "error");
       setLoading(false);
       return;
     }
@@ -95,7 +98,7 @@ function PrivacySettings() {
       ]);
       if (error) throw error;
     } catch (error) {
-      alert(error.error_description || error.message);
+      showAlert(error.error_description || error.message, "error")
       setLoading(false);
       return;
     }
@@ -112,7 +115,7 @@ function PrivacySettings() {
           ]);
           if (error) throw error;
         } catch (error) {
-          alert(error.error_description || error.message);
+          showAlert(error.error_description || error.message, "error")
           setLoading(false);
           return;
         }
@@ -139,6 +142,7 @@ function PrivacySettings() {
           marginTop: 0,
         }}
       >
+        <BasicAlert />
         <Box sx={{ display: "flex", width: "100%" }}>
           <div style={{ flex: 1 }}>
             <Person fontSize="large" />{" "}
