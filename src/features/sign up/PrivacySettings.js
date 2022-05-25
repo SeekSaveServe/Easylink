@@ -18,6 +18,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import logo from "../../Assets/Easylink Logo Full.png";
 import BasicButton from "../../components/BasicButton";
+import BasicLoadingButton from "../../components/BasicLoadingButton/BasicLoadingButton";
 import { supabase } from "../../supabaseClient";
 import { update } from "../user/userSlice";
 
@@ -76,14 +77,13 @@ function PrivacySettings() {
       if (error) throw error;
     } catch (error) {
       alert(error.error_description || error.message);
+      setLoading(false);
       return;
     }
     const user = supabase.auth.user();
 
     // 2. Update user information
     try {
-      console.log("USER:");
-      console.log(user);
       const { error } = await supabase.from("users").insert([
         {
           id: user.id,
@@ -96,6 +96,7 @@ function PrivacySettings() {
       if (error) throw error;
     } catch (error) {
       alert(error.error_description || error.message);
+      setLoading(false);
       return;
     }
     // 3. Update interest, skills, and communities table
@@ -112,14 +113,13 @@ function PrivacySettings() {
           if (error) throw error;
         } catch (error) {
           alert(error.error_description || error.message);
+          setLoading(false);
           return;
         }
       }
     }
-    // TODO: Add a check for error or smth
     // TODO: Unique communities categories
     // TODO: Get the unique communities/skills/etc from db
-    // TODO: Loading
     // alert("Success!");
     // navigate("/feed", { replace: true });
   }
@@ -208,13 +208,14 @@ function PrivacySettings() {
             </RadioGroup>
           </Box>
 
-          <BasicButton
+          <BasicLoadingButton
             bg="primary"
             sx={{ width: "50%", mt: 2 }}
             onClick={handleSubmit}
+            loading={loading}
           >
             Start Linking!
-          </BasicButton>
+          </BasicLoadingButton>
         </Paper>
       </Container>
     </div>

@@ -1,5 +1,5 @@
 import { Box } from "@mui/system";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { React } from "react";
 import { Link } from "react-router-dom";
 import BasicTextfield from "../../components/Basic Textfield";
@@ -16,7 +16,6 @@ import { update } from "../user/userSlice";
 
 export default function RegistrationTags() {
   const dispatch = useDispatch();
-  const [loading, setLoading] = useState(false);
   const [telegram, setTelegram] = useState("");
 
   // State of selected tags
@@ -24,12 +23,37 @@ export default function RegistrationTags() {
   const [selectedInterests, setSelectedInterests] = useState([]);
   const [selectedCommunities, setSelectedCommunities] = useState([]);
 
-  // Placeholder tags for now
-  const skills = ["Art", "History", "Java"]; // this should be retrieving tags from the DB ideally
-  const interests = ["Art", "History", "Java"]; // this should be retrieving tags from the DB ideally
-  const communities = ["NUS", "SOC", "USP", "Tembusu", "CAPT", "RC4", "RVRC"]; // this should be retrieving tags from the DB ideally
-  let navigate = useNavigate();
+  // display skills
+  const [skills, setSkills] = useState([]);
+  const [interests, setInterests] = useState([]);
+  const [communities, setCommunities] = useState([]);
 
+  // Placeholder tags for now
+  async function obtainTags(tag) {
+    const { data, error } = await supabase
+      .from(tag)
+      .select("name")
+      .is("in_login", true);
+    return data;
+  }
+
+  useEffect(() => {
+    obtainTags("unique_skills").then((res) =>
+      setSkills([res.map((obj) => obj.name)][0])
+    );
+  }, []);
+  useEffect(() => {
+    obtainTags("unique_interests").then((res) =>
+      setInterests([res.map((obj) => obj.name)][0])
+    );
+  }, []);
+  useEffect(() => {
+    obtainTags("unique_communities").then(
+      (res) => [res.map((obj) => obj.name)][0]
+    );
+  }, []);
+
+  let navigate = useNavigate();
   // Updates telegram display
   const handleTelegramChange = (e) => {
     setTelegram(e.target.value);
@@ -37,25 +61,14 @@ export default function RegistrationTags() {
 
   async function handleSubmit(e) {
     e.preventDefault();
-    console.log(selectedCommunities);
-    console.log(telegram);
     navigate("/privacy", { replace: true });
 
-    dispatch(update({ tags: [selectedSkills, selectedInterests, selectedCommunities], telegram }))
-    //     try {
-    //       setLoading(true);
-    //       const { error } = await supabase.auth.signIn({
-    //         email: formState.email,
-    //         password: formState.password,
-    //       });
-
-    //       if (error) throw error;
-    //       alert("Successful!");
-    //     } catch (error) {
-    //       alert(error.error_description || error.message);
-    //     } finally {
-    //       setLoading(false);
-    //     }
+    dispatch(
+      update({
+        tags: [selectedSkills, selectedInterests, selectedCommunities],
+        telegram,
+      })
+    );
   }
 
   return (
