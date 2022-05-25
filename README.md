@@ -31,4 +31,4 @@
 | Figma Prototype | [Figma Link](https://tinyurl.com/Easylink-figma) |
 <br/>
 
-<p>Developed by <a href="https://github.com/SeekSaveServe">Pei Cheng yi</a> & <a href="https://github.com/huzaifa1712">Huzaifa Raghav</a></p>
+<p>Developed by <a href="https://github.com/SeekSaveServe">Pei Cheng Yi</a> & <a href="https://github.com/huzaifa1712">Huzaifa Raghav</a></p>
