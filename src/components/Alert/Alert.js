@@ -6,7 +6,6 @@ const Alert = forwardRef(function Alert(props,ref) {
 });
 
 function BasicAlert({ open, setOpen }) {
-    const [open, setOpen] = useState(false);
     const handleClose = (event, reason) => {
         if (reason === 'clickaway') return;
         setOpen(false);
@@ -19,6 +18,16 @@ function BasicAlert({ open, setOpen }) {
             </Alert>
         </Snackbar>
     )
+}
+
+function useBasicAlert() {
+    const [open, setOpen] = useState(false);
+    
+    return {
+        open,
+        setOpen,
+        BasicAlert
+    };
 }
 
 
