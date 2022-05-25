@@ -8,10 +8,13 @@ import { PersonOutline, Email, LockOutlined } from "@mui/icons-material";
 
 import { useSelector, useDispatch } from "react-redux";
 import { update } from "../user/userSlice";
+import useBasicAlert from "../../components/Alert";
+
 
 export function Form() {
   // States for registration
   const dispatch = useDispatch();
+  const { BasicAlert, showAlert } = useBasicAlert("error");
 
   const [userName, setUserName] = useState("");
   const [email, setEmail] = useState("");
@@ -41,19 +44,37 @@ export function Form() {
     setConfirmPassword(e.target.value);
   };
 
+  // Validate form fields + appropriate alerts
+  // Return true if form valid else false
+  const validForm = () => {
+      const haveBlank = [userName, email, password, confirmPassword].some((str) => str.trim() == "");
+      const passNotEqual = !(password == confirmPassword); // no reason to exclude spaces from passwords
+
+      if (haveBlank && passNotEqual) {
+          showAlert("Please fill in all fields and ensure passwords are the same");
+          return false;
+      }
+
+      if (haveBlank) {
+          showAlert("Please fill in all fields");
+          return false;
+      }
+
+      if (passNotEqual) {
+          showAlert("Please ensure passwords are the same")
+          return false;
+      }
+
+      return true;
+
+  }
+
   // Handling the form submission
   let navigate = useNavigate();
   async function handleSubmit(e) {
     e.preventDefault();
-    if (
-      userName === "" ||
-      email === "" ||
-      password === "" ||
-      confirmPassword === "" ||
-      !(confirmPassword === password) // TODO: Make unique alert for this
-    ) {
-      alert("Please fill in all fields!");
-    } else {
+
+     if(validForm()) {
       // signing up
       try {
         setLoading(true);
@@ -73,10 +94,12 @@ export function Form() {
         setLoading(false);
       }
     }
+
   }
 
   return (
     <div className={styles.Left}>
+      <BasicAlert />
       <form>
         <BasicTextField
           label="Username"
