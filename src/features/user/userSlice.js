@@ -8,7 +8,8 @@ export const getUserProfile = createAsyncThunk(
         const { data: userProfile, error } = await supabase
         .from('users')
         .select('*')
-        .eq('id', uuid);
+        .eq('id', uuid)
+        .single();
 
         if (error) {
             console.log("Error from async");
