@@ -4,6 +4,7 @@ import SignIn from "./features/sign_in/SignIn";
 import RegistrationTags from "./features/Registration_Tags/RegistrationTags";
 import { useState, useEffect } from "react";
 import { supabase } from "./supabaseClient";
+import Feed from "./features/feed";
 
 function App() {
   const [session, setSession] = useState(null);
@@ -11,6 +12,7 @@ function App() {
   useEffect(() => {
 	  setSession(supabase.auth.session());
 
+    // also updates when there's a change in user but still logged in e.g USER_UPDATED
 	  supabase.auth.onAuthStateChange((_event, session) => {
 		  setSession(session);
 	  });
@@ -18,7 +20,7 @@ function App() {
 
   return (
     <div>
-      <SignIn />
+      {!session ? <SignIn /> : <Feed /> }
     </div>
   );
 }
