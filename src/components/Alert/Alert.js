@@ -1,5 +1,5 @@
 import { Alert as MuiAlert, Snackbar } from "@mui/material";
-import { forwardRef, useState } from "react";
+import React, { forwardRef, useState } from "react";
 
 const Alert = forwardRef(function Alert(props,ref) {
     return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
@@ -34,6 +34,10 @@ export function useBasicAlert(initialSeverity) {
     const [severity, setSeverity] = useState(initialSeverity);
     const [msg, setMsg] = useState("");
 
+    document.addEventListener('keypress', (e) => {
+        setOpen(false);
+    });
+
     function showAlert(newMsg, newSeverity) {
         setMsg(newMsg);
         setOpen(true);
@@ -41,10 +45,12 @@ export function useBasicAlert(initialSeverity) {
             setSeverity(newSeverity);
         }
     }
+
     
     return {
         showAlert,
         // a functional component is just a function returning a JSX element -> we can set props immediately
-        BasicAlert: () => <BasicAlert message={msg} severity={severity} open={open} setOpen={setOpen} />
+        BasicAlert: () => <BasicAlert message={msg} severity={severity} open={open} setOpen={setOpen} />,
+        setOpen
     };
 }
