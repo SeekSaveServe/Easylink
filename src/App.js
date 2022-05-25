@@ -4,11 +4,11 @@ import SignIn from "./features/sign_in/SignIn";
 import RegistrationTags from "./features/Registration_Tags/RegistrationTags";
 import { useState, useEffect } from "react";
 import { supabase } from "./supabaseClient";
-import Feed from "./features/feed";
+import Authenticated from "./components/Authenticated";
+// import Feed from "./features/feed";
 
 function App() {
   const [session, setSession] = useState(null);
-
 
   useEffect(() => {
 	  setSession(supabase.auth.session());
@@ -29,7 +29,7 @@ function App() {
 
   return (
     <div>
-      {!session ? <SignIn /> : <Feed /> }
+      {!session ? <SignIn /> : <Authenticated session={session} /> }
     </div>
   );
 }
