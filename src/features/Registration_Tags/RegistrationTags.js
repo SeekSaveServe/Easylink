@@ -41,17 +41,15 @@ export default function RegistrationTags() {
     obtainTags("unique_skills").then((res) =>
       setSkills([res.map((obj) => obj.name)][0])
     );
-  }, []);
-  useEffect(() => {
+
     obtainTags("unique_interests").then((res) =>
       setInterests([res.map((obj) => obj.name)][0])
     );
-  }, []);
-  useEffect(() => {
+
     obtainTags("unique_communities").then(
-      (res) => [res.map((obj) => obj.name)][0]
+      (res) => setCommunities([res.map((obj) => obj.name)][0])
     );
-  }, []);
+  }, [])
 
   let navigate = useNavigate();
   // Updates telegram display
