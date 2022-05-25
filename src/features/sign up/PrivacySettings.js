@@ -132,7 +132,7 @@ function PrivacySettings() {
     }
     // TODO: Add feed
     // TODO: Add Avatar button
-    // navigate("/feed", { replace: true });
+    navigate("/", { replace: true });
   }
   return (
     <div
