@@ -46,7 +46,7 @@ export function Form() {
 
   // Validate form fields + appropriate alerts
   // Return true if form valid else false
-  const validForm = () => {
+  const validForm = async() => {
       const haveBlank = [userName, email, password, confirmPassword].some((str) => str.trim() == "");
       const passNotEqual = !(password == confirmPassword); // no reason to exclude spaces from passwords
 
@@ -65,8 +65,23 @@ export function Form() {
           return false;
       }
 
-      return true;
-
+      // DB check only after everything else has passed
+      const { data, error } = await supabase
+        .from('users')
+        .select('username,email')
+        .or(`username.eq.${userName},email.eq.${email}`)
+      
+      if (error) {
+        showAlert(error.error_description || error.message, "error");
+        return false;
+      } 
+      
+      else {
+        if (data.length == 0) return true;
+        showAlert("Username or email already exists!", "error");
+        return false;
+      }
+      
   }
 
   // Handling the form submission
@@ -74,7 +89,9 @@ export function Form() {
   async function handleSubmit(e) {
     e.preventDefault();
 
-     if(validForm()) {
+    const formValid = await validForm();
+    
+     if(formValid) {
       // signing up
       try {
         setLoading(true);
