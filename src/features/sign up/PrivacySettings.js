@@ -66,6 +66,7 @@ function PrivacySettings() {
   const userName = useSelector((state) => state.user.username);
   const telegram = useSelector((state) => state.user.telegram);
   const tags = useSelector((state) => state.user.tags);
+  const avatar_url = useSelector((state) => state.user.avatar_url);
 
   async function handleSubmit(e) {
     e.preventDefault();
@@ -91,14 +92,22 @@ function PrivacySettings() {
         {
           id: user.id,
           username: userName,
-          avatar_url: "www.google.com",
+          avatar_url: avatar_url,
           email: email,
           telegram: telegram,
         },
       ]);
+
+      // Need to find a way to update uuid of storage.objects
+      // OR find a way to delete the owner-less entry from stroage.objects
+      // const {} = await supabase.storage
+      //   .from("avatars")
+      //   .update({ owner: user.id })
+      //   .eq("name", avatar_url);
+
       if (error) throw error;
     } catch (error) {
-      showAlert(error.error_description || error.message, "error")
+      showAlert(error.error_description || error.message, "error");
       setLoading(false);
       return;
     }
@@ -115,15 +124,14 @@ function PrivacySettings() {
           ]);
           if (error) throw error;
         } catch (error) {
-          showAlert(error.error_description || error.message, "error")
+          showAlert(error.error_description || error.message, "error");
           setLoading(false);
           return;
         }
       }
     }
-    // TODO: Unique communities categories
-    // TODO: Get the unique communities/skills/etc from db
-    // alert("Success!");
+    // TODO: Add feed
+    // TODO: Add Avatar button
     // navigate("/feed", { replace: true });
   }
   return (

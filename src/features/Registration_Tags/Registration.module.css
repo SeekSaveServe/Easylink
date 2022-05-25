@@ -36,3 +36,7 @@
   align-items: center;
   flex-direction: column;
 }
+
+.file {
+  visibility: hidden;
+}

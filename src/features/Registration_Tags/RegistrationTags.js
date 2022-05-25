@@ -13,10 +13,12 @@ import { useNavigate } from "react-router-dom";
 import { Telegram } from "@mui/icons-material";
 import { useDispatch } from "react-redux";
 import { update } from "../user/userSlice";
+import UploadAvatar from "../components/UploadAvatar";
 
 export default function RegistrationTags() {
   const dispatch = useDispatch();
   const [telegram, setTelegram] = useState("");
+  const [avatar_url, set_AvatarUrl] = useState(null);
 
   // State of selected tags
   const [selectedSkills, setSelectedSkills] = useState([]);
@@ -46,10 +48,10 @@ export default function RegistrationTags() {
       setInterests([res.map((obj) => obj.name)][0])
     );
 
-    obtainTags("unique_communities").then(
-      (res) => setCommunities([res.map((obj) => obj.name)][0])
+    obtainTags("unique_communities").then((res) =>
+      setCommunities([res.map((obj) => obj.name)][0])
     );
-  }, [])
+  }, []);
 
   let navigate = useNavigate();
   // Updates telegram display
@@ -65,6 +67,7 @@ export default function RegistrationTags() {
       update({
         tags: [selectedSkills, selectedInterests, selectedCommunities],
         telegram,
+        avatar_url,
       })
     );
   }
@@ -73,12 +76,15 @@ export default function RegistrationTags() {
     <div className={styles.centre}>
       <form>
         <Box className={styles.avatar}>
-          <BasicAvatar
-            sx={{ width: 66, height: 66 }}
-            // className={styles.avatar}
-          ></BasicAvatar>
+          <UploadAvatar
+            size={150}
+            url={avatar_url}
+            onUpload={(url) => {
+              set_AvatarUrl(url);
+            }}
+          ></UploadAvatar>
         </Box>
-        <h6 className={styles.firstMessage}> Upload your profile picture</h6>
+        {/* <h6 className={styles.firstMessage}> Upload your profile picture</h6> */}
         <Checkmarks
           newTags={skills}
           label="Skills"
