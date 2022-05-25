@@ -11,9 +11,7 @@ function Authenticated({ session }) {
     const dispatch = useDispatch();
 
     useEffect(() => {
-        console.log("Authenticated useEff");
         const authUser = supabase.auth.user(); // user definitely exists since logged in
-        console.log(authUser);
         dispatch(getUserProfile(authUser.id));
     }, [dispatch, session])
 

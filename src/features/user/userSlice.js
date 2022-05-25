@@ -12,12 +12,8 @@ export const getUserProfile = createAsyncThunk(
         .single();
 
         if (error) {
-            console.log("Error from async");
             throw error;
-        } else {
-            console.log("User profile:", userProfile);
-        }
-
+        } 
         return userProfile;
     }
 )
@@ -37,11 +33,11 @@ export const userSlice = createSlice({
     },
     extraReducers: (builder) => {
         builder.addCase(getUserProfile.fulfilled, (state, action) => {
+            //TODO: potential bug if user object has extra entries not in retrieved user
             for (const [key, val] of Object.entries(action.payload)) {
                 state[key] = val
             }
 
-            console.log("User after fulfilled", state);
         })
     }
 })
