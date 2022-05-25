@@ -11,8 +11,11 @@ import { supabase } from "../../supabaseClient";
 import styles from "./Registration.module.css";
 import { useNavigate } from "react-router-dom";
 import { Telegram } from "@mui/icons-material";
+import { useDispatch } from "react-redux";
+import { update } from "../user/userSlice";
 
 export default function RegistrationTags() {
+  const dispatch = useDispatch();
   const [loading, setLoading] = useState(false);
   const [telegram, setTelegram] = useState("");
 
@@ -37,6 +40,8 @@ export default function RegistrationTags() {
     console.log(selectedCommunities);
     console.log(telegram);
     navigate("/privacy", { replace: true });
+
+    dispatch(update({ tags: [selectedSkills, selectedInterests, selectedCommunities], telegram }))
     //     try {
     //       setLoading(true);
     //       const { error } = await supabase.auth.signIn({
