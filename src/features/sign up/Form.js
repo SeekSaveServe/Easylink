@@ -11,6 +11,7 @@ import { update } from "../user/userSlice";
 import useBasicAlert from "../../components/Alert";
 
 
+
 export function Form() {
   // States for registration
   const dispatch = useDispatch();
@@ -49,6 +50,7 @@ export function Form() {
   const validForm = async() => {
       const haveBlank = [userName, email, password, confirmPassword].some((str) => str.trim() == "");
       const passNotEqual = !(password == confirmPassword); // no reason to exclude spaces from passwords
+      const passNotMinLength = (password.length < 6); // assume check after password equal
 
       if (haveBlank && passNotEqual) {
           showAlert("Please fill in all fields and ensure passwords are the same");
@@ -65,6 +67,11 @@ export function Form() {
           return false;
       }
 
+      if (passNotMinLength) {
+        showAlert("Password should be at least 6 characters");
+        return false;
+      }
+
       // DB check only after everything else has passed
       const { data, error } = await supabase
         .from('users')
@@ -78,6 +85,7 @@ export function Form() {
       
       else {
         if (data.length == 0) return true;
+
         showAlert("Username or email already exists!", "error");
         return false;
       }
