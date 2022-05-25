@@ -52,9 +52,7 @@ export default function RegistrationTags() {
       (res) => [res.map((obj) => obj.name)][0]
     );
   }, []);
-  // const skills = ["Art", "History", "Java"]; // this should be retrieving tags from the DB ideally
-  // const interests = ["Art", "History", "Java"]; // this should be retrieving tags from the DB ideally
-  // const communities = ["NUS", "SOC", "USP", "Tembusu", "CAPT", "RC4", "RVRC"]; // this should be retrieving tags from the DB ideally
+
   let navigate = useNavigate();
   // Updates telegram display
   const handleTelegramChange = (e) => {
@@ -71,20 +69,6 @@ export default function RegistrationTags() {
         telegram,
       })
     );
-    //     try {
-    //       setLoading(true);
-    //       const { error } = await supabase.auth.signIn({
-    //         email: formState.email,
-    //         password: formState.password,
-    //       });
-
-    //       if (error) throw error;
-    //       alert("Successful!");
-    //     } catch (error) {
-    //       alert(error.error_description || error.message);
-    //     } finally {
-    //       setLoading(false);
-    //     }
   }
 
   return (
