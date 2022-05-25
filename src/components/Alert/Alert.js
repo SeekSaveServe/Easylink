@@ -14,7 +14,7 @@ export function BasicAlert({ message, severity, open, setOpen }) {
     }
 
     return (
-        <Snackbar open={open} autoHideDuration={2000} onClose={handleClose} 
+        <Snackbar open={open} autoHideDuration={6000} onClose={handleClose} 
             anchorOrigin={{vertical:'top', horizontal: 'center'}}
         >
             <Alert onClose={handleClose} severity={severity} sx={{ width: '100%' }}>
@@ -25,15 +25,18 @@ export function BasicAlert({ message, severity, open, setOpen }) {
 }
 
 // Usage: 
-    // const { open, setOpen, BasicAlert } = useBasicAlert() at top of function
-    // in component: <BasicAlert open={open} setOpen={setOpen} .../>
+    // const { open, setOpen, severity, setSeverity, BasicAlert } = useBasicAlert(initialSeverity) at top of function
+    // in component: <BasicAlert open={open} setOpen={setOpen} severity={severity}/>
 // https://dev.to/droopytersen/new-react-hooks-pattern-return-a-component-31bh
-export function useBasicAlert() {
+export function useBasicAlert(initialSeverity) {
     const [open, setOpen] = useState(false);
+    const [severity, setSeverity] = useState(initialSeverity);
     
     return {
         open,
         setOpen,
+        severity,
+        setSeverity,
         BasicAlert
     };
 }
