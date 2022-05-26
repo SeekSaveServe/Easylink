@@ -15,9 +15,11 @@ function Feed() {
     return (
         <Box className={styles.parent}>
             <Paper elevation={2} sx={{padding: "1rem", backgroundColor: "inherit"}}>
-                <Stack direction="row" justifyContent="space-between">
-                    <Typography variant="h4">Welcome, {userProfile.username}</Typography>
-                    <BasicButton onClick={signOut} bg="primary" sx={{width: "300px"}}>Sign Out</BasicButton>
+                <Stack direction="row" justifyContent="center">
+                    <Typography variant="h4">
+                        <span style={{color: "var(--primary)"}}>Welcome</span>, {" "}
+                        <span style={{color: "var(--secondary)"}}>{userProfile.username}</span>
+                    </Typography>
                 </Stack>
             </Paper>
 
