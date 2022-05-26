@@ -14,15 +14,12 @@ function Feed() {
     }
     return (
         <Box className={styles.parent}>
-            <Paper elevation={2} sx={{padding: "1rem"}}>
+            <Paper elevation={2} sx={{padding: "1rem", backgroundColor: "inherit"}}>
                 <Stack direction="row" justifyContent="space-between">
                     <Typography variant="h4">Welcome, {userProfile.username}</Typography>
                     <BasicButton onClick={signOut} bg="primary" sx={{width: "300px"}}>Sign Out</BasicButton>
                 </Stack>
             </Paper>
-
-            {/* {/* <h1>Welcome, {userProfile.username}</h1> */}
-            {/* <h2>Your telegram is: {userProfile.telegram}</h2> */}
 
             <Box className={styles.content}>
                 <RecommendationsList/>
