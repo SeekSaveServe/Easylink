@@ -1,11 +1,15 @@
 import { useEffect, useState } from "react";
 import { Navigate, useNavigate } from "react-router-dom";
 import { supabase } from "../../supabaseClient";
+import { useDispatch } from 'react-redux';
+import { getUserProfile } from "../../features/user/userSlice";
+
 
 // Redirects to sign in page if the user is not logged in
 // https://www.robinwieruch.de/react-router-private-routes/
 const ProtectedRoute = ({ children, redirectRoute = "/" }) => {
   let navigate = useNavigate();
+  const dispatch = useDispatch();
   const [session, setSession] = useState(null);
 
   useEffect(() => {
@@ -17,6 +21,11 @@ const ProtectedRoute = ({ children, redirectRoute = "/" }) => {
 
       // if user exists (i.e a sign in or sign up is happening) then update redux store with user profile data
     });
+
+    if (supabase.auth.session()?.user) {
+      dispatch(getUserProfile(supabase.auth.user().id))
+    }
+    
   }, []);
 
   if (!session) {
