@@ -20,8 +20,7 @@ const ProtectedRoute = ({ children, redirectRoute = "/" }) => {
   }, []);
 
   if (!session) {
-    navigate(redirectRoute, { replace: true });
-    return;
+    return <Navigate to={redirectRoute} replace={true} />
   }
 
   return children;
