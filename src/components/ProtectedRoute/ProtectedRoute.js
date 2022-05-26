@@ -20,7 +20,9 @@ const ProtectedRoute = ({ children, redirectRoute = "/" }) => {
   }, []);
 
   if (!session) {
-    return <Navigate to={redirectRoute} replace={true} />
+    // TODO: Navigate component causes recursion issue, but below goes to blank page instead of redirect
+    navigate(redirectRoute, { replace: true});
+    return;
   }
 
   return children;
