@@ -1,10 +1,11 @@
 import BasicButton from "../../components/BasicButton";
 import { supabase } from '../../supabaseClient';
 import { useSelector } from 'react-redux';
-import { Box, Typography, Stack, Paper } from "@mui/material";
+import { Box, Typography, Stack, Paper, Divider } from "@mui/material";
 import styles from './Feed.module.css';
 import RecommendationsList from "../recommendations";
 import PostsList from "../posts";
+import BasicNavBar from "../../components/BasicNavBar/BasicNavBar";
 
 function Feed() {
     const userProfile = useSelector(state => state.user);
@@ -13,21 +14,21 @@ function Feed() {
         await supabase.auth.signOut();
     }
     return (
-        <Box className={styles.parent}>
-            <Paper elevation={2} sx={{padding: "1rem", backgroundColor: "inherit"}}>
-                <Stack direction="row" justifyContent="center">
-                    <Typography variant="h4">
-                        <span style={{color: "var(--primary)"}}>Welcome</span>, {" "}
-                        <span style={{color: "var(--secondary)"}}>{userProfile.username}</span>
-                    </Typography>
-                </Stack>
-            </Paper>
+        <>
+            <BasicNavBar />
+            <Box className={styles.parent}>
+                <Typography variant="h4" sx={{margin: "0.5rem 0"}}> 
+                    <span style={{color: "var(--primary)"}}>Welcome</span>, {" "}
+                    <span style={{color: "var(--secondary)"}}>{userProfile.username}</span>
+                </Typography>
+                <Divider/>
 
-            <Box className={styles.content}>
-                <RecommendationsList/>
-                <PostsList/>
+                <Box className={styles.content}>
+                    <RecommendationsList/>
+                    <PostsList/>
+                </Box>
             </Box>
-        </Box>
+        </>
     )
 }
 

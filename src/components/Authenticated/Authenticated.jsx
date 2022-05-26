@@ -3,6 +3,8 @@ import { supabase } from '../../supabaseClient';
 import { useDispatch } from 'react-redux';
 import Feed from "../../features/feed";
 import { getUserProfile } from "../../features/user/userSlice";
+import { Navigate } from "react-router-dom";
+
 
 // Wrapper component around pages to show in Authenticated state to facilitate fetching common data
 // so we don't have to repeat useEffect
@@ -17,7 +19,7 @@ function Authenticated({ session }) {
 
     return (
         <>
-            <Feed/>
+            <Navigate to="/feed" replace={true}/>
         </>
     )
 }
