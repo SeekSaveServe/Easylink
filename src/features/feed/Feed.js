@@ -21,7 +21,6 @@ function Feed() {
                     <span style={{color: "var(--primary)"}}>Welcome</span>, {" "}
                     <span style={{color: "var(--secondary)"}}>{userProfile.username}</span>
                 </Typography>
-                <Divider/>
 
                 <Box className={styles.content}>
                     <RecommendationsList/>
