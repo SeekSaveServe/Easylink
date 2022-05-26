@@ -1,7 +1,7 @@
 import BasicButton from "../../components/BasicButton";
 import { supabase } from '../../supabaseClient';
 import { useSelector } from 'react-redux';
-import { Box, Container, Typography } from "@mui/material";
+import { Box, Typography, Stack, Paper } from "@mui/material";
 import styles from './Feed.module.css';
 import RecommendationsList from "../recommendations";
 import PostsList from "../posts";
@@ -14,8 +14,12 @@ function Feed() {
     }
     return (
         <Box className={styles.parent}>
-            <Typography variant="h3">Text</Typography>
-            <BasicButton onClick={signOut} bg="primary" sx={{width: "300px"}}>Sign Out</BasicButton>
+            <Paper elevation={2} sx={{padding: "1rem"}}>
+                <Stack direction="row" justifyContent="space-between">
+                    <Typography variant="h4">Welcome, {userProfile.username}</Typography>
+                    <BasicButton onClick={signOut} bg="primary" sx={{width: "300px"}}>Sign Out</BasicButton>
+                </Stack>
+            </Paper>
 
             {/* {/* <h1>Welcome, {userProfile.username}</h1> */}
             {/* <h2>Your telegram is: {userProfile.telegram}</h2> */}

@@ -9,9 +9,8 @@
 
 .content {
     display: grid;
-    border: 1px solid black;
     grid-template-columns: 6fr 4fr;
-    column-gap: 100px;
+    column-gap: 10%;
     padding: 1rem 2rem;
     height: 100%;
 }
