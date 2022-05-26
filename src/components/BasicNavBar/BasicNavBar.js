@@ -10,6 +10,8 @@ import BasicAvatar from "../BasicAvatar/BasicAvatar";
 import { NavLink } from "react-router-dom";
 import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
+import { supabase } from "../../supabaseClient";
+import BasicButton from "../BasicButton";
 
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
@@ -54,6 +56,9 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 export default function BasicNavBar() {
   const userProfile = useSelector((state) => state.user);
 
+  const signOut = async () => {
+    await supabase.auth.signOut();
+  };
   return (
     <Box sx={{ flexGrow: 1, backgroundColor: "var(--primary)" }}>
       <AppBar position="static">
@@ -117,23 +122,6 @@ export default function BasicNavBar() {
             Links
           </NavLink>
 
-          {/* <Link to="/feed" style={linkStyle}>
-            {" "}
-            Feed{" "}
-          </Link>
-
-          <Box sx={{ flexGrow: 0.05 }} />
-          <Link to="/feed" style={linkStyle}>
-            {" "}
-            Projects{" "}
-          </Link>
-
-          <Box sx={{ flexGrow: 0.05 }} />
-          <Link to="/feed" style={linkStyle}>
-            {" "}
-            Links{" "}
-          </Link> */}
-
           <Box sx={{ flexGrow: 1, backgroundColor: "var(--primary)" }} />
           <Search>
             <SearchIconWrapper>
@@ -144,6 +132,10 @@ export default function BasicNavBar() {
               inputProps={{ "aria-label": "search" }}
             />
           </Search>
+
+          <BasicButton onClick={signOut} bg="secondary" sx={{ width: "100px" }}>
+            Sign Out
+          </BasicButton>
         </Toolbar>
       </AppBar>
     </Box>
