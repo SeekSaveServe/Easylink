@@ -1,0 +1,9 @@
+.scroll_parent {
+    height: 100vh;
+    overflow-y: hidden;
+}
+
+.scroll_child {
+    height: 100vh;
+    overflow-y:auto;
+}
