@@ -54,9 +54,6 @@ function PrivacySettings() {
     });
   };
 
-  const startLinking = async () => {
-    dispatch(update(contact));
-  };
   // Handles form submission
   const [loading, setLoading] = useState(false);
   let navigate = useNavigate();
@@ -95,6 +92,8 @@ function PrivacySettings() {
           avatar_url: avatar_url,
           email: email,
           telegram: telegram,
+          telegram_visibility:contact.telegram_visibility,
+          email_visibility:contact.email_visibility
         },
       ]);
 
