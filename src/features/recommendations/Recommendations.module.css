@@ -1,3 +1,7 @@
-.recc {
+/* .recc_box {
     border: 1px solid var(--primary);
+} */
+
+.recommendations {
+    padding: 1rem;    
 }
