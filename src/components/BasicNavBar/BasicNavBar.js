@@ -12,6 +12,7 @@ import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { supabase } from "../../supabaseClient";
 import BasicButton from "../BasicButton";
+import LinkableAvatar from "../LinkableAvatar.js";
 
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
@@ -74,10 +75,10 @@ export default function BasicNavBar() {
 
           <Box sx={{ flexGrow: 0.1 }} />
           <Box sx={{ display: { xs: "none", md: "flex" } }}>
-            <BasicAvatar
+            <LinkableAvatar
               src={userProfile.avatarUrl}
               alt={userProfile.avatarUrl ? "Avatar" : "No image"}
-            />{" "}
+            />
           </Box>
 
           <Box sx={{ flexGrow: 0.05 }} />

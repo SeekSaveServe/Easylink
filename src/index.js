@@ -12,6 +12,9 @@ import Privacy from "./features/sign up/PrivacySettings";
 import RegistrationTags from "./features/Registration_Tags/RegistrationTags";
 import ProtectedRoute from "./components/ProtectedRoute";
 import Feed from "./features/feed";
+import Profile from "./features/Profile/Profile";
+import Projects from "./features/Profile";
+import Links from "./features/Links";
 
 const container = document.getElementById("root");
 const root = createRoot(container);
@@ -32,6 +35,33 @@ root.render(
                 <ProtectedRoute redirectRoute="/">
                   {" "}
                   <Feed />{" "}
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/profile"
+              element={
+                <ProtectedRoute redirectRoute="/">
+                  {" "}
+                  <Profile />{" "}
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/projects"
+              element={
+                <ProtectedRoute redirectRoute="/">
+                  {" "}
+                  <Projects />{" "}
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/links"
+              element={
+                <ProtectedRoute redirectRoute="/">
+                  {" "}
+                  <Links />{" "}
                 </ProtectedRoute>
               }
             />
