@@ -35,12 +35,11 @@ function RecommendationsList({ className }) {
         // className={`${className} ${styles.recc_box}`}
         <Box className={scroll.scroll_parent}>
             <Typography variant="h4" color="var(--primary)">Recommendations</Typography>
-
-            {/* <Box className={scroll.scroll_child}> */}
                 <Box className={scroll.scroll_child}>
-                    {showRecommendations(10)}
+                    <Stack spacing={4}>
+                        {showRecommendations(10)}
+                    </Stack>
                 </Box>
-            {/* </Box> */}
         </Box>
     )
 

@@ -29,11 +29,11 @@ function PostsList({ className }) {
     return (
         <Box className={`${scroll.scroll_parent}`}>
             <Typography variant="h4" color="var(--secondary)">Posts</Typography>
-            {/* <Stack spacing={4} sx={{padding: "1rem"}}> */}
             <Box className={scroll.scroll_child}>
+                <Stack spacing={4}>
                 { showPosts(10) }
+                </Stack>
             </Box>
-            {/* </Stack> */}
         </Box>
     )
 }
