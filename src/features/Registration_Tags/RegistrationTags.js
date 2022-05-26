@@ -3,7 +3,6 @@ import { useEffect, useState } from "react";
 import { React } from "react";
 import { Link } from "react-router-dom";
 import BasicTextfield from "../../components/Basic Textfield";
-import BasicAvatar from "../../components/BasicAvatar/BasicAvatar";
 import BasicButton from "../../components/BasicButton";
 import Checkmarks from "../../components/Checkmarks";
 

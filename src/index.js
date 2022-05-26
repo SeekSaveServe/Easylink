@@ -10,6 +10,9 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import SignUp from "./features/sign up/sign up";
 import Privacy from "./features/sign up/PrivacySettings";
 import RegistrationTags from "./features/Registration_Tags/RegistrationTags";
+import ProtectedRoute from "./components/ProtectedRoute";
+import Feed from "./features/feed";
+
 const container = document.getElementById("root");
 const root = createRoot(container);
 
@@ -23,6 +26,15 @@ root.render(
             <Route path="/signup" element={<SignUp />} />
             <Route path="/privacy" element={<Privacy />} />
             <Route path="/Registration_Tags" element={<RegistrationTags />} />
+            <Route
+              path="/feed"
+              element={
+                <ProtectedRoute redirectRoute="/">
+                  {" "}
+                  <Feed />{" "}
+                </ProtectedRoute>
+              }
+            />
           </Routes>
         </BrowserRouter>
       </Provider>
