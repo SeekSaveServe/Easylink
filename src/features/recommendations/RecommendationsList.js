@@ -22,7 +22,7 @@ function RecommendationsList({ className }) {
     function showRecommendations(n) {
         let arr = [];
         for (let i = 0; i < n; i++) {
-            arr.push(<RecommendationCard/>);
+            arr.push(<RecommendationCard key={i}/>);
         }
         return arr;
     }
