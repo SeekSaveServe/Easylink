@@ -1,0 +1,17 @@
+.parent {
+    background-color: var(--bg-grey);
+    margin-top:0;
+    width: 100vw;
+    height: 100vh;
+    text-align: center;
+}
+
+.content {
+    display: grid;
+    border: 1px solid black;
+    grid-template-columns: 6fr 4fr;
+    column-gap: 10px;
+}
+
+
+
