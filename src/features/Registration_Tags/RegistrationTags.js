@@ -10,15 +10,16 @@ import { supabase } from "../../supabaseClient";
 import styles from "./Registration.module.css";
 import { useNavigate } from "react-router-dom";
 import { Telegram } from "@mui/icons-material";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { update } from "../user/userSlice";
 import UploadAvatar from "../components/UploadAvatar";
-import { Stack } from "@mui/material";
 
 import BackNextGroup from "../../components/BackNextGroup";
 
 export default function RegistrationTags() {
   const dispatch = useDispatch();
+  const user = useSelector(state => state.user);
+
   const [telegram, setTelegram] = useState("");
   const [avatar_url, set_AvatarUrl] = useState(null);
 
@@ -53,6 +54,17 @@ export default function RegistrationTags() {
     obtainTags("unique_communities").then((res) =>
       setCommunities([res.map((obj) => obj.name)][0])
     );
+
+    if (user?.tags) {
+      const tags = user.tags;
+      setSelectedSkills(tags[0]);
+      setSelectedInterests(tags[1]);
+      setSelectedCommunities(tags[2]);
+    }
+
+    if (user?.telegram) {
+      setTelegram(user.telegram);
+    }
   }, []);
 
   let navigate = useNavigate();
@@ -61,10 +73,7 @@ export default function RegistrationTags() {
     setTelegram(e.target.value);
   };
 
-  async function handleSubmit(e) {
-    e.preventDefault();
-    navigate("/privacy", { replace: true });
-
+  const updateFormState = () => {
     dispatch(
       update({
         tags: [selectedSkills, selectedInterests, selectedCommunities],
@@ -72,6 +81,18 @@ export default function RegistrationTags() {
         avatar_url,
       })
     );
+  }
+
+  function handleBack() {
+    updateFormState();
+    navigate("/signup", { replace: true })
+  }
+
+  async function handleSubmit(e) {
+    e.preventDefault();
+    navigate("/privacy", { replace: true });
+    updateFormState();
+    
   }
 
   return (
@@ -127,7 +148,7 @@ export default function RegistrationTags() {
           </Link>
         </Stack> */}
         <BackNextGroup 
-          child1={<BasicButton bg="primary" onClick={() => navigate("/signup", { replace: true })}>Back</BasicButton>} 
+          child1={<BasicButton bg="primary" onClick={handleBack}>Back</BasicButton>} 
           child2={<BasicButton bg="secondary" onClick={handleSubmit}> Next </BasicButton>}
         />
       </form>
