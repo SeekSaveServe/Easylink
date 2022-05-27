@@ -1,5 +1,5 @@
 import BasicTextField from "../../components/Basic Textfield";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { supabase } from "../../supabaseClient";
 import BasicButton from "../../components/BasicButton";
 import styles from "./../components/left/Left.module.css";
@@ -14,6 +14,18 @@ export function Form() {
   // States for registration
   const dispatch = useDispatch();
   const { BasicAlert, showAlert } = useBasicAlert("error");
+
+  const user = useSelector(state => state.user);
+
+  useEffect(() => {
+    if (user?.username) setUserName(user.username);
+    if (user?.email) setEmail(user.email);
+    if (user?.password) {
+      setPassword(user.password);
+      setConfirmPassword(user.password);
+    }
+
+  }, [user])
 
   const [userName, setUserName] = useState("");
   const [email, setEmail] = useState("");
