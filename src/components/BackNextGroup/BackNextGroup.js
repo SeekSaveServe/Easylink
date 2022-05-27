@@ -3,18 +3,20 @@ import Stack from "@mui/material/Stack";
 import { Link } from "react-router-dom";
 import BasicButton from "../BasicButton";
 
-function BackNextGroup({ backOnClick, nextOnClick }) {
+function BackNextGroup({ child1, child2 }) {
     
     return (
         <Stack direction="row" spacing={3}>
           <div style={{ textDecoration: "none", marginLeft: "1.5%", flexGrow: 1 }}>
-              <BasicButton bg="primary" onClick={backOnClick}>Back</BasicButton>
+              {/* <BasicButton bg= onClick={backOnClick}>Back</BasicButton> */}
+              {child1}
           </div>
 
           <div style={{ textDecoration: "none", marginRight: "1.5%", flexGrow: 1 }}>
-            <BasicButton bg="secondary" onClick={nextOnClick}>
+            {/* <BasicButton bg="secondary" onClick={nextOnClick}>
               Next
-            </BasicButton>
+            </BasicButton> */}
+            {child2}
           </div>
         </Stack>
     )

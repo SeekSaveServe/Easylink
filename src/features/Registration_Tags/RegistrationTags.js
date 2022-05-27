@@ -63,7 +63,7 @@ export default function RegistrationTags() {
 
   async function handleSubmit(e) {
     e.preventDefault();
-    // navigate("/privacy", { replace: true });
+    navigate("/privacy", { replace: true });
 
     dispatch(
       update({
@@ -126,7 +126,10 @@ export default function RegistrationTags() {
             </BasicButton>
           </Link>
         </Stack> */}
-        <BackNextGroup backOnClick={() => console.log("back")} nextOnClick={() => console.log("next")}/>
+        <BackNextGroup 
+          child1={<BasicButton bg="primary" onClick={() => navigate("/signup", { replace: true })}>Back</BasicButton>} 
+          child2={<BasicButton bg="secondary" onClick={handleSubmit}> Next </BasicButton>}
+        />
       </form>
     </div>
   );
