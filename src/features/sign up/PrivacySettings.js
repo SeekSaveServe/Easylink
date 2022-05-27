@@ -11,6 +11,7 @@ import {
   RadioGroup,
   Box,
   Container,
+  Stack
 } from "@mui/material";
 import { SupabaseClient } from "@supabase/supabase-js";
 import { useState } from "react";
@@ -218,15 +219,26 @@ function PrivacySettings() {
               <RadioWithLabel value="everyone" label="Everyone" />
             </RadioGroup>
           </Box>
+          
+          <Stack sx={{mt:5}} direction="row" spacing={3}> 
+            <div style={{flexGrow: 1}}>
+              <BasicButton bg="secondary" onClick={() => navigate("/Registration_Tags", { replace: true })} sx={{paddingLeft: "2rem", paddingRight: "2rem"}} >
+                Back
+              </BasicButton>
+            </div>
+            
+            <div style={{flexGrow: 1}}>
+              <BasicLoadingButton
+                bg="primary"
+                onClick={handleSubmit}
+                loading={loading}
+                sx={{paddingLeft: "1rem", paddingRight: "1rem"}}
+              >
+                Start Linking!
+              </BasicLoadingButton>
+            </div>
+          </Stack>
 
-          <BasicLoadingButton
-            bg="primary"
-            sx={{ width: "50%", mt: 2 }}
-            onClick={handleSubmit}
-            loading={loading}
-          >
-            Start Linking!
-          </BasicLoadingButton>
         </Paper>
       </Container>
     </div>
