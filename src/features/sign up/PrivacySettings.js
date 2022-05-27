@@ -40,11 +40,12 @@ function RadioWithLabel({ value, label, ...rest }) {
 }
 function PrivacySettings() {
   const { BasicAlert, showAlert } = useBasicAlert("error");
+  const user = useSelector((state) => state.user);
 
   const dispatch = useDispatch();
   const [contact, setContact] = useState({
-    telegram_visibility: "afterlink",
-    email_visibility: "afterlink",
+    telegram_visibility: user?.telegram_visibility ?? "afterlink",
+    email_visibility: user?.email_visibility ?? "afterlink",
   });
 
   // update field with key = name attribute, to value = value attribute
@@ -134,6 +135,15 @@ function PrivacySettings() {
     // TODO: Add Avatar button
     navigate("/", { replace: true });
   }
+
+  const handleBack = () => {
+    dispatch(update({
+      telegram_visibility:contact.telegram_visibility,
+      email_visibility: contact.email_visibility
+    }));
+
+    navigate("/Registration_Tags", { replace: true });
+  };
   return (
     <div
       style={{
@@ -222,7 +232,7 @@ function PrivacySettings() {
           
           <Stack sx={{mt:5}} direction="row" spacing={3}> 
             <div style={{flexGrow: 1}}>
-              <BasicButton bg="secondary" onClick={() => navigate("/Registration_Tags", { replace: true })} sx={{paddingLeft: "2rem", paddingRight: "2rem"}} >
+              <BasicButton bg="secondary" onClick={handleBack} sx={{paddingLeft: "2rem", paddingRight: "2rem"}} >
                 Back
               </BasicButton>
             </div>
