@@ -36,8 +36,8 @@
 
 | Item | Link                               |
 |------------|-------------------------------------------|
-| Proposal      | [Docs Link](https://docs.google.com/document/d/1i9sCMypnuhqIIi9esRn1u5517_oENjyscRTttlhFQLM/edit?usp=sharing) |
-| Poster       | [Poster Link](https://raw.githubusercontent.com/SeekSaveServe/Easylink/main/src/Assets/EasyLink%20Poster%20Lift%20Off.png) |
+| Poster     | [Docs Link](https://docs.google.com/document/d/1i9sCMypnuhqIIi9esRn1u5517_oENjyscRTttlhFQLM/edit?usp=sharing) |
+| Proposal       | [Poster Link](https://docs.google.com/document/d/1fp2qiw4Wva24M1gQuMgI8Wd4vBF7FVN-eMRUA0AEosA/edit?usp=sharing) |
 | Video Overview | [Video Link](https://youtu.be/96NB5PJIMrk) |
 | Figma Prototype | [Figma Link](https://tinyurl.com/Easylink-figma) |
 <br/>
