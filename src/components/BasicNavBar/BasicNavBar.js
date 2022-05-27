@@ -62,7 +62,7 @@ export default function BasicNavBar() {
   };
   return (
     <Box sx={{ flexGrow: 1, backgroundColor: "var(--primary)" }}>
-      <AppBar position="static">
+      <AppBar position="static" sx={{backgroundColor: "var(--primary)"}}>
         <Toolbar>
           <Typography
             variant="h6"
