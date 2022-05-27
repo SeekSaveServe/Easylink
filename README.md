@@ -21,6 +21,17 @@
   <img src="https://raw.githubusercontent.com/SeekSaveServe/Easylink/main/.github/images/EasyLink%20Poster%20Lift%20Off.png" width="480" height="720">
 </div>
 
+### TODO (Milestone II): 
+
+- [x] Implemented sign in, sign up pages with basic CRUD
+- [x] Implemented landing page (feed) for successful sign in and sign up
+- [ ] Integrate GraphQL into frontend
+- [ ] Write Search and Recommendation API using Django 
+- [ ] Implement projects
+- [ ] Implement links page
+- [ ] Implement Search page
+- [ ] Perform comprehensive testing
+
 <br/><br/>
 
 | Item | Link                               |
