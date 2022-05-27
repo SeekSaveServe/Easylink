@@ -40,3 +40,10 @@
 .file {
   visibility: hidden;
 }
+
+
+
+
+.btn_group * {
+  flex-grow: 1;
+} 

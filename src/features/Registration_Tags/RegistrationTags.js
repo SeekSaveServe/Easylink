@@ -13,6 +13,9 @@ import { Telegram } from "@mui/icons-material";
 import { useDispatch } from "react-redux";
 import { update } from "../user/userSlice";
 import UploadAvatar from "../components/UploadAvatar";
+import { Stack } from "@mui/material";
+
+import BackNextGroup from "../../components/BackNextGroup";
 
 export default function RegistrationTags() {
   const dispatch = useDispatch();
@@ -60,7 +63,7 @@ export default function RegistrationTags() {
 
   async function handleSubmit(e) {
     e.preventDefault();
-    navigate("/privacy", { replace: true });
+    // navigate("/privacy", { replace: true });
 
     dispatch(
       update({
@@ -111,11 +114,19 @@ export default function RegistrationTags() {
           sx={{ m: 1 }}
           icon={<Telegram />}
         />
-        <Link to="/privacy " style={{ textDecoration: "none" }}>
-          <BasicButton bg="secondary" onClick={handleSubmit}>
-            Next
-          </BasicButton>
-        </Link>
+
+        {/* <Stack direction="row" className={styles.btn_group} spacing={3}>
+          <Link to="/signup" style={{ textDecoration: "none", marginLeft: "1.5%" }}>
+              <BasicButton bg="primary">Back</BasicButton>
+          </Link>
+
+          <Link to="/privacy " style={{ textDecoration: "none", marginRight: "1.5%" }}>
+            <BasicButton bg="secondary" onClick={handleSubmit}>
+              Next
+            </BasicButton>
+          </Link>
+        </Stack> */}
+        <BackNextGroup backOnClick={() => console.log("back")} nextOnClick={() => console.log("next")}/>
       </form>
     </div>
   );
