@@ -60,9 +60,10 @@ export default function BasicNavBar() {
   const signOut = async () => {
     await supabase.auth.signOut();
   };
+
   return (
     <Box sx={{ flexGrow: 1, backgroundColor: "var(--primary)" }}>
-      <AppBar position="static" sx={{backgroundColor: "var(--primary)"}}>
+      <AppBar position="static" sx={{ backgroundColor: "var(--primary)" }}>
         <Toolbar>
           <Typography
             variant="h6"
@@ -75,10 +76,7 @@ export default function BasicNavBar() {
 
           <Box sx={{ flexGrow: 0.1 }} />
           <Box sx={{ display: { xs: "none", md: "flex" } }}>
-            <LinkableAvatar
-              src={userProfile.avatarUrl}
-              alt={userProfile.avatarUrl ? "Avatar" : "No image"}
-            />
+            <LinkableAvatar src={userProfile.avatar_url} />
           </Box>
 
           <Box sx={{ flexGrow: 0.05 }} />
