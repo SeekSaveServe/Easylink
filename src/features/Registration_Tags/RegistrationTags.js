@@ -21,7 +21,7 @@ export default function RegistrationTags() {
   const user = useSelector(state => state.user);
 
   const [telegram, setTelegram] = useState("");
-  const [avatar_url, set_AvatarUrl] = useState(null);
+  const [avatar_url, set_AvatarUrl] = useState(user.avatar_url ?? "");
 
   // State of selected tags
   const [selectedSkills, setSelectedSkills] = useState([]);
@@ -84,8 +84,9 @@ export default function RegistrationTags() {
   }
 
   function handleBack() {
-    updateFormState();
+    
     navigate("/signup", { replace: true })
+    updateFormState();
   }
 
   async function handleSubmit(e) {
@@ -101,7 +102,7 @@ export default function RegistrationTags() {
         <Box className={styles.avatar}>
           <UploadAvatar
             size={150}
-            url={avatar_url}
+            url={user?.avatar_url ?? avatar_url}
             onUpload={(url) => {
               set_AvatarUrl(url);
             }}
