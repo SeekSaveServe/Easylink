@@ -23,6 +23,7 @@ import BasicButton from "../../components/BasicButton";
 import BasicLoadingButton from "../../components/BasicLoadingButton/BasicLoadingButton";
 import { supabase } from "../../supabaseClient";
 import { update } from "../user/userSlice";
+import LinkableAvatar from "../../components/LinkableAvatar.js";
 
 // rest is props for Checkbox, not FCL
 function CheckboxWithLabel({ label, ...rest }) {
@@ -163,7 +164,7 @@ function PrivacySettings() {
         <BasicAlert />
         <Box sx={{ display: "flex", width: "100%" }}>
           <div style={{ flex: 1 }}>
-            <Person fontSize="large" />{" "}
+            <LinkableAvatar src={user.avatar_url} sx={{height: 75, width: 75}}/>
           </div>
           <img src={logo} alt="Logo" style={{ width: "200px" }} />
           {/*  https://stackoverflow.com/questions/38948102/center-one-and-right-left-align-other-flexbox-element*/}
