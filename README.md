@@ -38,7 +38,7 @@
 |------------|-------------------------------------------|
 | Poster     | [Poster Link](https://docs.google.com/document/d/1i9sCMypnuhqIIi9esRn1u5517_oENjyscRTttlhFQLM/edit?usp=sharing) |
 | Proposal       | [Docs Link](https://docs.google.com/document/d/1fp2qiw4Wva24M1gQuMgI8Wd4vBF7FVN-eMRUA0AEosA/edit?usp=sharing) |
-| Video Overview | [Video Link](https://youtu.be/96NB5PJIMrk) |
+| Video Overview | [Video Link](https://youtu.be/z4C5g51rQ9o) |
 | Figma Prototype | [Figma Link](https://tinyurl.com/Easylink-figma) |
 <br/>
 
