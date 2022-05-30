@@ -6,40 +6,102 @@ import {
   CardHeader,
   Stack,
 } from "@mui/material";
-
-function RecommendationCard() {
-  return (
-    <Card variant="outlined">
-      <CardHeader title="USDevs" subheader="4 days ago" />
-
-      <CardContent>
-        <Typography variant="h4">Make laundry chill again</Typography>
-        <Typography variant="body2">
-          Hi! We are Project Laundrobot, a sub-project under USDevs working on a
-          hardware-based laundry notification system. We are looking for
-          Developers who knows Python, Raspberry Pi
-        </Typography>
-      </CardContent>
-    </Card>
-  );
-}
+import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { supabase } from "../../supabaseClient";
+import { update } from "../user/userSlice";
+import Checkmarks from "../../components/Checkmarks";
+import BasicButton from "../../components/BasicButton";
 
 function RecommendedTags({ className }) {
-  function showRecommendations(n) {
-    let arr = [];
-    for (let i = 0; i < n; i++) {
-      arr.push(<RecommendationCard key={i} />);
+  const dispatch = useDispatch();
+  const user = useSelector((state) => state.user);
+
+  // State of selected tags
+  const [selectedSkills, setSelectedSkills] = useState([]);
+  const [selectedInterests, setSelectedInterests] = useState([]);
+  const [selectedCommunities, setSelectedCommunities] = useState([]);
+
+  // display skills
+  const [skills, setSkills] = useState([]);
+  const [interests, setInterests] = useState([]);
+  const [communities, setCommunities] = useState([]);
+
+  // Placeholder tags for now
+  async function obtainTags(tag) {
+    const { data, error } = await supabase
+      .from(tag)
+      .select("name")
+      .is("in_login", true);
+    return data;
+  }
+
+  useEffect(() => {
+    obtainTags("unique_skills").then((res) =>
+      setSkills([res.map((obj) => obj.name)][0])
+    );
+
+    obtainTags("unique_interests").then((res) =>
+      setInterests([res.map((obj) => obj.name)][0])
+    );
+
+    obtainTags("unique_communities").then((res) =>
+      setCommunities([res.map((obj) => obj.name)][0])
+    );
+
+    if (user?.searchTags) {
+      const tags = user.tsearchTags;
+      setSelectedSkills(tags[0]);
+      setSelectedInterests(tags[1]);
+      setSelectedCommunities(tags[2]);
     }
-    return arr;
+  }, []);
+
+  const updateFormState = () => {
+    dispatch(
+      update({
+        tags: [selectedSkills, selectedInterests, selectedCommunities],
+      })
+    );
+  };
+
+  const navigate = useNavigate();
+  async function handleSubmit(e) {
+    e.preventDefault();
+    navigate("/Search", { replace: true });
+    updateFormState();
   }
 
   return (
     <Box>
       <Typography variant="h6" color="292929">
-        Recommended Tags
+        Filter Your Search
       </Typography>
       <Box>
-        <Stack spacing={4}>{showRecommendations(1)}</Stack>
+        <Checkmarks
+          newTags={skills}
+          label="Skills"
+          selectedTags={selectedSkills}
+          setSelectedTags={setSelectedSkills}
+        />
+        <Checkmarks
+          newTags={interests}
+          label="Interests"
+          selectedTags={selectedInterests}
+          setSelectedTags={setSelectedInterests}
+        />{" "}
+        <Checkmarks
+          required={true}
+          newTags={communities}
+          label="Communities"
+          selectedTags={selectedCommunities}
+          setSelectedTags={setSelectedCommunities}
+        />{" "}
+        <BasicButton bg="#000000" onClick={handleSubmit}>
+          {" "}
+          Apply Filter{" "}
+        </BasicButton>
       </Box>
     </Box>
   );
