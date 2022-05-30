@@ -15,7 +15,7 @@ import Feed from "./features/feed";
 import Profile from "./features/Profile/Profile";
 import Projects from "./features/Profile";
 import Links from "./features/Links";
-
+import SearchPage from "./features/SearchPage";
 const container = document.getElementById("root");
 const root = createRoot(container);
 
@@ -62,6 +62,15 @@ root.render(
                 <ProtectedRoute redirectRoute="/">
                   {" "}
                   <Links />{" "}
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/Search"
+              element={
+                <ProtectedRoute redirectRoute="/">
+                  {" "}
+                  <SearchPage />{" "}
                 </ProtectedRoute>
               }
             />
