@@ -1,7 +1,5 @@
-import { Box } from "@mui/system";
 import ProfileCard from "../ProfileCard/ProfileCard";
-import styles from './ProfileCardList.module.css';
-import scroll from '../../components/scroll/Scroll.module.css';
+import Scrollable from "../../../components/Scrollable";
 
 
 function ProfileCardList() {
@@ -17,12 +15,9 @@ function ProfileCardList() {
     }
 
     return (
-        <Box className={scroll.scroll_child}>
+        <Scrollable>
             { showList(5) }
-            {/* To add space for scrolling to last post */}
-            <div style={{visibility: "hidden", height: "10vh"}}>
-            </div>
-        </Box>
+        </Scrollable>
     )
 
 }
