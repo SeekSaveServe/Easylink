@@ -5,6 +5,8 @@ import {
   CardContent,
   CardHeader,
   Stack,
+  FormControlLabel,
+  Radio,
 } from "@mui/material";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -14,7 +16,7 @@ import { update } from "../user/userSlice";
 import Checkmarks from "../../components/Checkmarks";
 import BasicButton from "../../components/BasicButton";
 
-function RecommendedTags({ className }) {
+function RecommendedTags({ refresh, setRefresh }) {
   const dispatch = useDispatch();
   const user = useSelector((state) => state.user);
 
@@ -66,10 +68,10 @@ function RecommendedTags({ className }) {
     );
   };
 
-  const navigate = useNavigate();
+  //   const navigate = useNavigate();
   async function handleSubmit(e) {
     e.preventDefault();
-    navigate("/Search", { replace: true });
+    setRefresh(true); // triggers a refresh
     updateFormState();
   }
 

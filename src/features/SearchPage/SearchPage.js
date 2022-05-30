@@ -6,17 +6,20 @@ import styles from "./SearchPage.module.css";
 import BasicNavBar from "../../components/BasicNavBar/BasicNavBar";
 import Results from "./Results";
 import RecommendedTags from "./RecommendedTags";
+import { useState } from "react";
 
 export default function SearchPage() {
   const userProfile = useSelector((state) => state.user);
+  // Cause the results to refresh
+  const [refresh, setRefresh] = useState(true);
 
   return (
     <>
       <BasicNavBar />
 
       <Box className={styles.content}>
-        <Results />
-        <RecommendedTags />
+        <Results refresh setRefresh />
+        <RecommendedTags refresh setRefresh />
       </Box>
     </>
   );

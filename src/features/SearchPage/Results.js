@@ -8,7 +8,7 @@ import {
 } from "@mui/material";
 import scroll from "../components/scroll/Scroll.module.css";
 
-function RecommendationCard() {
+function RecommendationCard({ refresh, setRefresh }) {
   return (
     <Card variant="outlined">
       <CardHeader title="USDevs" subheader="4 days ago" />
@@ -39,6 +39,7 @@ function RecommendationsList({ className }) {
       <Typography variant="h6" color="292929">
         Search Results
       </Typography>
+
       <Box className={scroll.scroll_child}>
         <Stack spacing={4}>{showRecommendations(10)}</Stack>
       </Box>

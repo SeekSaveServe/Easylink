@@ -49,24 +49,30 @@ export default function BasicSearchBar() {
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+  const [listenerOn, setListenerOn] = useState(false);
 
-  const input = document.getElementById("searchBar");
-  input.addEventListener("keypress", function (event) {
-    if (event.key === "Enter") {
-      event.preventDefault();
-      // redirect to search page and update the userslice
-      try {
-        setLoading(true);
-        dispatch(update({ search: input.value }));
-        navigate("/Search", { replace: true });
-        // TODO: Add Backend API connector here
-      } catch (error) {
-        alert(alert(error.error_decription || error.message));
-      } finally {
-        setLoading(false);
-      }
+  const handleChange = () => {
+    const input = document.getElementById("searchBar");
+    if (!listenerOn) {
+      setListenerOn(true);
+      input.addEventListener("keypress", function (event) {
+        if (event.key === "Enter") {
+          event.preventDefault();
+          // redirect to search page and update the userslice
+          try {
+            setLoading(true);
+            dispatch(update({ search: input.value }));
+            navigate("/Search", { replace: true });
+            // TODO: Add Backend API connector here
+          } catch (error) {
+            alert(alert(error.error_decription || error.message));
+          } finally {
+            setLoading(false);
+          }
+        }
+      });
     }
-  });
+  };
 
   return (
     <Search>
@@ -77,6 +83,7 @@ export default function BasicSearchBar() {
         id="searchBar"
         placeholder="Search…"
         inputProps={{ "aria-label": "search" }}
+        onChange={handleChange}
       />
     </Search>
   );
