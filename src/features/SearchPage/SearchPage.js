@@ -9,17 +9,25 @@ import RecommendedTags from "./RecommendedTags";
 import { useState } from "react";
 
 export default function SearchPage() {
-  const userProfile = useSelector((state) => state.user);
   // Cause the results to refresh
   const [refresh, setRefresh] = useState(true);
+  const [loading, setLoading] = useState(false);
 
   return (
     <>
       <BasicNavBar />
 
       <Box className={styles.content}>
-        <Results refresh setRefresh />
-        <RecommendedTags refresh setRefresh />
+        <Results
+          setRefresh={setRefresh}
+          setLoading={setLoading}
+          refresh={refresh}
+        />
+        <RecommendedTags
+          setRefresh={setRefresh}
+          setLoading={setLoading}
+          loading={loading}
+        />
       </Box>
     </>
   );

@@ -15,8 +15,9 @@ import { supabase } from "../../supabaseClient";
 import { update } from "../user/userSlice";
 import Checkmarks from "../../components/Checkmarks";
 import BasicButton from "../../components/BasicButton";
+import BasicLoadingButton from "../../components/BasicLoadingButton/BasicLoadingButton";
 
-function RecommendedTags({ refresh, setRefresh }) {
+function RecommendedTags({ refresh, setRefresh, loading }) {
   const dispatch = useDispatch();
   const user = useSelector((state) => state.user);
 
@@ -100,10 +101,14 @@ function RecommendedTags({ refresh, setRefresh }) {
           selectedTags={selectedCommunities}
           setSelectedTags={setSelectedCommunities}
         />{" "}
-        <BasicButton bg="#000000" onClick={handleSubmit}>
+        <BasicLoadingButton
+          bg="#000000"
+          onClick={handleSubmit}
+          loading={loading}
+        >
           {" "}
           Apply Filter{" "}
-        </BasicButton>
+        </BasicLoadingButton>
       </Box>
     </Box>
   );

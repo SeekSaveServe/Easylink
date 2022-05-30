@@ -25,12 +25,16 @@ function RecommendationCard({ refresh, setRefresh }) {
   );
 }
 
-function RecommendationsList({ className }) {
+function RecommendationsList({ setLoading, refresh, setRefresh }) {
   function showRecommendations(n) {
     let arr = [];
+    setLoading(true);
     for (let i = 0; i < n; i++) {
+      // simulate backend
+      console.log(i);
       arr.push(<RecommendationCard key={i} />);
     }
+    setLoading(false);
     return arr;
   }
 
