@@ -3,13 +3,17 @@ import { supabase } from "../../supabaseClient";
 import { useSelector } from "react-redux";
 import { Box, Typography, Stack, Paper, Divider } from "@mui/material";
 import BasicNavBar from "../../components/BasicNavBar/BasicNavBar";
-import ProfileCard from "../components/ProfileCard/ProfileCard";
+import ProfileCardList from "../components/ProfileCardList";
+import scroll from '../components/scroll/Scroll.module.css';
+
 
 function Projects() {
   return (
     <>
       <BasicNavBar />
-      <ProfileCard/>
+      <div className={scroll.scroll_parent}>
+        <ProfileCardList/>
+      </div>
       {/* <h1> Work in Progress</h1>
       <iframe
         width="560"

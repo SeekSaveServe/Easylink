@@ -75,18 +75,8 @@ function ProfileCard(props) {
             </Box>
 
             <Divider orientation="vertical" flexItem/>
-            <LinkableAvatar sx={{ width: "17%", height: "auto" }} variant="square" src={user?.avatar_url} imgProps={{style: {objectFit: "contain"}}}/>
-
-            {/* <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/4d/Cat_November_2010-1a.jpg/340px-Cat_November_2010-1a.jpg"
-                 width="100px"
-                 className={styles.img}
-                 style={{objectFit: "contain"}}
-
-            /> */}
-                    
+            <LinkableAvatar sx={{ width: "17%", height: "auto" }} variant="square" src={user?.avatar_url} imgProps={{style: {objectFit: "contain"}}}/>       
         </Card>
-
-        
     )
 }
 
