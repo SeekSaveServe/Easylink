@@ -23,3 +23,11 @@
     display: flex;
 }
 
+/* backgroundColor: "var(--tag-grey)", borderRadius: "1rem", padding: "0.2rem 0.5rem", display: "inline-b */
+.tag {
+    /* background-color: var(--tag-grey); */
+    border-radius: 1rem;
+    padding: 0.2rem 0.5rem;
+    display: inline-block;
+}
+
