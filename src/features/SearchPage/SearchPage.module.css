@@ -1,0 +1,16 @@
+.parent {
+  background-color: var(--bg-grey);
+  margin-top: 0;
+  width: 100vw;
+  height: 100vh;
+  overflow-y: hidden;
+  text-align: center;
+}
+
+.content {
+  display: grid;
+  grid-template-columns: 8fr 2fr;
+  column-gap: 10%;
+  padding: 1rem 2rem;
+  height: 100%;
+}

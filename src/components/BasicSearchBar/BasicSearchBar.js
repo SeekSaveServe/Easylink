@@ -1,10 +1,9 @@
-import { styled } from "@chakra-ui/react";
-import { alpha, InputBase } from "@mui/material";
+import { styled, alpha, InputBase } from "@mui/material";
 import { useDispatch } from "react-redux";
 import SearchIcon from "@mui/icons-material/Search";
 import { update } from "../../features/user/userSlice";
 import { Navigate, useNavigate } from "react-router-dom";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
@@ -48,28 +47,26 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 
 export default function BasicSearchBar() {
   const dispatch = useDispatch();
-  const [loading, setLoading] = useEffect(false);
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
-  const handle = async () => {
-    const input = document.getElementById("searchBar");
-    input.addEventListener("keypress", function (event) {
-      if (event.key === "Enter") {
-        event.preventDefault();
-        // redirect to search page and update the userslice
-        try {
-          setLoading(true);
-          dispatch(update({ search: input.value }));
-          navigate("/Search", { replace: true });
-          // TODO: Add Backend API connector here
-        } catch (error) {
-          alert(alert(error.error_decription || error.message));
-        } finally {
-          setLoading(false);
-        }
+  const input = document.getElementById("searchBar");
+  input.addEventListener("keypress", function (event) {
+    if (event.key === "Enter") {
+      event.preventDefault();
+      // redirect to search page and update the userslice
+      try {
+        setLoading(true);
+        dispatch(update({ search: input.value }));
+        navigate("/Search", { replace: true });
+        // TODO: Add Backend API connector here
+      } catch (error) {
+        alert(alert(error.error_decription || error.message));
+      } finally {
+        setLoading(false);
       }
-    });
-  };
+    }
+  });
 
   return (
     <Search>
