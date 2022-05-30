@@ -3,12 +3,14 @@ import { supabase } from "../../supabaseClient";
 import { useSelector } from "react-redux";
 import { Box, Typography, Stack, Paper, Divider } from "@mui/material";
 import BasicNavBar from "../../components/BasicNavBar/BasicNavBar";
+import ProfileCard from "../components/ProfileCard/ProfileCard";
 
 function Projects() {
   return (
     <>
       <BasicNavBar />
-      <h1> Work in Progress</h1>
+      <ProfileCard/>
+      {/* <h1> Work in Progress</h1>
       <iframe
         width="560"
         height="315"
@@ -17,7 +19,7 @@ function Projects() {
         frameborder="0"
         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
         allowfullscreen
-      ></iframe>
+      ></iframe> */}
     </>
   );
 }
