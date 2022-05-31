@@ -31,10 +31,12 @@ function RecommendationsList({ setLoading, refresh, setRefresh }) {
     setLoading(true);
     for (let i = 0; i < n; i++) {
       // simulate backend
+      // TODO: Implement actual backend
       console.log(i);
       arr.push(<RecommendationCard key={i} />);
     }
     setLoading(false);
+    setRefresh(false);
     return arr;
   }
 
