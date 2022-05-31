@@ -7,7 +7,7 @@ function Scrollable({sx, children}) {
         <Box sx={sx} className={scroll.scroll_parent}>
             <Box className={scroll.scroll_child}>
                 {children}
-                <div style={{visibility: "hidden", height: "10vh"}}>
+                <div style={{visibility: "hidden", height: "25vh"}}>
                 </div>
             </Box>
         </Box>
