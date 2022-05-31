@@ -43,13 +43,9 @@ function RecommendationsList({ setLoading, refresh, setRefresh }) {
       arr.push(<RecommendationCard key={i} />);
     }
     setLoading(false);
-    
+
     setRecommendations(arr);
   }
-
-  
-
-  
 
   return (
     <Box className={scroll.scroll_parent}>

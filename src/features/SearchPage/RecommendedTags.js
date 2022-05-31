@@ -32,6 +32,14 @@ function RecommendedTags({ refresh, setRefresh, loading }) {
   const [interests, setInterests] = useState([]);
   const [communities, setCommunities] = useState([]);
 
+  // for radial buttons
+  const [filter, setFilter] = useState("Show All");
+
+  // update field with key = name attribute, to value = value attribute
+  const radioChange = (evt) => {
+    setFilter(evt.target.value);
+  };
+
   // Placeholder tags for now
   async function obtainTags(tag) {
     const { data, error } = await supabase
@@ -66,6 +74,7 @@ function RecommendedTags({ refresh, setRefresh, loading }) {
     dispatch(
       update({
         tags: [selectedSkills, selectedInterests, selectedCommunities],
+        searchFilter: filter,
       })
     );
   };
@@ -74,9 +83,7 @@ function RecommendedTags({ refresh, setRefresh, loading }) {
   async function handleSubmit(e) {
     e.preventDefault();
     updateFormState();
-    console.log(refresh);
     setRefresh(!refresh); // triggers a refresh
-    console.log(refresh);
   }
 
   return (
@@ -104,9 +111,15 @@ function RecommendedTags({ refresh, setRefresh, loading }) {
           selectedTags={selectedCommunities}
           setSelectedTags={setSelectedCommunities}
         />{" "}
-        <RadioGroup row>
+        <RadioGroup
+          row
+          aria-labelledby="demo-row-radio-buttons-group-label"
+          name="row-radio-buttons-group"
+          onChange={radioChange}
+        >
           <RadioWithLabel value="Show Projects" label="Show Users" />
           <RadioWithLabel value="Show Users" label="Show Users" />
+          <RadioWithLabel value="Show All" label="Show All" />
         </RadioGroup>
         <BasicLoadingButton
           bg="#000000"

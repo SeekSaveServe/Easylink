@@ -5,6 +5,10 @@ import { store } from "./app/store";
 import App from "./App.js";
 import reportWebVitals from "./reportWebVitals";
 import "./index.css";
+// Sentry
+import * as Sentry from "@sentry/react";
+import { BrowserTracing } from "@sentry/tracing";
+import { ReactDOM } from "react";
 import CssBaseline from "@mui/material/CssBaseline";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import SignUp from "./features/sign up/sign up";
@@ -18,6 +22,17 @@ import Links from "./features/Links";
 import SearchPage from "./features/SearchPage";
 const container = document.getElementById("root");
 const root = createRoot(container);
+
+// Setting up logger
+Sentry.init({
+  dsn: "https://2259a23501ee4699950c8f3cfc0901a1@o1268981.ingest.sentry.io/6458401",
+  integrations: [new BrowserTracing()],
+
+  // Set tracesSampleRate to 1.0 to capture 100%
+  // of transactions for performance monitoring.
+  // We recommend adjusting this value in production
+  tracesSampleRate: 1.0,
+});
 
 root.render(
   <React.StrictMode>
@@ -81,7 +96,8 @@ root.render(
   </React.StrictMode>
 );
 
+ReactDOM.render(<App />, document.getElementById("root"));
 // If you want to start measuring performance in your app, pass a function
 // to log results (for example: reportWebVitals(console.log))
 // or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
-reportWebVitals();
+// reportWebVitals(Sentry);

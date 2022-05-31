@@ -12,7 +12,7 @@ export default function SearchPage() {
   // Cause the results to refresh
   const [refresh, setRefresh] = useState(true);
   const [loading, setLoading] = useState(false);
-  console.log(refresh);
+  // console.log(refresh);
 
   return (
     <>
