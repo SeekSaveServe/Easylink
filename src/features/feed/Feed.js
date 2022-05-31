@@ -9,9 +9,12 @@ import BasicNavBar from "../../components/BasicNavBar/BasicNavBar";
 
 function Feed() {
   const userProfile = useSelector((state) => state.user);
-
+  const throwKnownError = () => {
+    throw new Error("testing Sentry");
+  };
   return (
     <>
+      {/* <button onClick={throwKnownError}> hi </button> */}
       <BasicNavBar />
       <Box className={styles.parent}>
         <Typography variant="h4" sx={{ margin: "0.5rem 0" }}>

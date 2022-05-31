@@ -5,27 +5,26 @@ import RegistrationTags from "./features/Registration_Tags/RegistrationTags";
 import { useState, useEffect } from "react";
 import { supabase } from "./supabaseClient";
 import Authenticated from "./components/Authenticated";
-// import Feed from "./features/feed";
+import * as Sentry from "@sentry/react";
 
 function App() {
   const [session, setSession] = useState(null);
 
   useEffect(() => {
-	  setSession(supabase.auth.session());
+    setSession(supabase.auth.session());
 
     // also updates when there's a change in user but still logged in e.g USER_UPDATED
-	  supabase.auth.onAuthStateChange((_event, session) => {
-		  setSession(session);
+    supabase.auth.onAuthStateChange((_event, session) => {
+      setSession(session);
 
       // if user exists (i.e a sign in or sign up is happening) then update redux store with user profile data
-	  });
+    });
   }, []);
 
   return (
-    <div>
-      {!session ? <SignIn /> : <Authenticated session={session} /> }
-    </div>
+    <div>{!session ? <SignIn /> : <Authenticated session={session} />}</div>
   );
 }
 
-export default App;
+// DISABLE ADBLOCKER FOR SENTRY TO WORK
+export default Sentry.withProfiler(App);
