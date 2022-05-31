@@ -11,7 +11,7 @@ import {
   RadioGroup,
   Box,
   Container,
-  Stack
+  Stack,
 } from "@mui/material";
 import { SupabaseClient } from "@supabase/supabase-js";
 import { useState } from "react";
@@ -95,8 +95,8 @@ function PrivacySettings() {
           avatar_url: avatar_url,
           email: email,
           telegram: telegram,
-          telegram_visibility:contact.telegram_visibility,
-          email_visibility:contact.email_visibility
+          telegram_visibility: contact.telegram_visibility,
+          email_visibility: contact.email_visibility,
         },
       ]);
 
@@ -132,16 +132,17 @@ function PrivacySettings() {
         }
       }
     }
-    // TODO: Add feed
-    // TODO: Add Avatar button
+
     navigate("/", { replace: true });
   }
 
   const handleBack = () => {
-    dispatch(update({
-      telegram_visibility:contact.telegram_visibility,
-      email_visibility: contact.email_visibility
-    }));
+    dispatch(
+      update({
+        telegram_visibility: contact.telegram_visibility,
+        email_visibility: contact.email_visibility,
+      })
+    );
 
     navigate("/Registration_Tags", { replace: true });
   };
@@ -164,7 +165,10 @@ function PrivacySettings() {
         <BasicAlert />
         <Box sx={{ display: "flex", width: "100%" }}>
           <div style={{ flex: 1 }}>
-            <LinkableAvatar src={user.avatar_url} sx={{height: 75, width: 75}}/>
+            <LinkableAvatar
+              src={user.avatar_url}
+              sx={{ height: 75, width: 75 }}
+            />
           </div>
           <img src={logo} alt="Logo" style={{ width: "200px" }} />
           {/*  https://stackoverflow.com/questions/38948102/center-one-and-right-left-align-other-flexbox-element*/}
@@ -230,26 +234,29 @@ function PrivacySettings() {
               <RadioWithLabel value="everyone" label="Everyone" />
             </RadioGroup>
           </Box>
-          
-          <Stack sx={{mt:5}} direction="row" spacing={3}> 
-            <div style={{flexGrow: 1}}>
-              <BasicButton bg="secondary" onClick={handleBack} sx={{paddingLeft: "2rem", paddingRight: "2rem"}} >
+
+          <Stack sx={{ mt: 5 }} direction="row" spacing={3}>
+            <div style={{ flexGrow: 1 }}>
+              <BasicButton
+                bg="secondary"
+                onClick={handleBack}
+                sx={{ paddingLeft: "2rem", paddingRight: "2rem" }}
+              >
                 Back
               </BasicButton>
             </div>
-            
-            <div style={{flexGrow: 1}}>
+
+            <div style={{ flexGrow: 1 }}>
               <BasicLoadingButton
                 bg="primary"
                 onClick={handleSubmit}
                 loading={loading}
-                sx={{paddingLeft: "1rem", paddingRight: "1rem"}}
+                sx={{ paddingLeft: "1rem", paddingRight: "1rem" }}
               >
                 Start Linking!
               </BasicLoadingButton>
             </div>
           </Stack>
-
         </Paper>
       </Container>
     </div>

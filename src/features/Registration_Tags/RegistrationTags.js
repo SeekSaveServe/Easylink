@@ -18,7 +18,7 @@ import BackNextGroup from "../../components/BackNextGroup";
 
 export default function RegistrationTags() {
   const dispatch = useDispatch();
-  const user = useSelector(state => state.user);
+  const user = useSelector((state) => state.user);
 
   const [telegram, setTelegram] = useState("");
   const [avatar_url, set_AvatarUrl] = useState(user.avatar_url ?? "");
@@ -81,11 +81,10 @@ export default function RegistrationTags() {
         avatar_url,
       })
     );
-  }
+  };
 
   function handleBack() {
-    
-    navigate("/signup", { replace: true })
+    navigate("/signup", { replace: true });
     updateFormState();
   }
 
@@ -93,7 +92,6 @@ export default function RegistrationTags() {
     e.preventDefault();
     navigate("/privacy", { replace: true });
     updateFormState();
-    
   }
 
   return (
@@ -136,7 +134,6 @@ export default function RegistrationTags() {
           sx={{ m: 1 }}
           icon={<Telegram />}
         />
-
         {/* <Stack direction="row" className={styles.btn_group} spacing={3}>
           <Link to="/signup" style={{ textDecoration: "none", marginLeft: "1.5%" }}>
               <BasicButton bg="primary">Back</BasicButton>
@@ -148,9 +145,18 @@ export default function RegistrationTags() {
             </BasicButton>
           </Link>
         </Stack> */}
-        <BackNextGroup 
-          child1={<BasicButton bg="primary" onClick={handleBack}>Back</BasicButton>} 
-          child2={<BasicButton bg="secondary" onClick={handleSubmit}> Next </BasicButton>}
+        <BackNextGroup
+          child1={
+            <BasicButton bg="primary" onClick={handleBack}>
+              Back
+            </BasicButton>
+          }
+          child2={
+            <BasicButton bg="secondary" onClick={handleSubmit}>
+              {" "}
+              Next{" "}
+            </BasicButton>
+          }
         />
       </form>
     </div>

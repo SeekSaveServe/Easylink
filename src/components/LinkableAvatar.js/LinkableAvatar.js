@@ -3,6 +3,7 @@ import { useState } from "react";
 import { Navigate, useNavigate } from "react-router-dom";
 import { supabase } from "../../supabaseClient";
 import useBasicAlert from "../Alert";
+import { useEffect } from "react";
 
 // provide custom sx to override
 function LinkableAvatar(props) {
@@ -17,6 +18,11 @@ function LinkableAvatar(props) {
   const [avatarUrl, setAvatarUrl] = useState(null);
   const { BasicAlert, showAlert } = useBasicAlert("error");
   const downloadImage = async (path) => {
+    if (!path) {
+      setAvatarUrl("");
+      return;
+    }
+
     try {
       const { data, error } = await supabase.storage
         .from("avatars")
@@ -34,7 +40,9 @@ function LinkableAvatar(props) {
     }
   };
 
-  const avatar_url = downloadImage(src);
+  useEffect(() => {
+    downloadImage(src);
+  }, [src]);
   return <Avatar onClick={onClick} src={avatarUrl} {...rest}></Avatar>;
 }
 
