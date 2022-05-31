@@ -16,18 +16,19 @@ function Projects() {
     setValue(newValue);
   }
 
+  
+
   return (
     <>
       <BasicNavBar />
       <Container>
         <Center>
-          <Tabs value={value} onChange={change} variant="fullWidth" sx={{width: "40%"}}>
+          <Tabs value={value} onChange={change} variant="fullWidth" sx={{width: "80%"}}>
             <Tab label="Pending"></Tab>
             <Tab label="Established"></Tab>
             <Tab label="Rejected"></Tab>
           </Tabs>
 
-          <BasicButton bg="primary" sx={{margin:"0.5rem 2rem", width: "20%", display: "block", padding: "0.2rem"}}>Users only</BasicButton>
         </Center>
 
         <ProfileCardList/>
