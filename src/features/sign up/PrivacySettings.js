@@ -24,6 +24,7 @@ import BasicLoadingButton from "../../components/BasicLoadingButton/BasicLoading
 import { supabase } from "../../supabaseClient";
 import { update } from "../user/userSlice";
 import LinkableAvatar from "../../components/LinkableAvatar.js";
+import BasicTextField from '../../components/Basic Textfield';
 
 // rest is props for Checkbox, not FCL
 function CheckboxWithLabel({ label, ...rest }) {
@@ -68,6 +69,9 @@ function PrivacySettings() {
   const tags = useSelector((state) => state.user.tags);
   const avatar_url = useSelector((state) => state.user.avatar_url);
 
+  const [title, setTitle] = useState(user?.title ?? "");
+  const [bio, setBio] = useState(user?.bio ?? "");
+
   async function handleSubmit(e) {
     e.preventDefault();
     // signing up
@@ -95,8 +99,10 @@ function PrivacySettings() {
           avatar_url: avatar_url,
           email: email,
           telegram: telegram,
-          telegram_visibility: contact.telegram_visibility,
-          email_visibility: contact.email_visibility,
+          telegram_visibility:contact.telegram_visibility,
+          email_visibility:contact.email_visibility,
+          title: title,
+          bio: bio
         },
       ]);
 
@@ -137,12 +143,12 @@ function PrivacySettings() {
   }
 
   const handleBack = () => {
-    dispatch(
-      update({
-        telegram_visibility: contact.telegram_visibility,
-        email_visibility: contact.email_visibility,
-      })
-    );
+    dispatch(update({
+      telegram_visibility:contact.telegram_visibility,
+      email_visibility: contact.email_visibility,
+      title: title,
+      bio: bio
+    }));
 
     navigate("/Registration_Tags", { replace: true });
   };
@@ -152,6 +158,7 @@ function PrivacySettings() {
         height: "100vh",
         backgroundColor: "var(--bg-grey)",
         paddingTop: 40,
+        overflow: "auto"
       }}
     >
       <Container
@@ -165,12 +172,9 @@ function PrivacySettings() {
         <BasicAlert />
         <Box sx={{ display: "flex", width: "100%" }}>
           <div style={{ flex: 1 }}>
-            <LinkableAvatar
-              src={user.avatar_url}
-              sx={{ height: 75, width: 75 }}
-            />
+            <LinkableAvatar src={user?.avatar_url} sx={{height: 75, width: 75}}/>
           </div>
-          <img src={logo} alt="Logo" style={{ width: "200px" }} />
+          <img src={logo} alt="Logo" style={{ width: "170px" }} />
           {/*  https://stackoverflow.com/questions/38948102/center-one-and-right-left-align-other-flexbox-element*/}
           <div style={{ flex: 1 }}> </div>
         </Box>
@@ -182,7 +186,7 @@ function PrivacySettings() {
             display: "flex",
             flexDirection: "column",
             alignItems: "center",
-            padding: "4rem",
+            padding: "3rem",
             marginTop: 2,
           }}
         >
@@ -193,6 +197,27 @@ function PrivacySettings() {
               alignItems: "center",
             }}
           >
+            <BasicTextField 
+              label="Title"
+              type="text"
+              margin="normal"
+              sx={{width: "100%" }}
+              helperText="A title to introduce yourself in recommendations"
+              value={title}
+              onChange={(evt) => setTitle(evt.target.value)}
+            />
+
+            <BasicTextField 
+              label="Bio"
+              type="text"
+              margin="normal"
+              sx={{width: "100%", mb: 3}}
+              helperText="A short description to introduce yourself"
+              multiline
+              value={bio}
+              onChange={(evt) => setBio(evt.target.value)}
+            />
+
             <FormLabel>
               <Typography variant="h5" color="black">
                 Telegram visibility:
@@ -211,7 +236,7 @@ function PrivacySettings() {
           </Box>
 
           <Box
-            mt={6}
+            mt={2}
             sx={{
               display: "flex",
               flexDirection: "column",
@@ -234,14 +259,10 @@ function PrivacySettings() {
               <RadioWithLabel value="everyone" label="Everyone" />
             </RadioGroup>
           </Box>
-
-          <Stack sx={{ mt: 5 }} direction="row" spacing={3}>
-            <div style={{ flexGrow: 1 }}>
-              <BasicButton
-                bg="secondary"
-                onClick={handleBack}
-                sx={{ paddingLeft: "2rem", paddingRight: "2rem" }}
-              >
+          
+          <Stack sx={{mt:2}} direction="row" spacing={3}> 
+            <div style={{flexGrow: 1}}>
+              <BasicButton bg="secondary" onClick={handleBack} sx={{paddingLeft: "2rem", paddingRight: "2rem"}} >
                 Back
               </BasicButton>
             </div>

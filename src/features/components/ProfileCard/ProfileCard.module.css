@@ -1,0 +1,33 @@
+.card {
+    width: 50%;
+    margin: 2rem auto;
+    display: flex;
+    align-content: center;
+}
+
+.card_content {
+    flex: 3;
+}
+
+.img {
+    flex: 1;
+    max-width: 20%;
+    
+}
+/* .content_box {
+    display: grid;
+    grid-template-columns: 3fr 1fr;
+} */
+
+.content_box {
+    display: flex;
+}
+
+/* backgroundColor: "var(--tag-grey)", borderRadius: "1rem", padding: "0.2rem 0.5rem", display: "inline-b */
+.tag {
+    /* background-color: var(--tag-grey); */
+    border-radius: 1rem;
+    padding: 0.2rem 0.5rem;
+    display: inline-block;
+}
+
