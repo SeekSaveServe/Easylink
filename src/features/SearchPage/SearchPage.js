@@ -12,6 +12,7 @@ export default function SearchPage() {
   // Cause the results to refresh
   const [refresh, setRefresh] = useState(true);
   const [loading, setLoading] = useState(false);
+  console.log(refresh);
 
   return (
     <>
@@ -27,6 +28,7 @@ export default function SearchPage() {
           setRefresh={setRefresh}
           setLoading={setLoading}
           loading={loading}
+          refresh={refresh}
         />
       </Box>
     </>

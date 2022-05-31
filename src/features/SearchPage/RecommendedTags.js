@@ -7,6 +7,7 @@ import {
   Stack,
   FormControlLabel,
   Radio,
+  RadioGroup,
 } from "@mui/material";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -72,8 +73,10 @@ function RecommendedTags({ refresh, setRefresh, loading }) {
   //   const navigate = useNavigate();
   async function handleSubmit(e) {
     e.preventDefault();
-    setRefresh(true); // triggers a refresh
     updateFormState();
+    console.log(refresh);
+    setRefresh(!refresh); // triggers a refresh
+    console.log(refresh);
   }
 
   return (
@@ -101,7 +104,10 @@ function RecommendedTags({ refresh, setRefresh, loading }) {
           selectedTags={selectedCommunities}
           setSelectedTags={setSelectedCommunities}
         />{" "}
-        <RadioWithLabel value="Show Projects" label="Show Users" />
+        <RadioGroup row>
+          <RadioWithLabel value="Show Projects" label="Show Users" />
+          <RadioWithLabel value="Show Users" label="Show Users" />
+        </RadioGroup>
         <BasicLoadingButton
           bg="#000000"
           onClick={handleSubmit}
