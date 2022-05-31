@@ -73,8 +73,10 @@ function RecommendedTags({ refresh, setRefresh, loading }) {
   //   const navigate = useNavigate();
   async function handleSubmit(e) {
     e.preventDefault();
-    setRefresh(true); // triggers a refresh
     updateFormState();
+    console.log(refresh);
+    setRefresh(!refresh); // triggers a refresh
+    console.log(refresh);
   }
 
   return (
