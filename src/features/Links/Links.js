@@ -9,6 +9,48 @@ import { useState } from "react";
 import { Center } from "@chakra-ui/react";
 
 
+const data = [
+  {
+    username: "Cat Lover",
+    title: "Cat lover, professional photographer, expert coder",
+    bio: "Hi! I love to document the cats of NUS and code!",
+    // skills, interests, communities
+    tags: [["Python", "Meowing", "Photography"], ["Nature", "Software Development", "Photography"], ["USP"]],
+    dateRange: "Now to Dec 2022",
+    isProject: false
+  
+  },
+  {
+    username: "USDevs",
+    title: "Make laundry chill",
+    bio: "Hi! We are Project Laundrobot, a subproject under USDevs working on a hardware based laundry notification system.",
+    // skills, interests, communities
+    tags: [["Python", "Software Development", "Raspberry Pi"], ["Developers"], ["USP"]],
+    dateRange: "Now to Dec 2022",
+    isProject: true
+  
+  },
+  {
+    username: "Web_Lover",
+    title: "Web Lover, expert coder",
+    bio: "Hi! I love to make websites.",
+    // skills, interests, communities
+    tags: [["Python", "JavaScript"], ["Web development", "UI/UX"], ["USP"]],
+    dateRange: "Now to Dec 2022",
+    isProject: false
+  },
+  {
+    username: "Livecore",
+    title: "Looking for live performers",
+    bio: "Looking for performers to play in a show.",
+    // skills, interests, communities
+    tags: [["Drumming", "Guitar", "Singing"], ["Performers"], ["USP"]],
+    dateRange: "Now to Dec 2022",
+    isProject: true
+  }
+  
+]
+
 
 function Projects() {
   const [value, setValue] = useState(0);
@@ -17,7 +59,6 @@ function Projects() {
   }
 
   
-
   return (
     <>
       <BasicNavBar />
@@ -31,7 +72,7 @@ function Projects() {
 
         </Center>
 
-        <ProfileCardList/>
+        <ProfileCardList data={data}/>
       </Container>
    
     </>

@@ -10,6 +10,13 @@ const map = {
     2: "Projects Only"
 };
 
+// filter fn to apply on datum
+const filterMap = {
+    0: (datum) => true,
+    1: (datum) => !datum.isProject,
+    2: (datum) => datum.isProject
+}
+
 const n = Object.keys(map).length;
 
 // pass in the data through props. This component applies further filter based on Users/Projects
@@ -21,13 +28,9 @@ function ProfileCardList({ data }) {
     }
     // TODO: replace with actual data etc
     const showList = (n) => {
-        let arr = [];
-        
-        for (let i = 0; i < n; i++) {
-            arr.push(<ProfileCard isProject={i % 2 == 0}/>);
-        }
-
-        return arr;
+        return data.map((datum, idx) => {
+            return filterMap[btnIndex](datum) ? <ProfileCard isProject={datum.isProject} info={datum} /> : <></>;
+        });
     }
 
     return (
