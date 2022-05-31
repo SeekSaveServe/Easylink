@@ -83,9 +83,7 @@ function RecommendedTags({ refresh, setRefresh, loading }) {
   async function handleSubmit(e) {
     e.preventDefault();
     updateFormState();
-    // console.log(refresh);
     setRefresh(!refresh); // triggers a refresh
-    // console.log(refresh);
   }
 
   return (
