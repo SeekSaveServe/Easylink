@@ -39,6 +39,11 @@ const data = [
     pid: 5,
     title: 'Laundry Hardware',
     parent_id: 1,
+  },
+  {
+    pid:6,
+    title: 'USTech',
+    parent_id: null
   }
 ]
 
