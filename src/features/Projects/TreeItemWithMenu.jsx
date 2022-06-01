@@ -4,6 +4,9 @@ import { Box, Typography } from "@mui/material"
 import { forwardRef } from "react";
 import clsx from 'clsx';
 
+// this is necessary to prevent menu expansion/collapse when the row is clicked
+    // needed for hamburger menu to work: otherwise, everytime hamburger is clicked the child menu is collapsed/expanded
+// Taken from : https://mui.com/material-ui/react-tree-view/#contentcomponent-prop
 const CustomContent = forwardRef(function CustomContent(props, ref) {
     const {
       classes,
@@ -66,6 +69,7 @@ const CustomContent = forwardRef(function CustomContent(props, ref) {
     );
   });
 
+// Adapted from MUI TreeView docs
 function TreeItemWithMenu({label, nodeId, children,...rest}) {
     return (
       <TreeItem
