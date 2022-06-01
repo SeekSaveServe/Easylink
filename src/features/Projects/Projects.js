@@ -8,55 +8,35 @@ import { Container } from "@mui/system";
 
 import ProjectTree from "./ProjectTree";
 
-// simulation of actual data from DB: e.g select * where projects.uid = user.id;
-const data = [
-  {
-    pid: 0,
-    title: 'USDevs',
-    parent_id: null,
-  },
-  {
-    pid: 1,
-    title: 'Laundrobot',
-    parent_id: 0,
-  },
-  {
-    pid: 2,
-    title: 'Cinnabot',
-    parent_id: 0,
-  },
-  {
-    pid: 3,
-    title: 'USC Website',
-    parent_id: 0,
-  },
-  {
-    pid: 4,
-    title: 'Booking system',
-    parent_id: 3,
-  },
-  {
-    pid: 5,
-    title: 'Laundry Hardware',
-    parent_id: 1,
-  },
-  {
-    pid:6,
-    title: 'USTech',
-    parent_id: null
-  }
-]
-
-
 function Projects() {
+  
+  async function addProj() {
+    // const { data, error } = await supabase
+    //   .from('projects')
+    //   .insert([
+    //     {
+    //       parent_id: null,
+    //       uid: supabase.auth.user().id,
+    //       title: 'First project',
+    //       bio: 'First project bio'
+    //     }
+    //   ])
+    
+    // if (error) {
+    //   console.log(error);
+    // } else {
+    //   console.log(data);
+    // }
+  }
   return (
     <>
       <BasicNavBar />
       <Container className={styles.container} maxWidth={"md"}>
-        
         <Paper elevation={3} className={styles.paper}>
-          <ProjectTree data={data}/>
+          <ProjectTree/>
         </Paper>
+
+        <BasicButton bg="primary" onClick={addProj}>Add proj</BasicButton>
       </Container>
     </>
   );
