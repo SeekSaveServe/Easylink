@@ -17,7 +17,7 @@ import RegistrationTags from "./features/Registration_Tags/RegistrationTags";
 import ProtectedRoute from "./components/ProtectedRoute";
 import Feed from "./features/feed";
 import Profile from "./features/Profile/Profile";
-import Projects from "./features/Profile";
+import Projects from "./features/Projects";
 import Links from "./features/Links";
 import SearchPage from "./features/SearchPage";
 const container = document.getElementById("root");
@@ -54,7 +54,7 @@ root.render(
               }
             />
             <Route
-              path="/profile"
+              path="/Profile"
               element={
                 <ProtectedRoute redirectRoute="/">
                   {" "}
