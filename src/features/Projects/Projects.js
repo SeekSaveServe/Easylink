@@ -1,15 +1,47 @@
 import BasicButton from "../../components/BasicButton";
 import { supabase } from "../../supabaseClient";
 import { useSelector } from "react-redux";
-import { Box, Typography, Stack, Paper, Divider } from "@mui/material";
-import { TreeView, TreeItem } from "@mui/lab";
+import {  Paper  } from "@mui/material";
 import BasicNavBar from "../../components/BasicNavBar/BasicNavBar";
-import { ArrowRight, ArrowDropDown, ArrowCircleDownOutlined, ArrowCircleRightOutlined } from "@mui/icons-material";
 import styles from './Projects.module.css';
 import { Container } from "@mui/system";
-import OptionsMenu from "./OptionsMenu";
 
-import TreeItemWithMenu from "./TreeItemWithMenu";
+import ProjectTree from "./ProjectTree";
+
+// simulation of actual data from DB: e.g select * where projects.uid = user.id;
+const data = [
+  {
+    pid: 0,
+    title: 'USDevs',
+    parent_id: null,
+  },
+  {
+    pid: 1,
+    title: 'Laundrobot',
+    parent_id: 0,
+  },
+  {
+    pid: 2,
+    title: 'Cinnabot',
+    parent_id: 0,
+  },
+  {
+    pid: 3,
+    title: 'USC Website',
+    parent_id: 0,
+  },
+  {
+    pid: 4,
+    title: 'Booking system',
+    parent_id: 3,
+  },
+  {
+    pid: 5,
+    title: 'Laundry Hardware',
+    parent_id: 1,
+  }
+]
+
 
 function Projects() {
   return (
@@ -18,15 +50,7 @@ function Projects() {
       <Container className={styles.container} maxWidth={"md"}>
         
         <Paper elevation={3} className={styles.paper}>
-          <TreeView defaultCollapseIcon={<ArrowCircleDownOutlined size="large"/>} defaultExpandIcon={<ArrowCircleRightOutlined size="large"/>}>
-            <TreeItemWithMenu label="USDevs" nodeId="1">
-              <TreeItemWithMenu label="Laundrobot" nodeId="2"></TreeItemWithMenu>
-              <TreeItemWithMenu label="Cinnabot" nodeId="3"></TreeItemWithMenu>
-              <TreeItemWithMenu label="USC Website" nodeId="4">
-                <TreeItemWithMenu label="Booking System" nodeId="5"></TreeItemWithMenu>
-              </TreeItemWithMenu>
-            </TreeItemWithMenu>
-          </TreeView>
+          <ProjectTree data={data}/>
         </Paper>
       </Container>
     </>
