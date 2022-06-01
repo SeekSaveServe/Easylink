@@ -9,23 +9,7 @@ import styles from './Projects.module.css';
 import { Container } from "@mui/system";
 import OptionsMenu from "./OptionsMenu";
 
-function TreeItemWithMenu({label, nodeId, children,...rest}) {
-  return (
-    <TreeItem
-      label={
-        <Box sx={{display: 'flex', alignItems: 'center', p: 0.5, pr:0}}>
-        <Typography variant="subtitle1">{label}</Typography>
-        <Box component={() => <OptionsMenu projectId={nodeId}/>} />
-    
-        </Box>
-      }
-      nodeId={nodeId}
-      {...rest}
-    >
-      { children }
-    </TreeItem>
-  )
-}
+import TreeItemWithMenu from "./TreeItemWithMenu";
 
 function Projects() {
   return (
