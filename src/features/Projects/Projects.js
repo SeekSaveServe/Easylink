@@ -4,7 +4,7 @@ import { useSelector } from "react-redux";
 import { Box, Typography, Stack, Paper, Divider } from "@mui/material";
 import { TreeView, TreeItem } from "@mui/lab";
 import BasicNavBar from "../../components/BasicNavBar/BasicNavBar";
-import { ArrowRight, ArrowDropDown } from "@mui/icons-material";
+import { ArrowRight, ArrowDropDown, ArrowCircleDownOutlined, ArrowCircleRightOutlined } from "@mui/icons-material";
 import styles from './Projects.module.css';
 import { Container } from "@mui/system";
 import OptionsMenu from "./OptionsMenu";
@@ -14,7 +14,7 @@ function TreeItemWithMenu({label, nodeId, children,...rest}) {
     <TreeItem
       label={
         <Box sx={{display: 'flex', alignItems: 'center', p: 0.5, pr:0}}>
-        <Typography variant="subtitle1" sx={{}}>{label}</Typography>
+        <Typography variant="subtitle1">{label}</Typography>
         <Box component={() => <OptionsMenu projectId={nodeId}/>} />
     
         </Box>
@@ -34,7 +34,7 @@ function Projects() {
       <Container className={styles.container} maxWidth={"md"}>
         
         <Paper elevation={3} className={styles.paper}>
-          <TreeView defaultCollapseIcon={<ArrowDropDown />} defaultExpandIcon={<ArrowRight/>}>
+          <TreeView defaultCollapseIcon={<ArrowCircleDownOutlined size="large"/>} defaultExpandIcon={<ArrowCircleRightOutlined size="large"/>}>
             <TreeItemWithMenu label="USDevs" nodeId="1">
               <TreeItemWithMenu label="Laundrobot" nodeId="2"></TreeItemWithMenu>
               <TreeItemWithMenu label="Cinnabot" nodeId="3"></TreeItemWithMenu>
