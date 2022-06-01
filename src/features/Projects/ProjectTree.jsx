@@ -133,7 +133,7 @@ function ProjectTree() {
     const { BasicAlert, showAlert } = useBasicAlert("error");
 
     async function loadData() {
-      const { data, error } = await getData();
+      const { data, error } = await getActualData();
       if (error) {
         showAlert(error.message || error.description);
         return;
@@ -142,7 +142,6 @@ function ProjectTree() {
       setTree(returnTree(data));
       return;
     }
-    
 
     useEffect(() => {
       loadData();

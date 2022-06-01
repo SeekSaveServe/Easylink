@@ -34,7 +34,7 @@ function Projects() {
       <BasicNavBar />
       <Container className={styles.container} maxWidth={"md"}>
         <Paper elevation={3} className={styles.paper}>
-          <Button variant="outlined" sx={{textTransform: 'none', float: 'left', width: '20%', pl:0}} startIcon={<AddCircleOutlined/>} size="larges">Add root project</Button>
+          <Button variant="outlined" sx={{textTransform: 'none', float: 'left', width: '25%', pl:1}} startIcon={<AddCircleOutlined/>} size="normal">Add root project</Button>
           <ProjectTree/>
         </Paper>
       </Container>
