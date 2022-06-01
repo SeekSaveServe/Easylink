@@ -20,6 +20,8 @@ import Profile from "./features/Profile/Profile";
 import Projects from "./features/Projects";
 import Links from "./features/Links";
 import SearchPage from "./features/SearchPage";
+import AddProject from "./features/Projects/AddProject";
+
 const container = document.getElementById("root");
 const root = createRoot(container);
 
@@ -86,6 +88,16 @@ root.render(
                 <ProtectedRoute redirectRoute="/">
                   {" "}
                   <SearchPage />{" "}
+                </ProtectedRoute>
+              }
+            />
+
+            <Route
+              path="/addproject"
+              element={
+                <ProtectedRoute redirectRoute="/">
+                  {" "}
+                  <AddProject />{" "}
                 </ProtectedRoute>
               }
             />

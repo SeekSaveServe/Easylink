@@ -8,8 +8,15 @@ import { Container } from "@mui/system";
 
 import ProjectTree from "./ProjectTree";
 import { AddCircleOutlined } from "@mui/icons-material";
+import { useNavigate } from "react-router-dom";
+
 
 function Projects() {
+  const navigate = useNavigate();
+
+  function addProject() {
+    navigate('/addproject');
+  }
   
   async function addProj() {
     // const { data, error } = await supabase
@@ -34,7 +41,13 @@ function Projects() {
       <BasicNavBar />
       <Container className={styles.container} maxWidth={"md"}>
         <Paper elevation={3} className={styles.paper}>
-          <Button variant="outlined" sx={{textTransform: 'none', float: 'left', width: '25%', pl:1}} startIcon={<AddCircleOutlined/>} size="normal">Add root project</Button>
+          <Button 
+            variant="outlined" 
+            sx={{textTransform: 'none', float: 'left', width: '25%', pl:1}} 
+            startIcon={<AddCircleOutlined/>} 
+            size="normal"
+            onClick={addProject}
+            >Add root project</Button>
           <ProjectTree/>
         </Paper>
       </Container>
