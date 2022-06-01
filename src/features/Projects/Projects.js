@@ -1,12 +1,13 @@
 import BasicButton from "../../components/BasicButton";
 import { supabase } from "../../supabaseClient";
 import { useSelector } from "react-redux";
-import {  Paper  } from "@mui/material";
+import {  Button, Paper  } from "@mui/material";
 import BasicNavBar from "../../components/BasicNavBar/BasicNavBar";
 import styles from './Projects.module.css';
 import { Container } from "@mui/system";
 
 import ProjectTree from "./ProjectTree";
+import { AddCircleOutlined } from "@mui/icons-material";
 
 function Projects() {
   
@@ -33,10 +34,9 @@ function Projects() {
       <BasicNavBar />
       <Container className={styles.container} maxWidth={"md"}>
         <Paper elevation={3} className={styles.paper}>
+          <Button variant="outlined" sx={{textTransform: 'none', float: 'left', width: '20%', pl:0}} startIcon={<AddCircleOutlined/>} size="larges">Add root project</Button>
           <ProjectTree/>
         </Paper>
-
-        <BasicButton bg="primary" onClick={addProj}>Add proj</BasicButton>
       </Container>
     </>
   );

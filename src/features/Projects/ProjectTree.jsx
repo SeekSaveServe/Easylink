@@ -133,7 +133,7 @@ function ProjectTree() {
     const { BasicAlert, showAlert } = useBasicAlert("error");
 
     async function loadData() {
-      const { data, error } = await getActualData();
+      const { data, error } = await getData();
       if (error) {
         showAlert(error.message || error.description);
         return;
