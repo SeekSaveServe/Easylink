@@ -1707,7 +1707,7 @@
   "resolved" "https://registry.npmjs.org/@date-io/core/-/core-2.14.0.tgz"
   "version" "2.14.0"
 
-"@date-io/date-fns@^2.11.0":
+"@date-io/date-fns@^2.11.0", "@date-io/date-fns@^2.14.0":
   "integrity" "sha512-4fJctdVyOd5cKIKGaWUM+s3MUXMuzkZaHuTY15PH70kU1YTMrCoauA7hgQVx9qj0ZEbGrH9VSPYJYnYro7nKiA=="
   "resolved" "https://registry.npmjs.org/@date-io/date-fns/-/date-fns-2.14.0.tgz"
   "version" "2.14.0"
@@ -4512,6 +4512,11 @@
     "abab" "^2.0.3"
     "whatwg-mimetype" "^2.3.0"
     "whatwg-url" "^8.0.0"
+
+"date-fns@^2.0.0", "date-fns@^2.25.0", "date-fns@^2.28.0":
+  "integrity" "sha512-8d35hViGYx/QH0icHYCeLmsLmMUheMmTyV9Fcm6gvNwdw31yXXH+O85sOBJ+OLnLQMKZowvpKb6FgMIQjcpvQw=="
+  "resolved" "https://registry.npmjs.org/date-fns/-/date-fns-2.28.0.tgz"
+  "version" "2.28.0"
 
 "debug@^2.2.0":
   "integrity" "sha512-bC7ElrdJaJnPbAP+1EotYvqZsb3ecl5wi6Bfi6BJTUcNowp6cvspg0jXznRTKDjm/E7AdgFBVeAPVMNcKGsHMA=="
