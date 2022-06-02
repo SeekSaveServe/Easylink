@@ -1,14 +1,17 @@
 import { Center } from "@chakra-ui/react";
 import { Paper, Typography } from "@mui/material";
 import { Container } from "@mui/system";
+import { useSelector } from "react-redux";
 import { useLocation } from "react-router-dom";
 import BasicNavBar from "../../components/BasicNavBar/BasicNavBar";
 import styles from './Projects.module.css';
+import { selectProjectById } from "./projectsSlice";
 
 function AddProject() {
     const { state } = useLocation();
-    const parent = state?.project;
-    
+    const parentId = state?.parentId;
+    const parent = useSelector((state) => selectProjectById(state, parentId));
+
     return (
         <>
         <BasicNavBar/>
