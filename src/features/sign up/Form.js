@@ -15,7 +15,7 @@ export function Form() {
   const dispatch = useDispatch();
   const { BasicAlert, showAlert } = useBasicAlert("error");
 
-  const user = useSelector(state => state.user);
+  const user = useSelector((state) => state.user);
 
   useEffect(() => {
     if (user?.username) setUserName(user.username);
@@ -24,8 +24,7 @@ export function Form() {
       setPassword(user.password);
       setConfirmPassword(user.password);
     }
-
-  }, [user])
+  }, [user]);
 
   const [userName, setUserName] = useState("");
   const [email, setEmail] = useState("");

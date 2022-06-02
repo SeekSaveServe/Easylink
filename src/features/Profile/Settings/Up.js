@@ -1,18 +1,19 @@
-import { Center } from "@chakra-ui/react";
+import { Button, ButtonGroup, Center } from "@mui/material";
 import { Box } from "@mui/system";
-import ClickableSetting from "../components/ClickableSetting";
-import DisplayAvatar from "../components/DisplayAvatar/DisplayAvatar";
 
-export default function Upperhalf() {
+export default function Up(isSettings) {
   return (
-    <Box
-      sx={{
-        backgroundColor: "#93b7db",
-        "&:hover": {
-          backgroundColor: "#a6cff7",
-          opacity: [0.9, 0.8, 0.7],
-        },
-      }}
-    ></Box>
+    <>
+      <Box
+        sx={{
+          backgroundColor: "#93b7db",
+        }}
+      >
+        <ButtonGroup variant="text" aria-label="text button group">
+          <Button sx={{ backgroundColor: "white" }}>Settings</Button>
+          <Button>Privacy</Button>
+        </ButtonGroup>
+      </Box>
+    </>
   );
 }
