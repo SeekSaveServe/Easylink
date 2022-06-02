@@ -1,8 +1,10 @@
 import { Menu, MenuItem, IconButton } from "@mui/material";
 import { useState } from "react";
 import { Menu as MenuIcon } from "@mui/icons-material";
+import { useNavigate } from "react-router-dom";
 
-function OptionsMenu({ projectId }) {
+function OptionsMenu({ parentId }) {
+  const navigate = useNavigate();
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
 
@@ -12,6 +14,12 @@ function OptionsMenu({ projectId }) {
   const handleClose = () => {
     setAnchorEl(null);
   };
+
+  const addSubProject = () => {
+    // pass data while navigating without props
+    navigate('/addproject', { state: { parentId } });
+    // handleClose();
+  }
 
   return (
     <div>
@@ -35,7 +43,7 @@ function OptionsMenu({ projectId }) {
         }}
       >
         <MenuItem onClick={handleClose}>Switch to project</MenuItem>
-        <MenuItem onClick={handleClose}>Add sub-project</MenuItem>
+        <MenuItem onClick={addSubProject}>Add sub-project</MenuItem>
         <MenuItem onClick={handleClose}>Delete</MenuItem>
       </Menu>
     </div>

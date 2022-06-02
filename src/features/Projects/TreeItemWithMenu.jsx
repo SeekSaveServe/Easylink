@@ -77,7 +77,7 @@ function TreeItemWithMenu({label, nodeId, children,...rest}) {
         label={
           <Box sx={{display: 'flex', alignItems: 'center', p: 0.5, pr:0}}>
           <Typography variant="subtitle1">{label}</Typography>
-          <Box component={() => <OptionsMenu projectId={nodeId}/>} />
+          <Box component={() => <OptionsMenu parentId={nodeId}/>} />
       
           </Box>
         }

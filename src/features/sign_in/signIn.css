@@ -94,7 +94,7 @@ form {
   margin: 1rem 0;
 }
 
-button {
+/* button {
   background-color: var(--secondary);
   color: white;
   font-weight: bold;
@@ -102,7 +102,7 @@ button {
   padding: 1rem;
   font-size: 1rem;
   width: 100%;
-}
+} */
 
 label {
   margin-bottom: 0.5rem;
