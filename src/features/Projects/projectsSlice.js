@@ -88,7 +88,7 @@ function preprocess(data) {
         parent_id: 1,
       },
       {
-        pid:6,
+        pid:10,
         title: 'USTech',
         parent_id: null
       }
@@ -100,6 +100,10 @@ function preprocess(data) {
     }
   };
 
+// to test loading
+function delay(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+}
 // Async Thunks
 export const getProjects = createAsyncThunk('projects/getProjects', async() => {
     const { data, error } = await supabase.from('projects')

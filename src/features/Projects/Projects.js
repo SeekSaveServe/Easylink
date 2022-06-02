@@ -43,7 +43,7 @@ function Projects() {
         <Paper elevation={3} className={styles.paper}>
           <Button 
             variant="outlined" 
-            sx={{textTransform: 'none', float: 'left', width: '25%', pl:1}} 
+            sx={{textTransform: 'none', width: '20%', pl:1, ml:1}} 
             startIcon={<AddCircleOutlined/>} 
             size="normal"
             onClick={addProject}

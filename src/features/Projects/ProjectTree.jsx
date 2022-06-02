@@ -1,47 +1,20 @@
-import { TreeItem, TreeView } from "@mui/lab";
+import { TreeView } from "@mui/lab";
 import { ArrowCircleDownOutlined, ArrowCircleRightOutlined } from "@mui/icons-material";
 import TreeItemWithMenu from "./TreeItemWithMenu";
 import { useEffect, useState } from "react";
-import { supabase } from "../../supabaseClient";
 import useBasicAlert from "../../components/Alert";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { getProjects } from "./projectsSlice";
+import { CircularProgress, Typography } from "@mui/material";
 
 // 1. Get mapping of pid to { ...data, parent_id, childrenIds:[...] }
 // 2: At the same time, get root element pids with parent_id = null
 // 3. arr = [renderTree(pid) for pid in rootIds], renderTree returns tree of items for that particular pid -> render arr in view
 
-
-// data: [Project] where Project at least contains: { pid: uuid/int, title: string, parent_id: FK to pid}
-// output: {mapping from pid to data}, [rootIds]
-// O(n) space and time where n = data.length
-function preprocess(data) {
-  const idMapping = {};
-  const rootIds = [];
-
-  // add entries for each pid first
-  for (const project of data) {
-    if (!(project.pid in idMapping)) {
-      idMapping[project.pid] = {...project, childrenIds: [] };
-    }
-  }
-
-
-  for (const project of data) {
-    if (project.parent_id == null) {
-      rootIds.push(project.pid);
-      continue;
-    }
-
-    idMapping[project.parent_id].childrenIds.push(project.pid);
-  }
-
-  return { idMapping, rootIds };
-}
-
 // O(n) space and time: is a tree where each node only one parent -> each node should only be visited once
 function returnTree(data) {
-  const { idMapping, rootIds } = preprocess(data);
+  const { idMapping, rootIds } = data;
+
   const rootArr = [];
 
   function renderTree(pid) {
@@ -75,89 +48,41 @@ function returnTree(data) {
   return rootArr;
 }
 
-async function getData() {
-  // simulation of actual data from DB: e.g select * where projects.uid = user.id;
-  const data = [
-    {
-      pid: 0,
-      title: 'USDevs',
-      parent_id: null,
-    },
-    {
-      pid: 1,
-      title: 'Laundrobot',
-      parent_id: 0,
-    },
-    {
-      pid: 2,
-      title: 'Cinnabot',
-      parent_id: 0,
-    },
-    {
-      pid: 3,
-      title: 'USC Website',
-      parent_id: 0,
-    },
-    {
-      pid: 4,
-      title: 'Booking system',
-      parent_id: 3,
-    },
-    {
-      pid: 5,
-      title: 'Laundry Hardware',
-      parent_id: 1,
-    },
-    {
-      pid:6,
-      title: 'USTech',
-      parent_id: null
-    }
-  ];
-
-  return {
-    data,
-    error: null
-  }
-};
-
-// move this inside loadData after testing complete
-async function getActualData() {
-  const { data, error } = await supabase.from('projects')
-    .select('*');
-  return { data, error };
-}
-
-
-
 function ProjectTree() {
-    const dispatch = useDispatch();
-    const [tree, setTree] = useState([]);
-    const { BasicAlert, showAlert } = useBasicAlert("error");
-
-    async function loadData() {
-      dispatch(getProjects());
-      const { data, error } = await getData();
-      if (error) {
-        showAlert(error.message || error.description);
-        return;
-      } 
-    
-      setTree(returnTree(data));
-      return;
-    }
-
     useEffect(() => {
       loadData();
     }, []);
 
+    const dispatch = useDispatch();
+    const projects = useSelector(state => state.projects);
+
+    // const { BasicAlert, showAlert } = useBasicAlert("error"); - there is a problem with the hook
+
+    async function loadData() {
+      dispatch(getProjects());
+    }
+
+    function display() {
+      switch (projects.loading) {
+        case 'pending':
+          return <div><CircularProgress size={40} sx={{m:3}}/></div>;
+        case 'error':
+          return <Typography color="error.main">Error</Typography>
+        default:
+          return (
+            <TreeView defaultCollapseIcon={<ArrowCircleDownOutlined size="large"/>} defaultExpandIcon={<ArrowCircleRightOutlined size="large"/>}>
+              { returnTree({ idMapping: projects.entities, rootIds: projects.rootIds }) }
+            </TreeView>
+          )
+      }
+    }
+
+    
+
     return (
-        <>
-          <BasicAlert/>
-          <TreeView defaultCollapseIcon={<ArrowCircleDownOutlined size="large"/>} defaultExpandIcon={<ArrowCircleRightOutlined size="large"/>}>
-            {tree}
-          </TreeView>
-        </>
+        <div>
+          { display() }
+        </div>
     )
 }
 
