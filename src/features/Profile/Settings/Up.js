@@ -13,11 +13,6 @@ export default function Upperhalf() {
           opacity: [0.9, 0.8, 0.7],
         },
       }}
-    >
-      <ClickableSetting fontSize="large" />
-      <Center>
-        <DisplayAvatar fontSize="large" />
-      </Center>
-    </Box>
+    ></Box>
   );
 }

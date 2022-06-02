@@ -4,7 +4,7 @@ import useBasicAlert from "../../../components/Alert";
 import BasicAvatar from "../../../components/BasicAvatar";
 import { supabase } from "../../../supabaseClient";
 
-export default function DisplayAvatar() {
+export default function DisplayAvatar(props) {
   // Obtaining the avatar from database
   const [avatarUrl, setAvatarUrl] = useState(null);
   const { BasicAlert, showAlert } = useBasicAlert("error");
@@ -37,5 +37,5 @@ export default function DisplayAvatar() {
     downloadImage(src);
   }, [src]);
 
-  return <BasicAvatar src={src} />;
+  return <BasicAvatar {...props} src={avatarUrl} />;
 }
