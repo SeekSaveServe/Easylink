@@ -20,6 +20,9 @@ import Profile from "./features/Profile/Profile";
 import Projects from "./features/Projects";
 import Links from "./features/Links";
 import SearchPage from "./features/SearchPage";
+import Settings from "./features/Profile/Settings/Settings";
+import PrivacySettings from "./features/Profile/Privacy/Privacy";
+
 const container = document.getElementById("root");
 const root = createRoot(container);
 
@@ -54,7 +57,7 @@ root.render(
               }
             />
             <Route
-              path="/profile"
+              path="/Profile"
               element={
                 <ProtectedRoute redirectRoute="/">
                   {" "}
@@ -86,6 +89,24 @@ root.render(
                 <ProtectedRoute redirectRoute="/">
                   {" "}
                   <SearchPage />{" "}
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/Settings"
+              element={
+                <ProtectedRoute redirectRoute="/">
+                  {" "}
+                  <Settings />{" "}
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/PrivacySettings"
+              element={
+                <ProtectedRoute redirectRoute="/">
+                  {" "}
+                  <PrivacySettings />{" "}
                 </ProtectedRoute>
               }
             />
