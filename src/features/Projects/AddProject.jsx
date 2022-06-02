@@ -1,5 +1,5 @@
 import { Center } from "@chakra-ui/react";
-import { Divider, FormGroup, Grid, Paper, Stack, TextField, Typography } from "@mui/material";
+import { Divider, FormGroup, FormLabel, Grid, Paper, RadioGroup, Stack, TextField, Typography } from "@mui/material";
 import { Container } from "@mui/system";
 import { useSelector } from "react-redux";
 import { useLocation } from "react-router-dom";
@@ -12,6 +12,9 @@ import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { DatePicker, LocalizationProvider } from "@mui/lab";
 import { useState } from "react";
 import { Flex, Spacer } from "@chakra-ui/react";
+import { Box } from "@mui/system";
+import RadioWithLabel from "../../components/RadioWithLabel";
+import BasicButton from "../../components/BasicButton";
 
 function AddProject() {
     const { state } = useLocation();
@@ -23,6 +26,7 @@ function AddProject() {
 
     return (
         <>
+        {/* LocalizationProvider and dateAdapter necc. for date pickers to work */}
         <LocalizationProvider dateAdapter={AdapterDateFns}>
             <BasicNavBar/>
             <Container className={styles.container} maxWidth="md">
@@ -39,14 +43,24 @@ function AddProject() {
 
                 <Paper className={styles.paper} elevation={3}>
                     <Center>
-                        <TextField label="Title" type="text" margin="normal" size="small" sx={{width:"80%"}}/>
-                    </Center>
+                        <Stack direction="row" sx={{mt:1, width: "80%"}}>
+                            <BasicTextField
+                            label="Title"
+                            type="text"
+                            margin="normal"
+                            size="small"
+                            sx={{mr:3, width: "50%"}}
+                            />
 
-                    <Center>
-                        <TextField label="Bio" type="text" margin="normal" size="small" sx={{width:"80%"}} multiline/>
+                            <BasicTextField
+                            label="Bio"
+                            type="text"
+                            margin="normal"
+                            size="small"
+                            sx={{width: "50%"}}
+                            />      
+                        </Stack>
                     </Center>
-                    
-                    <Divider />
                     
                     <Center>
                         <FormGroup sx={{width: "90%", mt:1}}>
@@ -81,7 +95,7 @@ function AddProject() {
                             onChange={(newValue) => {
                             setStartDate(newValue);
                             }}
-                            renderInput={(params) => <TextField {...params} />}
+                            renderInput={(params) => <TextField {...params} size="small"/>}
                             />
 
                             <DatePicker
@@ -90,7 +104,7 @@ function AddProject() {
                             onChange={(newValue) => {
                             setEndDate(newValue);
                             }}
-                            renderInput={(params) => <TextField {...params} />}
+                            renderInput={(params) => <TextField {...params} size="small"/>}
                             />
                         </Stack>
                     </Center>
@@ -101,6 +115,7 @@ function AddProject() {
                             label="Telegram"
                             type="text"
                             margin="normal"
+                            size="small"
                             sx={{mr:3, width: "50%"}}
                             />
 
@@ -108,13 +123,71 @@ function AddProject() {
                             label="Email"
                             type="text"
                             margin="normal"
+                            size="small"
                             sx={{width: "50%"}}
                             />      
                         </Stack>
                     </Center>
 
+                    <Box sx={{display:"flex", flexDirection:"row", justifyContent: "space-between"}}>
+                        <Box 
+                            mt={2}
+                            sx={{
+                            flex:1,
+                            display: "flex",
+                            flexDirection: "column",
+                            alignItems: "center",
+                            ml:7
+                            }}
+                        >
+                            <FormLabel>
+                            <Typography variant="h6" color="black">
+                                Telegram visibility:
+                            </Typography>
+                            </FormLabel>
+
+                            <RadioGroup
+                            //   row
+                            //   value={contact.email_visibility}
+                            //   onChange={radioChange}
+                            //   name="email_visibility"
+                            >
+                            <RadioWithLabel value="afterlink" label="Only after linking" />
+                            <RadioWithLabel value="everyone" label="Everyone" />
+                            </RadioGroup>
+                        </Box>
+
+                        <Box
+                            mt={2}
+                            sx={{
+                            flex:1,
+                            display: "flex",
+                            flexDirection: "column",
+                            alignItems: "center",
+                            mr:7
+                            }}
+                        >
+                            <FormLabel>
+                            <Typography variant="h6" color="black">
+                                Email visibility:
+                            </Typography>
+                            </FormLabel>
+
+                            <RadioGroup
+                            //   row
+                            //   value={contact.email_visibility}
+                            //   onChange={radioChange}
+                            //   name="email_visibility"
+                            >
+                            <RadioWithLabel value="afterlink" label="Only after linking" />
+                            <RadioWithLabel value="everyone" label="Everyone" />
+                            </RadioGroup>
+                        </Box>
+                    </Box>
                     
-                  
+                    <Center>
+                        <BasicButton bg="primary" sx={{width:"40%", mt:2}}>Start Linking!</BasicButton>
+                    </Center>
                 </Paper>
             </Container>
         </LocalizationProvider>
