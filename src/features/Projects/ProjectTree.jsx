@@ -4,6 +4,8 @@ import TreeItemWithMenu from "./TreeItemWithMenu";
 import { useEffect, useState } from "react";
 import { supabase } from "../../supabaseClient";
 import useBasicAlert from "../../components/Alert";
+import { useDispatch } from "react-redux";
+import { getProjects } from "./projectsSlice";
 
 // 1. Get mapping of pid to { ...data, parent_id, childrenIds:[...] }
 // 2: At the same time, get root element pids with parent_id = null
@@ -47,7 +49,7 @@ function returnTree(data) {
     // if no children
     if (data.childrenIds.length == 0) {
       return (
-        <TreeItemWithMenu label={data.title} nodeId={pid} key={pid} />
+        <TreeItemWithMenu label={data.title} nodeId={`${pid}`} key={pid} />
       );
     }
 
@@ -59,7 +61,7 @@ function returnTree(data) {
     }
 
     return (
-      <TreeItemWithMenu label={data.title} nodeId={pid} key={pid}>
+      <TreeItemWithMenu label={data.title} nodeId={`${pid}`} key={pid}>
         {childTrees}
       </TreeItemWithMenu>
     )
@@ -129,11 +131,13 @@ async function getActualData() {
 
 
 function ProjectTree() {
+    const dispatch = useDispatch();
     const [tree, setTree] = useState([]);
     const { BasicAlert, showAlert } = useBasicAlert("error");
 
     async function loadData() {
-      const { data, error } = await getActualData();
+      dispatch(getProjects());
+      const { data, error } = await getData();
       if (error) {
         showAlert(error.message || error.description);
         return;
