@@ -96,21 +96,24 @@ function AddProject() {
                     </Center>
 
                     <Center>
-                        <Stack direction="row" sx={{mt:1}}>
+                        <Stack direction="row" sx={{mt:1, width: "70%"}}>
                             <BasicTextField
                             label="Telegram"
                             type="text"
                             margin="normal"
-                            sx={{mr:3}}
+                            sx={{mr:3, width: "50%"}}
                             />
 
                             <BasicTextField
                             label="Email"
                             type="text"
                             margin="normal"
+                            sx={{width: "50%"}}
                             />      
                         </Stack>
                     </Center>
+
+                    
                   
                 </Paper>
             </Container>
