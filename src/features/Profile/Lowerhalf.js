@@ -11,39 +11,47 @@ export default function Lowerhalf() {
   const user = useSelector((state) => state.user);
   const title = user.username;
   const bio = user.bio ? user.bio : "No Bio";
-  const [links, setLinks] = useState(0);
-  const [projects, setProjects] = useState(0);
-  const [following, setFollowing] = useState(0);
+  const [links, setLinks] = useState("loading");
+  const [projects, setProjects] = useState("loading");
+  const [following, setFollowing] = useState("loading");
+  // console.log(user.id);
   // NOTE: Some of the functions need to be rewritten to accommodate projects
   // The current version is written for users only
+  // Count returns null instead of 0 when nothing is found; very weird
+
   async function obtainData(tag) {
     const { data, error, count } = await supabase
       .from(tag)
       .select("link_id", { count: "exact", head: true })
-      .eq("uid_receiver", user.id)
-      .is("accepted", true);
+      .eq("uid_receiver", supabase.auth.user().id)
+      .is("accepted", true); // MUST USE SUPABASE.AUTH.USER() with head
+    return count;
+  }
+
+  async function obtainCountFollowers(tag) {
+    const { data, error, count } = await supabase
+      .from(tag)
+      .select("created_at", { count: "exact", head: true })
+      .eq("followed_uid", supabase.auth.user().id);
     return count;
   }
 
   async function obtainCountProjects(tag) {
     const { data, error, count } = await supabase
       .from(tag)
-      .select("link_id", { count: "exact", head: true })
-      .eq("uid_receiver", user.id)
-      .is("accepted", true);
+      .select("pid", { count: "exact", head: true })
+      .eq("uid", supabase.auth.user().id);
     return count;
   }
 
   useEffect(() => {
-    obtainData("links").then((res) =>
-      res ? setLinks(res) : console.log("hey")
+    obtainData("links").then((res) => (res ? setLinks(res) : 0));
+    obtainCountFollowers("followers").then((res) =>
+      res ? setFollowing(res) : setFollowing(0)
     );
-    //   obtainData("unique_communities").then((res) =>
-    //     setProjects([res.map((obj) => obj.name)][0])
-    //   );
-    //   obtainData("unique_communities").then((res) =>
-    //     setFollowing([res.map((obj) => obj.name)][0])
-    //   );
+    obtainCountProjects("projects").then((res) =>
+      res ? setProjects(res) : setProjects(0)
+    );
   }, []);
   return (
     <>
