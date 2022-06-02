@@ -15,6 +15,7 @@ import { Flex, Spacer } from "@chakra-ui/react";
 import { Box } from "@mui/system";
 import RadioWithLabel from "../../components/RadioWithLabel";
 import BasicButton from "../../components/BasicButton";
+import { Email, Telegram } from "@mui/icons-material";
 
 function AddProject() {
     const { state } = useLocation();
@@ -35,7 +36,7 @@ function AddProject() {
                 </Center>
 
                 <Center>
-                    <Typography sx={{mb:2}}variant='subtitle1'>
+                    <Typography sx={{mb:1}}variant='subtitle1'>
                         {parent ? `Parent project: ${parent.title}` : 'as root project'}
                     </Typography>
                 </Center>
@@ -73,14 +74,14 @@ function AddProject() {
 
                             <Checkmarks
                             newTags={["One", "Two", "Three"]}
-                            label="Skills"
+                            label="Interests"
                             selectedTags={[]}
                             setSelectedTags={() => {}}
                             />    
 
                             <Checkmarks
                             newTags={["One", "Two", "Three"]}
-                            label="Skills"
+                            label="Communities"
                             selectedTags={[]}
                             setSelectedTags={() => {}}
                             />        
@@ -117,6 +118,7 @@ function AddProject() {
                             margin="normal"
                             size="small"
                             sx={{mr:3, width: "50%"}}
+                            icon={<Telegram />}
                             />
 
                             <BasicTextField
@@ -125,6 +127,7 @@ function AddProject() {
                             margin="normal"
                             size="small"
                             sx={{width: "50%"}}
+                            icon={<Email/>}
                             />      
                         </Stack>
                     </Center>
