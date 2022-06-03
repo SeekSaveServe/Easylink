@@ -16,6 +16,7 @@ function BasicButton(props) {
         fontSize: "1.2rem", 
         backgroundColor: bgColor,
         padding: "0.5rem",
+        width: "100%",
         ...sx
     }
     

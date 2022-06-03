@@ -5,7 +5,7 @@ import BasicAvatar from "../../../components/BasicAvatar/BasicAvatar";
 import BasicButton from "../../../components/BasicButton";
 import { supabase } from "../../../supabaseClient";
 
-export default function UploadAvatar({ url, size, onUpload }) {
+export default function UploadAvatar({ url, size, onUpload, ParentProps, AvatarProps, ButtonProps }) {
   const [avatarUrl, setAvatarUrl] = useState(null);
   const [loading, setLoading] = useState(false);
   const { BasicAlert, showAlert } = useBasicAlert("error");
@@ -63,13 +63,14 @@ export default function UploadAvatar({ url, size, onUpload }) {
   };
 
   return (
-    <div style={{ width: size }} aria-live="polite">
+    <div aria-live="polite" style={{display: "flex", flexDirection: "column", alignItems: "center"}} {...ParentProps}>
       <BasicAvatar
         src={avatarUrl}
         alt={avatarUrl ? "Avatar" : "No image"}
         style={{ height: size, width: size }}
+        {...AvatarProps}
       />
-      <BasicButton onClick={() => fileInput.current.click()}>
+      <BasicButton onClick={() => fileInput.current.click()} {...ButtonProps}>
         <input
           ref={fileInput}
           style={{ display: "none" }}

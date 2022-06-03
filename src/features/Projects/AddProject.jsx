@@ -16,12 +16,15 @@ import { Box } from "@mui/system";
 import RadioWithLabel from "../../components/RadioWithLabel";
 import BasicButton from "../../components/BasicButton";
 import { Email, Telegram } from "@mui/icons-material";
+import UploadAvatar from "../components/UploadAvatar";
 
 function AddProject() {
     const { state } = useLocation();
     const parentId = state?.parentId;
     const parent = useSelector((state) => selectProjectById(state, parentId));
-
+    
+    // Form State
+    const [avatarUrl, setAvatarUrl] = useState("");
     const [startDate, setStartDate] = useState(new Date());
     const [endDate, setEndDate] = useState(new Date());
 
@@ -43,6 +46,16 @@ function AddProject() {
 
 
                 <Paper className={styles.paper} elevation={3}>
+                    <Center>
+                        <UploadAvatar
+                            size={100}
+                            url={avatarUrl}
+                            onUpload={
+                                (url) => setAvatarUrl(url)
+                            }
+                        />
+                    </Center>
+
                     <Center>
                         <Stack direction="row" sx={{mt:1, width: "80%"}}>
                             <BasicTextField
@@ -88,7 +101,7 @@ function AddProject() {
                         </FormGroup>
                     </Center>
 
-                    <Center>
+                    <Center className={styles.date_center}>
                         <Stack direction="row" spacing={3} sx={{mt:1}}>
                             <DatePicker
                             label="Start date"
@@ -132,15 +145,16 @@ function AddProject() {
                         </Stack>
                     </Center>
 
-                    <Box sx={{display:"flex", flexDirection:"row", justifyContent: "space-between"}}>
+                    <Box sx={{display:"flex", flexDirection:"column", justifyContent: "center"}}>
                         <Box 
                             mt={2}
                             sx={{
                             flex:1,
                             display: "flex",
-                            flexDirection: "column",
+                            flexDirection: "row",
+                            justifyContent: "center",
                             alignItems: "center",
-                            ml:7
+                            // ml:7
                             }}
                         >
                             <FormLabel>
@@ -150,7 +164,7 @@ function AddProject() {
                             </FormLabel>
 
                             <RadioGroup
-                            //   row
+                              row
                             //   value={contact.email_visibility}
                             //   onChange={radioChange}
                             //   name="email_visibility"
@@ -160,7 +174,7 @@ function AddProject() {
                             </RadioGroup>
                         </Box>
 
-                        <Box
+                        {/* <Box
                             mt={2}
                             sx={{
                             flex:1,
@@ -185,7 +199,7 @@ function AddProject() {
                             <RadioWithLabel value="afterlink" label="Only after linking" />
                             <RadioWithLabel value="everyone" label="Everyone" />
                             </RadioGroup>
-                        </Box>
+                        </Box> */}
                     </Box>
                     
                     <Center>

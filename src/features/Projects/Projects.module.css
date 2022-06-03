@@ -2,13 +2,21 @@
     min-height: 10vh;
     padding: 1rem 0.5rem;
     margin-bottom: 3rem;
+    /* overflow: scroll; */
 }
 
 .container {
     padding: 1rem 0;
+    height:100vh;
+    overflow: scroll;
 }
 
 
 .MuiTreeItem-label {
     font-size: 100px;
 }
+
+.date_center .MuiButtonBase-root  {
+    background-color: red !important;
+    width: 0% !important;
+}   
