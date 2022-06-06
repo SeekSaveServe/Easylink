@@ -91,6 +91,26 @@ function preprocess(data) {
         pid:10,
         title: 'USTech',
         parent_id: null
+      },
+      {
+        pid:11,
+        title: 'Add',
+        parent_id: null
+      },
+      {
+        pid:12,
+        title: 'Add two',
+        parent_id: null
+      },
+      {
+        pid:13,
+        title: 'Add three',
+        parent_id: null
+      },
+      {
+        pid:14,
+        title: 'Add four',
+        parent_id: null
       }
     ];
   
@@ -106,10 +126,10 @@ function delay(ms) {
 }
 // Async Thunks
 export const getProjects = createAsyncThunk('projects/getProjects', async() => {
-    const { data, error } = await supabase.from('projects')
-    .select('*');
+    // const { data, error } = await supabase.from('projects')
+    // .select('*');
 
-    // const { data, error } = await getData();
+    const { data, error } = await getData();
 
     if (error) throw error;
     return data;

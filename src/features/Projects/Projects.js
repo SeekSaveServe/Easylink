@@ -1,7 +1,7 @@
 import BasicButton from "../../components/BasicButton";
 import { supabase } from "../../supabaseClient";
 import { useSelector } from "react-redux";
-import {  Button, Paper  } from "@mui/material";
+import {  Button, ButtonGroup, Paper  } from "@mui/material";
 import BasicNavBar from "../../components/BasicNavBar/BasicNavBar";
 import styles from './Projects.module.css';
 import { Container } from "@mui/system";
@@ -9,7 +9,8 @@ import { Container } from "@mui/system";
 import ProjectTree from "./ProjectTree";
 import { AddCircleOutlined } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
-
+import { Tabs, TabList, Tab } from "@chakra-ui/react";
+import NavButtonGroup from "./NavButtonGroup";
 
 function Projects() {
   const navigate = useNavigate();
@@ -36,10 +37,21 @@ function Projects() {
     //   console.log(data);
     // }
   }
+
+  const isActive = false;
+  const props = isActive ? {
+    variant: "contained"
+  } : {}
   return (
     <>
       <BasicNavBar />
       <Container className={styles.container} maxWidth={"md"}>
+        <NavButtonGroup/>
+        {/* <ButtonGroup variant="outlined" sx={{mb:1}}>
+          <Button {...props}>Projects</Button>
+          <Button>Posts</Button>
+        </ButtonGroup> */}
+
         <Paper elevation={3} className={styles.paper}>
           <Button 
             variant="outlined" 

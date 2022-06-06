@@ -138,6 +138,7 @@ function AddProject() {
             <BasicAlert/>
             <BasicNavBar/>
             <Container className={styles.container} maxWidth="md">
+
                 <Center style={{marginBottom: 5}}>
                     <Typography variant='h5' sx={{fontWeight: "bold", mr: 2}}>Add project: </Typography>
                     <Typography variant='subtitle1'>
