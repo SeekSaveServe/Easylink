@@ -5,8 +5,9 @@ import { useEffect, useState } from "react";
 import useBasicAlert from "../../components/Alert";
 import { useDispatch, useSelector } from "react-redux";
 import { getProjects } from "./projectsSlice";
-import { Button, CircularProgress, Typography } from "@mui/material";
+import { Button, CircularProgress, Paper, Typography } from "@mui/material";
 import { useNavigate } from "react-router-dom";
+import styles from './Projects.module.css';
 
 // 1. Get mapping of pid to { ...data, parent_id, childrenIds:[...] }
 // 2: At the same time, get root element pids with parent_id = null
@@ -82,7 +83,7 @@ function ProjectTree() {
     
 
     return (
-        <div>
+        <Paper elevation={3} className={styles.paper}>
            <Button 
             variant="outlined" 
             sx={{textTransform: 'none', width: '20%', pl:1, ml:1}} 
@@ -91,7 +92,7 @@ function ProjectTree() {
             onClick={() => navigate("/addproject")}
             >Add root project</Button>
           { display() }
-        </div>
+        </Paper>
     )
 }
 

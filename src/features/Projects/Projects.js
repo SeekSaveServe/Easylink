@@ -40,10 +40,7 @@ function Projects() {
       <BasicNavBar />
       <Container className={styles.container} maxWidth={"md"}>
         <NavButtonGroup isProject={isProject} setIsProject={setIsProject}/>
-  
-        <Paper elevation={3} className={styles.paper}>
-          {isProject ? <ProjectTree/> : <Posts/> }
-        </Paper>
+        { isProject ? <ProjectTree/> : <Posts/> }
       </Container>
     </>
   );
