@@ -69,7 +69,7 @@ function ProjectTree() {
         case 'error':
           return <Typography color="error.main">Error</Typography>
         default:
-          return (
+          return projects.ids.length == 0 ? <Typography color="gray" variant="subtitle1" sx={{ml:2, mt:1}}> No projects </Typography> : (
             <TreeView defaultCollapseIcon={<ArrowCircleDownOutlined size="large"/>} defaultExpandIcon={<ArrowCircleRightOutlined size="large"/>}>
               { returnTree({ idMapping: projects.entities, rootIds: projects.rootIds }) }
             </TreeView>
