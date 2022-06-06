@@ -1,5 +1,5 @@
 import { Center } from "@chakra-ui/react";
-import { MenuItem, Paper, RadioGroup, Select, Typography } from "@mui/material";
+import { Divider, FormControlLabel, IconButton, MenuItem, Paper, Radio, RadioGroup, Select, Typography } from "@mui/material";
 import { Container } from "@mui/system";
 import BasicNavBar from "../../components/BasicNavBar/BasicNavBar";
 import RadioWithLabel from "../../components/RadioWithLabel";
@@ -8,11 +8,23 @@ import { useState } from "react";
 import { InputLabel, FormControl } from "@mui/material";
 import BasicTextField from "../../components/Basic Textfield";
 import BasicButton from "../../components/BasicButton";
+import { AddCircleOutlined } from "@mui/icons-material";
+import useBasicAlert from "../../components/Alert";
 
+// TODO: add form validate at least 2 options, delete option, no duplicate options
 function AddPost() {
-    const [isPost, setIsPost] = useState(true);
     const [description, setDescription] = useState("");
-
+    const [addOption, setAddOption] = useState("");
+    const [pollOptions, setPollOptions] = useState([]);
+    const [isPost, setIsPost] = useState(true);
+    const { BasicAlert, showAlert } = useBasicAlert();
+    
+    const addOptionClick = () => {
+        const toAdd = addOption.trim()
+        if (toAdd == "") return;
+        pollOptions.push(toAdd);
+        setAddOption("");
+    }
     return (
         <>
         <BasicNavBar/>
@@ -43,6 +55,30 @@ function AddPost() {
                 value={description}
                 onChange={(evt) => setDescription(evt.target.value)}
                 ></BasicTextField>
+
+                {!isPost ? 
+                    <>
+                    <div style={{display: "flex", flexDirection: "row", justifyContent: "center", alignItems: "center"}}>
+                        <BasicTextField
+                            label="Add option"
+                            size="small"
+                            value={addOption}
+                            onChange={(evt) => setAddOption(evt.target.value)}
+                        ></BasicTextField>
+                        <IconButton color="primary" onClick={addOptionClick}>
+                            <AddCircleOutlined/>
+                        </IconButton>
+                    </div>
+
+                    <Divider flexItem/>
+
+                    <div>
+                        <Typography variant="h6">Preview:</Typography>
+                        <RadioGroup column>
+                            {pollOptions.map((option, idx) => <FormControlLabel control={<Radio/>} key={idx} value={option} label={option}></FormControlLabel>)}
+                        </RadioGroup>
+                    </div></> : <></> }
+
 
                 <BasicButton bg="primary" sx={{width: "20%"}}>Add {isPost ? "post" : "poll"}</BasicButton>
             </Paper>
