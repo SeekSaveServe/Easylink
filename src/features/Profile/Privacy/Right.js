@@ -13,7 +13,7 @@ import UploadAvatar from "../../components/UploadAvatar";
 import BasicButton from "../../../components/BasicButton";
 import useBasicAlert from "../../../components/Alert";
 
-export default function Right() {
+export default function Right({ contact }) {
   const dispatch = useDispatch();
   const user = useSelector((state) => state.user);
 
@@ -106,8 +106,8 @@ export default function Right() {
           .from("users")
           .update({
             telegram: telegram,
-            telegram_visibility: user.telegram_visibility,
-            email_visibility: user.email_visibility,
+            telegram_visibility: contact.telegram_visibility,
+            email_visibility: contact.email_visibility,
           })
           .match({ id: supabase.auth.user().id });
       } catch (error) {
@@ -193,6 +193,8 @@ export default function Right() {
       update({
         tags: [selectedSkills, selectedInterests, selectedCommunities],
         telegram,
+        telegram_visibility: contact.telegram_visibility,
+        email_visibility: contact.email_visibility,
       })
     );
   };
