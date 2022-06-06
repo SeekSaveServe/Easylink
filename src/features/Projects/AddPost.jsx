@@ -6,9 +6,13 @@ import RadioWithLabel from "../../components/RadioWithLabel";
 import styles from './Projects.module.css';
 import { useState } from "react";
 import { InputLabel, FormControl } from "@mui/material";
+import BasicTextField from "../../components/Basic Textfield";
+import BasicButton from "../../components/BasicButton";
 
 function AddPost() {
     const [isPost, setIsPost] = useState(true);
+    const [description, setDescription] = useState("");
+
     return (
         <>
         <BasicNavBar/>
@@ -30,8 +34,17 @@ function AddPost() {
                 </FormControl>
             </Center>
             
-            <Paper elevation={3} className={styles.paper}>
-                lol
+            <Paper elevation={3} className={styles.paper} sx={{display: "flex", flexDirection: "column", alignItems: "center", gap: "1rem"}}>
+                <BasicTextField
+                label="Description"
+                size="small"
+                sx={{width: "70%"}}
+                multiline
+                value={description}
+                onChange={(evt) => setDescription(evt.target.value)}
+                ></BasicTextField>
+
+                <BasicButton bg="primary" sx={{width: "20%"}}>Add {isPost ? "post" : "poll"}</BasicButton>
             </Paper>
         </Container>
         </>

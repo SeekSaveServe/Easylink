@@ -26,13 +26,12 @@ function Posts() {
 
         <Scrollable height="25vh">
             <div style={{display: "flex", flexDirection: "column", alignItems: "center", gap: "1rem",}}>
-                <PostCard sx={{width: "80%", ml:1, mt:1}}/>
-                <PostCard sx={{width: "80%", ml:1, mt:1}}/>
-                <PostCard sx={{width: "80%", ml:1, mt:1}}/>
-                <PostCard sx={{width: "80%", ml:1, mt:1}}/>
-                <PostCard sx={{width: "80%", ml:1, mt:1}}/>
-                <PostCard sx={{width: "80%", ml:1, mt:1}}/>
-
+                <PostCard sx={{width: "100%", ml:1, mt:1}}/>
+                <PostCard sx={{width: "100%", ml:1, mt:1}}/>
+                <PostCard sx={{width: "100%", ml:1, mt:1}}/>
+                <PostCard sx={{width: "100%", ml:1, mt:1}}/>
+                <PostCard sx={{width: "100%", ml:1, mt:1}}/>
+                <PostCard sx={{width: "100%", ml:1, mt:1}}/>
             </div>
         </Scrollable>
         </>
