@@ -5,11 +5,10 @@ import {  Button, ButtonGroup, Paper  } from "@mui/material";
 import BasicNavBar from "../../components/BasicNavBar/BasicNavBar";
 import styles from './Projects.module.css';
 import { Container } from "@mui/system";
-
 import ProjectTree from "./ProjectTree";
 import { AddCircleOutlined } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
-import { Tabs, TabList, Tab } from "@chakra-ui/react";
+import { Tabs, TabList, Tab, Center } from "@chakra-ui/react";
 import NavButtonGroup from "./NavButtonGroup";
 import { useState } from "react";
 import Posts from './Posts';
@@ -39,7 +38,9 @@ function Projects() {
     <>
       <BasicNavBar />
       <Container className={styles.container} maxWidth={"md"}>
-        <NavButtonGroup isProject={isProject} setIsProject={setIsProject}/>
+        <Center>
+          <NavButtonGroup isProject={isProject} setIsProject={setIsProject}/>
+        </Center>
         { isProject ? <ProjectTree/> : <Posts/> }
       </Container>
     </>
