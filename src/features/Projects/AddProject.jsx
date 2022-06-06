@@ -2,7 +2,7 @@ import { Center } from "@chakra-ui/react";
 import { Divider, FormGroup, FormLabel, Grid, Paper, RadioGroup, Stack, TextField, Typography } from "@mui/material";
 import { Container } from "@mui/system";
 import { useSelector } from "react-redux";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import BasicNavBar from "../../components/BasicNavBar/BasicNavBar";
 import styles from './Projects.module.css';
 import { selectProjectById } from "./projectsSlice";
@@ -20,8 +20,10 @@ import UploadAvatar from "../components/UploadAvatar";
 import BasicLoadingButton from "../../components/BasicLoadingButton/BasicLoadingButton";
 import { supabase } from "../../supabaseClient";
 import { useEffect } from "react";
+import useBasicAlert from "../../components/Alert";
 
 function AddProject() {
+    const navigate = useNavigate();
     async function obtainTags(tag) {
         const { data, error } = await supabase
           .from(tag)
@@ -50,6 +52,7 @@ function AddProject() {
     const parentId = state?.parentId;
     const parent = useSelector((state) => selectProjectById(state, parentId));
     const [loading, setLoading] = useState(false); // for start linking button
+    const { showAlert, BasicAlert } = useBasicAlert("error");
 
     // Form State
     const [avatarUrl, setAvatarUrl] = useState(null);
@@ -65,10 +68,23 @@ function AddProject() {
     const [teleVisibility, setTeleVisibility] = useState("afterlink");
     const [emailVisibility, setEmailVisibility] = useState("afterlink");
 
+    // Functions
+    const uploadTag = async (columnName, tagsArray, pid) => {
+        for (const tag of tagsArray) {
+            const { error } = await supabase
+                .from(columnName)
+                .insert([
+                    { pid, name: tag }
+                ]);
+            
+            if (error) {
+                showAlert(error.error_description || error.message, "error");
+            }
+        }
+        
+    }
     
-    
-
-    const onClick = () => {
+    const onClick = async() => {
         // only username missing
         const state = {
             parent_id: parentId ? parseInt(parentId): null,
@@ -76,24 +92,50 @@ function AddProject() {
             avatar_url: avatarUrl,
             title,
             bio,
-            selectedSkills,
-            selectedInterests,
-            selectedCommunities,
             start_date: startDate,
             end_date: endDate,
             telegram,
             email,
             telegram_visibility: teleVisibility,
-            email_visibiliity: emailVisibility,
+            email_visibility: emailVisibility,
 
         }
-        console.log(state);
+        
+        setLoading(true);
+        try {
+        // Insert project
+        const { data, error } = await supabase 
+            .from('projects')
+            .insert([
+                state
+            ])
+        
+        if (error) throw error;
+
+        // Use pid to update skills, interests, communities
+        const pid = data[0].pid;
+        await Promise.all([
+            uploadTag("user_skills", selectedSkills, pid),
+            uploadTag("user_interests", selectedInterests, pid),
+            uploadTag("user_communities", selectedCommunities, pid)
+        ]);
+
+        navigate("/projects", { replace: true });
+        
+        }
+        
+        catch (error) {
+            showAlert(error.error_description || error.message, "error");
+        } finally {
+            setLoading(false);
+        }
     }
 
     return (
         <>
         {/* LocalizationProvider and dateAdapter necc. for date pickers to work */}
         <LocalizationProvider dateAdapter={AdapterDateFns}>
+            <BasicAlert/>
             <BasicNavBar/>
             <Container className={styles.container} maxWidth="md">
                 <Center style={{marginBottom: 5}}>
