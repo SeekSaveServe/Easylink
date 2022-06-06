@@ -23,6 +23,7 @@ import SearchPage from "./features/SearchPage";
 import Settings from "./features/Profile/Settings/Settings";
 import PrivacySettings from "./features/Profile/Privacy/Privacy";
 import AddProject from "./features/Projects/AddProject";
+import AddPost from "./features/Projects/AddPost";
 
 const container = document.getElementById("root");
 const root = createRoot(container);
@@ -119,6 +120,16 @@ root.render(
                 <ProtectedRoute redirectRoute="/">
                   {" "}
                   <AddProject />{" "}
+                </ProtectedRoute>
+              }
+            />
+
+            <Route
+              path="/addpost"
+              element={
+                <ProtectedRoute redirectRoute="/">
+                  {" "}
+                  <AddPost />{" "}
                 </ProtectedRoute>
               }
             />
