@@ -17,16 +17,50 @@ import RadioWithLabel from "../../components/RadioWithLabel";
 import BasicButton from "../../components/BasicButton";
 import { Email, Telegram } from "@mui/icons-material";
 import UploadAvatar from "../components/UploadAvatar";
+import BasicLoadingButton from "../../components/BasicLoadingButton/BasicLoadingButton";
+import { supabase } from "../../supabaseClient";
 
 function AddProject() {
     const { state } = useLocation();
     const parentId = state?.parentId;
     const parent = useSelector((state) => selectProjectById(state, parentId));
+    const [loading, setLoading] = useState(false);
     
     // Form State
-    const [avatarUrl, setAvatarUrl] = useState("");
+    const [avatarUrl, setAvatarUrl] = useState(null);
+    const [title, setTitle] = useState("");
+    const [bio, setBio] = useState("");
+    const [selectedSkills, setSelectedSkills] = useState([]);
+    const [selectedInterests, setSelectedInterests] = useState([]);
+    const [selectedCommunities, setSelectedCommunities] = useState([]);
     const [startDate, setStartDate] = useState(new Date());
     const [endDate, setEndDate] = useState(new Date());
+    const [telegram, setTelegram] = useState("");
+    const [email, setEmail] = useState("");
+    const [teleVisibility, setTeleVisibility] = useState("afterlink");
+    const [emailVisibility, setEmailVisibility] = useState("afterlink");
+
+    const onClick = () => {
+        // only username missing
+        const state = {
+            parent_id: parentId ? parseInt(parentId): null,
+            uid: supabase.auth.user().id,
+            avatar_url: avatarUrl,
+            title,
+            bio,
+            selectedSkills,
+            selectedInterests,
+            selectedCommunities,
+            start_date: startDate,
+            end_date: endDate,
+            telegram,
+            email,
+            telegram_visibility: teleVisibility,
+            email_visibiliity: emailVisibility,
+
+        }
+        console.log(state);
+    }
 
     return (
         <>
@@ -44,7 +78,7 @@ function AddProject() {
                 <Paper className={styles.paper} elevation={3}>
                     <Center>
                         <UploadAvatar
-                            size={60}
+                            size={70}
                             url={avatarUrl}
                             onUpload={
                                 (url) => setAvatarUrl(url)
@@ -63,6 +97,8 @@ function AddProject() {
                             margin="normal"
                             size="small"
                             sx={{mr:3, width: "50%"}}
+                            value={title}
+                            onChange={(e) => setTitle(e.target.value)}
                             />
 
                             <BasicTextField
@@ -71,6 +107,7 @@ function AddProject() {
                             margin="normal"
                             size="small"
                             sx={{width: "50%"}}
+                            onChange={(e) => setBio(e.target.value)}
                             />      
                         </Stack>
                     </Center>
@@ -80,22 +117,22 @@ function AddProject() {
                             <Checkmarks
                             newTags={["One", "Two", "Three"]}
                             label="Skills"
-                            selectedTags={[]}
-                            setSelectedTags={() => {}}
+                            selectedTags={selectedSkills}
+                            setSelectedTags={setSelectedSkills}
                             />  
 
                             <Checkmarks
                             newTags={["One", "Two", "Three"]}
                             label="Interests"
-                            selectedTags={[]}
-                            setSelectedTags={() => {}}
+                            selectedTags={selectedInterests}
+                            setSelectedTags={setSelectedInterests}
                             />    
 
                             <Checkmarks
                             newTags={["One", "Two", "Three"]}
                             label="Communities"
-                            selectedTags={[]}
-                            setSelectedTags={() => {}}
+                            selectedTags={selectedCommunities}
+                            setSelectedTags={setSelectedCommunities}
                             />        
                         </FormGroup>
                     </Center>
@@ -131,6 +168,8 @@ function AddProject() {
                             size="small"
                             sx={{mr:3, width: "50%"}}
                             icon={<Telegram />}
+                            value={telegram}
+                            onChange={(evt) => setTelegram(evt.target.value)}
                             />
 
                             <BasicTextField
@@ -140,6 +179,8 @@ function AddProject() {
                             size="small"
                             sx={{width: "50%"}}
                             icon={<Email/>}
+                            value={email}
+                            onChange={(evt) => setEmail(evt.target.value)}
                             />      
                         </Stack>
                     </Center>
@@ -163,9 +204,8 @@ function AddProject() {
 
                             <RadioGroup
                               row
-                            //   value={contact.email_visibility}
-                            //   onChange={radioChange}
-                            //   name="email_visibility"
+                              value={teleVisibility}
+                              onChange={(evt) => setTeleVisibility(evt.target.value)}
                             >
                             <RadioWithLabel value="afterlink" label="Only after linking" />
                             <RadioWithLabel value="everyone" label="Everyone" />
@@ -190,9 +230,8 @@ function AddProject() {
 
                             <RadioGroup
                               row
-                            //   value={contact.email_visibility}
-                            //   onChange={radioChange}
-                            //   name="email_visibility"
+                              value={emailVisibility}
+                              onChange={(evt) => setEmailVisibility(evt.target.value)}
                             >
                             <RadioWithLabel value="afterlink" label="Only after linking" />
                             <RadioWithLabel value="everyone" label="Everyone" />
@@ -203,7 +242,7 @@ function AddProject() {
                     </Box>
                     
                     <Center>
-                        <BasicButton bg="primary" sx={{width:"40%", mt:2}}>Start Linking!</BasicButton>
+                        <BasicLoadingButton bg="primary" sx={{width:"40%", mt:1}} onClick={onClick} loading={loading}>Start Linking!</BasicLoadingButton>
                     </Center>
                 </Paper>
             </Container>
