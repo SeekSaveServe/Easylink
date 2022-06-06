@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { supabase } from "../../../supabaseClient";
 import DisplayAvatar from "../../components/DisplayAvatar/DisplayAvatar";
+import styles from "../Settings.module.css";
 
 export default function Left() {
   const user = useSelector((state) => state.user);
@@ -54,7 +55,7 @@ export default function Left() {
     );
   }, []);
   return (
-    <>
+    <div className={styles.child2}>
       <Center>
         <DisplayAvatar />
       </Center>
@@ -77,6 +78,6 @@ export default function Left() {
           <CardContent> {following} Followers </CardContent>
         </Card>
       </Center>
-    </>
+    </div>
   );
 }

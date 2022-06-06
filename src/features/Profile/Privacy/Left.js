@@ -9,6 +9,7 @@ import { Box } from "@mui/system";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import useBasicAlert from "../../../components/Alert";
+import styles from "../Settings.module.css";
 
 export default function Left({ contact, setContact }) {
   const { BasicAlert, showAlert } = useBasicAlert("error");
@@ -32,7 +33,7 @@ export default function Left({ contact, setContact }) {
   };
 
   return (
-    <>
+    <div className={styles.child2}>
       <Box>
         <FormLabel>
           <Typography variant="h5" color="black">
@@ -74,6 +75,6 @@ export default function Left({ contact, setContact }) {
           />
         </RadioGroup>
       </Box>
-    </>
+    </div>
   );
 }

@@ -3,9 +3,8 @@ import { useEffect, useState } from "react";
 import { React } from "react";
 import BasicTextfield from "../../../components/Basic Textfield";
 import Checkmarks from "../../../components/Checkmarks";
-
+import styles from "../Settings.module.css";
 import { supabase } from "../../../supabaseClient";
-import styles from "../../Registration_Tags/Registration.module.css";
 import { Telegram } from "@mui/icons-material";
 import { useDispatch, useSelector } from "react-redux";
 import { update } from "../../user/userSlice";
@@ -206,7 +205,7 @@ export default function Right({ contact }) {
   }
 
   return (
-    <div className={styles.centre}>
+    <div className={styles.child1}>
       <BasicAlert />
       <form>
         <Checkmarks

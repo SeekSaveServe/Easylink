@@ -8,9 +8,6 @@ import SettingsForm from "./SettingsForm";
 export default function Right() {
   return (
     <Box>
-      <Box>
-        <Typography>Basic Info</Typography>
-      </Box>
       <SettingsForm />
     </Box>
   );
