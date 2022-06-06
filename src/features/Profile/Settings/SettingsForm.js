@@ -15,8 +15,6 @@ export default function SettingsForm() {
   // States for registration
   const dispatch = useDispatch();
   const { BasicAlert, showAlert } = useBasicAlert("error");
-  const { BasicLoad, showLoad } = useBasicAlert("warning");
-  const { BasicSuccess, showSuccess } = useBasicAlert("success");
 
   const user = useSelector((state) => state.user);
   useEffect(() => {

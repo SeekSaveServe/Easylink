@@ -1,27 +1,23 @@
 import { Box } from "@mui/system";
 import { useEffect, useState } from "react";
 import { React } from "react";
-import { Link } from "react-router-dom";
-import BasicTextfield from "../../components/Basic Textfield";
-import BasicButton from "../../components/BasicButton";
-import Checkmarks from "../../components/Checkmarks";
+import BasicTextfield from "../../../components/Basic Textfield";
+import Checkmarks from "../../../components/Checkmarks";
 
-import { supabase } from "../../supabaseClient";
-import styles from "./Registration.module.css";
-import { useNavigate } from "react-router-dom";
+import { supabase } from "../../../supabaseClient";
+import styles from "../../Registration_Tags/Registration.module.css";
 import { Telegram } from "@mui/icons-material";
 import { useDispatch, useSelector } from "react-redux";
-import { update } from "../user/userSlice";
-import UploadAvatar from "../components/UploadAvatar";
-
-import BackNextGroup from "../../components/BackNextGroup";
+import { update } from "../../user/userSlice";
+import UploadAvatar from "../../components/UploadAvatar";
+import BasicButton from "../../../components/BasicButton";
+import useBasicAlert from "../../../components/Alert";
 
 export default function Right() {
   const dispatch = useDispatch();
   const user = useSelector((state) => state.user);
 
   const [telegram, setTelegram] = useState("");
-  const [avatar_url, set_AvatarUrl] = useState(user.avatar_url ?? "");
 
   // State of selected tags
   const [selectedSkills, setSelectedSkills] = useState([]);
@@ -33,12 +29,33 @@ export default function Right() {
   const [interests, setInterests] = useState([]);
   const [communities, setCommunities] = useState([]);
 
-  // Placeholder tags for now
+  // Alert
+  const { BasicAlert, showAlert } = useBasicAlert("error");
+
+  // Get Tags from db
   async function obtainTags(tag) {
     const { data, error } = await supabase
       .from(tag)
       .select("name")
       .is("in_login", true);
+    return data;
+  }
+
+  // Get user tags from db
+  async function obtainUserTags(tag) {
+    const { data, error } = await supabase
+      .from(tag)
+      .select("name")
+      .eq("uid", supabase.auth.user().id);
+    return data;
+  }
+
+  // Get user telegram
+  async function obtainTelegram() {
+    const { data, error } = await supabase
+      .from("users")
+      .select("telegram")
+      .eq("id", supabase.auth.user().id);
     return data;
   }
 
@@ -55,16 +72,25 @@ export default function Right() {
       setCommunities([res.map((obj) => obj.name)][0])
     );
 
-    if (user?.tags) {
-      const tags = user.tags;
-      setSelectedSkills(tags[0]);
-      setSelectedInterests(tags[1]);
-      setSelectedCommunities(tags[2]);
-    }
+    obtainUserTags("user_skills").then((res) =>
+      res
+        ? setSelectedSkills([res.map((obj) => obj.name)][0])
+        : setSelectedSkills([])
+    );
 
-    if (user?.telegram) {
-      setTelegram(user.telegram);
-    }
+    obtainUserTags("user_interests").then((res) =>
+      res
+        ? setSelectedInterests([res.map((obj) => obj.name)][0])
+        : console.log(res)
+    );
+
+    obtainUserTags("user_communities").then((res) =>
+      res
+        ? setSelectedCommunities([res.map((obj) => obj.name)][0])
+        : setSelectedCommunities([])
+    );
+
+    setTelegram(user.telegram);
   }, []);
 
   // Updates telegram display
@@ -72,16 +98,94 @@ export default function Right() {
     setTelegram(e.target.value);
   };
 
-  // Handling the form submission
-  // TODO: Figure out how to remove previous entries and update new ones
-  // TODO: Figure out how to insert new entires
-  // TODO: Update supabase can only be used to update Tele, visibility etc
-  // TODO: The state of things should be declared in Down and passed down to left and right
   async function updateSupabase() {
-    const { data, error } = await supabase
-      .from("users")
-      //   .update({ username: userName, title: title, bio: bio })
-      .match({ id: supabase.auth.user().id });
+    console.log(user.id);
+    async function updateUsers() {
+      try {
+        const { data, error } = await supabase
+          .from("users")
+          .update({
+            telegram: telegram,
+            telegram_visibility: user.telegram_visibility,
+            email_visibility: user.email_visibility,
+          })
+          .match({ id: supabase.auth.user().id });
+      } catch (error) {
+        showAlert(error.error_description || error.message, "error");
+      } finally {
+        return;
+      }
+    }
+
+    async function updatePreferences() {
+      try {
+        const { data, error } = await supabase
+          .from("user_communities")
+          .delete()
+          .match({ uid: supabase.auth.user().id });
+      } catch (error) {
+        showAlert(error.error_description || error.message, "error");
+      }
+      try {
+        for (let i = 0; i < selectedCommunities.length; i++) {
+          const { error } = await supabase.from("user_communities").insert([
+            {
+              uid: supabase.auth.user().id,
+              name: selectedCommunities[i],
+            },
+          ]);
+          // console.log(error);
+        }
+      } catch (error) {
+        showAlert(error.error_description || error.message, "error");
+      }
+      try {
+        const { data, error } = await supabase
+          .from("user_skills")
+          .delete()
+          .match({ uid: supabase.auth.user().id });
+      } catch (error) {
+        showAlert(error.error_description || error.message, "error");
+      }
+      try {
+        for (let i = 0; i < selectedCommunities.length; i++) {
+          const { error } = await supabase.from("user_skills").insert([
+            {
+              uid: supabase.auth.user().id,
+              name: selectedSkills[i],
+            },
+          ]);
+          // console.log(error);
+        }
+      } catch (error) {
+        showAlert(error.error_description || error.message, "error");
+      }
+      try {
+        const { data, error } = await supabase
+          .from("user_interests")
+          .delete()
+          .match({ uid: supabase.auth.user().id });
+      } catch (error) {
+        showAlert(error.error_description || error.message, "error");
+      }
+      try {
+        for (let i = 0; i < selectedCommunities.length; i++) {
+          const { error } = await supabase.from("user_interests").insert([
+            {
+              uid: supabase.auth.user().id,
+              name: selectedInterests[i],
+            },
+          ]);
+          // console.log(error);
+        }
+      } catch (error) {
+        showAlert(error.error_description || error.message, "error");
+      } finally {
+        showAlert("Success!", "success");
+      }
+    }
+    updateUsers();
+    updatePreferences();
   }
 
   const updateFormState = () => {
@@ -89,7 +193,6 @@ export default function Right() {
       update({
         tags: [selectedSkills, selectedInterests, selectedCommunities],
         telegram,
-        avatar_url,
       })
     );
   };
@@ -97,21 +200,13 @@ export default function Right() {
   async function handleSubmit(e) {
     e.preventDefault();
     updateFormState();
+    updateSupabase();
   }
 
   return (
     <div className={styles.centre}>
+      <BasicAlert />
       <form>
-        <Box className={styles.avatar}>
-          <UploadAvatar
-            size={150}
-            url={user?.avatar_url ?? avatar_url}
-            onUpload={(url) => {
-              set_AvatarUrl(url);
-            }}
-          ></UploadAvatar>
-        </Box>
-        {/* <h6 className={styles.firstMessage}> Upload your profile picture</h6> */}
         <Checkmarks
           newTags={skills}
           label="Skills"
@@ -139,30 +234,9 @@ export default function Right() {
           sx={{ m: 1 }}
           icon={<Telegram />}
         />
-        {/* <Stack direction="row" className={styles.btn_group} spacing={3}>
-          <Link to="/signup" style={{ textDecoration: "none", marginLeft: "1.5%" }}>
-              <BasicButton bg="primary">Back</BasicButton>
-          </Link>
-
-          <Link to="/privacy " style={{ textDecoration: "none", marginRight: "1.5%" }}>
-            <BasicButton bg="secondary" onClick={handleSubmit}>
-              Next
-            </BasicButton>
-          </Link>
-        </Stack> */}
-        {/* <BackNextGroup
-          child1={
-            <BasicButton bg="primary" onClick={handleBack}>
-              Back
-            </BasicButton>
-          }
-          child2={
-            <BasicButton bg="secondary" onClick={handleSubmit}>
-              {" "}
-              Next{" "}
-            </BasicButton>
-          }
-        /> */}
+        <BasicButton bg="red" onClick={handleSubmit}>
+          Update
+        </BasicButton>
       </form>
     </div>
   );
