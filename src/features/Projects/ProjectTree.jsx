@@ -1,11 +1,12 @@
 import { TreeView } from "@mui/lab";
-import { ArrowCircleDownOutlined, ArrowCircleRightOutlined } from "@mui/icons-material";
+import { AddCircleOutlined, ArrowCircleDownOutlined, ArrowCircleRightOutlined } from "@mui/icons-material";
 import TreeItemWithMenu from "./TreeItemWithMenu";
 import { useEffect, useState } from "react";
 import useBasicAlert from "../../components/Alert";
 import { useDispatch, useSelector } from "react-redux";
 import { getProjects } from "./projectsSlice";
-import { CircularProgress, Typography } from "@mui/material";
+import { Button, CircularProgress, Typography } from "@mui/material";
+import { useNavigate } from "react-router-dom";
 
 // 1. Get mapping of pid to { ...data, parent_id, childrenIds:[...] }
 // 2: At the same time, get root element pids with parent_id = null
@@ -54,6 +55,7 @@ function ProjectTree() {
     }, []);
 
     const dispatch = useDispatch();
+    const navigate = useNavigate();
     const projects = useSelector(state => state.projects);
 
     // const { BasicAlert, showAlert } = useBasicAlert("error"); - there is a problem with the hook
@@ -81,6 +83,13 @@ function ProjectTree() {
 
     return (
         <div>
+           <Button 
+            variant="outlined" 
+            sx={{textTransform: 'none', width: '20%', pl:1, ml:1}} 
+            startIcon={<AddCircleOutlined/>} 
+            size="normal"
+            onClick={() => navigate("/addproject")}
+            >Add root project</Button>
           { display() }
         </div>
     )

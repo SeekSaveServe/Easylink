@@ -11,14 +11,10 @@ import { AddCircleOutlined } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
 import { Tabs, TabList, Tab } from "@chakra-ui/react";
 import NavButtonGroup from "./NavButtonGroup";
+import { useState } from "react";
+import Posts from './Posts';
 
 function Projects() {
-  const navigate = useNavigate();
-
-  function addProject() {
-    navigate('/addproject');
-  }
-  
   async function addProj() {
     // const { data, error } = await supabase
     //   .from('projects')
@@ -38,29 +34,15 @@ function Projects() {
     // }
   }
 
-  const isActive = false;
-  const props = isActive ? {
-    variant: "contained"
-  } : {}
+  const [isProject, setIsProject] = useState(true);
   return (
     <>
       <BasicNavBar />
       <Container className={styles.container} maxWidth={"md"}>
-        <NavButtonGroup/>
-        {/* <ButtonGroup variant="outlined" sx={{mb:1}}>
-          <Button {...props}>Projects</Button>
-          <Button>Posts</Button>
-        </ButtonGroup> */}
-
+        <NavButtonGroup isProject={isProject} setIsProject={setIsProject}/>
+  
         <Paper elevation={3} className={styles.paper}>
-          <Button 
-            variant="outlined" 
-            sx={{textTransform: 'none', width: '20%', pl:1, ml:1}} 
-            startIcon={<AddCircleOutlined/>} 
-            size="normal"
-            onClick={addProject}
-            >Add root project</Button>
-          <ProjectTree/>
+          {isProject ? <ProjectTree/> : <Posts/> }
         </Paper>
       </Container>
     </>
