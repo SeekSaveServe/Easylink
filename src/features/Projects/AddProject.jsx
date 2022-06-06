@@ -19,13 +19,38 @@ import { Email, Telegram } from "@mui/icons-material";
 import UploadAvatar from "../components/UploadAvatar";
 import BasicLoadingButton from "../../components/BasicLoadingButton/BasicLoadingButton";
 import { supabase } from "../../supabaseClient";
+import { useEffect } from "react";
 
 function AddProject() {
+    async function obtainTags(tag) {
+        const { data, error } = await supabase
+          .from(tag)
+          .select("name")
+          .is("in_login", true);
+        return data;
+    }
+
+    async function setTags(tag, setFunction) {
+        obtainTags(tag)
+            .then((res) => setFunction(res.map((obj) => obj.name)))
+    }
+
+    // display tags from DB
+    const [skills, setSkills] = useState([]);
+    const [interests, setInterests] = useState([]);
+    const [communities, setCommunities] = useState([]);
+
+    useEffect(() => {
+        setTags("unique_skills", setSkills);
+        setTags("unique_interests", setInterests);
+        setTags("unique_communities", setCommunities);
+    }, []);
+
     const { state } = useLocation();
     const parentId = state?.parentId;
     const parent = useSelector((state) => selectProjectById(state, parentId));
-    const [loading, setLoading] = useState(false);
-    
+    const [loading, setLoading] = useState(false); // for start linking button
+
     // Form State
     const [avatarUrl, setAvatarUrl] = useState(null);
     const [title, setTitle] = useState("");
@@ -39,6 +64,9 @@ function AddProject() {
     const [email, setEmail] = useState("");
     const [teleVisibility, setTeleVisibility] = useState("afterlink");
     const [emailVisibility, setEmailVisibility] = useState("afterlink");
+
+    
+    
 
     const onClick = () => {
         // only username missing
@@ -115,21 +143,21 @@ function AddProject() {
                     <Center>
                         <FormGroup sx={{width: "90%", mt:1}}>
                             <Checkmarks
-                            newTags={["One", "Two", "Three"]}
+                            newTags={skills}
                             label="Skills"
                             selectedTags={selectedSkills}
                             setSelectedTags={setSelectedSkills}
                             />  
 
                             <Checkmarks
-                            newTags={["One", "Two", "Three"]}
+                            newTags={interests}
                             label="Interests"
                             selectedTags={selectedInterests}
                             setSelectedTags={setSelectedInterests}
                             />    
 
                             <Checkmarks
-                            newTags={["One", "Two", "Three"]}
+                            newTags={communities}
                             label="Communities"
                             selectedTags={selectedCommunities}
                             setSelectedTags={setSelectedCommunities}
