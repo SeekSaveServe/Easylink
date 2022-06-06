@@ -11,6 +11,15 @@ import { Link } from "react-router-dom";
 // Posts / polls
 
 function Posts() {
+    const showPosts = (n) => {
+        let posts = [];
+        
+        for (let i = 0; i < n; i++) {
+            posts.push( <PostCard sx={{width: "90%", ml:1, mt:1}}/>)
+        }
+
+        return posts;
+    }
     return (
         <>
         <Center style={{marginBottom:2}}>
@@ -26,12 +35,7 @@ function Posts() {
 
         <Scrollable height="25vh">
             <div style={{display: "flex", flexDirection: "column", alignItems: "center", gap: "1rem",}}>
-                <PostCard sx={{width: "100%", ml:1, mt:1}}/>
-                <PostCard sx={{width: "100%", ml:1, mt:1}}/>
-                <PostCard sx={{width: "100%", ml:1, mt:1}}/>
-                <PostCard sx={{width: "100%", ml:1, mt:1}}/>
-                <PostCard sx={{width: "100%", ml:1, mt:1}}/>
-                <PostCard sx={{width: "100%", ml:1, mt:1}}/>
+                { showPosts(6) }
             </div>
         </Scrollable>
         </>
