@@ -34,25 +34,24 @@ function AddProject() {
         <LocalizationProvider dateAdapter={AdapterDateFns}>
             <BasicNavBar/>
             <Container className={styles.container} maxWidth="md">
-                <Center>
-                    <Typography variant='h5' sx={{fontWeight: "bold"}}>Add project</Typography>
-                </Center>
-
-                <Center>
-                    <Typography sx={{mb:1}}variant='subtitle1'>
-                        {parent ? `Parent project: ${parent.title}` : 'as root project'}
+                <Center style={{marginBottom: 5}}>
+                    <Typography variant='h5' sx={{fontWeight: "bold", mr: 2}}>Add project: </Typography>
+                    <Typography variant='subtitle1'>
+                        {parent ? `Parent project - ${parent.title}` : 'as root project'}
                     </Typography>
                 </Center>
-
 
                 <Paper className={styles.paper} elevation={3}>
                     <Center>
                         <UploadAvatar
-                            size={100}
+                            size={60}
                             url={avatarUrl}
                             onUpload={
                                 (url) => setAvatarUrl(url)
                             }
+                            ButtonProps={{
+                                sx:{padding: "0.3rem", marginTop: "0.2rem"},
+                            }}
                         />
                     </Center>
 
@@ -147,20 +146,19 @@ function AddProject() {
 
                     <Box sx={{display:"flex", flexDirection:"column", justifyContent: "center"}}>
                         <Box 
-                            mt={2}
+                            mt={1}
                             sx={{
                             flex:1,
                             display: "flex",
                             flexDirection: "row",
                             justifyContent: "center",
                             alignItems: "center",
-                            // ml:7
                             }}
                         >
                             <FormLabel>
-                            <Typography variant="h6" color="black">
-                                Telegram visibility:
-                            </Typography>
+                                <Typography variant="h6" color="black" sx={{mr: 2}}>
+                                    Telegram visibility:
+                                </Typography>
                             </FormLabel>
 
                             <RadioGroup
@@ -174,24 +172,24 @@ function AddProject() {
                             </RadioGroup>
                         </Box>
 
-                        {/* <Box
-                            mt={2}
+                        <Box 
+                            mt={0}
                             sx={{
                             flex:1,
                             display: "flex",
-                            flexDirection: "column",
+                            flexDirection: "row",
+                            justifyContent: "center",
                             alignItems: "center",
-                            mr:7
                             }}
                         >
                             <FormLabel>
-                            <Typography variant="h6" color="black">
-                                Email visibility:
-                            </Typography>
+                                <Typography variant="h6" color="black" sx={{mr: 2}}>
+                                    Email visibility:
+                                </Typography>
                             </FormLabel>
 
                             <RadioGroup
-                            //   row
+                              row
                             //   value={contact.email_visibility}
                             //   onChange={radioChange}
                             //   name="email_visibility"
@@ -199,7 +197,9 @@ function AddProject() {
                             <RadioWithLabel value="afterlink" label="Only after linking" />
                             <RadioWithLabel value="everyone" label="Everyone" />
                             </RadioGroup>
-                        </Box> */}
+                        </Box>
+
+                    
                     </Box>
                     
                     <Center>
