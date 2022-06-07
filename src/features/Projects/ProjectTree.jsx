@@ -86,7 +86,6 @@ function ProjectTree() {
 
     return (
         <Paper elevation={3} className={styles.paper}>
-           <Button variant="outlined" onClick={() => showAlert("Message", "success")}>Context</Button>
            <Button 
             variant="outlined" 
             sx={{textTransform: 'none', width: '20%', pl:1, ml:1}} 

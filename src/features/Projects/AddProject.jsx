@@ -88,12 +88,15 @@ function AddProject() {
     const validForm = () => {
         let errorMsg = null;
 
-        console.log(endDate - startDate);
         if (title == "") {
             errorMsg = "Please enter a title";
         } 
+
+        else if (!startDate && endDate) {
+            errorMsg = "Please enter a start date";
+        }
         
-        else if (endDate - startDate < 0) {
+        else if (endDate && endDate - startDate < 0) {
             errorMsg = "End date should be same as or after start date"
         }
 
@@ -191,6 +194,7 @@ function AddProject() {
                             sx={{mr:3, width: "50%"}}
                             value={title}
                             onChange={(e) => setTitle(e.target.value)}
+                            required
                             />
 
                             <BasicTextField
