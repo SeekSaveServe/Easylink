@@ -8,14 +8,63 @@ import { Center } from "@chakra-ui/react";
 import { AddCircleOutlined } from "@mui/icons-material";
 import { Link } from "react-router-dom";
 
-// Posts / polls
+const fakePosts = [
+    {   
+        isPost: true,
+        title: "USDevs",
+        avatarUrl: "",
+        dateString: "7th May 2022 | 9:03pm", // TODO: format date string based on created_at ISO Date str from DB
+        description: "Good day to all! This is to announce our workshop happening on May 14th. Please come if you want to learn Node.js",
+    },
+    {   
+        isPost: false,
+        title: "USDevs",
+        avatarUrl: "",
+        dateString: "7th May 2022 | 9:33pm", 
+        description: "Are you coming for the workshop on the 14th?",
+        pollOptions: ["Yes", "No"]
+    },
+    {   
+        isPost: true,
+        title: "USDevs",
+        avatarUrl: "",
+        dateString: "7th May 2022 | 9:03pm",
+        description: "Good day to all! This is to announce our workshop happening on May 14th. Please come if you want to learn Node.js",
+    },
+    {   
+        isPost: false,
+        title: "USDevs",
+        avatarUrl: "",
+        dateString: "7th May 2022 | 9:33pm", 
+        description: "Are you coming for the workshop on the 14th?",
+        pollOptions: ["Yes", "No"]
+    },
+    {   
+        isPost: false,
+        title: "USDevs",
+        avatarUrl: "",
+        dateString: "7th May 2022 | 9:33pm", 
+        description: "Are you coming for the workshop on the 14th?",
+        pollOptions: ["Yes", "No"]
+    },
+    {   
+        isPost: true,
+        title: "USDevs",
+        avatarUrl: "",
+        dateString: "7th May 2022 | 9:03pm",
+        description: "Good day to all! This is to announce our workshop happening on May 14th. Please come if you want to learn Node.js",
+    }
 
+    
+]
+
+// Posts / polls
 function Posts() {
     const showPosts = (n) => {
         let posts = [];
         
         for (let i = 0; i < n; i++) {
-            posts.push( <PostCard sx={{width: "90%", ml:1, mt:1}}/>)
+            posts.push( <PostCard sx={{width: "90%", ml:1, mt:1}} data={fakePosts[i % fakePosts.length]}/>)
         }
 
         return posts;
