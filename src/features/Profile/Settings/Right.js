@@ -5,10 +5,10 @@ import BasicButton from "../../../components/BasicButton";
 import { Form } from "../../sign up/Form";
 import SettingsForm from "./SettingsForm";
 
-export default function Right() {
+export default function Right({ user, avatarUrl }) {
   return (
     <Box>
-      <SettingsForm />
+      <SettingsForm user={user} avatarUrl={avatarUrl} />
     </Box>
   );
 }

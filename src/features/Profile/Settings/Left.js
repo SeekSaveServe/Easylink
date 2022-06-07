@@ -5,19 +5,15 @@ import { Box } from "@mui/system";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { supabase } from "../../../supabaseClient";
-import DisplayAvatar from "../../components/DisplayAvatar/DisplayAvatar";
 import styles from "../Settings.module.css";
-import UploadAvatar from "../../components/UploadAvatar";
 import { BasicAlert } from "../../../components/Alert/Alert";
 import SettingsAvatar from "../../components/SettingsAvatar";
-export default function Left() {
-  const user = useSelector((state) => state.user);
+export default function Left({ avatarUrl, set_AvatarUrl, user }) {
   const name = user.username;
   const title = user.title ? user.title : "No title";
   const [links, setLinks] = useState("loading");
   const [projects, setProjects] = useState("loading");
   const [following, setFollowing] = useState("loading");
-  const [avatarUrl, set_AvatarUrl] = useState(user.avatar_url);
 
   // NOTE: Some of the functions need to be rewritten to accommodate projects
   // The current version is written for users only

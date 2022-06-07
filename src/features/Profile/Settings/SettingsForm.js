@@ -11,12 +11,11 @@ import { update } from "../../user/userSlice";
 import useBasicAlert from "../../../components/Alert";
 import AutoAwesomeIcon from "@mui/icons-material/AutoAwesome";
 
-export default function SettingsForm() {
+export default function SettingsForm({ user, avatarUrl }) {
   // States for registration
   const dispatch = useDispatch();
   const { BasicAlert, showAlert } = useBasicAlert("error");
 
-  const user = useSelector((state) => state.user);
   useEffect(() => {
     if (user?.username) setUserName(user.username);
     if (user?.title) setTitle(user.title);
@@ -83,7 +82,12 @@ export default function SettingsForm() {
   async function updateSupabase() {
     const { data, error } = await supabase
       .from("users")
-      .update({ username: userName, title: title, bio: bio })
+      .update({
+        username: userName,
+        title: title,
+        bio: bio,
+        avatar_url: avatarUrl,
+      })
       .match({ id: supabase.auth.user().id });
     showAlert("Success!", "success");
   }
@@ -97,7 +101,14 @@ export default function SettingsForm() {
       // signing up
       try {
         setLoading(true);
-        dispatch(update({ username: userName, title: title, bio: bio }));
+        dispatch(
+          update({
+            username: userName,
+            title: title,
+            bio: bio,
+            avatar_url: avatarUrl,
+          })
+        );
         updateSupabase();
       } catch (error) {
         alert(error.error_description || error.message);
