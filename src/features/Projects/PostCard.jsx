@@ -1,9 +1,12 @@
-import { Card, CardHeader, CardContent, CardActions, Typography, RadioGroup, FormControlLabel, Radio } from "@mui/material";
+import { Card, CardHeader, CardContent, CardActions, Typography, RadioGroup, FormControlLabel, Radio, Button } from "@mui/material";
 import LinkableAvatar from '../../components/LinkableAvatar.js';
 import { Badge } from "@chakra-ui/react";
 import Tag from "../../components/Tag/Tag.jsx";
 import Emoji from "../../components/Emoji/EmojiButton.jsx";
 import { Box } from "@mui/system";
+import BasicButton from "../../components/BasicButton/BasicButton.js";
+import LoadingButton from "@mui/lab/LoadingButton";
+import { useState } from "react";
 
 // Common: Avatar, Title of project, created_at datetime, description
 // Post: show react emoji dropdown, Poll: show poll options
@@ -15,7 +18,10 @@ function PostCard({ data, ...rest }) {
     const avatarUrl= data.avatarUrl ?? "";
     const description = data.description ?? "Good day to all! This is to announce our workshop happening on May 14th. Please come if you want to learn Node.js";
 
-    const pollOptions = data?.pollOptions ?? null; // ["Yes", "No"]
+    const pollOptions = data?.pollOptions ?? null; // e.g ["Yes", "No"]
+
+    // disabled/submitted state
+    const [submitted, setSubmitted] = useState(false);
 
     const showPollOptions = () => {
         if(!pollOptions) return [];
@@ -40,23 +46,28 @@ function PostCard({ data, ...rest }) {
             <CardHeader avatar={<LinkableAvatar />} title={title} subheader={<p style={{margin:0}}>{dateString}</p>}>
             </CardHeader>
 
-            <CardContent sx={{paddingTop:0}}>
+            <CardContent sx={{paddingTop:0, paddingBottom:0}}>
                 <Tag color="var(--tag-grey)" variant="body2" sx={{marginBottom:3}}>{isPost ? "Post" : "Poll"}</Tag>
                 <Typography variant="body1">{description}</Typography>
 
                 {!isPost ?
-                    <div style={{marginLeft: 3, marginTop:3}}>
+                    <div style={{marginLeft: 3, marginTop:3, marginBottom:0}}>
                         { showPollOptions() }
                     </div> : <></> }
                 
             </CardContent>
 
-            {isPost ? 
-                <CardActions sx={{ml:1, mb:1, gap:"10px"}}>
+            {/*  submit with diff. color: */}
+            {/* <Button variant="outlined" sx={{color: "var(--primary)", borderColor: "var(--primary)", ml:1,mb:1}}>Submit</Button>  */}
+            <CardActions>
+                {isPost ? 
+                <Box sx={{display: "flex", mt:2, ml:1, mb:1, gap:"10px"}}>
                     <Emoji label="thumbs-up" symbol="👍" />
                     <Emoji label="thumbs-up" symbol="👎" />
                     <Emoji label="thumbs-up" symbol="🤩" />
-                </CardActions> : <></> }
+                </Box>
+                : <LoadingButton variant="outlined" sx={{ ml:1,mb:1}}>Submit</LoadingButton> }
+            </CardActions>
         </Card>
     )
 
