@@ -3,7 +3,7 @@ import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
-import { NavLink } from "react-router-dom";
+import { NavLink, useLocation } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { supabase } from "../../supabaseClient";
 import BasicButton from "../BasicButton";
@@ -12,7 +12,7 @@ import BasicSearchBar from "../BasicSearchBar/BasicSearchBar";
 
 export default function BasicNavBar() {
   const userProfile = useSelector((state) => state.user);
-
+  const location = useLocation();
   const signOut = async () => {
     await supabase.auth.signOut();
   };
@@ -53,7 +53,7 @@ export default function BasicNavBar() {
           <NavLink
             to="/projects"
             style={({ isActive }) =>
-              isActive
+              (isActive || ["/addproject", "/addpost"].includes(location.pathname))
                 ? {
                     color: "white",
                   }
