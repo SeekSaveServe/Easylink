@@ -1,0 +1,36 @@
+/* .box {
+    width: 20px;
+    height:20px;
+    margin-bottom:50px;
+    background-color: var(--bg-grey);
+} */
+.box {
+    transition: 0.3s;
+}
+
+.box:hover {
+    transform: scale(1.1);
+}
+
+.emoji {
+    background-color: var(--tag-grey);
+    border-radius: 35%;
+    padding: 0.1rem;
+    border: 1px solid black;
+}
+
+.selected{
+    background-color: var(--tag-grey);
+    border-radius: 30%;
+    padding: 0.1rem;
+    border: 1px solid black;
+    border-color:var(--primary);
+}
+
+.number {
+    font-size: 1.1rem;
+    font-weight: normal;
+    display: inline-block;
+    margin-left:2px;
+    margin-right:2px;
+}

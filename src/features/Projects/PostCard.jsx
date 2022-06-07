@@ -2,6 +2,8 @@ import { Card, CardHeader, CardContent, CardActions, Typography } from "@mui/mat
 import LinkableAvatar from '../../components/LinkableAvatar.js';
 import { Badge } from "@chakra-ui/react";
 import Tag from "../../components/Tag/Tag.jsx";
+import Emoji from "../../components/Emoji/EmojiButton.jsx";
+import { Box } from "@mui/system";
 
 // Common: Avatar, Title of project, created_at datetime, description
 // Post: show react emoji dropdown, Poll: show poll options
@@ -31,8 +33,10 @@ function PostCard(props) {
                 
             </CardContent>
 
-            <CardActions>
-
+            <CardActions sx={{ml:1,mb:1, gap:"10px"}}>
+                <Emoji label="thumbs-up" symbol="👍" />
+                <Emoji label="thumbs-up" symbol="👎" />
+                <Emoji label="thumbs-up" symbol="🤩" />
             </CardActions>
         </Card>
     )
