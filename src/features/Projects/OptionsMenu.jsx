@@ -2,7 +2,9 @@ import { Menu, MenuItem, IconButton } from "@mui/material";
 import { useState } from "react";
 import { Menu as MenuIcon } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
+import { supabase } from "../../supabaseClient";
 
+// parentId: the pid of the project this menu is associated with
 function OptionsMenu({ parentId }) {
   const navigate = useNavigate();
   const [anchorEl, setAnchorEl] = useState(null);
@@ -19,6 +21,19 @@ function OptionsMenu({ parentId }) {
     // pass data while navigating without props
     navigate('/addproject', { state: { parentId } });
     // handleClose();
+  }
+
+  const handleDelete = async() => {
+    const {data, error} = await supabase
+      .from('projects')
+      .delete()
+      .match({ pid: parentId });
+    
+    if (error) {
+      throw error;
+    }
+
+    window.location.reload()
   }
 
   return (
@@ -44,7 +59,7 @@ function OptionsMenu({ parentId }) {
       >
         <MenuItem onClick={handleClose}>Switch to project</MenuItem>
         <MenuItem onClick={addSubProject}>Add sub-project</MenuItem>
-        <MenuItem onClick={handleClose}>Delete</MenuItem>
+        <MenuItem onClick={handleDelete}>Delete</MenuItem>
       </Menu>
     </div>
   );

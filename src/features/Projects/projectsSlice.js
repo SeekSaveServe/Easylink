@@ -126,10 +126,12 @@ function delay(ms) {
 }
 // Async Thunks
 export const getProjects = createAsyncThunk('projects/getProjects', async() => {
-    // const { data, error } = await supabase.from('projects')
-    // .select('*');
+    const { data, error } = await supabase.from('projects')
+    .select('*')
+    .match({ uid: supabase.auth.user().id })
 
-    const { data, error } = await getData();
+
+    // const { data, error } = await getData();
 
     if (error) throw error;
     return data;
