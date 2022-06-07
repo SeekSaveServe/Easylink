@@ -11,6 +11,8 @@ import { useState } from "react";
 // Common: Avatar, Title of project, created_at datetime, description
 // Post: show react emoji dropdown, Poll: show poll options
 // Looking at own posts: disable poll options, don't show react dropdown
+
+// TODO: add disable options/emojis if looking at own posts -> show results instead
 function PostCard({ data, ...rest }) {
     const isPost = data.isPost ?? true;
     const title = data.title ?? "USDevs";
@@ -28,9 +30,14 @@ function PostCard({ data, ...rest }) {
 
         return (
             <RadioGroup column sx={{mb:-1}}>
-             {pollOptions.map((option, idx) => <FormControlLabel control={<Radio/>} key={idx} value={option} label={option}></FormControlLabel>)}
+             {pollOptions.map((option, idx) => <FormControlLabel disabled={submitted} control={<Radio/>} key={idx} value={option} label={option}></FormControlLabel>)}
             </RadioGroup>
         )
+    }
+
+    // for poll submit
+    const handleSubmit = () => {
+        setSubmitted(!submitted);
     }
 
     function TextBadge({ text }) {
@@ -66,7 +73,7 @@ function PostCard({ data, ...rest }) {
                     <Emoji label="thumbs-up" symbol="👎" />
                     <Emoji label="thumbs-up" symbol="🤩" />
                 </Box>
-                : <LoadingButton variant="outlined" sx={{ ml:1,mb:1}}>Submit</LoadingButton> }
+                : <LoadingButton variant="outlined" sx={{ ml:1,mb:1}} onClick={handleSubmit}>{submitted ? "Unsubmit" : "Submit"}</LoadingButton> }
             </CardActions>
         </Card>
     )
