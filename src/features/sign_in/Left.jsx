@@ -27,7 +27,7 @@ function Left({ logo, msg, formState, updateState, handleSignIn }) {
       });
 
       if (error) throw error;
-      showAlert("Signed in!", "success");
+      // showAlert("Signed in!", "success");
     } catch (error) {
       showAlert(error.error_description || error.message, "error");
 

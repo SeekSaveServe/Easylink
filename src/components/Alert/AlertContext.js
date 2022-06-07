@@ -7,7 +7,7 @@ export function useAlert() {
 }
 
 export function AlertProvider({ children }) {
-    const { showAlert, BasicAlert } = useBasicAlert();
+    const { showAlert, BasicAlert } = useBasicAlert("error");
     return (
         <AlertContext.Provider value={showAlert}>
             <BasicAlert/>

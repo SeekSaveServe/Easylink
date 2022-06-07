@@ -8,12 +8,12 @@ import { PersonOutline, Email, LockOutlined } from "@mui/icons-material";
 
 import { useSelector, useDispatch } from "react-redux";
 import { update } from "../user/userSlice";
-import useBasicAlert from "../../components/Alert";
+import { useAlert } from "../../components/Alert/AlertContext";
 
 export function Form() {
   // States for registration
   const dispatch = useDispatch();
-  const { BasicAlert, showAlert } = useBasicAlert("error");
+  const showAlert = useAlert();
 
   const user = useSelector((state) => state.user);
 
@@ -64,22 +64,22 @@ export function Form() {
     const passNotMinLength = password.length < 6; // assume check after password equal
 
     if (haveBlank && passNotEqual) {
-      showAlert("Please fill in all fields and ensure passwords are the same");
+      showAlert("Please fill in all fields and ensure passwords are the same", "error");
       return false;
     }
 
     if (haveBlank) {
-      showAlert("Please fill in all fields");
+      showAlert("Please fill in all fields", "error");
       return false;
     }
 
     if (passNotEqual) {
-      showAlert("Please ensure passwords are the same");
+      showAlert("Please ensure passwords are the same", "error");
       return false;
     }
 
     if (passNotMinLength) {
-      showAlert("Password should be at least 6 characters");
+      showAlert("Password should be at least 6 characters", "error");
       return false;
     }
 
@@ -123,7 +123,6 @@ export function Form() {
 
   return (
     <div className={styles.Left}>
-      <BasicAlert />
       <form>
         <BasicTextField
           label="Username"
