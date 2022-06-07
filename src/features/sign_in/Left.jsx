@@ -6,12 +6,13 @@ import { supabase } from "../../supabaseClient";
 import styles from "./../components/left/Left.module.css";
 import { FormGroup, FormControlLabel, Checkbox } from "@mui/material";
 import { Email, LockOutlined } from "@mui/icons-material";
-import useBasicAlert from "../../components/Alert";
+import { useAlert } from "../../components/Alert/AlertContext";
 
 
 
 function Left({ logo, msg, formState, updateState, handleSignIn }) {
-    const { showAlert, BasicAlert } = useBasicAlert("error");
+    // const { showAlert, BasicAlert } = useBasicAlert("error");
+  const showAlert = useAlert();
 
   const [loading, setLoading] = useState(false); // awaiting authentication
 
@@ -72,8 +73,6 @@ function Left({ logo, msg, formState, updateState, handleSignIn }) {
         <BasicButton bg="secondary" onClick={handleLogin}>
           Sign in
         </BasicButton>
-
-        <BasicAlert />        
       </form>
     </div>
   );

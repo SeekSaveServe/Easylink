@@ -24,6 +24,7 @@ import Settings from "./features/Profile/Settings/Settings";
 import PrivacySettings from "./features/Profile/Privacy/Privacy";
 import AddProject from "./features/Projects/AddProject";
 import AddPost from "./features/Projects/AddPost";
+import { AlertProvider } from "./components/Alert/AlertContext";
 
 const container = document.getElementById("root");
 const root = createRoot(container);
@@ -43,6 +44,7 @@ root.render(
   <React.StrictMode>
     <CssBaseline>
       <Provider store={store}>
+        <AlertProvider>
         <BrowserRouter>
           <Routes>
             <Route path="/" element={<App />} />
@@ -135,6 +137,7 @@ root.render(
             />
           </Routes>
         </BrowserRouter>
+        </AlertProvider>
       </Provider>
     </CssBaseline>
   </React.StrictMode>

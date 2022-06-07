@@ -7,7 +7,7 @@ import { getUserProfile } from "../../features/user/userSlice";
 
 // Redirects to sign in page if the user is not logged in
 // https://www.robinwieruch.de/react-router-private-routes/
-const ProtectedRoute = ({ children, redirectRoute = "/" }) => {
+const ProtectedRoute = ({ children, redirectRoute = "/", active }) => {
   let navigate = useNavigate();
   const dispatch = useDispatch();
   const [session, setSession] = useState(null);

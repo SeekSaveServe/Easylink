@@ -14,7 +14,7 @@ export function BasicAlert({ message, severity, open, setOpen }) {
     }
 
     return (
-        <Snackbar open={open} autoHideDuration={6000} onClose={handleClose} 
+        <Snackbar open={open} autoHideDuration={2000} onClose={handleClose} 
             anchorOrigin={{vertical:'top', horizontal: 'center'}}
         >
             <Alert onClose={handleClose} severity={severity} sx={{ width: '100%' }}>
@@ -34,9 +34,9 @@ export function useBasicAlert(initialSeverity) {
     const [severity, setSeverity] = useState(initialSeverity);
     const [msg, setMsg] = useState("");
 
-    document.addEventListener('keypress', (e) => {
-        setOpen(false);
-    });
+    // document.addEventListener('keypress', (e) => {
+    //     setOpen(false);
+    // });
 
     function showAlert(newMsg, newSeverity) {
         setMsg(newMsg);
