@@ -8,6 +8,8 @@ import { getProjects } from "./projectsSlice";
 import { Button, CircularProgress, Paper, Typography } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import styles from './Projects.module.css';
+import { AlertContext, useAlert } from "../../components/Alert/AlertContext";
+import { useContext } from "react";
 
 // 1. Get mapping of pid to { ...data, parent_id, childrenIds:[...] }
 // 2: At the same time, get root element pids with parent_id = null
@@ -55,6 +57,7 @@ function ProjectTree() {
       loadData();
     }, []);
 
+    const value = useContext(AlertContext);
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const projects = useSelector(state => state.projects);
@@ -84,12 +87,13 @@ function ProjectTree() {
 
     return (
         <Paper elevation={3} className={styles.paper}>
+           <Button variant="outlined" onClick={() => console.log(value)}>Context</Button>
            <Button 
             variant="outlined" 
             sx={{textTransform: 'none', width: '20%', pl:1, ml:1}} 
             startIcon={<AddCircleOutlined/>} 
             size="normal"
-            onClick={() => navigate("/addproject")}
+            onClick={() => navigate("/addproject") }
             >Add root project</Button>
           { display() }
         </Paper>
