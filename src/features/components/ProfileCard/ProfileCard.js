@@ -4,7 +4,7 @@ import styles from './ProfileCard.module.css';
 import { useSelector } from "react-redux";
 import { getUser } from "../../user/userSlice.js";
 import BasicButton from "../../../components/BasicButton/BasicButton.js";
-
+import Tag from "../../../components/Tag/Tag.jsx";
 // info needed: username, title, bio, isProject, tags
 const defaultInfo = {
     username: "Cat Lover",
@@ -19,14 +19,6 @@ const defaultInfo = {
 function CardButton({ children, sx ,...rest}) {
     return (
         <BasicButton sx={{...sx, fontSize: "0.1rem", padding: "0.2rem 0.8rem", display: "inline", width: "auto"}} {...rest}>{children}</BasicButton>
-    )
-}
-
-function Tag({ children, color,...rest}) {
-    return (
-        <Typography sx={{backgroundColor: color}} className={styles.tag} {...rest}>
-            { children }
-        </Typography>
     )
 }
 

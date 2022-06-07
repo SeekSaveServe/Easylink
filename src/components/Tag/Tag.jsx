@@ -1,16 +1,13 @@
 import { Typography } from "@mui/material"
-
+import styles from './Tag.module.css';
 
 function Tag({ sx, children, color,...rest}) {
     const styleSx = {
         backgroundColor: color,
-        borderRadius: "1rem",
-        padding: "0.2rem 0.5rem",
-        display: "inline-block",
         ...sx
     }
     return (
-        <Typography sx={{styleSx}} {...rest}>
+        <Typography variant="body1" sx={{...styleSx}} className={styles.tag} {...rest}>
             { children }
         </Typography>
     )
