@@ -25,6 +25,7 @@ import { supabase } from "../../supabaseClient";
 import { update } from "../user/userSlice";
 import LinkableAvatar from "../../components/LinkableAvatar.js";
 import BasicTextField from '../../components/Basic Textfield';
+import { useAlert } from "../../components/Alert/AlertContext";
 
 // rest is props for Checkbox, not FCL
 function CheckboxWithLabel({ label, ...rest }) {
@@ -41,7 +42,8 @@ function RadioWithLabel({ value, label, ...rest }) {
   );
 }
 function PrivacySettings() {
-  const { BasicAlert, showAlert } = useBasicAlert("error");
+  // const { BasicAlert, showAlert } = useBasicAlert("error");
+  const showAlert = useAlert();
   const user = useSelector((state) => state.user);
 
   const dispatch = useDispatch();
@@ -169,7 +171,7 @@ function PrivacySettings() {
           marginTop: 0,
         }}
       >
-        <BasicAlert />
+      
         <Box sx={{ display: "flex", width: "100%" }}>
           <div style={{ flex: 1 }}>
             <LinkableAvatar src={user?.avatar_url} sx={{height: 75, width: 75}}/>

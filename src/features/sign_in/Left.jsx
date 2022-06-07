@@ -8,8 +8,6 @@ import { FormGroup, FormControlLabel, Checkbox } from "@mui/material";
 import { Email, LockOutlined } from "@mui/icons-material";
 import { useAlert } from "../../components/Alert/AlertContext";
 
-
-
 function Left({ logo, msg, formState, updateState, handleSignIn }) {
     // const { showAlert, BasicAlert } = useBasicAlert("error");
   const showAlert = useAlert();

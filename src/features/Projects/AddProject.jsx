@@ -21,6 +21,7 @@ import BasicLoadingButton from "../../components/BasicLoadingButton/BasicLoading
 import { supabase } from "../../supabaseClient";
 import { useEffect } from "react";
 import useBasicAlert from "../../components/Alert";
+import { useAlert } from "../../components/Alert/AlertContext";
 
 function AddProject() {
     const navigate = useNavigate();
@@ -52,7 +53,8 @@ function AddProject() {
     const parentId = state?.parentId;
     const parent = useSelector((state) => selectProjectById(state, parentId));
     const [loading, setLoading] = useState(false); // for start linking button
-    const { showAlert, BasicAlert } = useBasicAlert("error");
+    // const { showAlert, BasicAlert } = useBasicAlert("error");
+    const showAlert = useAlert();
 
     // Form State
     const [avatarUrl, setAvatarUrl] = useState(null);
@@ -135,7 +137,6 @@ function AddProject() {
         <>
         {/* LocalizationProvider and dateAdapter necc. for date pickers to work */}
         <LocalizationProvider dateAdapter={AdapterDateFns}>
-            <BasicAlert/>
             <BasicNavBar/>
             <Container className={styles.container} maxWidth="md">
 

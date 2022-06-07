@@ -11,6 +11,7 @@ import BasicButton from "../../components/BasicButton";
 import { AddCircleOutlined } from "@mui/icons-material";
 import useBasicAlert from "../../components/Alert";
 import { useNavigate } from "react-router-dom";
+import { useAlert } from "../../components/Alert/AlertContext";
 
 // TODO: add form validate at least 2 options, delete option, no duplicate options
 function AddPost() {
@@ -19,7 +20,7 @@ function AddPost() {
     const [addOption, setAddOption] = useState("");
     const [pollOptions, setPollOptions] = useState([]);
     const [isPost, setIsPost] = useState(true);
-    const { BasicAlert, showAlert } = useBasicAlert();
+    const showAlert = useAlert();
     
     const addOptionClick = () => {
         const toAdd = addOption.trim()
@@ -28,9 +29,28 @@ function AddPost() {
         setAddOption("");
     }
 
+    const validForm = () => {
+        let errorMsg = null;
+        if (description.trim() == "") {
+            errorMsg = "Please enter a description";
+        } 
+
+        else if (!isPost && pollOptions.length == 0) {
+            errorMsg = "Please enter at least one poll option";
+        }
+
+        if (errorMsg) {
+            showAlert(errorMsg, "error");
+            return false;
+        }
+
+        return true;
+
+    }
+
     const handleSubmit = async() => {
         // add to DB..etc
-
+        if (!validForm()) return;
         navigate("/projects", { state: {isProject: false} })
     }
 
