@@ -10,9 +10,11 @@ import BasicTextField from "../../components/Basic Textfield";
 import BasicButton from "../../components/BasicButton";
 import { AddCircleOutlined } from "@mui/icons-material";
 import useBasicAlert from "../../components/Alert";
+import { useNavigate } from "react-router-dom";
 
 // TODO: add form validate at least 2 options, delete option, no duplicate options
 function AddPost() {
+    const navigate = useNavigate();
     const [description, setDescription] = useState("");
     const [addOption, setAddOption] = useState("");
     const [pollOptions, setPollOptions] = useState([]);
@@ -25,6 +27,13 @@ function AddPost() {
         pollOptions.push(toAdd);
         setAddOption("");
     }
+
+    const handleSubmit = async() => {
+        // add to DB..etc
+
+        navigate("/projects", { state: {isProject: false} })
+    }
+
     return (
         <>
         <BasicNavBar/>
@@ -80,7 +89,7 @@ function AddPost() {
                     </div></> : <></> }
 
 
-                <BasicButton bg="primary" sx={{width: "20%"}}>Add {isPost ? "post" : "poll"}</BasicButton>
+                <BasicButton bg="primary" sx={{width: "20%"}} onClick={handleSubmit}>Add {isPost ? "post" : "poll"}</BasicButton>
             </Paper>
         </Container>
         </>

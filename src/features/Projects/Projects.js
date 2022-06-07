@@ -7,7 +7,7 @@ import styles from './Projects.module.css';
 import { Container } from "@mui/system";
 import ProjectTree from "./ProjectTree";
 import { AddCircleOutlined } from "@mui/icons-material";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { Tabs, TabList, Tab, Center } from "@chakra-ui/react";
 import NavButtonGroup from "./NavButtonGroup";
 import { useState } from "react";
@@ -33,7 +33,8 @@ function Projects() {
     // }
   }
 
-  const [isProject, setIsProject] = useState(true);
+  const { state } = useLocation();
+  const [isProject, setIsProject] = useState(state?.isProject ?? true);
   return (
     <>
       <BasicNavBar />
