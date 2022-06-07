@@ -1,7 +1,13 @@
 import { Button, ButtonGroup, Center } from "@mui/material";
 import { Box } from "@mui/system";
+import { Navigate, useNavigate } from "react-router-dom";
 
 export default function Up(isSettings) {
+  const navigate = useNavigate();
+
+  const onClick = (e) => {
+    navigate("/Settings", { replace: true });
+  };
   return (
     <>
       <Box
@@ -10,7 +16,7 @@ export default function Up(isSettings) {
         }}
       >
         <ButtonGroup variant="text" aria-label="text button group">
-          <Button>Settings</Button>
+          <Button onClick={onClick}>Settings</Button>
           <Button sx={{ backgroundColor: "white" }}>Privacy</Button>
         </ButtonGroup>
       </Box>

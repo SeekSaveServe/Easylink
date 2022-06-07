@@ -45,7 +45,7 @@ export default function Lowerhalf() {
   }
 
   useEffect(() => {
-    obtainData("links").then((res) => (res ? setLinks(res) : 0));
+    obtainData("links").then((res) => (res ? setLinks(res) : setLinks(0)));
     obtainCountFollowers("followers").then((res) =>
       res ? setFollowing(res) : setFollowing(0)
     );

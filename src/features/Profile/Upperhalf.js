@@ -16,7 +16,7 @@ export default function Upperhalf() {
     >
       <ClickableSetting fontSize="large" />
       <Center>
-        <DisplayAvatar fontSize="large" />
+        <DisplayAvatar sx={{ height: 70, width: 70 }} />
       </Center>
     </Box>
   );
