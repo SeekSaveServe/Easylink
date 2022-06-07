@@ -7,7 +7,9 @@ import { useSelector } from "react-redux";
 import { supabase } from "../../../supabaseClient";
 import DisplayAvatar from "../../components/DisplayAvatar/DisplayAvatar";
 import styles from "../Settings.module.css";
-
+import UploadAvatar from "../../components/UploadAvatar";
+import { BasicAlert } from "../../../components/Alert/Alert";
+import SettingsAvatar from "../../components/SettingsAvatar";
 export default function Left() {
   const user = useSelector((state) => state.user);
   const name = user.username;
@@ -15,7 +17,8 @@ export default function Left() {
   const [links, setLinks] = useState("loading");
   const [projects, setProjects] = useState("loading");
   const [following, setFollowing] = useState("loading");
-  // console.log(user.id);
+  const [avatarUrl, set_AvatarUrl] = useState(user.avatar_url);
+
   // NOTE: Some of the functions need to be rewritten to accommodate projects
   // The current version is written for users only
   // Count returns null instead of 0 when nothing is found; very weird
@@ -54,10 +57,17 @@ export default function Left() {
       res ? setProjects(res) : setProjects(0)
     );
   }, []);
+
   return (
     <div className={styles.child2}>
       <Center>
-        <DisplayAvatar />
+        <SettingsAvatar
+          size={150}
+          url={avatarUrl}
+          onUpload={(url) => {
+            set_AvatarUrl(url);
+          }}
+        />
       </Center>
       <Center>
         <Typography variant="h5" component="div">

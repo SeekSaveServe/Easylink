@@ -85,6 +85,7 @@ export default function SettingsForm() {
       .from("users")
       .update({ username: userName, title: title, bio: bio })
       .match({ id: supabase.auth.user().id });
+    showAlert("Success!", "success");
   }
 
   async function handleSubmit(e) {
