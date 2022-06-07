@@ -20,7 +20,6 @@ import UploadAvatar from "../components/UploadAvatar";
 import BasicLoadingButton from "../../components/BasicLoadingButton/BasicLoadingButton";
 import { supabase } from "../../supabaseClient";
 import { useEffect } from "react";
-import useBasicAlert from "../../components/Alert";
 import { useAlert } from "../../components/Alert/AlertContext";
 
 function AddProject() {
@@ -63,8 +62,8 @@ function AddProject() {
     const [selectedSkills, setSelectedSkills] = useState([]);
     const [selectedInterests, setSelectedInterests] = useState([]);
     const [selectedCommunities, setSelectedCommunities] = useState([]);
-    const [startDate, setStartDate] = useState(new Date());
-    const [endDate, setEndDate] = useState(new Date());
+    const [startDate, setStartDate] = useState(null);
+    const [endDate, setEndDate] = useState(null);
     const [telegram, setTelegram] = useState("");
     const [email, setEmail] = useState("");
     const [teleVisibility, setTeleVisibility] = useState("afterlink");
@@ -85,8 +84,29 @@ function AddProject() {
         }
         
     }
+
+    const validForm = () => {
+        let errorMsg = null;
+
+        console.log(endDate - startDate);
+        if (title == "") {
+            errorMsg = "Please enter a title";
+        } 
+        
+        else if (endDate - startDate < 0) {
+            errorMsg = "End date should be same as or after start date"
+        }
+
+        if (errorMsg) {
+            showAlert(errorMsg, "error");
+            return false;
+        } else {
+            return true;
+        }
+    }
     
     const onClick = async() => {
+        if (!validForm()) { return; }
         // only username missing
         const state = {
             parent_id: parentId ? parseInt(parentId): null,
