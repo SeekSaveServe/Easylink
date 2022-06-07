@@ -5,15 +5,14 @@
 }
 
 .App-logo {
-    pointer-events: none;
-  }
+  pointer-events: none;
+}
 
-  @media (prefers-reduced-motion: no-preference) {
-    .App-logo {
-      animation: App-logo-float infinite 3s ease-in-out;
-    }
+@media (prefers-reduced-motion: no-preference) {
+  .App-logo {
+    animation: App-logo-float infinite 3s ease-in-out;
   }
-
+}
 
 .App-header {
   min-height: 100px;
@@ -32,7 +31,7 @@
   0% {
     transform: translateY(0);
   }
-  
+
   .App-header {
     min-height: 100vh;
     display: flex;
@@ -41,7 +40,7 @@
     justify-content: center;
     font-size: calc(10px + 2vmin);
   }
-  
+
   .App-link {
     color: rgb(112, 76, 182);
   }
@@ -66,6 +65,5 @@
 
 .Leftside {
   width: 40%;
-  background-color: #25b2ef;
   padding: 20px;
 }

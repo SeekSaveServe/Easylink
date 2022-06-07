@@ -5,16 +5,16 @@ import { Box } from "@mui/system";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { supabase } from "../../../supabaseClient";
-import DisplayAvatar from "../../components/DisplayAvatar/DisplayAvatar";
-
-export default function Left() {
-  const user = useSelector((state) => state.user);
+import styles from "../Settings.module.css";
+import { BasicAlert } from "../../../components/Alert/Alert";
+import SettingsAvatar from "../../components/SettingsAvatar";
+export default function Left({ avatarUrl, set_AvatarUrl, user }) {
   const name = user.username;
   const title = user.title ? user.title : "No title";
   const [links, setLinks] = useState("loading");
   const [projects, setProjects] = useState("loading");
   const [following, setFollowing] = useState("loading");
-  // console.log(user.id);
+
   // NOTE: Some of the functions need to be rewritten to accommodate projects
   // The current version is written for users only
   // Count returns null instead of 0 when nothing is found; very weird
@@ -45,7 +45,7 @@ export default function Left() {
   }
 
   useEffect(() => {
-    obtainData("links").then((res) => (res ? setLinks(res) : 0));
+    obtainData("links").then((res) => (res ? setLinks(res) : setLinks(0)));
     obtainCountFollowers("followers").then((res) =>
       res ? setFollowing(res) : setFollowing(0)
     );
@@ -53,10 +53,17 @@ export default function Left() {
       res ? setProjects(res) : setProjects(0)
     );
   }, []);
+
   return (
-    <>
+    <div className={styles.child2}>
       <Center>
-        <DisplayAvatar />
+        <SettingsAvatar
+          size={150}
+          url={avatarUrl}
+          onUpload={(url) => {
+            set_AvatarUrl(url);
+          }}
+        />
       </Center>
       <Center>
         <Typography variant="h5" component="div">
@@ -77,6 +84,6 @@ export default function Left() {
           <CardContent> {following} Followers </CardContent>
         </Card>
       </Center>
-    </>
+    </div>
   );
 }

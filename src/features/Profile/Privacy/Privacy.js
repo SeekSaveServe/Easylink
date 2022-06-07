@@ -1,6 +1,6 @@
 import { useState } from "react";
 import BasicNavBar from "../../../components/BasicNavBar/BasicNavBar";
-import Down from "../Settings/Down";
+import Down from "./Down";
 import Up from "./Up";
 
 export default function Privacy() {
@@ -8,7 +8,7 @@ export default function Privacy() {
     <>
       <BasicNavBar />
       <Up isSettings={true} />
-      {/* <Down /> */}
+      <Down />
     </>
   );
 }
