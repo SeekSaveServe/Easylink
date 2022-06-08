@@ -13,7 +13,7 @@ import { useState } from "react";
 // Looking at own posts: disable poll options, don't show react dropdown
 
 // TODO: add disable options/emojis if looking at own posts -> show results instead
-function PostCard({ data, ...rest }) {
+function PostCard({ sx, data, ...rest }) {
     const isPost = data.isPost ?? true;
     const title = data.title ?? "USDevs";
     const dateString = data.dateString ?? "7th May 2022 | 9:03pm";
@@ -48,7 +48,7 @@ function PostCard({ data, ...rest }) {
         )
     }
     return (
-        <Card {...rest} sx={{width:"100%"}}>
+        <Card {...rest} sx={{width:"100%", ...sx}}>
             
             <CardHeader avatar={<LinkableAvatar />} title={title} subheader={<p style={{margin:0}}>{dateString}</p>}>
             </CardHeader>

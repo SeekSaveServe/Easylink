@@ -92,7 +92,7 @@ function ProfileCard(props) {
             <Typography 
             variant="body1" 
             sx={{display:"inline-flex", flexDirection: "row", alignItems: "center", mr:1}}>
-                <Email sx={{mr:1}}/> {email}
+                <Email sx={{mr:0.5}}/> {email}
             </Typography> 
         ) : <></>;
     }
@@ -143,13 +143,6 @@ function ProfileCard(props) {
                                     { isProject ? <TooltipIconButton icon={<RssFeedOutlined sx={{ color: "var(--secondary)", fontSize:30 }} />} title={"Follow"} /> : <></> }
                                     <TooltipIconButton icon={<CancelOutlined sx={{fontSize:30, color: "error.main"}}/>} title="Not for me" />
                                 </div>
-
-
-                                {/* <Typography variant="body1" sx={{display:"inline-flex", flexDirection: "row", alignItems: "center"}}><Email sx={{mr:1}}/> windowpane1712@gmail.com</Typography>
-                                <Typography variant="body1" sx={{display:"inline-flex", flexDirection: "row", alignItems: "center"}}><Telegram sx={{mr:0}}/> @Huzaifa2171</Typography> */}
-
-                                    {/* <Typography variant="body2"><Telegram/> @Huzaifa2171</Typography> */}
-
                             </Stack>
 
                             {/* Email, Tele */}

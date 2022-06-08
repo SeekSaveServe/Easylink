@@ -3,6 +3,7 @@ import Scrollable from "../../../components/Scrollable";
 import BasicButton from "../../../components/BasicButton";
 import { Center } from "@chakra-ui/react";
 import { useState } from "react";
+import useProfileFilter from "./useProfileFilter";
 
 const map = {
     0: "Users and projects",
@@ -21,11 +22,14 @@ const n = Object.keys(map).length;
 
 // pass in the data through props. This component applies further filter based on Users/Projects
 function ProfileCardList({ data }) {
-    const [btnIndex, setBtnIndex] = useState(0);
+    // const [btnIndex, setBtnIndex] = useState(0);
 
-    const btnClick = () => {
-        setBtnIndex((btnIndex + 1) % n);
-    }
+    // const btnClick = () => {
+    //     setBtnIndex((btnIndex + 1) % n);
+    // }
+
+    const { FilterButton, btnIndex } = useProfileFilter();
+
     // TODO: replace with actual data etc
     const showList = (n) => {
         return data.map((datum, idx) => {
@@ -36,11 +40,12 @@ function ProfileCardList({ data }) {
     return (
         <div>
             <Center>
-                <BasicButton 
+                <FilterButton bg="primary" sx={{margin:"1rem 2rem", width: "20%", display: "block", padding: "0.2rem"}}/>
+                {/* <BasicButton 
                     bg="primary" 
                     sx={{margin:"1rem 2rem", width: "20%", display: "block", padding: "0.2rem"}}
                     onClick={btnClick}
-                >{map[btnIndex]}</BasicButton>
+                >{map[btnIndex]}</BasicButton> */}
             </Center>
 
             <Scrollable height="30vh">
