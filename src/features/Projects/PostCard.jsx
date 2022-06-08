@@ -48,7 +48,7 @@ function PostCard({ data, ...rest }) {
         )
     }
     return (
-        <Card {...rest}>
+        <Card {...rest} sx={{width:"100%"}}>
             
             <CardHeader avatar={<LinkableAvatar />} title={title} subheader={<p style={{margin:0}}>{dateString}</p>}>
             </CardHeader>

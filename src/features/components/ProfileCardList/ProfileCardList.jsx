@@ -43,7 +43,7 @@ function ProfileCardList({ data }) {
                 >{map[btnIndex]}</BasicButton>
             </Center>
 
-            <Scrollable>
+            <Scrollable height="30vh">
                 { showList(5) }
             </Scrollable>
         </div>

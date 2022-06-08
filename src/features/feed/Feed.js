@@ -6,6 +6,7 @@ import styles from "./Feed.module.css";
 import RecommendationsList from "../recommendations";
 import PostsList from "../posts";
 import BasicNavBar from "../../components/BasicNavBar/BasicNavBar";
+import { Center } from "@chakra-ui/react";
 
 function Feed() {
   const userProfile = useSelector((state) => state.user);
@@ -17,12 +18,14 @@ function Feed() {
       {/* <button onClick={throwKnownError}> hi </button> */}
       <BasicNavBar />
       <Box className={styles.parent}>
-        <Typography variant="h4" sx={{ margin: "0.5rem 0" }}>
-          <span style={{ color: "var(--primary)" }}>Welcome</span>,{" "}
-          <span style={{ color: "var(--secondary)" }}>
-            {userProfile.username}
-          </span>
-        </Typography>
+        <Center>
+          <Typography variant="h4" sx={{ margin: "0.5rem 0" }}>
+            <span>Welcome</span>,{" "}
+            <span>
+              {userProfile.username}
+            </span>
+          </Typography>
+        </Center>
 
         <Box className={styles.content}>
           <RecommendationsList />

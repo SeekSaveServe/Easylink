@@ -8,7 +8,7 @@ import { Center } from "@chakra-ui/react";
 import { AddCircleOutlined } from "@mui/icons-material";
 import { Link } from "react-router-dom";
 
-const fakePosts = [
+export const fakePosts = [
     {   
         isPost: true,
         title: "USDevs",
