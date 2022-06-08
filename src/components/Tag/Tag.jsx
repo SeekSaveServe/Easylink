@@ -1,9 +1,10 @@
 import { Typography } from "@mui/material"
 import styles from './Tag.module.css';
 
-function Tag({ sx, children, color,...rest}) {
+function Tag({ sx, children, color, fontColor, ...rest}) {
     const styleSx = {
         backgroundColor: color,
+        color: fontColor,
         ...sx
     }
     return (

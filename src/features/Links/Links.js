@@ -15,7 +15,7 @@ const data = [
     title: "Cat lover, professional photographer, expert coder",
     bio: "Hi! I love to document the cats of NUS and code!",
     // skills, interests, communities
-    tags: [["Python", "Meowing", "Photography"], ["Nature", "Software Development", "Photography"], ["USP"]],
+    tags: [["Python", "Meowing", "Photography"], ["Nature", "Software Development", "Photography"], ["USP", "NUS"]],
     dateRange: "Now to Dec 2022",
     isProject: false
   
@@ -72,7 +72,7 @@ function Projects() {
 
         </Center>
 
-        <ProfileCardList data={data}/>
+        <ProfileCardList data={data.slice(0,2)}/>
       </Container>
    
     </>
