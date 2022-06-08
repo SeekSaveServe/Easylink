@@ -30,7 +30,7 @@ function PostsList() {
 
     return (
         <div>
-            <Center>
+            <Center style={{marginBottom:6}}>
                 <Typography variant="h4" color="var(--secondary)">Posts</Typography>
             </Center>
             <Scrollable height="25vh">

@@ -21,13 +21,28 @@ const filterMap = {
 const n = Object.keys(map).length;
 
 // pass in the data through props. This component applies further filter based on Users/Projects
+// without button
+export function CardList({ data, btnIndex }) {
+
+    // TODO: replace with actual data etc
+    const showList = () => {
+        return data.map((datum, idx) => {
+            return filterMap[btnIndex](datum) ? <ProfileCard isProject={datum.isProject} info={datum} /> : <></>;
+        });
+    }
+
+    return (
+        <div>
+            <Scrollable height="30vh">
+                { showList() }
+            </Scrollable>
+        </div>
+    )
+
+}
+
+// with button - this component exists because was previously written as ProfileCardList for a few pages -> don't want to interrupt those imports
 function ProfileCardList({ data }) {
-    // const [btnIndex, setBtnIndex] = useState(0);
-
-    // const btnClick = () => {
-    //     setBtnIndex((btnIndex + 1) % n);
-    // }
-
     const { FilterButton, btnIndex } = useProfileFilter();
 
     // TODO: replace with actual data etc
@@ -41,19 +56,11 @@ function ProfileCardList({ data }) {
         <div>
             <Center>
                 <FilterButton bg="primary" sx={{margin:"1rem 2rem", width: "20%", display: "block", padding: "0.2rem"}}/>
-                {/* <BasicButton 
-                    bg="primary" 
-                    sx={{margin:"1rem 2rem", width: "20%", display: "block", padding: "0.2rem"}}
-                    onClick={btnClick}
-                >{map[btnIndex]}</BasicButton> */}
             </Center>
 
-            <Scrollable height="30vh">
-                { showList(5) }
-            </Scrollable>
+            <CardList data={data} btnIndex={btnIndex}/>
         </div>
     )
-
 }
 
 export default ProfileCardList;

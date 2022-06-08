@@ -4,6 +4,8 @@ import scroll from '../components/scroll/Scroll.module.css';
 import ProfileCardList from "../components/ProfileCardList";
 import { fakeLinksData } from "../Links/Links";
 import { Center } from "@chakra-ui/react";
+import useProfileFilter from "../components/ProfileCardList/useProfileFilter";
+import { CardList } from "../components/ProfileCardList/ProfileCardList";
 
 function RecommendationCard() {
     return (
@@ -22,14 +24,7 @@ function RecommendationCard() {
 }
 
 function RecommendationsList({ className }) {
-    function showRecommendations(n) {
-        let arr = [];
-        for (let i = 0; i < n; i++) {
-            arr.push(<RecommendationCard key={i}/>);
-        }
-        return arr;
-    }
-
+    const { FilterButton, btnIndex } = useProfileFilter();
     return (
         // <Box className={styles.recc}>
         //     <Typography variant="h4" color="var(--primary)">Recommendations</Typography>
@@ -47,10 +42,11 @@ function RecommendationsList({ className }) {
         // </Box>
 
         <Box>
-            <Center>
+            <Center style={{marginBottom:6}}>
                 <Typography variant="h4" color="var(--primary)">Recommendations</Typography>
+                <FilterButton bg="primary" sx={{margin:"0rem 2rem", width: "20%", display: "block", padding: "0.2rem"}}/>
             </Center>
-            <ProfileCardList data={fakeLinksData} />
+            <CardList data={fakeLinksData} btnIndex={btnIndex} />
         </Box>
     )
 
