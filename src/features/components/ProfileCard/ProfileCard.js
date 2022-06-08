@@ -5,7 +5,7 @@ import { useSelector } from "react-redux";
 import { getUser } from "../../user/userSlice.js";
 import BasicButton from "../../../components/BasicButton/BasicButton.js";
 import Tag from "../../../components/Tag/Tag.jsx";
-import { AddLinkOutlined, RssFeedOutlined, CancelOutlined } from "@mui/icons-material";
+import { AddLinkOutlined, RssFeedOutlined, CancelOutlined, Email, Telegram} from "@mui/icons-material";
 import { Tooltip, IconButton } from "@mui/material";
 // info needed: username, title, bio, isProject, tags
 const defaultInfo = {
@@ -14,7 +14,9 @@ const defaultInfo = {
     bio: "Hi! I love to document the cats of NUS and code!",
     // skills, interests, communities
     tags: [["Python", "Meowing", "Photography"], ["Nature", "Software Development", "Photography"], ["USP"]],
-    dateRange: "Now to Dec 2022"
+    dateRange: "Now to Dec 2022",
+    email: "defaultemail@gmail.com",
+    telegram: "@telegram_user"
 
 }
 
@@ -42,8 +44,15 @@ const colors = ["#FFE977", "#77FFCE", "#77EFFF"];
 function ProfileCard(props) {
     const user = useSelector(getUser);
     let { isProject, info } = props;
+
     isProject = isProject ?? false;
     info = info ?? defaultInfo;
+
+    const email = info.email ?? defaultInfo.email;
+    const telegram = info.telegram ?? defaultInfo.telegram;
+
+    const showEmail = info.showEmail ?? false;
+    const showTele = info.showTele ?? false;
 
     const wordsToTags = (tagStrings, bgColor, fontColor) => {
 
@@ -77,6 +86,28 @@ function ProfileCard(props) {
     const communities = () => {
         return info.tags[2].join(", ")
     }
+
+    const emailDisplay = () => {
+        return showEmail ? ( 
+            <Typography 
+            variant="body1" 
+            sx={{display:"inline-flex", flexDirection: "row", alignItems: "center", mr:1}}>
+                <Email sx={{mr:1}}/> {email}
+            </Typography> 
+        ) : <></>;
+    }
+
+    const teleDisplay = () => {
+        return showTele ? (
+            <Typography 
+                variant="body1" 
+                sx={{display:"inline-flex", flexDirection: "row", alignItems: "center", mr:2}}
+            >
+                <Telegram/> {telegram}
+            </Typography>
+        ) : <></>;
+    }
+
 
     return (
         <Card className={styles.card}>
@@ -113,13 +144,24 @@ function ProfileCard(props) {
                                     <TooltipIconButton icon={<CancelOutlined sx={{fontSize:30, color: "error.main"}}/>} title="Not for me" />
                                 </div>
 
+
+                                {/* <Typography variant="body1" sx={{display:"inline-flex", flexDirection: "row", alignItems: "center"}}><Email sx={{mr:1}}/> windowpane1712@gmail.com</Typography>
+                                <Typography variant="body1" sx={{display:"inline-flex", flexDirection: "row", alignItems: "center"}}><Telegram sx={{mr:0}}/> @Huzaifa2171</Typography> */}
+
+                                    {/* <Typography variant="body2"><Telegram/> @Huzaifa2171</Typography> */}
+
                             </Stack>
+
+                            {/* Email, Tele */}
+                            { emailDisplay() }
+                            { teleDisplay() }
+
                         </CardActions>
                     </CardContent>
             </Box>
 
             <Divider orientation="vertical" flexItem/>
-            <LinkableAvatar sx={{ width: "17%", height: "auto" }} variant="square" src={user?.avatar_url} imgProps={{style: {objectFit: "contain"}}}/>       
+            <LinkableAvatar sx={{ width: "15%", height: "auto" }} variant="square" src={user?.avatar_url} imgProps={{style: {objectFit: "contain"}}}/>       
         </Card>
     )
 }

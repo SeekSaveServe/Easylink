@@ -17,8 +17,12 @@ const data = [
     // skills, interests, communities
     tags: [["Python", "Meowing", "Photography"], ["Nature", "Software Development", "Photography"], ["USP", "NUS"]],
     dateRange: "Now to Dec 2022",
-    isProject: false
-  
+    isProject: false,
+    email: "catlover@gmail.com",
+    telegram:"@CatLover",
+    // TODO: just for testing, replace with calculated 
+    showEmail: true,
+    showTele: true
   },
   {
     username: "USDevs",
@@ -27,8 +31,12 @@ const data = [
     // skills, interests, communities
     tags: [["Python", "Software Development", "Raspberry Pi"], ["Developers"], ["USP"]],
     dateRange: "Now to Dec 2022",
-    isProject: true
-  
+    isProject: true,
+    email: "usdevs@gmail.com",
+    telegram: "@USDevs",
+    
+    showEmail: true,
+    showTele: false
   },
   {
     username: "Web_Lover",
@@ -37,7 +45,12 @@ const data = [
     // skills, interests, communities
     tags: [["Python", "JavaScript"], ["Web development", "UI/UX"], ["USP"]],
     dateRange: "Now to Dec 2022",
-    isProject: false
+    isProject: false,
+    email: "weblover@gmail.com",
+    telegram: "@WebLover",
+
+    showEmail: false,
+    showTele: true
   },
   {
     username: "Livecore",
@@ -46,7 +59,12 @@ const data = [
     // skills, interests, communities
     tags: [["Drumming", "Guitar", "Singing"], ["Performers"], ["USP"]],
     dateRange: "Now to Dec 2022",
-    isProject: true
+    isProject: true,
+    email: "livecore@gmail.com",
+    telegram: "@livecore",
+
+    showEmail: false,
+    showTele: false
   }
   
 ]
@@ -72,7 +90,7 @@ function Projects() {
 
         </Center>
 
-        <ProfileCardList data={data.slice(0,2)}/>
+        <ProfileCardList data={data}/>
       </Container>
    
     </>
