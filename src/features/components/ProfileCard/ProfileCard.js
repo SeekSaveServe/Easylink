@@ -121,7 +121,7 @@ function ProfileCard(props) {
                     <CardContent sx={{mt:0}}>
                         <Typography variant="h5" sx={{fontSize: "1.4rem"}} gutterBottom> {info.title}</Typography>
 
-                        <Typography variant="body1" color="text.secondary" sx={{fontSize:"1rem"}}> {info.bio} {" "}
+                        <Typography variant="body1" color="text.secondary" sx={{fontSize:"1rem", width:"100%"}}> {info.bio} {" "}
                         { interests() } {" "} { skills() } </Typography>
 
                         { info.tags[2] ? <Typography variant="body1" color="text.secondary" sx={{mt:2}}>Communities: {communities()} </Typography> : <></> }
@@ -161,7 +161,7 @@ function ProfileCard(props) {
             </Box>
 
             <Divider orientation="vertical" flexItem/>
-            <LinkableAvatar sx={{ width: "15%", height: "auto" }} variant="square" src={user?.avatar_url} imgProps={{style: {objectFit: "contain"}}}/>       
+            <LinkableAvatar sx={{ width: "10%", height: "auto" }} variant="square" src={user?.avatar_url} imgProps={{style: {objectFit: "contain"}}}/>       
         </Card>
     )
 }

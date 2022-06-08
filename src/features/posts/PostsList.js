@@ -1,6 +1,7 @@
 import { Box, Typography, Card, CardHeader, CardContent, Stack } from "@mui/material";
 import styles from './Posts.module.css';
 import scroll from '../components/scroll/Scroll.module.css';
+import { Center } from "@chakra-ui/react";
 
 
 function PostCard() {
@@ -28,7 +29,9 @@ function PostsList({ className }) {
 
     return (
         <Box className={`${scroll.scroll_parent}`}>
-            <Typography variant="h4" color="var(--secondary)">Posts</Typography>
+            <Center>
+                <Typography variant="h4" color="var(--secondary)">Posts</Typography>
+            </Center>
             <Box className={scroll.scroll_child}>
                 <Stack spacing={4}>
                 { showPosts(10) }

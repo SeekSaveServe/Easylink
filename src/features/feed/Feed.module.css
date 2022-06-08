@@ -4,13 +4,13 @@
     width: 100vw;
     height: 100vh;
     overflow-y:hidden;
-    text-align: center;
+    /* text-align: center; */
 }
 
 .content {
     display: grid;
     grid-template-columns: 6fr 4fr;
-    column-gap: 10%;
+    column-gap: 2%;
     padding: 1rem 2rem;
     height: 100%;
 }

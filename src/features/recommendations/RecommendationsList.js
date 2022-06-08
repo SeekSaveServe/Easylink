@@ -1,6 +1,9 @@
 import { Box, Typography, Card, CardContent, CardHeader, Stack } from "@mui/material";
 import styles from './Recommendations.module.css';
 import scroll from '../components/scroll/Scroll.module.css';
+import ProfileCardList from "../components/ProfileCardList";
+import { fakeLinksData } from "../Links/Links";
+import { Center } from "@chakra-ui/react";
 
 function RecommendationCard() {
     return (
@@ -33,13 +36,21 @@ function RecommendationsList({ className }) {
         //     {showRecommendations(2)}
         // </Box>
         // className={`${className} ${styles.recc_box}`}
-        <Box className={scroll.scroll_parent}>
-            <Typography variant="h4" color="var(--primary)">Recommendations</Typography>
-                <Box className={scroll.scroll_child}>
-                    <Stack spacing={4}>
-                        {showRecommendations(10)}
-                    </Stack>
-                </Box>
+        // <Box className={scroll.scroll_parent}>
+        //     <Typography variant="h4" color="var(--primary)">Recommendations</Typography>
+        //         <Box className={scroll.scroll_child}>
+        //             <ProfileCardList data={fakeLinksData}/>
+        //             {/* <Stack spacing={4}>
+        //                 {showRecommendations(10)}
+        //             </Stack> */}
+        //         </Box>
+        // </Box>
+
+        <Box>
+            <Center>
+                <Typography variant="h4" color="var(--primary)">Recommendations</Typography>
+            </Center>
+            <ProfileCardList data={fakeLinksData} />
         </Box>
     )
 

@@ -9,7 +9,7 @@ import { useState } from "react";
 import { Center } from "@chakra-ui/react";
 
 
-const data = [
+export const fakeLinksData = [
   {
     username: "Cat Lover",
     title: "Cat lover, professional photographer, expert coder",
@@ -90,7 +90,7 @@ function Projects() {
 
         </Center>
 
-        <ProfileCardList data={data}/>
+        <ProfileCardList data={fakeLinksData}/>
       </Container>
    
     </>
