@@ -8,11 +8,11 @@ import {
 import { Box } from "@mui/system";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import useBasicAlert from "../../../components/Alert";
 import styles from "../Settings.module.css";
+import { useAlert } from '../../../components/Alert/AlertContext';
 
 export default function Left({ contact, setContact }) {
-  const { BasicAlert, showAlert } = useBasicAlert("error");
+  const showAlert = useAlert();
 
   function RadioWithLabel({ value, label, ...rest }) {
     return (

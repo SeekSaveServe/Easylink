@@ -1,16 +1,16 @@
 import { IconButton, Tooltip } from "@mui/material";
 import { useEffect, useRef, useState } from "react";
 // import VisuallyHidden from "@reach/visually-hidden";
-import useBasicAlert from "../../../components/Alert";
+import { useAlert } from "../../../components/Alert/AlertContext";
 import BasicAvatar from "../../../components/BasicAvatar/BasicAvatar";
 import BasicButton from "../../../components/BasicButton";
 import { supabase } from "../../../supabaseClient";
 import styles from "./SettingsAvatar.module.css";
 
 export default function SettingsAvatar({ url, size, onUpload }) {
+  const showAlert = useAlert();
   const [avatarUrl, setAvatarUrl] = useState(null);
   const [loading, setLoading] = useState(false);
-  const { BasicAlert, showAlert } = useBasicAlert("error");
   const fileInput = useRef();
 
   useEffect(() => {
@@ -30,7 +30,7 @@ export default function SettingsAvatar({ url, size, onUpload }) {
     } catch (error) {
       showAlert(
         error.error_description || error.message,
-        "Error downloading image"
+        "error"
       );
     }
   };

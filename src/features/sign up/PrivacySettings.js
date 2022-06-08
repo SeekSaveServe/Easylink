@@ -42,7 +42,6 @@ function RadioWithLabel({ value, label, ...rest }) {
   );
 }
 function PrivacySettings() {
-  // const { BasicAlert, showAlert } = useBasicAlert("error");
   const showAlert = useAlert();
   const user = useSelector((state) => state.user);
 

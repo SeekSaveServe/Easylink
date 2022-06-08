@@ -1,14 +1,14 @@
 import { useEffect, useRef, useState } from "react";
 // import VisuallyHidden from "@reach/visually-hidden";
-import useBasicAlert from "../../../components/Alert";
+import { useAlert } from "../../../components/Alert/AlertContext";
 import BasicAvatar from "../../../components/BasicAvatar/BasicAvatar";
 import BasicButton from "../../../components/BasicButton";
 import { supabase } from "../../../supabaseClient";
 
 export default function UploadAvatar({ url, size, onUpload, ParentProps, AvatarProps, ButtonProps }) {
+  const showAlert = useAlert();
   const [avatarUrl, setAvatarUrl] = useState(null);
   const [loading, setLoading] = useState(false);
-  const { BasicAlert, showAlert } = useBasicAlert("error");
   const fileInput = useRef();
 
   useEffect(() => {

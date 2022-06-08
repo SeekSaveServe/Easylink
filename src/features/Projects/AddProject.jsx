@@ -52,7 +52,7 @@ function AddProject() {
     const parentId = state?.parentId;
     const parent = useSelector((state) => selectProjectById(state, parentId));
     const [loading, setLoading] = useState(false); // for start linking button
-    // const { showAlert, BasicAlert } = useBasicAlert("error");
+
     const showAlert = useAlert();
 
     // Form State

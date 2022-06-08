@@ -2,7 +2,6 @@ import { TreeView } from "@mui/lab";
 import { AddCircleOutlined, ArrowCircleDownOutlined, ArrowCircleRightOutlined } from "@mui/icons-material";
 import TreeItemWithMenu from "./TreeItemWithMenu";
 import { useEffect, useState } from "react";
-import useBasicAlert from "../../components/Alert";
 import { useDispatch, useSelector } from "react-redux";
 import { getProjects } from "./projectsSlice";
 import { Button, CircularProgress, Paper, Typography } from "@mui/material";
@@ -60,9 +59,7 @@ function ProjectTree() {
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const projects = useSelector(state => state.projects);
-
-    // const { BasicAlert, showAlert } = useBasicAlert("error"); - there is a problem with the hook
-
+    
     async function loadData() {
       dispatch(getProjects());
     }

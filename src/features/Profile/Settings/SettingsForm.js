@@ -8,13 +8,13 @@ import { PersonOutline, Email, LockOutlined } from "@mui/icons-material";
 import TitleIcon from "@mui/icons-material/Title";
 import { useSelector, useDispatch } from "react-redux";
 import { update } from "../../user/userSlice";
-import useBasicAlert from "../../../components/Alert";
 import AutoAwesomeIcon from "@mui/icons-material/AutoAwesome";
+import { useAlert } from "../../../components/Alert/AlertContext";
 
 export default function SettingsForm({ user, avatarUrl }) {
   // States for registration
+  const showAlert = useAlert();
   const dispatch = useDispatch();
-  const { BasicAlert, showAlert } = useBasicAlert("error");
 
   useEffect(() => {
     if (user?.username) setUserName(user.username);
@@ -120,7 +120,6 @@ export default function SettingsForm({ user, avatarUrl }) {
 
   return (
     <div className={styles.Left}>
-      <BasicAlert />
       <form>
         <BasicTextField
           label="Username"

@@ -1,13 +1,13 @@
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import useBasicAlert from "../../../components/Alert";
+import { useAlert } from "../../../components/Alert/AlertContext";
 import BasicAvatar from "../../../components/BasicAvatar";
 import { supabase } from "../../../supabaseClient";
 
 export default function DisplayAvatar(props) {
   // Obtaining the avatar from database
   const [avatarUrl, setAvatarUrl] = useState(null);
-  const { BasicAlert, showAlert } = useBasicAlert("error");
+  const showAlert = useAlert();
   const src = useSelector((state) => state.user.avatar_url);
 
   const downloadImage = async (path) => {
@@ -28,7 +28,7 @@ export default function DisplayAvatar(props) {
     } catch (error) {
       showAlert(
         error.error_description || error.message,
-        "Error downloading image"
+        "error"
       );
     }
   };

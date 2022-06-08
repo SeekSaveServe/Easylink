@@ -10,7 +10,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { update } from "../../user/userSlice";
 import UploadAvatar from "../../components/UploadAvatar";
 import BasicButton from "../../../components/BasicButton";
-import useBasicAlert from "../../../components/Alert";
+import { useAlert } from "../../../components/Alert/AlertContext";
 
 export default function Right({ contact }) {
   const dispatch = useDispatch();
@@ -29,7 +29,7 @@ export default function Right({ contact }) {
   const [communities, setCommunities] = useState([]);
 
   // Alert
-  const { BasicAlert, showAlert } = useBasicAlert("error");
+  const showAlert = useAlert();
 
   // Get Tags from db
   async function obtainTags(tag) {
@@ -206,7 +206,6 @@ export default function Right({ contact }) {
 
   return (
     <div className={styles.child1}>
-      <BasicAlert />
       <form>
         <Checkmarks
           newTags={skills}
