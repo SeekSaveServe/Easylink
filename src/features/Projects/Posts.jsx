@@ -11,6 +11,7 @@ import { useEffect, useState } from "react";
 import { supabase } from "../../supabaseClient";
 import { useAlert } from "../../components/Alert/AlertContext";
 import { useSelector } from "react-redux";
+import { selectProjectById } from "./projectsSlice";
 
 // For the Posts tab under Projects. Show posts and polls made by the switched project
 export const fakePosts = [
@@ -64,25 +65,14 @@ export const fakePosts = [
 ]
 
 // Posts / polls that are made by the switched project (owned)
-function Posts() {
-    // const showPosts = (n) => {
-    //     let posts = [];
-        
-    //     for (let i = 0; i < n; i++) {
-    //         posts.push( <PostCard sx={{width: "90%", ml:1, mt:1}} data={fakePosts[i % fakePosts.length]}/>)
-    //     }
-
-    //     return posts;
-    // }
-    
+function Posts() {    
     const [posts, setPosts] = useState([]);
     const [loading, setLoading] = useState(false);
     const pid = useSelector(state => state.user.pid); // if I'm seeing Posts, I should be in Project mode -> pid exists
+    const project = useSelector(state => selectProjectById(state, pid));
     const showAlert = useAlert();
 
     async function getPosts() {
-        console.log("Get posts")
-        console.log(pid);
         try {
             setLoading(true);
             const { data, error } = await supabase
@@ -107,7 +97,7 @@ function Posts() {
 
         return posts.length == 0 ? <Typography variant="h6" color="gray" sx={{mt:1, fontWeight:"normal"}}>Nothing to show</Typography> : 
             posts.map((post, idx) => {
-            return <PostCard sx={{width: "90%", ml:1, mt:1}} data={post} key={idx}/>
+            return <PostCard sx={{width: "90%", ml:1, mt:1}} data={post} pid={pid} key={idx}/>
         })
     }
 
@@ -126,6 +116,10 @@ function Posts() {
                 sx={{textTransform: "none"}}
                 > Add announcement</Button>
             </Link>
+        </Center>
+
+        <Center sx={{mt:10}}>
+            <Typography variant="h6">Announcements by {project.title}</Typography>
         </Center>
 
         <Scrollable height="25vh">

@@ -7,17 +7,27 @@ import { Box } from "@mui/system";
 import BasicButton from "../../components/BasicButton/BasicButton.js";
 import LoadingButton from "@mui/lab/LoadingButton";
 import { useState } from "react";
+import { useSelector } from "react-redux";
+import { selectProjectById } from "./projectsSlice.js";
 
 // Common: Avatar, Title of project, created_at datetime, description
 // Post: show react emoji dropdown, Poll: show poll options
 // Looking at own posts: disable poll options, don't show react dropdown
 
 // TODO: add disable options/emojis if looking at own posts -> show results instead
-function PostCard({ sx, data, ...rest }) {
+
+// To fill with project details:
+    // Current idea: pass down pid, assume that projects are in projectsSlice
+    // Why?: e.g 100 posts by 10 projects -> when fetching feed posts, collect unique project ids -> only need to query 10 more times
+    // instead of querying for every post 
+    // own posts: the project will definitely be in the slice anyway - waste to query again
+function PostCard({ pid, sx, data, ...rest }) {
+
+    const project = useSelector(state => selectProjectById(state, pid));
     const isPoll = data.isPoll ?? false;
-    const title = data.title ?? "USDevs";
+    const title = project?.title ?? "USDevs";
     const dateString = data.dateString ?? "7th May 2022 | 9:03pm";
-    const avatarUrl= data.avatarUrl ?? "";
+    const avatarUrl= project?.avatar_url ?? "";
     const body = data.body ?? "Good day to all! This is to announce our workshop happening on May 14th. Please come if you want to learn Node.js";
 
     const pollOptions = data?.pollOptions ?? null; // e.g ["Yes", "No"]
@@ -50,7 +60,7 @@ function PostCard({ sx, data, ...rest }) {
     return (
         <Card {...rest} sx={{width:"100%", ...sx}}>
             
-            <CardHeader avatar={<LinkableAvatar />} title={title} subheader={<p style={{margin:0}}>{dateString}</p>}>
+            <CardHeader avatar={<LinkableAvatar src={avatarUrl}/>} title={title} subheader={<p style={{margin:0}}>{dateString}</p>}>
             </CardHeader>
 
             <CardContent sx={{paddingTop:0, paddingBottom:0}}>

@@ -7,6 +7,7 @@ import PostCard from "../Projects/PostCard";
 import { fakePosts } from "../Projects/Posts";
 
 // For use specifically in feed: pull from followed projects
+//  Todo: pass actual pids down to PostCard after populating projectsSlice with needed pids
 function PostsList() {
     const posts = fakePosts; // replace with actual data
     function showPosts() {
