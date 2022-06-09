@@ -10,7 +10,7 @@ import { AddCircleOutlined } from "@mui/icons-material";
 import { useLocation, useNavigate } from "react-router-dom";
 import { Tabs, TabList, Tab, Center } from "@chakra-ui/react";
 import NavButtonGroup from "./NavButtonGroup";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Posts from './Posts';
 import { Typography } from "@mui/material";
 import { getUser, getUserProfile } from "../user/userSlice";
@@ -36,12 +36,15 @@ function Projects() {
     // }
   }
 
+  
+
   const { state } = useLocation();
   const dispatch = useDispatch();
   const showAlert = useAlert();
   // for projects/posts button and navigation
   const [isProject, setIsProject] = useState(state?.isProject ?? true);
   const user = useSelector(state => state.user); // check for selected project
+
 
   const switchUser = async() => {
     await dispatch(getUserProfile(supabase.auth.user().id));

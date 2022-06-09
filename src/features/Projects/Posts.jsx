@@ -81,6 +81,8 @@ function Posts() {
     const showAlert = useAlert();
 
     async function getPosts() {
+        console.log("Get posts")
+        console.log(pid);
         try {
             setLoading(true);
             const { data, error } = await supabase

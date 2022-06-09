@@ -30,6 +30,8 @@ function OptionsMenu({ parentId }) {
   }
 
   const handleDelete = async() => {
+    console.log("Delete proj");
+    console.log("pid", parentId);
     const {data, error} = await supabase
       .from('projects')
       .delete()
@@ -40,6 +42,7 @@ function OptionsMenu({ parentId }) {
     }
 
     window.location.reload()
+    // navigate('/projects', { state: { isProject: true } })
   }
 
   const handleSwitchProject = async() => {
