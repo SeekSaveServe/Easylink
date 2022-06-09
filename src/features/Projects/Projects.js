@@ -12,6 +12,7 @@ import { Tabs, TabList, Tab, Center } from "@chakra-ui/react";
 import NavButtonGroup from "./NavButtonGroup";
 import { useState } from "react";
 import Posts from './Posts';
+import { Typography } from "@mui/material";
 
 function Projects() {
   async function addProj() {
@@ -34,7 +35,9 @@ function Projects() {
   }
 
   const { state } = useLocation();
+  // for projects/posts button and navigation
   const [isProject, setIsProject] = useState(state?.isProject ?? true);
+  const user = useSelector(state => state.user); // check for selected project
   return (
     <>
       <BasicNavBar />
@@ -42,6 +45,13 @@ function Projects() {
         <Center>
           <NavButtonGroup isProject={isProject} setIsProject={setIsProject}/>
         </Center>
+
+          { isProject && user?.isProject ? 
+            <Center style={{display: "flex", marginTop:5, marginBottom:10}}>
+              <Typography variant="h6" sx={{fontWeight:'normal'}}>Selected project: <b>{user.title}</b> </Typography>
+              <BasicButton bg="secondary" sx={{width: "20%", padding: "0.02rem", ml:2}}>Switch to user</BasicButton>
+            </Center> : <></> }
+
         { isProject ? <ProjectTree/> : <Posts/> }
       </Container>
     </>

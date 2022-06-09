@@ -54,15 +54,6 @@ export const userSlice = createSlice({
             console.log("State", state);
             updateHelper(action.payload, state);
         },
-
-        testDelete:(state) => {
-            console.log("Test del");
-            // delete state['profile_visibility'];
-            state = {
-                'id': 1,
-                'pid':2
-            }
-        }
     },
     extraReducers: (builder) => {
         builder.addCase(getUserProfile.fulfilled, (state, action) => {
@@ -76,7 +67,7 @@ export const userSlice = createSlice({
     }
 })
 
-export const { update, testDelete, replace } = userSlice.actions;
+export const { update, replace } = userSlice.actions;
 
 export const getUser = (state) => state.user;
 

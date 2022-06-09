@@ -22,7 +22,7 @@ function Feed() {
           <Typography variant="h4" sx={{ margin: "0.5rem 0" }}>
             <span>Welcome</span>,{" "}
             <span>
-              {userProfile.username}
+              {userProfile.username || userProfile.title}
             </span>
           </Typography>
         </Center>

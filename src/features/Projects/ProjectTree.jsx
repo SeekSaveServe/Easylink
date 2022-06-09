@@ -8,7 +8,6 @@ import { Button, CircularProgress, Paper, Typography } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import styles from './Projects.module.css';
 import { useAlert } from "../../components/Alert/AlertContext";
-import { testDelete } from "../user/userSlice";
 
 // 1. Get mapping of pid to { ...data, parent_id, childrenIds:[...] }
 // 2: At the same time, get root element pids with parent_id = null
@@ -91,8 +90,6 @@ function ProjectTree() {
             size="normal"
             onClick={() => navigate("/addproject") }
             >Add root project</Button>
-
-            <Button onClick={() => dispatch(testDelete())}>Testdel</Button>
           { display() }
         </Paper>
     )
