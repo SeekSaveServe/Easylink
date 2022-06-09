@@ -3,9 +3,15 @@ import { useState } from "react";
 import { Menu as MenuIcon } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "../../supabaseClient";
+import { selectProjectById } from "./projectsSlice";
+import { useDispatch, useSelector } from "react-redux";
+import { replace } from "../user/userSlice";
 
 // parentId: the pid of the project this menu is associated with
 function OptionsMenu({ parentId }) {
+  const dispatch = useDispatch();
+  const project = useSelector((state) => selectProjectById(state, parentId));
+
   const navigate = useNavigate();
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
@@ -36,6 +42,11 @@ function OptionsMenu({ parentId }) {
     window.location.reload()
   }
 
+  const handleSwitchProject = async() => {
+    console.log(project);
+    dispatch(replace({...project, isProject:true}));
+  }
+
   return (
     <div>
       <IconButton
@@ -57,7 +68,7 @@ function OptionsMenu({ parentId }) {
           'aria-labelledby': 'basic-button',
         }}
       >
-        <MenuItem onClick={handleClose}>Switch to project</MenuItem>
+        <MenuItem onClick={handleSwitchProject}>Switch to project</MenuItem>
         <MenuItem onClick={addSubProject}>Add sub-project</MenuItem>
         <MenuItem onClick={handleDelete}>Delete</MenuItem>
       </Menu>
