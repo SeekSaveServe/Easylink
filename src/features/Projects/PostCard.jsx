@@ -6,10 +6,10 @@ import Emoji from "../../components/Emoji/EmojiButton.jsx";
 import { Box } from "@mui/system";
 import BasicButton from "../../components/BasicButton/BasicButton.js";
 import LoadingButton from "@mui/lab/LoadingButton";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { selectProjectById } from "./projectsSlice.js";
-
+import { supabase } from '../../supabaseClient';
 // Common: Avatar, Title of project, created_at datetime, description
 // Post: show react emoji dropdown, Poll: show poll options
 // Looking at own posts: disable poll options, don't show react dropdown
@@ -22,7 +22,6 @@ import { selectProjectById } from "./projectsSlice.js";
     // instead of querying for every post 
     // own posts: the project will definitely be in the slice anyway - waste to query again
 function PostCard({ pid, sx, data, ...rest }) {
-
     const project = useSelector(state => selectProjectById(state, pid));
     const isPoll = data.isPoll ?? false;
     const title = project?.title ?? "USDevs";
@@ -30,7 +29,29 @@ function PostCard({ pid, sx, data, ...rest }) {
     const avatarUrl= project?.avatar_url ?? "";
     const body = data.body ?? "Good day to all! This is to announce our workshop happening on May 14th. Please come if you want to learn Node.js";
 
-    const pollOptions = data?.pollOptions ?? null; // e.g ["Yes", "No"]
+    // const pollOptions = data?.pollOptions ?? null; // e.g ["Yes", "No"]
+    const [pollOptions, setPollOptions] = useState(data?.pollOptions ?? []);
+
+    async function getPollOptions() {
+        if (!isPoll) return;
+        const { data: pollData, error } = await supabase
+            .from('poll_options')
+            .select('*')
+            .match({ post_id: data.s_n })
+        
+        if (error) {
+            console.log(error);
+            return;
+        } 
+
+        console.log("Poll opt data", pollData);
+        setPollOptions(pollData.map(datum => datum.option));
+        
+    }
+
+    useEffect(() => {
+        getPollOptions();
+    },[])
 
     // disabled/submitted state
     const [submitted, setSubmitted] = useState(false);
@@ -50,13 +71,6 @@ function PostCard({ pid, sx, data, ...rest }) {
         setSubmitted(!submitted);
     }
 
-    function TextBadge({ text }) {
-        return (
-            <Badge variant="subtle" colorScheme="blue">
-                { text }
-            </Badge>
-        )
-    }
     return (
         <Card {...rest} sx={{width:"100%", ...sx}}>
             
