@@ -7,59 +7,62 @@ import Scrollable from "../../components/Scrollable";
 import { Center } from "@chakra-ui/react";
 import { AddCircleOutlined } from "@mui/icons-material";
 import { Link } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { supabase } from "../../supabaseClient";
+import { useAlert } from "../../components/Alert/AlertContext";
 
 // For the Posts tab under Projects. Show posts and polls made by the switched project
 export const fakePosts = [
     {   
-        isPost: true,
+        isPoll: false,
         title: "USDevs",
         avatarUrl: "",
         dateString: "7th May 2022 | 9:03pm", // TODO: format date string based on created_at ISO Date str from DB
-        description: "Good day to all! This is to announce our workshop happening on May 14th. Please come if you want to learn Node.js",
+        body: "Good day to all! This is to announce our workshop happening on May 14th. Please come if you want to learn Node.js",
     },
     {   
-        isPost: false,
+        isPoll: true,
         title: "USDevs",
         avatarUrl: "",
         dateString: "7th May 2022 | 9:33pm", 
-        description: "Are you coming for the workshop on the 14th?",
+        body: "Are you coming for the workshop on the 14th?",
         pollOptions: ["Yes", "No"]
     },
     {   
-        isPost: true,
+        isPoll: false,
         title: "USDevs",
         avatarUrl: "",
         dateString: "7th May 2022 | 9:03pm",
-        description: "Good day to all! This is to announce our workshop happening on May 14th. Please come if you want to learn Node.js",
+        body: "Good day to all! This is to announce our workshop happening on May 14th. Please come if you want to learn Node.js",
     },
     {   
-        isPost: false,
+        isPoll: true,
         title: "USDevs",
         avatarUrl: "",
         dateString: "7th May 2022 | 9:33pm", 
-        description: "Are you coming for the workshop on the 14th?",
+        body: "Are you coming for the workshop on the 14th?",
         pollOptions: ["Yes", "No"]
     },
     {   
-        isPost: false,
+        isPoll: true,
         title: "USDevs",
         avatarUrl: "",
         dateString: "7th May 2022 | 9:33pm", 
-        description: "Are you coming for the workshop on the 14th?",
+        body: "Are you coming for the workshop on the 14th?",
         pollOptions: ["Yes", "No"]
     },
     {   
-        isPost: true,
+        isPoll: false,
         title: "USDevs",
         avatarUrl: "",
         dateString: "7th May 2022 | 9:03pm",
-        description: "Good day to all! This is to announce our workshop happening on May 14th. Please come if you want to learn Node.js",
+        body: "Good day to all! This is to announce our workshop happening on May 14th. Please come if you want to learn Node.js",
     }
 
     
 ]
 
-// Posts / polls
+// Posts / polls that are made by the switched project (owned)
 function Posts() {
     const showPosts = (n) => {
         let posts = [];
@@ -70,6 +73,25 @@ function Posts() {
 
         return posts;
     }
+    
+    const [posts, setPosts] = useState([]);
+    const showAlert = useAlert();
+
+    async function getPosts() {
+        try {
+        const { data, error } = await supabase
+            .from('posts')
+            .select('*');
+
+        } catch (error) {
+            showAlert(error.error_description || error.message, "error");
+        }
+    }
+
+    useEffect(() => {
+
+    }, [])
+
     return (
         <>
         <Center style={{marginBottom:2}}>

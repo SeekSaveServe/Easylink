@@ -14,11 +14,11 @@ import { useState } from "react";
 
 // TODO: add disable options/emojis if looking at own posts -> show results instead
 function PostCard({ sx, data, ...rest }) {
-    const isPost = data.isPost ?? true;
+    const isPoll = data.isPoll ?? false;
     const title = data.title ?? "USDevs";
     const dateString = data.dateString ?? "7th May 2022 | 9:03pm";
     const avatarUrl= data.avatarUrl ?? "";
-    const description = data.description ?? "Good day to all! This is to announce our workshop happening on May 14th. Please come if you want to learn Node.js";
+    const body = data.body ?? "Good day to all! This is to announce our workshop happening on May 14th. Please come if you want to learn Node.js";
 
     const pollOptions = data?.pollOptions ?? null; // e.g ["Yes", "No"]
 
@@ -54,10 +54,10 @@ function PostCard({ sx, data, ...rest }) {
             </CardHeader>
 
             <CardContent sx={{paddingTop:0, paddingBottom:0}}>
-                <Tag color="var(--tag-grey)" variant="body2" sx={{marginBottom:3}}>{isPost ? "Post" : "Poll"}</Tag>
-                <Typography variant="body1">{description}</Typography>
+                <Tag color="var(--tag-grey)" variant="body2" sx={{marginBottom:3}}>{isPoll ? "Poll" : "Post"}</Tag>
+                <Typography variant="body1">{body}</Typography>
 
-                {!isPost ?
+                {isPoll ?
                     <div style={{marginLeft: 3, marginTop:3, marginBottom:0}}>
                         { showPollOptions() }
                     </div> : <></> }
@@ -67,7 +67,7 @@ function PostCard({ sx, data, ...rest }) {
             {/*  submit with diff. color: */}
             {/* <Button variant="outlined" sx={{color: "var(--primary)", borderColor: "var(--primary)", ml:1,mb:1}}>Submit</Button>  */}
             <CardActions>
-                {isPost ? 
+                {!isPoll ? 
                 <Box sx={{display: "flex", mt:2, ml:1, mb:1, gap:"10px"}}>
                     <Emoji label="thumbs-up" symbol="👍" />
                     <Emoji label="thumbs-up" symbol="👎" />

@@ -14,6 +14,7 @@ import { useAlert } from "../../components/Alert/AlertContext";
 import { useDispatch, useSelector } from "react-redux";
 import { getProjects } from "./projectsSlice";
 import { selectAllProjects } from "./projectsSlice";
+import { supabase } from "../../supabaseClient";
 
 // TODO: add form validate at least 2 options, delete option, no duplicate options
 function AddPost() {
@@ -71,9 +72,35 @@ function AddPost() {
 
     const handleSubmit = async() => {
         // add to DB..etc
-        console.log(selectedProject == '');
         if (!validForm()) return;
-        navigate("/projects", { state: {isProject: false} })
+
+        // 1. Polls are subset of Post: make the post first
+        const state = {
+            pid: selectedProject,
+            body: description,
+            isPoll: !isPost
+        };
+
+        try {
+            const { data, error } = await supabase
+                .from('posts')
+                .insert([
+                    state
+                ]);
+            
+            if (error) throw error;
+
+        } catch (error) {
+            showAlert(error.error_decription || error.message, "error");
+        }
+
+        if (defaultId) {
+            navigate("/projects", { state: {isProject: false} });
+        } else {
+            navigate("/projects", { state: {isProject: true} });
+        }
+        
+        showAlert("Added post!", "success");
     }
 
     return (
@@ -110,9 +137,6 @@ function AddPost() {
                         { projects.map((project, idx) => {
                             return <MenuItem value={project.pid} key={idx}>{project.title}</MenuItem>
                         }) }
-
-                        {/* <MenuItem value={"Post"}>Post</MenuItem>
-                        <MenuItem value={"Project 2"}>Poll</MenuItem> */}
                     </Select>
                 </FormControl>
             </Center>
