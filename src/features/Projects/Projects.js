@@ -1,6 +1,6 @@
 import BasicButton from "../../components/BasicButton";
 import { supabase } from "../../supabaseClient";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import {  Button, ButtonGroup, Paper  } from "@mui/material";
 import BasicNavBar from "../../components/BasicNavBar/BasicNavBar";
 import styles from './Projects.module.css';
@@ -13,6 +13,8 @@ import NavButtonGroup from "./NavButtonGroup";
 import { useState } from "react";
 import Posts from './Posts';
 import { Typography } from "@mui/material";
+import { getUser, getUserProfile } from "../user/userSlice";
+import { useAlert } from "../../components/Alert/AlertContext";
 
 function Projects() {
   async function addProj() {
@@ -35,21 +37,32 @@ function Projects() {
   }
 
   const { state } = useLocation();
+  const dispatch = useDispatch();
+  const showAlert = useAlert();
   // for projects/posts button and navigation
   const [isProject, setIsProject] = useState(state?.isProject ?? true);
   const user = useSelector(state => state.user); // check for selected project
+
+  const switchUser = async() => {
+    await dispatch(getUserProfile(supabase.auth.user().id));
+    showAlert("Switched to user!", "success");
+  };
+
   return (
     <>
       <BasicNavBar />
       <Container className={styles.container} maxWidth={"md"}>
+      
+      {user?.isProject ?
         <Center>
           <NavButtonGroup isProject={isProject} setIsProject={setIsProject}/>
-        </Center>
+        </Center> : <></> }
 
           { isProject && user?.isProject ? 
             <Center style={{display: "flex", marginTop:10, marginBottom:10}}>
+            <BasicButton bg="secondary" sx={{width: "20%", padding: "0.01rem", mr:2}} 
+              onClick={switchUser}>Switch to user</BasicButton>
               <Typography variant="h6" sx={{fontWeight:'normal'}}>Selected project: <b>{user.title}</b> </Typography>
-              <BasicButton bg="secondary" sx={{width: "20%", padding: "0.01rem", ml:2}}>Switch to user</BasicButton>
             </Center> : <></> }
 
         { isProject ? <ProjectTree/> : <Posts/> }

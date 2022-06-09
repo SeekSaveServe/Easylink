@@ -43,8 +43,8 @@ function OptionsMenu({ parentId }) {
   }
 
   const handleSwitchProject = async() => {
-    console.log(project);
     dispatch(replace({...project, isProject:true}));
+    handleClose();
   }
 
   return (
