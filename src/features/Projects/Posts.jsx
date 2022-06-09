@@ -8,6 +8,7 @@ import { Center } from "@chakra-ui/react";
 import { AddCircleOutlined } from "@mui/icons-material";
 import { Link } from "react-router-dom";
 
+// For the Posts tab under Projects. Show posts and polls made by the switched project
 export const fakePosts = [
     {   
         isPost: true,

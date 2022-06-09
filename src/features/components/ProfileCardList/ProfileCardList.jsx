@@ -22,6 +22,7 @@ const n = Object.keys(map).length;
 
 // pass in the data through props. This component applies further filter based on Users/Projects
 // without button
+// btnIndex indicates filter to apply
 export function CardList({ data, btnIndex }) {
 
     // TODO: replace with actual data etc

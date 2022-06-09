@@ -7,22 +7,7 @@ import { Center } from "@chakra-ui/react";
 import useProfileFilter from "../components/ProfileCardList/useProfileFilter";
 import { CardList } from "../components/ProfileCardList/ProfileCardList";
 
-function RecommendationCard() {
-    return (
-        <Card variant="outlined">
-            <CardHeader title="USDevs" subheader="4 days ago"/>
-
-            <CardContent>
-                <Typography variant="h4">Make laundry chill again</Typography>
-                <Typography variant="body2">
-                Hi! We are Project Laundrobot, a sub-project under USDevs working on a hardware-based laundry notification system. We are looking for  
-                Developers who knows Python, Raspberry Pi
-                </Typography>
-            </CardContent>
-        </Card>
-    )
-}
-
+// For use specifically in Feed: pull from recommender API
 function RecommendationsList({ className }) {
     const { FilterButton, btnIndex } = useProfileFilter();
     return (

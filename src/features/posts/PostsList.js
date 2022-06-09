@@ -6,20 +6,7 @@ import Scrollable from "../../components/Scrollable";
 import PostCard from "../Projects/PostCard";
 import { fakePosts } from "../Projects/Posts";
 
-// function PostCard() {
-//     return (
-//         <Card variant="outlined">
-//             <CardHeader title="USDevs" subheader="4 days ago"/>
-
-//             <CardContent>
-//                 <Typography variant="h4">Workshop</Typography>
-//                 <Typography variant="body2">
-//                 Good day to all! This is to announce our workshop happening on 14th May. Please come if you want to learn about Node.js!
-//                 </Typography>
-//             </CardContent>
-//         </Card>
-//     )
-// }
+// For use specifically in feed: pull from followed projects
 function PostsList() {
     const posts = fakePosts; // replace with actual data
     function showPosts() {
