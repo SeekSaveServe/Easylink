@@ -31,7 +31,8 @@ function AddPost() {
 
     const projects = useSelector(selectAllProjects);
     // selectedProject pid
-    const defaultProject = projects.length > 0 ? projects[0].pid : '';
+    const defaultId = useSelector(state => state.user?.pid);
+    const defaultProject = defaultId ?? '';
 
     const [selectedProject, setSelectedProject] = useState(defaultProject); // for dropdown
 

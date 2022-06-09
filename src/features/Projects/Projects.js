@@ -47,9 +47,9 @@ function Projects() {
         </Center>
 
           { isProject && user?.isProject ? 
-            <Center style={{display: "flex", marginTop:5, marginBottom:10}}>
+            <Center style={{display: "flex", marginTop:10, marginBottom:10}}>
               <Typography variant="h6" sx={{fontWeight:'normal'}}>Selected project: <b>{user.title}</b> </Typography>
-              <BasicButton bg="secondary" sx={{width: "20%", padding: "0.02rem", ml:2}}>Switch to user</BasicButton>
+              <BasicButton bg="secondary" sx={{width: "20%", padding: "0.01rem", ml:2}}>Switch to user</BasicButton>
             </Center> : <></> }
 
         { isProject ? <ProjectTree/> : <Posts/> }
