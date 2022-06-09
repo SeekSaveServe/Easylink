@@ -90,10 +90,25 @@ function AddPost() {
             
             if (error) throw error;
 
+            // s_n of post so we can add poll options
+            const { s_n } = data[0];
+        
+            if (!isPost) {
+                // 2. Poll: add the additional columns in poll_options
+                const pollArray = pollOptions.map((option) => ({ post_id: s_n, option }));
+                const { data, error } = await supabase
+                    .from('poll_options')
+                    .insert(pollArray);
+                    
+                if (error) throw error;
+            } 
+
         } catch (error) {
             showAlert(error.error_decription || error.message, "error");
+            return;
         }
 
+        // if the user was already switched to a project, go to the posts page. else, go to projects page
         if (defaultId) {
             navigate("/projects", { state: {isProject: false} });
         } else {
