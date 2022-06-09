@@ -4,21 +4,37 @@ import { Container } from "@mui/system";
 import BasicNavBar from "../../components/BasicNavBar/BasicNavBar";
 import RadioWithLabel from "../../components/RadioWithLabel";
 import styles from './Projects.module.css';
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { InputLabel, FormControl } from "@mui/material";
 import BasicTextField from "../../components/Basic Textfield";
 import BasicButton from "../../components/BasicButton";
 import { AddCircleOutlined } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
 import { useAlert } from "../../components/Alert/AlertContext";
+import { useDispatch, useSelector } from "react-redux";
+import { getProjects } from "./projectsSlice";
+import { selectAllProjects } from "./projectsSlice";
 
 // TODO: add form validate at least 2 options, delete option, no duplicate options
 function AddPost() {
+    const dispatch = useDispatch();
+    // load projects for selector to work - in case /addpost visited directly + keep up to date
+    useEffect(() => {
+        dispatch(getProjects());
+    }, [])
+
     const navigate = useNavigate();
     const [description, setDescription] = useState("");
     const [addOption, setAddOption] = useState("");
     const [pollOptions, setPollOptions] = useState([]);
     const [isPost, setIsPost] = useState(true);
+
+    const projects = useSelector(selectAllProjects);
+    // selectedProject pid
+    const defaultProject = projects.length > 0 ? projects[0].pid : '';
+
+    const [selectedProject, setSelectedProject] = useState(defaultProject); // for dropdown
+
     const showAlert = useAlert();
     
     const addOptionClick = () => {
@@ -30,6 +46,11 @@ function AddPost() {
 
     const validForm = () => {
         let errorMsg = null;
+
+        if (!selectedProject) {
+            errorMsg = "Please select a project";
+        }
+
         if (description.trim() == "") {
             errorMsg = "Please enter a description";
         } 
@@ -49,6 +70,7 @@ function AddPost() {
 
     const handleSubmit = async() => {
         // add to DB..etc
+        console.log(selectedProject == '');
         if (!validForm()) return;
         navigate("/projects", { state: {isProject: false} })
     }
@@ -60,16 +82,36 @@ function AddPost() {
             <Center style={{marginBottom:10}}>
                 <Typography variant="h5" sx={{fontWeight: "bold", mr:2}}>Add {isPost ? "post" : "poll"}: </Typography>
 
+                {/* Type dropdown */}
                 <FormControl size="small">
                     <InputLabel id="select-type">Type</InputLabel>
                     <Select
                     id="select-type"
                     label="Type"
                     value={isPost}
-                    onChange={(evt) => {console.log("ran"); setIsPost(evt.target.value) }}
+                    onChange={(evt) => {setIsPost(evt.target.value) }}
                     >
                         <MenuItem value={true}>Post</MenuItem>
                         <MenuItem value={false}>Poll</MenuItem>
+                    </Select>
+                </FormControl>
+
+                {/* Select project dropdown */}
+                <FormControl size="small" sx={{ml:2, minWidth: "6rem"}}>
+                    <InputLabel id="select-project">Project</InputLabel>
+                    <Select
+                    id="select-project"
+                    label="Project"
+                    value={selectedProject}
+                    onChange={(evt) => {setSelectedProject(evt.target.value) }}
+                    >
+
+                        { projects.map((project, idx) => {
+                            return <MenuItem value={project.pid} key={idx}>{project.title}</MenuItem>
+                        }) }
+
+                        {/* <MenuItem value={"Post"}>Post</MenuItem>
+                        <MenuItem value={"Project 2"}>Poll</MenuItem> */}
                     </Select>
                 </FormControl>
             </Center>

@@ -166,5 +166,6 @@ const projectsSlice = createSlice({
 export default projectsSlice.reducer;
 
 export const { 
-    selectById: selectProjectById
+    selectById: selectProjectById,
+    selectAll: selectAllProjects,
  } = projectsAdapter.getSelectors((state) => state.projects);
