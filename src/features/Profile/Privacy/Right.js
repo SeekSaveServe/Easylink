@@ -15,6 +15,7 @@ import { useAlert } from "../../../components/Alert/AlertContext";
 export default function Right({ contact }) {
   const dispatch = useDispatch();
   const user = useSelector((state) => state.user);
+  const isUser = user.pid ? false : true;
 
   const [telegram, setTelegram] = useState("");
 
@@ -42,19 +43,24 @@ export default function Right({ contact }) {
 
   // Get user tags from db
   async function obtainUserTags(tag) {
-    const { data, error } = await supabase
-      .from(tag)
-      .select("name")
-      .eq("uid", supabase.auth.user().id);
+    const { data, error } = isUser
+      ? await supabase
+          .from(tag)
+          .select("name")
+          .eq("uid", supabase.auth.user().id)
+      : await supabase.from(tag).select("name").eq("pid", user.pid);
     return data;
   }
 
   // Get user telegram
   async function obtainTelegram() {
-    const { data, error } = await supabase
-      .from("users")
-      .select("telegram")
-      .eq("id", supabase.auth.user().id);
+    const { data, error } = isUser
+      ? await supabase
+          .from("users")
+          .select("telegram")
+          .eq("id", supabase.auth.user().id)
+      : await supabase.from("projects").select("telegram").eq("pid", user.pid);
+
     return data;
   }
 
@@ -101,14 +107,23 @@ export default function Right({ contact }) {
     console.log(user.id);
     async function updateUsers() {
       try {
-        const { data, error } = await supabase
-          .from("users")
-          .update({
-            telegram: telegram,
-            telegram_visibility: contact.telegram_visibility,
-            email_visibility: contact.email_visibility,
-          })
-          .match({ id: supabase.auth.user().id });
+        const { data, error } = isUser
+          ? await supabase
+              .from("users")
+              .update({
+                telegram: telegram,
+                telegram_visibility: contact.telegram_visibility,
+                email_visibility: contact.email_visibility,
+              })
+              .match({ id: supabase.auth.user().id })
+          : await supabase
+              .from("projects")
+              .update({
+                telegram: telegram,
+                telegram_visibility: contact.telegram_visibility,
+                email_visibility: contact.email_visibility,
+              })
+              .match({ pid: user.pid });
       } catch (error) {
         showAlert(error.error_description || error.message, "error");
       } finally {
@@ -118,64 +133,98 @@ export default function Right({ contact }) {
 
     async function updatePreferences() {
       try {
-        const { data, error } = await supabase
-          .from("user_communities")
-          .delete()
-          .match({ uid: supabase.auth.user().id });
+        const { data, error } = isUser
+          ? await supabase
+              .from("user_communities")
+              .delete()
+              .match({ uid: supabase.auth.user().id })
+          : await supabase
+              .from("user_communities")
+              .delete()
+              .match({ pid: user.pid });
       } catch (error) {
         showAlert(error.error_description || error.message, "error");
       }
       try {
         for (let i = 0; i < selectedCommunities.length; i++) {
-          const { error } = await supabase.from("user_communities").insert([
-            {
-              uid: supabase.auth.user().id,
-              name: selectedCommunities[i],
-            },
-          ]);
+          const { error } = isUser
+            ? await supabase.from("user_communities").insert([
+                {
+                  uid: supabase.auth.user().id,
+                  name: selectedCommunities[i],
+                },
+              ])
+            : await supabase.from("user_communities").insert([
+                {
+                  pid: user.pid,
+                  name: selectedCommunities[i],
+                },
+              ]);
+        }
+      } catch (error) {
+        showAlert(error.error_description || error.message, "error");
+      }
+      try {
+        const { data, error } = isUser
+          ? await supabase
+              .from("user_skills")
+              .delete()
+              .match({ uid: supabase.auth.user().id })
+          : await supabase
+              .from("user_skills")
+              .delete()
+              .match({ pid: user.pid });
+      } catch (error) {
+        showAlert(error.error_description || error.message, "error");
+      }
+      try {
+        for (let i = 0; i < selectedCommunities.length; i++) {
+          const { error } = isUser
+            ? await supabase.from("user_skills").insert([
+                {
+                  uid: supabase.auth.user().id,
+                  name: selectedSkills[i],
+                },
+              ])
+            : await supabase.from("user_skills").insert([
+                {
+                  pid: user.pid,
+                  name: selectedSkills[i],
+                },
+              ]);
           // console.log(error);
         }
       } catch (error) {
         showAlert(error.error_description || error.message, "error");
       }
       try {
-        const { data, error } = await supabase
-          .from("user_skills")
-          .delete()
-          .match({ uid: supabase.auth.user().id });
+        const { data, error } = isUser
+          ? await supabase
+              .from("user_interests")
+              .delete()
+              .match({ uid: supabase.auth.user().id })
+          : await supabase
+              .from("user_interests")
+              .delete()
+              .match({ pid: user.pid });
       } catch (error) {
         showAlert(error.error_description || error.message, "error");
       }
       try {
         for (let i = 0; i < selectedCommunities.length; i++) {
-          const { error } = await supabase.from("user_skills").insert([
-            {
-              uid: supabase.auth.user().id,
-              name: selectedSkills[i],
-            },
-          ]);
-          // console.log(error);
-        }
-      } catch (error) {
-        showAlert(error.error_description || error.message, "error");
-      }
-      try {
-        const { data, error } = await supabase
-          .from("user_interests")
-          .delete()
-          .match({ uid: supabase.auth.user().id });
-      } catch (error) {
-        showAlert(error.error_description || error.message, "error");
-      }
-      try {
-        for (let i = 0; i < selectedCommunities.length; i++) {
-          const { error } = await supabase.from("user_interests").insert([
-            {
-              uid: supabase.auth.user().id,
-              name: selectedInterests[i],
-            },
-          ]);
-          // console.log(error);
+          const { error } = isUser
+            ? await supabase.from("user_interests").insert([
+                {
+                  uid: supabase.auth.user().id,
+                  name: selectedInterests[i],
+                },
+              ])
+            : await supabase.from("user_interests").insert([
+                {
+                  pid: user.pid,
+                  name: selectedInterests[i],
+                },
+              ]);
         }
       } catch (error) {
         showAlert(error.error_description || error.message, "error");

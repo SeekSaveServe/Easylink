@@ -12,6 +12,9 @@ import AutoAwesomeIcon from "@mui/icons-material/AutoAwesome";
 import { useAlert } from "../../../components/Alert/AlertContext";
 
 export default function SettingsForm({ user, avatarUrl }) {
+  // Checking if we are pushing to the user db or projects db
+  const isUser = user.pid ? false : true;
+
   // States for registration
   const showAlert = useAlert();
   const dispatch = useDispatch();
@@ -62,11 +65,15 @@ export default function SettingsForm({ user, avatarUrl }) {
     }
 
     // DB check only after everything else has passed
-    const { data, error } = await supabase
-      .from("users")
-      .select("username,email")
-      .or(`username.eq.${userName}`);
-
+    const { data, error } = isUser
+      ? await supabase
+          .from("users")
+          .select("username,email")
+          .or(`username.eq.${userName}`)
+      : await supabase
+          .from("projects")
+          .select("username,email")
+          .or(`username.eq.${userName}`);
     if (error) {
       showAlert(error.error_description || error.message, "error");
       return false;
@@ -80,15 +87,26 @@ export default function SettingsForm({ user, avatarUrl }) {
 
   // Handling the form submission
   async function updateSupabase() {
-    const { data, error } = await supabase
-      .from("users")
-      .update({
-        username: userName,
-        title: title,
-        bio: bio,
-        avatar_url: avatarUrl,
-      })
-      .match({ id: supabase.auth.user().id });
+    const { data, error } = isUser
+      ? await supabase
+          .from("users")
+          .update({
+            username: userName,
+            title: title,
+            bio: bio,
+            avatar_url: avatarUrl,
+          })
+          .match({ id: supabase.auth.user().id })
+      : await supabase
+          .from("projects")
+          .update({
+            username: userName,
+            title: title,
+            bio: bio,
+            avatar_url: avatarUrl,
+          })
+          .match({ pid: user.pid });
+
     showAlert("Success!", "success");
   }
 
