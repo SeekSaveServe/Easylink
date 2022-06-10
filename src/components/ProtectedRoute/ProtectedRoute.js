@@ -14,24 +14,64 @@ const ProtectedRoute = ({ children, redirectRoute = "/", active }) => {
   const projects = useSelector(state => state.projects);
 
   // return true if project was loaded else false
-  const getProjectProfile = () => {
+  const getProjectProfile = async() => {
     const currProject = sessionStorage.getItem("currProject");
-    if (!currProject) return false; // no curr project cached
+    if (!currProject) { 
+      return false; // no curr project cached
+    }
 
     // there is a pid - check if it exists in projects.entities (e.g after delete of the proj or ancestor and its gone)
     const { pid } = JSON.parse(currProject);
     const exists = pid in projects.entities;
-    if (!exists) return false;
+    let cachedProject = null;
+
+    if (exists) {
+      cachedProject = projects.entities[pid]
+    }
+
+    else {
+      // if not in projects slice, check the DB
+        // when projects has not been loaded -> avoid loading all projects just to check e.g when /feed
+        // must check since proj could have been deleted
+      
+      const { data, error } = await supabase
+        .from('projects')
+        .select('*')
+        .match({ pid: pid })
+        .limit(1)
+        .maybeSingle()
+      
+      if (error) {
+        throw error;
+      }
+      
+      // if data exists -> cachedProject = data, etc.
+      // doesn't exist -> clear sessionStorage, return false
+      if (!data) {
+        sessionStorage.removeItem("currProject");
+        return false;
+
+      } else {
+          cachedProject = data;
+      }
+    }
 
     // there is a pid and it exists - replace userSlice with project data
-    const cachedProject = projects.entities[pid]
-
     dispatch(
       replace({...cachedProject, isProject: true})
     )
 
     return true;
 
+  }
+
+  // function to handle loading: either loads user profile or project profile
+  const loadProfile = async() => {
+    const projectLoaded = await getProjectProfile();
+    console.log(projectLoaded);
+    if (!projectLoaded) {
+      dispatch(getUserProfile(supabase.auth.user().id))
+    }
   }
 
   useEffect(() => {
@@ -45,10 +85,12 @@ const ProtectedRoute = ({ children, redirectRoute = "/", active }) => {
     });
 
     if (supabase.auth.session()?.user) {
-      const projectLoaded = getProjectProfile();
-      if (!projectLoaded) {
-        dispatch(getUserProfile(supabase.auth.user().id))
-      }
+      // const projectLoaded = await getProjectProfile();
+      // console.log(projectLoaded);
+      // if (!projectLoaded) {
+      //   dispatch(getUserProfile(supabase.auth.user().id))
+      // }
+      loadProfile();
     }
     
   }, [projects]);
