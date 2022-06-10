@@ -15,20 +15,16 @@ const ProtectedRoute = ({ children, redirectRoute = "/", active }) => {
 
   // return true if project was loaded else false
   const getProjectProfile = () => {
-    console.log("Use eff in proj");
-
     const currProject = sessionStorage.getItem("currProject");
     if (!currProject) return false; // no curr project cached
 
     // there is a pid - check if it exists in projects.entities (e.g after delete of the proj or ancestor and its gone)
     const { pid } = JSON.parse(currProject);
     const exists = pid in projects.entities;
-    console.log("Exists", exists);
     if (!exists) return false;
 
     // there is a pid and it exists - replace userSlice with project data
     const cachedProject = projects.entities[pid]
-    console.log("Project from cache", cachedProject);
 
     dispatch(
       replace({...cachedProject, isProject: true})
