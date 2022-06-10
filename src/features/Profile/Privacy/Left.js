@@ -66,13 +66,9 @@ export default function Left({ contact, setContact }) {
           </Typography>
         </FormLabel>
 
-        <RadioGroup row value={contact.email_visibility} onChange={radioChange}>
+        <RadioGroup row value={contact.email_visibility} name="email_visibility" onChange={radioChange}>
           <RadioWithLabel value="afterlink" label="Only after linking" />
-          <RadioWithLabel
-            value="everyone"
-            label="Everyone"
-            name="email_visibility"
-          />
+          <RadioWithLabel value="everyone" label="Everyone" />
         </RadioGroup>
       </Box>
     </div>

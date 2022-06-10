@@ -144,6 +144,7 @@ export default function Right({ contact }) {
       } catch (error) {
         showAlert(error.error_description || error.message, "error");
       }
+      
       try {
         for (let i = 0; i < selectedCommunities.length; i++) {
           const { error } = isUser
@@ -177,7 +178,7 @@ export default function Right({ contact }) {
         showAlert(error.error_description || error.message, "error");
       }
       try {
-        for (let i = 0; i < selectedCommunities.length; i++) {
+        for (let i = 0; i < selectedSkills.length; i++) {
           const { error } = isUser
             ? await supabase.from("user_skills").insert([
                 {
@@ -210,7 +211,7 @@ export default function Right({ contact }) {
         showAlert(error.error_description || error.message, "error");
       }
       try {
-        for (let i = 0; i < selectedCommunities.length; i++) {
+        for (let i = 0; i < selectedInterests.length; i++) {
           const { error } = isUser
             ? await supabase.from("user_interests").insert([
                 {
