@@ -150,7 +150,7 @@ function AddPost() {
                     >
 
                         { projects.map((project, idx) => {
-                            return <MenuItem value={project.pid} key={idx}>{project.title}</MenuItem>
+                            return <MenuItem value={project.pid} key={idx}>{project.username}</MenuItem>
                         }) }
                     </Select>
                 </FormControl>

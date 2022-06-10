@@ -31,7 +31,7 @@ function PostCard({ pid, sx, data, ...rest }) {
     project = data?.projects ? data?.projects : project;
 
     const isPoll = data.isPoll ?? false;
-    const title = project?.title ?? "USDevs";
+    const title = project?.username ?? "USDevs";
     // https://date-fns.org/v2.28.0/docs/format
     const dateString = data?.created_at ? format(new Date(data.created_at), "do MMM y | h:mmaaa") : "7th May 2022 | 9:03pm";
     const avatarUrl= project?.avatar_url ?? "";

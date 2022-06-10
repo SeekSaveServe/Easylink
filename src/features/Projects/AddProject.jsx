@@ -58,6 +58,7 @@ function AddProject() {
     // Form State
     const [avatarUrl, setAvatarUrl] = useState(null);
     const [title, setTitle] = useState("");
+    const [username, setUsername] = useState("");
     const [bio, setBio] = useState("");
     const [selectedSkills, setSelectedSkills] = useState([]);
     const [selectedInterests, setSelectedInterests] = useState([]);
@@ -88,8 +89,8 @@ function AddProject() {
     const validForm = () => {
         let errorMsg = null;
 
-        if (title == "") {
-            errorMsg = "Please enter a title";
+        if (username.trim() == "") {
+            errorMsg = "Please enter a username";
         } 
 
         else if (!startDate && endDate) {
@@ -115,6 +116,7 @@ function AddProject() {
             parent_id: parentId ? parseInt(parentId): null,
             uid: supabase.auth.user().id,
             avatar_url: avatarUrl,
+            username,
             title,
             bio,
             start_date: startDate,
@@ -171,21 +173,40 @@ function AddProject() {
                 </Center>
 
                 <Paper className={styles.paper} elevation={3}>
+                    {/* Username, Avatar */}
                     <Center>
-                        <UploadAvatar
-                            size={70}
-                            url={avatarUrl}
-                            onUpload={
-                                (url) => setAvatarUrl(url)
-                            }
-                            ButtonProps={{
-                                sx:{padding: "0.3rem", marginTop: "0.2rem"},
-                            }}
-                        />
-                    </Center>
+                        <Stack direction="row" sx={{width:"80%", alignItems: "flex-end"}}>
+                            <BasicTextField
+                                label="Username"
+                                type="text"
+                                margin="normal"
+                                size="small"
+                                sx={{width:"50%", mr:3}}
+                                value={username}
+                                onChange={(e) => setUsername(e.target.value)}
+                                required
+                                />
 
+                            <UploadAvatar
+                                size={70}
+                                url={avatarUrl}
+                                onUpload={
+                                    (url) => setAvatarUrl(url)
+                                }
+                                ButtonProps={{
+                                    sx:{padding: "0.3rem", marginTop: "0.2rem"},
+                                }}
+
+                                ParentProps={{
+                                    style: {width:"50%", marginBottom:"10px", flex:1}
+                                }}
+                        />
+                        </Stack>
+                    </Center>
+                    
+                    {/* Title, Bio */}
                     <Center>
-                        <Stack direction="row" sx={{mt:1, width: "80%"}}>
+                        <Stack direction="row" sx={{mt:0, width: "80%"}}>
                             <BasicTextField
                             label="Title"
                             type="text"
@@ -194,7 +215,6 @@ function AddProject() {
                             sx={{mr:3, width: "50%"}}
                             value={title}
                             onChange={(e) => setTitle(e.target.value)}
-                            required
                             />
 
                             <BasicTextField
@@ -203,11 +223,13 @@ function AddProject() {
                             margin="normal"
                             size="small"
                             sx={{width: "50%"}}
+                            multiline
                             onChange={(e) => setBio(e.target.value)}
                             />      
                         </Stack>
                     </Center>
                     
+                    {/* Skills, Interests, Communities */}
                     <Center>
                         <FormGroup sx={{width: "90%", mt:1}}>
                             <Checkmarks
@@ -232,7 +254,8 @@ function AddProject() {
                             />        
                         </FormGroup>
                     </Center>
-
+                    
+                    {/* Date Pickers */}
                     <Center className={styles.date_center}>
                         <Stack direction="row" spacing={3} sx={{mt:1}}>
                             <DatePicker
@@ -254,7 +277,8 @@ function AddProject() {
                             />
                         </Stack>
                     </Center>
-
+                        
+                    {/* Tele, Email details */}
                     <Center>
                         <Stack direction="row" sx={{mt:1, width: "70%"}}>
                             <BasicTextField
@@ -280,7 +304,8 @@ function AddProject() {
                             />      
                         </Stack>
                     </Center>
-
+                    
+                    {/* Tele, Email vis */}
                     <Box sx={{display:"flex", flexDirection:"column", justifyContent: "center"}}>
                         <Box 
                             mt={1}
@@ -340,7 +365,9 @@ function AddProject() {
                     <Center>
                         <BasicLoadingButton bg="primary" sx={{width:"40%", mt:1}} onClick={onClick} loading={loading}>Start Linking!</BasicLoadingButton>
                     </Center>
+                   
                 </Paper>
+                {/* <div style={{visibility: "hidden", height:"50vh"}}></div> */}
             </Container>
         </LocalizationProvider>
         </>

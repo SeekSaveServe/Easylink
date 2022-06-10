@@ -24,7 +24,7 @@ function returnTree(data) {
     // if no children
     if (data.childrenIds.length == 0) {
       return (
-        <TreeItemWithMenu label={data.title} nodeId={`${pid}`} key={pid} />
+        <TreeItemWithMenu label={data.username} nodeId={`${pid}`} key={pid} />
       );
     }
 
@@ -36,7 +36,7 @@ function returnTree(data) {
     }
 
     return (
-      <TreeItemWithMenu label={data.title} nodeId={`${pid}`} key={pid}>
+      <TreeItemWithMenu label={data.username} nodeId={`${pid}`} key={pid}>
         {childTrees}
       </TreeItemWithMenu>
     )

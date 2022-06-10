@@ -63,7 +63,7 @@ export default function UploadAvatar({ url, size, onUpload, ParentProps, AvatarP
   };
 
   return (
-    <div aria-live="polite" style={{display: "flex", flexDirection: "column", alignItems: "center", ...ParentProps?.style}} {...ParentProps}>
+    <div aria-live="polite" style={{display: "flex", flexDirection: "column", alignItems: "center", ...ParentProps?.style}}>
       <BasicAvatar
         src={avatarUrl}
         alt={avatarUrl ? "Avatar" : "No image"}

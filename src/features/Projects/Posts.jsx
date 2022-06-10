@@ -1,7 +1,4 @@
 import { Button, Container, Paper, Typography } from "@mui/material";
-import BasicNavBar from "../../components/BasicNavBar/BasicNavBar";
-import NavButtonGroup from "./NavButtonGroup";
-import styles from './Projects.module.css';
 import PostCard from "./PostCard";
 import Scrollable from "../../components/Scrollable";
 import { Center, CircularProgress } from "@chakra-ui/react";
@@ -83,6 +80,7 @@ function Posts() {
                 .order('created_at', { ascending: false })
             
             if (error) throw error;
+            
             setPosts(data);
 
         } catch (error) {
@@ -121,7 +119,7 @@ function Posts() {
         </Center>
 
         <Center sx={{mt:10}}>
-            <Typography variant="h6">Announcements by {project.title}</Typography>
+            <Typography variant="h6">Announcements by {project.username}</Typography>
         </Center>
 
         <Scrollable height="25vh">
