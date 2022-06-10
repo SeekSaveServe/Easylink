@@ -16,7 +16,17 @@ Including another URLconf
 # ordersys/urls.py
 from django.contrib import admin
 from django.urls import path, include
+from rest_framework import routers
+from app.apis import CourseViewSet
+from app.apis import TableViewSet
+
+router = routers.DefaultRouter()
+router.register(r'course', CourseViewSet)
+router.register(r'table', TableViewSet)
+
 urlpatterns = [
+path('api/', include(router.urls)),
 path('', include('app.urls')),
 path('admin/', admin.site.urls),
+path('dj-rest-auth/', include('dj_rest_auth.urls')),
 ]

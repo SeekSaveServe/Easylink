@@ -40,7 +40,10 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'app.apps.AppConfig'
+    'app.apps.AppConfig', 
+    'rest_framework',
+    'dj_rest_auth',
+    'rest_framework.authtoken'
 ]
 
 MIDDLEWARE = [
@@ -77,12 +80,12 @@ WSGI_APPLICATION = 'ordersys.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
 DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.sqlite3',
-#         'NAME': BASE_DIR / 'db.sqlite3',
-#     },
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
+    },
 
-    'default' : {
+    'remote' : {
         'ENGINE' : 'django.db.backends.postgresql',
         'NAME' : 'postgres',
         'HOST' : os.getenv('SUPABASE_HOST'),
@@ -133,3 +136,11 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# DRF
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASS': [
+        'rest_framework.authentication_BasicAuthentication',
+        'rest_framework.authentication.TokenAuthentication',
+    ]
+}
