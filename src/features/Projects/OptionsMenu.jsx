@@ -8,6 +8,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { replace } from "../user/userSlice";
 
 // parentId: the pid of the project this menu is associated with
+// for use specifically in ProjectTree
 function OptionsMenu({ parentId }) {
   const dispatch = useDispatch();
   const project = useSelector((state) => selectProjectById(state, parentId));
@@ -47,6 +48,7 @@ function OptionsMenu({ parentId }) {
 
   const handleSwitchProject = async() => {
     dispatch(replace({...project, isProject:true}));
+    sessionStorage.setItem('currProject', JSON.stringify({ pid: parentId }))
     handleClose();
   }
 

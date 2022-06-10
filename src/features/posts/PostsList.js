@@ -14,6 +14,7 @@ function PostsList() {
     const [posts, setPosts] = useState([]);
     const [loading, setLoading] = useState(false);
 
+    // TODO: change to fetch posts from followed projects only
     const fetchPostsAndProjects = async() => {
         setLoading(true);
         // format of returned data:
@@ -54,7 +55,7 @@ function PostsList() {
         }
         
         if (posts.length == 0) {
-            return <Typography variant="h6" color="gray" sx={{fontWeight:"normal", mt:1}}> No posts </Typography>
+            return <Typography variant="h6" color="gray" sx={{fontWeight:"normal", mt:1}}> No posts to show </Typography>
         }
 
         return posts.map((post, idx) => {
