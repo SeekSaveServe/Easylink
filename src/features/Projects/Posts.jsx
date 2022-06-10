@@ -81,7 +81,8 @@ function Posts() {
                 .match({ pid: pid})
             
             if (error) throw error;
-            setPosts(data);
+            // sort posts so most recent at top
+            setPosts(data.sort((p1,p2) => new Date(p2.created_at) - new Date(p1.created_at)));
 
         } catch (error) {
             showAlert(error.error_description || error.message, "error");

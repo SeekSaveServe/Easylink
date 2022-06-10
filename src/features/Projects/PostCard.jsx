@@ -10,6 +10,7 @@ import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { selectProjectById } from "./projectsSlice.js";
 import { supabase } from '../../supabaseClient';
+import format from "date-fns/format";
 // Common: Avatar, Title of project, created_at datetime, description
 // Post: show react emoji dropdown, Poll: show poll options
 // Looking at own posts: disable poll options, don't show react dropdown
@@ -21,11 +22,14 @@ import { supabase } from '../../supabaseClient';
     // Why?: e.g 100 posts by 10 projects -> when fetching feed posts, collect unique project ids -> only need to query 10 more times
     // instead of querying for every post 
     // own posts: the project will definitely be in the slice anyway - waste to query again
+
+    // Can be achieved with a join query - for feed, get all the relevant posts + their associated projects, and fill the projectsSlice with those projects
 function PostCard({ pid, sx, data, ...rest }) {
     const project = useSelector(state => selectProjectById(state, pid));
     const isPoll = data.isPoll ?? false;
     const title = project?.title ?? "USDevs";
-    const dateString = data.dateString ?? "7th May 2022 | 9:03pm";
+    // https://date-fns.org/v2.28.0/docs/format
+    const dateString = data?.created_at ? format(new Date(data.created_at), "do MMM y | h:mmaaa") : "7th May 2022 | 9:03pm";
     const avatarUrl= project?.avatar_url ?? "";
     const body = data.body ?? "Good day to all! This is to announce our workshop happening on May 14th. Please come if you want to learn Node.js";
 
@@ -44,7 +48,6 @@ function PostCard({ pid, sx, data, ...rest }) {
             return;
         } 
 
-        console.log("Poll opt data", pollData);
         setPollOptions(pollData.map(datum => datum.option));
         
     }
