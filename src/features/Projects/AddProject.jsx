@@ -89,8 +89,8 @@ function AddProject() {
     const validForm = () => {
         let errorMsg = null;
 
-        if (title == "") {
-            errorMsg = "Please enter a title";
+        if (username.trim() == "") {
+            errorMsg = "Please enter a username";
         } 
 
         else if (!startDate && endDate) {
@@ -116,6 +116,7 @@ function AddProject() {
             parent_id: parentId ? parseInt(parentId): null,
             uid: supabase.auth.user().id,
             avatar_url: avatarUrl,
+            username,
             title,
             bio,
             start_date: startDate,

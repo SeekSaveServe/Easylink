@@ -25,7 +25,6 @@ function Projects() {
 
   const user = useSelector(state => state.user); // check for selected project
   const projects = useSelector(state => state.projects);
-  console.log("Projects", projects);
 
   // useEffect(() => {
   //   console.log("Use eff in proj");
@@ -67,7 +66,7 @@ function Projects() {
             <Center style={{display: "flex", marginTop:10, marginBottom:10}}>
             <BasicButton bg="secondary" sx={{width: "20%", padding: "0.01rem", mr:2}} 
               onClick={switchUser}>Switch to user</BasicButton>
-              <Typography variant="h6" sx={{fontWeight:'normal'}}>Selected project: <b>{user.title}</b> </Typography>
+              <Typography variant="h6" sx={{fontWeight:'normal'}}>Selected project: <b>{user.username}</b> </Typography>
             </Center> : <></> }
 
         { isProject ? <ProjectTree/> : <Posts/> }

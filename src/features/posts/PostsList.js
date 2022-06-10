@@ -19,14 +19,16 @@ function PostsList() {
         setLoading(true);
         // format of returned data:
         // array of { ...post, projects: { pid, title, avatar_url } }
+
+        // need to specify posts.pid f_key because of reactions
         try {
             const { data, error } = await supabase
                 .from('posts')
                 .select(`
                     *,
-                    projects (
+                    projects!posts_pid_fkey (
                         pid,
-                        title,
+                        username,
                         avatar_url
                     )
                 `)
@@ -37,7 +39,8 @@ function PostsList() {
                 throw error;
             } 
 
-            setPosts(data);
+            console.log("Posts feed", data);
+            setPosts(data); 
         } catch (error) {
             console.log("Error", error);
         } finally {
