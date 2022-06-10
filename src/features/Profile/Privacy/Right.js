@@ -104,7 +104,6 @@ export default function Right({ contact }) {
   };
 
   async function updateSupabase() {
-    console.log(user.id);
     async function updateUsers() {
       try {
         const { data, error } = isUser
