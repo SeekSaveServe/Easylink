@@ -97,6 +97,10 @@ function Posts() {
 
         return posts.length == 0 ? <Typography variant="h6" color="gray" sx={{mt:1, fontWeight:"normal"}}>Nothing to show</Typography> : 
             posts.map((post, idx) => {
+            const data = {
+                ...post,
+                projects: { username: project.username, avatar_url: project.avatar_url }
+            }
             return <PostCard sx={{width: "90%", ml:1, mt:1}} data={post} pid={pid} key={idx}/>
         })
     }

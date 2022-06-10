@@ -16,14 +16,9 @@ import format from "date-fns/format";
 // Looking at own posts: disable poll options, don't show react dropdown
 
 // TODO: add disable options/emojis if looking at own posts -> show results instead
+// Can be achieved with a join query - for feed, get all the relevant posts + their associated projects, and fill the projectsSlice with those projects
 
-// To fill with project details:
-    // Current idea: pass down pid, assume that projects are in projectsSlice
-    // Why?: e.g 100 posts by 10 projects -> when fetching feed posts, collect unique project ids -> only need to query 10 more times
-    // instead of querying for every post 
-    // own posts: the project will definitely be in the slice anyway - waste to query again
-
-    // Can be achieved with a join query - for feed, get all the relevant posts + their associated projects, and fill the projectsSlice with those projects
+// Structure of data prop: { ...post, projects: { username, avatar_url } }
 function PostCard({ pid, sx, data, ...rest }) {
     let project = useSelector(state => selectProjectById(state, pid));
     
@@ -37,7 +32,6 @@ function PostCard({ pid, sx, data, ...rest }) {
     const avatarUrl= project?.avatar_url ?? "";
     const body = data.body ?? "Good day to all! This is to announce our workshop happening on May 14th. Please come if you want to learn Node.js";
 
-    // const pollOptions = data?.pollOptions ?? null; // e.g ["Yes", "No"]
     const [pollOptions, setPollOptions] = useState(data?.pollOptions ?? []);
 
     async function getPollOptions() {
