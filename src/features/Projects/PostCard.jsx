@@ -25,7 +25,11 @@ import format from "date-fns/format";
 
     // Can be achieved with a join query - for feed, get all the relevant posts + their associated projects, and fill the projectsSlice with those projects
 function PostCard({ pid, sx, data, ...rest }) {
-    const project = useSelector(state => selectProjectById(state, pid));
+    let project = useSelector(state => selectProjectById(state, pid));
+    
+    // if data has the projects field (due to join in feed) use that instead
+    project = data?.projects ? data?.projects : project;
+
     const isPoll = data.isPoll ?? false;
     const title = project?.title ?? "USDevs";
     // https://date-fns.org/v2.28.0/docs/format
@@ -44,7 +48,6 @@ function PostCard({ pid, sx, data, ...rest }) {
             .match({ post_id: data.s_n })
         
         if (error) {
-            console.log(error);
             return;
         } 
 

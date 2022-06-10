@@ -1,16 +1,62 @@
 import { Box, Typography, Card, CardHeader, CardContent, Stack } from "@mui/material";
 import styles from './Posts.module.css';
 import scroll from '../components/scroll/Scroll.module.css';
-import { Center } from "@chakra-ui/react";
+import { Center, CircularProgress } from "@chakra-ui/react";
 import Scrollable from "../../components/Scrollable";
 import PostCard from "../Projects/PostCard";
 import { fakePosts } from "../Projects/Posts";
+import { useEffect, useState } from "react";
+import { supabase } from "../../supabaseClient";
 
 // For use specifically in feed: pull from followed projects
 //  Todo: pass actual pids down to PostCard after populating projectsSlice with needed pids
 function PostsList() {
-    const posts = fakePosts; // replace with actual data
+    const [posts, setPosts] = useState([]);
+    const [loading, setLoading] = useState(false);
+
+    const fetchPostsAndProjects = async() => {
+        setLoading(true);
+        // format of returned data:
+        // array of { ...post, projects: { pid, title, avatar_url } }
+        try {
+            const { data, error } = await supabase
+                .from('posts')
+                .select(`
+                    *,
+                    projects (
+                        pid,
+                        title,
+                        avatar_url
+                    )
+                `)
+                .order('created_at', { ascending: false })
+            
+            if (error) {
+                
+                throw error;
+            } 
+
+            setPosts(data);
+        } catch (error) {
+            console.log("Error", error);
+        } finally {
+            setLoading(false);
+        }
+ 
+}
+    useEffect(() => {
+        fetchPostsAndProjects();
+    }, []);
+
     function showPosts() {
+        if (loading) {
+            return <CircularProgress />
+        }
+        
+        if (posts.length == 0) {
+            return <Typography variant="h6" color="gray" sx={{fontWeight:"normal", mt:1}}> No posts </Typography>
+        }
+
         return posts.map((post, idx) => {
             return <PostCard key={idx} data={post}/>
         });
