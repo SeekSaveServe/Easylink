@@ -168,7 +168,7 @@ function AddProject() {
                 <Center style={{marginBottom: 5}}>
                     <Typography variant='h5' sx={{fontWeight: "bold", mr: 2}}>Add project: </Typography>
                     <Typography variant='subtitle1'>
-                        {parent ? `Parent project - ${parent.title}` : 'as root project'}
+                        {parent ? `Parent project - ${parent.username}` : 'as root project'}
                     </Typography>
                 </Center>
 
