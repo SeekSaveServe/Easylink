@@ -9,11 +9,17 @@ import { supabase } from "../../supabaseClient";
 import BasicButton from "../BasicButton";
 import LinkableAvatar from "../LinkableAvatar.js";
 import BasicSearchBar from "../BasicSearchBar/BasicSearchBar";
+import { replace } from "../../features/user/userSlice";
+
 
 export default function BasicNavBar() {
   const userProfile = useSelector((state) => state.user);
+  const dispatch = useDispatch();
   const location = useLocation();
+
   const signOut = async () => {
+    sessionStorage.removeItem("currProject"); 
+    dispatch(replace({})); // clear userSlice so it doesn't pre-fill signup
     await supabase.auth.signOut();
   };
 
