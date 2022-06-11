@@ -34,10 +34,12 @@ function LinkableAvatar(props) {
       const url = URL.createObjectURL(data);
       setAvatarUrl(url);
     } catch (error) {
-      showAlert(
-        error.error_description || error.message,
-        "error"
-      );
+      // For some accounts an alert keeps showing if the avatarUrl is blank. Tempfix to keep alert from popping up on every tab change
+      // showAlert(
+      //   error.error_description || error.message,
+      //   "error"
+      // );
+      console.log(error);
     }
   };
 
