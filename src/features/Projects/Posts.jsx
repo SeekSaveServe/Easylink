@@ -98,7 +98,7 @@ function Posts() {
             posts.map((post, idx) => {
             const data = {
                 ...post,
-                projects: { username: project.username, avatar_url: project.avatar_url }
+                projects: { pid, username: project.username, avatar_url: project.avatar_url }
             }
             return <PostCard sx={{width: "90%", ml:1, mt:1}} data={data} key={idx}/>
         })
