@@ -12,12 +12,12 @@ import { useSelector } from "react-redux";
 // To display one Poll radio button with 
 // submitted:Boolean, option : { options_id:uuid , post_id:uuid, option:String }, idx:Int from array.map
 function PollRadio({ submitted, optionDatum, idx }) {
-    const { option_id, post_id, option } = optionDatum;
+    const { options_id, post_id, option } = optionDatum;
 
 
     return (
         <div>
-            <FormControlLabel disabled={submitted} control={<Radio/>} key={idx} value={idx} label={`${option}`}></FormControlLabel>
+            <FormControlLabel disabled={submitted} control={<Radio/>} value={options_id} label={`${option}`}></FormControlLabel>
             {/* <Typography variant="subtitle1" color="gray" sx={{display: "inline-block"}}>20</Typography> */}
         </div>
     )
@@ -36,7 +36,7 @@ function PollRadio({ submitted, optionDatum, idx }) {
 function PostCard({ sx, data, ...rest }) {    
     // if data has the projects field (due to join in feed) use that instead
     const project = data.projects;
-    const userPid = useSelector(state => state.user?.pid); // can be undefined
+    const user = useSelector(state => state.user); // can be undefined
     const projectPid = project.pid; // should have a int value
 
 
@@ -46,11 +46,14 @@ function PostCard({ sx, data, ...rest }) {
     const dateString = format(new Date(data.created_at), "do MMM y | h:mmaaa"); // https://date-fns.org/v2.28.0/docs/format
     const avatarUrl= project?.avatar_url ?? ""; // sometimes avatar_url is null
     const body = data.body;
-    const [pollOptions, setPollOptions] = useState([]);
 
-    // disabled only if user.pid exists and user.pid == project.pid
-    const disabled = userPid == projectPid;
+    // Poll state
+    const [pollOptions, setPollOptions] = useState([]);
+    const [selectedOptionId, setSelectedOptionId] = useState("");
+    // disable poll submit only if user.pid exists and user.pid == project.pid
+    const disabled = user?.pid == projectPid;
     const [submitted, setSubmitted] = useState(disabled);
+    const [submitLoading, setSubmitLoading] = useState(false);
 
     async function getPollOptions() {
         if (!isPoll) return;
@@ -63,6 +66,7 @@ function PostCard({ sx, data, ...rest }) {
             return;
         } 
         
+        // console.log("Poll data", pollData);
         setPollOptions(pollData);
         
     }
@@ -71,28 +75,51 @@ function PostCard({ sx, data, ...rest }) {
         getPollOptions();
     },[])
 
-    // disabled/submitted state
     
-    
-
     const showPollOptions = () => {
         if(!pollOptions) return [];
 
         return (
-            <RadioGroup column sx={{mb:-1}}>
-             {pollOptions.map((option, idx) => <PollRadio submitted={submitted} optionDatum={option} idx={idx}/>)}
+            <RadioGroup column sx={{mb:-1}} value={selectedOptionId} onChange={(evt) => setSelectedOptionId(evt.target.value)}>
+             {pollOptions.map((option, idx) => <PollRadio key={idx} submitted={submitted} optionDatum={option} idx={idx}/>)}
             </RadioGroup>
         )
     }
 
     // for poll submit
-    const handleSubmit = () => {
+    const handleSubmit = async() => {
+        if (!selectedOptionId) return; // nothing selected just don't do anything. I think there's no need for an alert here
+
+        setSubmitLoading(true);
+
+
+        // not submitted: create row in poll_results with selected option id, pid or uid
+        if (!submitted) {
+            const { data, error } = await supabase
+                .from('poll_results')
+                .insert([
+                    { 
+                        options_id: selectedOptionId,
+                        pid: user?.isProject ? user.pid : null, // isProject: set the pid, else null
+                        uid: user?.isProject ? null : supabase.auth.user().id // isProject: no uid, else put user id
+                    }
+                ]);
+            
+            if (error) throw error;
+                
+        } 
+        
+        // submitted: process unsubmit -> delete currently sel option, where pid/uid is equal to curr user's pid/uid
+        else {
+
+        }
+
         setSubmitted(!submitted);
+        setSubmitLoading(false);
     }
 
     return (
         <Card {...rest} sx={{width:"100%", ...sx}}>
-            
             <CardHeader avatar={<LinkableAvatar src={avatarUrl}/>} title={title} subheader={<p style={{margin:0}}>{dateString}</p>}>
             </CardHeader>
 
@@ -118,7 +145,7 @@ function PostCard({ sx, data, ...rest }) {
                     <Emoji label="thumbs-up" symbol="👎" />
                     <Emoji label="thumbs-up" symbol="🤩" />
                 </Box>
-                : disabled ? <></> : <LoadingButton variant="outlined" sx={{ ml:1,mb:1}} onClick={handleSubmit}>{submitted ? "Unsubmit" : "Submit"}</LoadingButton> 
+                : disabled ? <></> : <LoadingButton loading={submitLoading} variant="outlined" sx={{ ml:1,mb:1}} onClick={handleSubmit}>{submitted ? "Unsubmit" : "Submit"}</LoadingButton> 
                 }
             </CardActions>
         </Card>
