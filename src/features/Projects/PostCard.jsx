@@ -8,6 +8,21 @@ import { useEffect, useState } from "react";
 import { supabase } from '../../supabaseClient';
 import format from "date-fns/format";
 import { useSelector } from "react-redux";
+
+// To display one Poll radio button with 
+// submitted:Boolean, option : { options_id:uuid , post_id:uuid, option:String }, idx:Int from array.map
+function PollRadio({ submitted, optionDatum, idx }) {
+    const { option_id, post_id, option } = optionDatum;
+
+
+    return (
+        <div>
+            <FormControlLabel disabled={submitted} control={<Radio/>} key={idx} value={idx} label={`${option}`}></FormControlLabel>
+            {/* <Typography variant="subtitle1" color="gray" sx={{display: "inline-block"}}>20</Typography> */}
+        </div>
+    )
+}
+
 // Common: Avatar, Title of project, created_at datetime, description
 // Post: show react emoji dropdown, Poll: show poll options
 // Looking at own posts: disable poll options, don't show react dropdown
@@ -47,8 +62,8 @@ function PostCard({ sx, data, ...rest }) {
         if (error) {
             return;
         } 
-
-        setPollOptions(pollData.map(datum => datum.option));
+        
+        setPollOptions(pollData);
         
     }
 
@@ -58,13 +73,14 @@ function PostCard({ sx, data, ...rest }) {
 
     // disabled/submitted state
     
+    
 
     const showPollOptions = () => {
         if(!pollOptions) return [];
 
         return (
             <RadioGroup column sx={{mb:-1}}>
-             {pollOptions.map((option, idx) => <FormControlLabel disabled={submitted} control={<Radio/>} key={idx} value={option} label={option}></FormControlLabel>)}
+             {pollOptions.map((option, idx) => <PollRadio submitted={submitted} optionDatum={option} idx={idx}/>)}
             </RadioGroup>
         )
     }
