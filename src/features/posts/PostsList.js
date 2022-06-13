@@ -4,7 +4,6 @@ import scroll from '../components/scroll/Scroll.module.css';
 import { Center, CircularProgress } from "@chakra-ui/react";
 import Scrollable from "../../components/Scrollable";
 import PostCard from "../Projects/PostCard";
-import { fakePosts } from "../Projects/Posts";
 import { useEffect, useState } from "react";
 import { supabase } from "../../supabaseClient";
 

@@ -11,55 +11,54 @@ import { useSelector } from "react-redux";
 import { selectProjectById } from "./projectsSlice";
 
 // For the Posts tab under Projects. Show posts and polls made by the switched project
-export const fakePosts = [
-    {   
-        isPoll: false,
-        title: "USDevs",
-        avatarUrl: "",
-        dateString: "7th May 2022 | 9:03pm", // TODO: format date string based on created_at ISO Date str from DB
-        body: "Good day to all! This is to announce our workshop happening on May 14th. Please come if you want to learn Node.js",
-    },
-    {   
-        isPoll: true,
-        title: "USDevs",
-        avatarUrl: "",
-        dateString: "7th May 2022 | 9:33pm", 
-        body: "Are you coming for the workshop on the 14th?",
-        pollOptions: ["Yes", "No"]
-    },
-    {   
-        isPoll: false,
-        title: "USDevs",
-        avatarUrl: "",
-        dateString: "7th May 2022 | 9:03pm",
-        body: "Good day to all! This is to announce our workshop happening on May 14th. Please come if you want to learn Node.js",
-    },
-    {   
-        isPoll: true,
-        title: "USDevs",
-        avatarUrl: "",
-        dateString: "7th May 2022 | 9:33pm", 
-        body: "Are you coming for the workshop on the 14th?",
-        pollOptions: ["Yes", "No"]
-    },
-    {   
-        isPoll: true,
-        title: "USDevs",
-        avatarUrl: "",
-        dateString: "7th May 2022 | 9:33pm", 
-        body: "Are you coming for the workshop on the 14th?",
-        pollOptions: ["Yes", "No"]
-    },
-    {   
-        isPoll: false,
-        title: "USDevs",
-        avatarUrl: "",
-        dateString: "7th May 2022 | 9:03pm",
-        body: "Good day to all! This is to announce our workshop happening on May 14th. Please come if you want to learn Node.js",
-    }
+// export const fakePosts = [
+//     {   
+//         isPoll: false,
+//         title: "USDevs",
+//         avatarUrl: "",
+//         dateString: "7th May 2022 | 9:03pm", // TODO: format date string based on created_at ISO Date str from DB
+//         body: "Good day to all! This is to announce our workshop happening on May 14th. Please come if you want to learn Node.js",
+//     },
+//     {   
+//         isPoll: true,
+//         title: "USDevs",
+//         avatarUrl: "",
+//         dateString: "7th May 2022 | 9:33pm", 
+//         body: "Are you coming for the workshop on the 14th?",
+//         pollOptions: ["Yes", "No"]
+//     },
+//     {   
+//         isPoll: false,
+//         title: "USDevs",
+//         avatarUrl: "",
+//         dateString: "7th May 2022 | 9:03pm",
+//         body: "Good day to all! This is to announce our workshop happening on May 14th. Please come if you want to learn Node.js",
+//     },
+//     {   
+//         isPoll: true,
+//         title: "USDevs",
+//         avatarUrl: "",
+//         dateString: "7th May 2022 | 9:33pm", 
+//         body: "Are you coming for the workshop on the 14th?",
+//         pollOptions: ["Yes", "No"]
+//     },
+//     {   
+//         isPoll: true,
+//         title: "USDevs",
+//         avatarUrl: "",
+//         dateString: "7th May 2022 | 9:33pm", 
+//         body: "Are you coming for the workshop on the 14th?",
+//         pollOptions: ["Yes", "No"]
+//     },
+//     {   
+//         isPoll: false,
+//         title: "USDevs",
+//         avatarUrl: "",
+//         dateString: "7th May 2022 | 9:03pm",
+//         body: "Good day to all! This is to announce our workshop happening on May 14th. Please come if you want to learn Node.js",
+//     }
 
-    
-]
+// ]
 
 // Posts / polls that are made by the switched project (owned)
 function Posts() {    
@@ -101,7 +100,7 @@ function Posts() {
                 ...post,
                 projects: { username: project.username, avatar_url: project.avatar_url }
             }
-            return <PostCard sx={{width: "90%", ml:1, mt:1}} data={post} pid={pid} key={idx}/>
+            return <PostCard sx={{width: "90%", ml:1, mt:1}} data={data} key={idx}/>
         })
     }
 

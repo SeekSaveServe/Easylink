@@ -16,23 +16,21 @@ import format from "date-fns/format";
 // Looking at own posts: disable poll options, don't show react dropdown
 
 // TODO: add disable options/emojis if looking at own posts -> show results instead
-// Can be achieved with a join query - for feed, get all the relevant posts + their associated projects, and fill the projectsSlice with those projects
 
-// Structure of data prop: { ...post, projects: { username, avatar_url } }
-function PostCard({ pid, sx, data, ...rest }) {
-    let project = useSelector(state => selectProjectById(state, pid));
-    
+// Structure of data prop: { ...post, projects: { username, avatar_url } } -> ensure data looks like this or there will be issues
+    // post : structure follows DB schema
+function PostCard({ sx, data, ...rest }) {    
     // if data has the projects field (due to join in feed) use that instead
-    project = data?.projects ? data?.projects : project;
+    const project = data.projects;
 
-    const isPoll = data.isPoll ?? false;
-    const title = project?.username ?? "USDevs";
+    const isPoll = data.isPoll;
+    const title = project.username;
     // https://date-fns.org/v2.28.0/docs/format
-    const dateString = data?.created_at ? format(new Date(data.created_at), "do MMM y | h:mmaaa") : "7th May 2022 | 9:03pm";
-    const avatarUrl= project?.avatar_url ?? "";
-    const body = data.body ?? "Good day to all! This is to announce our workshop happening on May 14th. Please come if you want to learn Node.js";
+    const dateString = format(new Date(data.created_at), "do MMM y | h:mmaaa");
+    const avatarUrl= project?.avatar_url ?? ""; // sometimes avatar_url is null
+    const body = data.body;
 
-    const [pollOptions, setPollOptions] = useState(data?.pollOptions ?? []);
+    const [pollOptions, setPollOptions] = useState([]);
 
     async function getPollOptions() {
         if (!isPoll) return;
