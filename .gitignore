@@ -19,7 +19,12 @@
 .env.production.local
 .env
 
-.pyc
+#pycache and cpython
+*.pyc
+__pycache__/
+*.cpython-39.pyc
+*.pyo
+*.py[cod]
 
 npm-debug.log*
 yarn-debug.log*
