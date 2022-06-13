@@ -45,7 +45,6 @@ function PollRadio({ submitted, optionDatum, idx }) {
     return (
         <div>
             <FormControlLabel disabled={submitted} control={<Radio/>} value={options_id} label={<LabelText/>}></FormControlLabel>
-            {/* <Typography variant="subtitle1" color="gray" sx={{display: "inline-block"}}>20</Typography> */}
         </div>
     )
 }
