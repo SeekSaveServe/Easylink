@@ -26,26 +26,6 @@ function Projects() {
   const user = useSelector(state => state.user); // check for selected project
   const projects = useSelector(state => state.projects);
 
-  // useEffect(() => {
-  //   console.log("Use eff in proj");
-  //   if (!projects) return; // projects hasn't been loaded
-
-  //   const currProject = sessionStorage.getItem("currProject");
-  //   if (!currProject) return; // no curr project cached
-
-  //   // there is a pid - check if it exists in projects.entities (e.g after delete of the proj or ancestor and its gone)
-  //   const { pid } = JSON.parse(currProject);
-  //   const exists = pid in projects.entities;
-  //   console.log("Exists", exists);
-  //   if (!exists) return;
-
-  //   // there is a pid and it exists - replace userSlice with project data
-  //   console.log("Project from cache", projects.entities[pid])
-
-    
-  // }, [projects])
-
-
   const switchUser = async() => {
     await dispatch(getUserProfile(supabase.auth.user().id));
     sessionStorage.removeItem("currProject");

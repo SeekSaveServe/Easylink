@@ -38,7 +38,7 @@ function PostsList() {
                 throw error;
             } 
 
-            console.log("Posts feed", data);
+            // console.log("Posts feed", data);
             setPosts(data); 
         } catch (error) {
             console.log("Error", error);

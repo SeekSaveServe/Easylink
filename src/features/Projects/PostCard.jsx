@@ -110,7 +110,6 @@ function PostCard({ sx, data, ...rest }) {
             .in('options_id', optionIds)
         
         if (resError) throw resError;
-        console.log("Poll res data", resData[0]);
 
         // if no resData => no currently sel option (haven't responded)
         // have: the options_id of the first element is the currently sel option -> we already have the array (query again vs small filter in mem)
@@ -161,7 +160,16 @@ function PostCard({ sx, data, ...rest }) {
 
         // submitted: process unsubmit -> delete currently sel option, where pid/uid is equal to curr user's pid/uid
         else {
-
+            const idObj = user?.isProject ? { pid:  user.pid } : { uid: supabase.auth.user().id };
+            const { data, error } = await supabase
+                .from('poll_results')
+                .delete()
+                .match({
+                    options_id: selectedOptionId,
+                    ...idObj
+                })
+            if (error) throw error;
+            console.log("Deleted", data);
         }
 
         setSubmitted(!submitted);
