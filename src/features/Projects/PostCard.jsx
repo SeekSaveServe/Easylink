@@ -13,11 +13,38 @@ import { useSelector } from "react-redux";
 // submitted:Boolean, option : { options_id:uuid , post_id:uuid, option:String }, idx:Int from array.map
 function PollRadio({ submitted, optionDatum, idx }) {
     const { options_id, post_id, option } = optionDatum;
+    const [count, setCount] = useState(0);
 
+    // TODO: change fetchcount to be fetched along with poll options through join
+    async function fetchCount() {
+        // if submitted = false, we are showing options without count
+        if (!submitted) return;
+        
+        // console.log("Options id", options_id);
+        const { error, count } = await supabase
+            .from('poll_results')
+            .select('*', { count: 'exact', head: true })
+            .match({ options_id: options_id})
+        
+        if (error) throw error;
+        setCount(count);
+        // console.log("Count data", count);
+    }
+
+    useEffect(() => {
+        fetchCount();
+    }, [submitted]);
+
+    const LabelText = () => {
+        // if submitted, show count too, else just show option label as is
+        return (
+            <span>{option}{ submitted ? ` : ${count}` : ""}</span>
+        )
+    }
 
     return (
         <div>
-            <FormControlLabel disabled={submitted} control={<Radio/>} value={options_id} label={`${option}`}></FormControlLabel>
+            <FormControlLabel disabled={submitted} control={<Radio/>} value={options_id} label={<LabelText/>}></FormControlLabel>
             {/* <Typography variant="subtitle1" color="gray" sx={{display: "inline-block"}}>20</Typography> */}
         </div>
     )
@@ -66,7 +93,7 @@ function PostCard({ sx, data, ...rest }) {
             return;
         } 
         
-        // console.log("Poll data", pollData);
+        console.log("Poll data", pollData);
         setPollOptions(pollData);
         
     }
@@ -108,7 +135,7 @@ function PostCard({ sx, data, ...rest }) {
             if (error) throw error;
                 
         } 
-        
+
         // submitted: process unsubmit -> delete currently sel option, where pid/uid is equal to curr user's pid/uid
         else {
 
