@@ -23,4 +23,4 @@ class UserViewSet(viewsets.ModelViewSet):
         # print(username)
         return queryset
     serializer_class = UserSerializer
-    permission_classes=  [UserPermissions]
+    # permission_classes=  [UserPermissions]
