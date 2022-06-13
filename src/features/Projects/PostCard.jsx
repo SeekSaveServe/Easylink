@@ -92,9 +92,33 @@ function PostCard({ sx, data, ...rest }) {
             return;
         } 
         
-        console.log("Poll data", pollData);
+        // console.log("Poll data", pollData);
         setPollOptions(pollData);
+
+        if (disabled) return; // if own project, no need check for currently sel option etc.
+
+        // run query to get currently selected option if it is there
+            // query poll results with all option ids and user's pid/uid -> to see if user has responded to this poll
+        const optionIds = pollData.map((datum) => datum.options_id);
+        const idObj = user?.isProject ? { pid:  user.pid } : { uid: supabase.auth.user().id };
+
+        const { data: resData, error: resError } = await supabase
+            .from('poll_results')
+            .select('options_id')
+            .order('created_at', { ascending: false })
+            .match(idObj)
+            .in('options_id', optionIds)
         
+        if (resError) throw resError;
+        console.log("Poll res data", resData[0]);
+
+        // if no resData => no currently sel option (haven't responded)
+        // have: the options_id of the first element is the currently sel option -> we already have the array (query again vs small filter in mem)
+            // set sel option id, set submitted to true
+        
+        if (resData.length == 0) return;
+        setSelectedOptionId(resData[0].options_id);
+        setSubmitted(true);
     }
 
     useEffect(() => {
