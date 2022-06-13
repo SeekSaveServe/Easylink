@@ -19,10 +19,12 @@ from django.urls import path, include
 from rest_framework import routers
 from app.apis import CourseViewSet
 from app.apis import TableViewSet
+from app.apis import UserViewSet
 
 router = routers.DefaultRouter()
 router.register(r'course', CourseViewSet)
 router.register(r'table', TableViewSet)
+router.register(r'user', UserViewSet, basename='Users')
 
 urlpatterns = [
 path('api/', include(router.urls)),
