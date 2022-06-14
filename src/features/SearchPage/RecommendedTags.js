@@ -117,7 +117,7 @@ function RecommendedTags({ refresh, setRefresh, loading }) {
           name="row-radio-buttons-group"
           onChange={radioChange}
         >
-          <RadioWithLabel value="Show Projects" label="Show Users" />
+          <RadioWithLabel value="Show Projects" label="Show Projects" />
           <RadioWithLabel value="Show Users" label="Show Users" />
           <RadioWithLabel value="Show All" label="Show All" />
         </RadioGroup>
