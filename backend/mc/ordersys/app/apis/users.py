@@ -21,15 +21,35 @@ class UserPermissions(permissions.IsAuthenticated):
 
 
 class UserViewSet(viewsets.ModelViewSet):
-    # Test : http://127.0.0.1:8000/api/user/?format=json&username=123
+    # Test : http://127.0.0.1:8000/api/user/?format=json&username=123&communities='USP','NUS'&skills='Acting'&interests='Sports'
     def get_queryset(self):
         searchInput = self.request.query_params.get('searchInput')
-        communities = self.request.query_params.get('communities').split('|')
-        skills = self.request.query_params.get('skills').split('|')
-        interests = self.request.query_params.get('interests').split('|')
+        # Needs to be in the format "'tag','tag'... "
+        communities = self.request.query_params.get('communities')
+        skills = self.request.query_params.get('skills')
+        interests = self.request.query_params.get('interests')
+        raw_query = f"""SELECT
+            users.username,
+            users.id,
+            users.avatar_url,
+            users.title,
+            users.bio,
+            string_agg(distinct user_interests.name, ',') as interests,
+            string_agg(distinct user_skills.name, ',') as skills,
+            string_agg(distinct user_communities.name, ',') as communities,
+            count(users.id = users.id) as count
+        from users
+        inner join user_communities on users.id = user_communities.uid
+        inner join user_skills on users.id = user_skills.uid
+        inner join user_interests on users.id = user_interests.uid
+        where user_communities.name in ({communities}) 
+        or user_skills.name in ({skills})
+        or user_interests.name in ({interests})
+        group by users.id
+        order by count desc"""
 
-        queryset = Users.objects.filter(username=username).values()
-        # print(queryset)
+        queryset = Users.objects.raw(raw_query)
+        print(queryset)
         # print(username)
         return queryset
     serializer_class = UserSerializer
