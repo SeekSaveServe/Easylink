@@ -20,11 +20,13 @@ from rest_framework import routers
 from app.apis import CourseViewSet
 from app.apis import TableViewSet
 from app.apis import UserViewSet
+from app.apis import ProjectViewSet
 
 router = routers.DefaultRouter()
 router.register(r'course', CourseViewSet)
 router.register(r'table', TableViewSet)
 router.register(r'user', UserViewSet, basename='Users')
+router.register(r'project', ProjectViewSet, basename='Projects')
 
 urlpatterns = [
 path('api/', include(router.urls)),

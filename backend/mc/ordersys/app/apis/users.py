@@ -25,6 +25,7 @@ class UserViewSet(viewsets.ModelViewSet):
     def get_queryset(self):
         searchInput = self.request.query_params.get('searchInput')
         # Needs to be in the format "'tag','tag'... "
+        # Expected null input for tags is ''
         communities = self.request.query_params.get('communities')
         skills = self.request.query_params.get('skills')
         interests = self.request.query_params.get('interests')
@@ -49,7 +50,7 @@ class UserViewSet(viewsets.ModelViewSet):
         order by count desc"""
 
         queryset = Users.objects.raw(raw_query)
-        print(queryset)
+        # print(queryset)
         # print(username)
         return queryset
     serializer_class = UserSerializer
