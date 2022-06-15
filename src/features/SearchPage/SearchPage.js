@@ -12,7 +12,9 @@ export default function SearchPage() {
   // Cause the results to refresh
   const [refresh, setRefresh] = useState(true);
   const [loading, setLoading] = useState(false);
-  // console.log(refresh);
+  // Data retrieved from search
+  const [projects, setProjects] = useState("Not set");
+  const [users, setUsers] = useState("Not set");
 
   return (
     <>
@@ -23,12 +25,16 @@ export default function SearchPage() {
           setRefresh={setRefresh}
           setLoading={setLoading}
           refresh={refresh}
+          users={users}
+          projecs={projects}
         />
         <RecommendedTags
           setRefresh={setRefresh}
           setLoading={setLoading}
           loading={loading}
           refresh={refresh}
+          setUsers={setUsers}
+          setProjects={setProjects}
         />
       </Box>
     </>

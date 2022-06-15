@@ -18,7 +18,14 @@ import Checkmarks from "../../components/Checkmarks";
 import BasicButton from "../../components/BasicButton";
 import BasicLoadingButton from "../../components/BasicLoadingButton/BasicLoadingButton";
 import RadioWithLabel from "../../components/RadioWithLabel";
-function RecommendedTags({ refresh, setRefresh, loading }) {
+import fetchData from "./FetchData";
+function RecommendedTags({
+  refresh,
+  setRefresh,
+  loading,
+  setUsers,
+  setProjects,
+}) {
   const dispatch = useDispatch();
   const user = useSelector((state) => state.user);
 
@@ -40,7 +47,6 @@ function RecommendedTags({ refresh, setRefresh, loading }) {
     setFilter(evt.target.value);
   };
 
-  // Placeholder tags for now
   async function obtainTags(tag) {
     const { data, error } = await supabase
       .from(tag)
@@ -79,10 +85,17 @@ function RecommendedTags({ refresh, setRefresh, loading }) {
     );
   };
 
-  //   const navigate = useNavigate();
   async function handleSubmit(e) {
     e.preventDefault();
     updateFormState();
+    const comm = !selectedCommunities.length
+      ? communities
+      : selectedCommunities;
+    const skil = !selectedSkills.length ? skills : selectedSkills;
+    const int = !selectedInterests.length ? interests : selectedInterests;
+
+    fetchData(setUsers, "user", user, comm, skil, int);
+    fetchData(setProjects, "project", user, comm, skil, int);
     setRefresh(!refresh); // triggers a refresh
   }
 

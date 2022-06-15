@@ -25,29 +25,12 @@ function Feed() {
   });
 
   // Testing Django backend
-  async function test() {
-    try {
-      await fetch(
-        "http://127.0.0.1:8000/api/user/?format=json&username=123&communities='USP','NUS'&skills='Acting'&interests='Sports'",
-        {
-          headers: {
-            Authorization: "4e9f4c0735a434e094da78c61faa290881016460",
-          },
-        }
-      )
-        .then((a) => a.json())
-        .then((data) => setRes(data[0]));
-    } catch (e) {
-      console.log(e);
-    } finally {
-      console.log("done!");
-    }
-  }
-  useEffect(() => {
-    setLoading(true);
-    test();
-  }, loading);
-  console.log(res);
+
+  // useEffect(() => {
+  //   setLoading(true);
+  //   test();
+  // }, loading);
+  // console.log(res);
 
   return (
     <>

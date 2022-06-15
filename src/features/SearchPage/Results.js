@@ -9,7 +9,9 @@ import {
 import { useEffect, useState } from "react";
 import scroll from "../components/scroll/Scroll.module.css";
 
-function RecommendationCard({ refresh, setRefresh }) {
+function RecommendationCard({ refresh, setRefresh, users, projects }) {
+  // console.log(users);
+  // console.log(projects);
   return (
     <Card variant="outlined">
       <CardHeader title="USDevs" subheader="4 days ago" />
