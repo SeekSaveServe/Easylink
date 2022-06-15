@@ -90,17 +90,28 @@ function PostCard({ sx, data, ...rest }) {
     const [reaction3, setReaction3] = useState(false);
 
     // check if they have reacted and set the initial reaction state
-    async function fetchReactionStatus() {
-        if (isPoll || disabled) return; // don't fetch if poll or project owner
+    // async function fetchReactionStatus() {
+    //     if (isPoll || disabled) return; // don't fetch if poll or project owner
 
-        const { data, error } = await supabase
-            .from('post_reactions')
-            .select('reaction1,reaction2,reaction3')
-            .match(idObj)
+    //     // index by pid/uid of current user + posot_id
+    //     const { data: reactionsData, error } = await supabase
+    //         .from('post_reactions')
+    //         .select('*')
+    //         .match({
+    //             ...idObj,
+    //             post_id: data.s_n
+    //         })
+    //         .maybeSingle();
         
-        if (error) console.log(error.error_description || error.message);
-        console.log('reactions', data);
-    }
+    //     if (error) console.log(error.error_description || error.message);
+    //     if (!reactionsData) return; // haven't reacted -> maybeSingle returs nnull
+
+    //     console.log('reactions', reactionsData);
+
+    //     setReaction1(reactionsData.reaction1);
+    //     setReaction2(reactionsData.reaction2);
+    //     setReaction3(reactionsData.reaction3);
+    // }
 
     async function getPollOptions() {
         if (!isPoll) return;
@@ -141,7 +152,7 @@ function PostCard({ sx, data, ...rest }) {
     }
 
     useEffect(() => {
-        fetchReactionStatus();
+        //fetchReactionStatus();
         getPollOptions();
     },[])
 
@@ -219,9 +230,9 @@ function PostCard({ sx, data, ...rest }) {
             <CardActions>
                 {!isPoll ? 
                 <Box sx={{display: "flex", mt:2, ml:1, mb:1, gap:"10px"}}>
-                    <Emoji label="thumbs-up" symbol="👍" disabled={disabled} name="reaction1" startNumber={data.reaction1} startSelected={reaction1}/>
-                    <Emoji label="thumbs-up" symbol="👎" disabled={disabled} name="reaction2" startNumber={data.reaction2} startSelected={reaction2}/>
-                    <Emoji label="thumbs-up" symbol="🤩" disabled={disabled} name="reaction3" startNumber={data.reaction3} startSelected={reaction3}/>
+                    <Emoji postId={data.s_n} label="thumbs-up" symbol="👍" disabled={disabled} name="reaction1" startNumber={data.reaction1} startSelected={reaction1}/>
+                    <Emoji postId={data.s_n} label="thumbs-up" symbol="👎" disabled={disabled} name="reaction2" startNumber={data.reaction2} startSelected={reaction2}/>
+                    <Emoji postId={data.s_n} label="thumbs-up" symbol="🤩" disabled={disabled} name="reaction3" startNumber={data.reaction3} startSelected={reaction3}/>
                 </Box>
                 : disabled ? <></> : <LoadingButton loading={submitLoading} variant="outlined" sx={{ ml:1,mb:1}} onClick={handleSubmit}>{submitted ? "Unsubmit" : "Submit"}</LoadingButton> 
                 }
