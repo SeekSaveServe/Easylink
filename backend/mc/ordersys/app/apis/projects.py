@@ -21,7 +21,7 @@ class ProjectPermissions(permissions.IsAuthenticated):
 
 
 class ProjectViewSet(viewsets.ModelViewSet):
-    # Test : http://127.0.0.1:8000/api/project/?format=json&username=123&communities='USP','NUS'&skills='Acting'&interests='Sports'
+    # Test : http://127.0.0.1:8000/api/project/?format=json&searchInput=123&communities='USP','NUS'&skills='Acting'&interests='Sports'
     def get_queryset(self):
         searchInput = self.request.query_params.get('searchInput')
         # Needs to be in the format "'tag','tag'... "

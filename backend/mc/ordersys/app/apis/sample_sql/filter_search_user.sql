@@ -12,8 +12,9 @@ from users
 inner join user_communities on users.id = user_communities.uid
 inner join user_skills on users.id = user_skills.uid
 inner join user_interests on users.id = user_interests.uid
-where user_communities.name in ('USP') 
+where users.username like '%2%'
+and (user_communities.name in ('USP') 
 or user_skills.name in ('Acting')
-or user_interests.name in ('Sports', 'Arts&Music')
+or user_interests.name in ('Sports', 'Arts&Music'))
 group by users.id
 order by count desc

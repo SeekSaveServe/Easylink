@@ -12,8 +12,9 @@ from projects
 inner join user_communities on projects.pid = user_communities.pid
 inner join user_skills on projects.pid = user_skills.pid
 inner join user_interests on projects.pid = user_interests.pid
-where user_communities.name in ('USP') 
+where projects.username like '%1%'
+and (user_communities.name in ('USP') 
 or user_skills.name in ('Acting')
-or user_interests.name in ('Sports', 'Arts&Music')
+or user_interests.name in ('Sports', 'Arts&Music'))
 group by projects.pid
 order by count desc
