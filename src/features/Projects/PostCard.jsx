@@ -8,12 +8,16 @@ import { useEffect, useState } from "react";
 import { supabase } from '../../supabaseClient';
 import format from "date-fns/format";
 import { useSelector } from "react-redux";
+import useIdObject from '../../components/hooks/useIdObject';
 
 // To display one Poll radio button with 
 // submitted:Boolean, option : { options_id:uuid , post_id:uuid, option:String }, idx:Int from array.map
 function PollRadio({ submitted, optionDatum, idx }) {
     const { options_id, post_id, option } = optionDatum;
     const [count, setCount] = useState(0);
+
+    const test = useIdObject();
+    console.log("Test id obj", test);
 
     // TODO: change fetchcount to be fetched along with poll options through join
     async function fetchCount() {
@@ -60,7 +64,7 @@ function PollRadio({ submitted, optionDatum, idx }) {
     // projects : contains data for project that made the post/poll
     // post : structure follows DB schema
 function PostCard({ sx, data, ...rest }) {  
-    console.log("post", data);  
+    
     // if data has the projects field (due to join in feed) use that instead
     const project = data.projects;
     const user = useSelector(state => state.user); // can be undefined
