@@ -3,11 +3,13 @@ import { Box } from "@mui/system"
 import { useState } from "react";
 import styles from './Emoji.module.css';
 
-export default function EmojiButton({ label, symbol }) {
+// disabled: if disabled on click doesn't work -> for project that owns the post
+export default function EmojiButton({ label, symbol, disabled }) {
     const [selected, setSelected] = useState(false);
     const [number, setNumber] = useState(0);
 
     const click = () => {
+        if (disabled) return;
         if (!selected) {
             setNumber(number + 1);
         } else {

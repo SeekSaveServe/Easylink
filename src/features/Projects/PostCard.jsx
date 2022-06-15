@@ -76,7 +76,7 @@ function PostCard({ sx, data, ...rest }) {
     // Poll state
     const [pollOptions, setPollOptions] = useState([]);
     const [selectedOptionId, setSelectedOptionId] = useState("");
-    // disable poll submit only if user.pid exists and user.pid == project.pid
+    // disable poll submit / emoji click only if user.pid exists and user.pid == project.pid
     const disabled = user?.pid == projectPid;
     const [submitted, setSubmitted] = useState(disabled);
     const [submitLoading, setSubmitLoading] = useState(false);
@@ -199,9 +199,9 @@ function PostCard({ sx, data, ...rest }) {
             <CardActions>
                 {!isPoll ? 
                 <Box sx={{display: "flex", mt:2, ml:1, mb:1, gap:"10px"}}>
-                    <Emoji label="thumbs-up" symbol="👍" />
-                    <Emoji label="thumbs-up" symbol="👎" />
-                    <Emoji label="thumbs-up" symbol="🤩" />
+                    <Emoji label="thumbs-up" symbol="👍" disabled={disabled}/>
+                    <Emoji label="thumbs-up" symbol="👎" disabled={disabled}/>
+                    <Emoji label="thumbs-up" symbol="🤩" disabled={disabled}/>
                 </Box>
                 : disabled ? <></> : <LoadingButton loading={submitLoading} variant="outlined" sx={{ ml:1,mb:1}} onClick={handleSubmit}>{submitted ? "Unsubmit" : "Submit"}</LoadingButton> 
                 }
