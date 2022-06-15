@@ -21,7 +21,7 @@ class UserPermissions(permissions.IsAuthenticated):
 
 
 class UserViewSet(viewsets.ModelViewSet):
-    # Test : http://127.0.0.1:8000/api/user/?format=json&username=123&communities='USP','NUS'&skills='Acting'&interests='Sports'
+    # Test : http://127.0.0.1:8000/api/user/?format=json&searchInput=123&communities='USP','NUS'&skills='Acting'&interests='Sports'
     def get_queryset(self):
         searchInput = self.request.query_params.get('searchInput')
         # Needs to be in the format "'tag','tag'... "
@@ -43,12 +43,13 @@ class UserViewSet(viewsets.ModelViewSet):
         inner join user_communities on users.id = user_communities.uid
         inner join user_skills on users.id = user_skills.uid
         inner join user_interests on users.id = user_interests.uid
-        where user_communities.name in ({communities}) 
+        where users.username ~ '{searchInput}'
+        and (user_communities.name in ({communities}) 
         or user_skills.name in ({skills})
-        or user_interests.name in ({interests})
+        or user_interests.name in ({interests}))
         group by users.id
         order by count desc"""
-
+        # print(raw_query)
         queryset = Users.objects.raw(raw_query)
         # print(queryset)
         # print(username)

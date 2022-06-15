@@ -21,7 +21,7 @@ class ProjectPermissions(permissions.IsAuthenticated):
 
 
 class ProjectViewSet(viewsets.ModelViewSet):
-    # Test : http://127.0.0.1:8000/api/project/?format=json&searchInput=123&communities='USP','NUS'&skills='Acting'&interests='Sports'
+    # Test : http://127.0.0.1:8000/api/project/?format=json&searchInput=1&communities='USP','NUS'&skills='Acting'&interests='Sports'
     def get_queryset(self):
         searchInput = self.request.query_params.get('searchInput')
         # Needs to be in the format "'tag','tag'... "
@@ -42,12 +42,13 @@ class ProjectViewSet(viewsets.ModelViewSet):
         inner join user_communities on projects.pid = user_communities.pid
         inner join user_skills on projects.pid = user_skills.pid
         inner join user_interests on projects.pid = user_interests.pid
-        where user_communities.name in ({communities}) 
+        where projects.username ~ '{searchInput}'
+        and (user_communities.name in ({communities}) 
         or user_skills.name in ({skills})
-        or user_interests.name in ({interests})
+        or user_interests.name in ({interests}))
         group by projects.pid
         order by count desc"""
-
+        # print(raw_query)
         queryset = Projects.objects.raw(raw_query)
         # print(queryset)
         # print(username)
