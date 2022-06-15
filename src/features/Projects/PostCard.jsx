@@ -59,7 +59,8 @@ function PollRadio({ submitted, optionDatum, idx }) {
 // Structure of data prop: { ...post, projects: { ...dontcare, pid, username, avatar_url } } -> ensure data looks like this or there will be issues
     // projects : contains data for project that made the post/poll
     // post : structure follows DB schema
-function PostCard({ sx, data, ...rest }) {    
+function PostCard({ sx, data, ...rest }) {  
+    console.log("post", data);  
     // if data has the projects field (due to join in feed) use that instead
     const project = data.projects;
     const user = useSelector(state => state.user); // can be undefined
@@ -80,6 +81,25 @@ function PostCard({ sx, data, ...rest }) {
     const disabled = user?.pid == projectPid;
     const [submitted, setSubmitted] = useState(disabled);
     const [submitLoading, setSubmitLoading] = useState(false);
+
+    // Initial reactions state
+    const [reaction1, setReaction1] = useState(false);
+    const [reaction2, setReaction2] = useState(false);
+    const [reaction3, setReaction3] = useState(false);
+
+    // check if they have reacted and set the initial reaction state
+    async function fetchReactionStatus() {
+        if (isPoll || disabled) return; // don't fetch if poll or project owner
+
+        const idObj = user?.isProject ? { pid:  user.pid } : { uid: supabase.auth.user().id };
+        const { data, error } = await supabase
+            .from('post_reactions')
+            .select('reaction1,reaction2,reaction3')
+            .match(idObj)
+        
+        if (error) console.log(error.error_description || error.message);
+        console.log('reactions', data);
+    }
 
     async function getPollOptions() {
         if (!isPoll) return;
@@ -121,6 +141,7 @@ function PostCard({ sx, data, ...rest }) {
     }
 
     useEffect(() => {
+        fetchReactionStatus();
         getPollOptions();
     },[])
 
@@ -199,9 +220,9 @@ function PostCard({ sx, data, ...rest }) {
             <CardActions>
                 {!isPoll ? 
                 <Box sx={{display: "flex", mt:2, ml:1, mb:1, gap:"10px"}}>
-                    <Emoji label="thumbs-up" symbol="👍" disabled={disabled}/>
-                    <Emoji label="thumbs-up" symbol="👎" disabled={disabled}/>
-                    <Emoji label="thumbs-up" symbol="🤩" disabled={disabled}/>
+                    <Emoji label="thumbs-up" symbol="👍" disabled={disabled} name="reaction1" startNumber={data.reaction1} startSelected={reaction1}/>
+                    <Emoji label="thumbs-up" symbol="👎" disabled={disabled} name="reaction2" startNumber={data.reaction2} startSelected={reaction2}/>
+                    <Emoji label="thumbs-up" symbol="🤩" disabled={disabled} name="reaction3" startNumber={data.reaction3} startSelected={reaction3}/>
                 </Box>
                 : disabled ? <></> : <LoadingButton loading={submitLoading} variant="outlined" sx={{ ml:1,mb:1}} onClick={handleSubmit}>{submitted ? "Unsubmit" : "Submit"}</LoadingButton> 
                 }

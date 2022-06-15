@@ -4,9 +4,10 @@ import { useState } from "react";
 import styles from './Emoji.module.css';
 
 // disabled: if disabled on click doesn't work -> for project that owns the post
-export default function EmojiButton({ label, symbol, disabled }) {
-    const [selected, setSelected] = useState(false);
-    const [number, setNumber] = useState(0);
+// name: reaction1 || reaction2 || reaction3 -> for making the queries
+export default function EmojiButton({ label, symbol, disabled, name, startNumber, startSelected }) {
+    const [selected, setSelected] = useState(startSelected);
+    const [number, setNumber] = useState(startNumber);
 
     const click = () => {
         if (disabled) return;
