@@ -16,9 +16,6 @@ function PollRadio({ submitted, optionDatum, idx }) {
     const { options_id, post_id, option } = optionDatum;
     const [count, setCount] = useState(0);
 
-    const test = useIdObject();
-    console.log("Test id obj", test);
-
     // TODO: change fetchcount to be fetched along with poll options through join
     async function fetchCount() {
         // if submitted = false, we are showing options without count
@@ -64,7 +61,8 @@ function PollRadio({ submitted, optionDatum, idx }) {
     // projects : contains data for project that made the post/poll
     // post : structure follows DB schema
 function PostCard({ sx, data, ...rest }) {  
-    
+    const idObj = useIdObject();
+
     // if data has the projects field (due to join in feed) use that instead
     const project = data.projects;
     const user = useSelector(state => state.user); // can be undefined
@@ -95,7 +93,6 @@ function PostCard({ sx, data, ...rest }) {
     async function fetchReactionStatus() {
         if (isPoll || disabled) return; // don't fetch if poll or project owner
 
-        const idObj = user?.isProject ? { pid:  user.pid } : { uid: supabase.auth.user().id };
         const { data, error } = await supabase
             .from('post_reactions')
             .select('reaction1,reaction2,reaction3')
@@ -124,7 +121,6 @@ function PostCard({ sx, data, ...rest }) {
         // run query to get currently selected option if it is there
             // query poll results with all option ids and user's pid/uid -> to see if user has responded to this poll
         const optionIds = pollData.map((datum) => datum.options_id);
-        const idObj = user?.isProject ? { pid:  user.pid } : { uid: supabase.auth.user().id };
 
         const { data: resData, error: resError } = await supabase
             .from('poll_results')
@@ -185,7 +181,6 @@ function PostCard({ sx, data, ...rest }) {
 
         // submitted: process unsubmit -> delete currently sel option, where pid/uid is equal to curr user's pid/uid
         else {
-            const idObj = user?.isProject ? { pid:  user.pid } : { uid: supabase.auth.user().id };
             const { data, error } = await supabase
                 .from('poll_results')
                 .delete()
