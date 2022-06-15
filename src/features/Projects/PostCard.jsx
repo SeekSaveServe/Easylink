@@ -207,10 +207,25 @@ function PostCard({ sx, data, ...rest }) {
         setSubmitLoading(false);
     }
 
+
+    async function rpcTest() {
+        console.log("rpctest");
+        const { data: rpcData, error } = await supabase
+            .rpc('dec_reaction', { col_name: 'reaction1', post_id: data.s_n});
+        if (error) {
+            console.log("rpc err");
+            console.log(error);
+        }
+
+        console.log("rpc succ", rpcData);
+    }
+
     return (
         <Card {...rest} sx={{width:"100%", ...sx}}>
             <CardHeader avatar={<LinkableAvatar src={avatarUrl}/>} title={title} subheader={<p style={{margin:0}}>{dateString}</p>}>
             </CardHeader>
+
+            {/* <LoadingButton onClick={rpcTest}>rpc</LoadingButton> */}
 
             <CardContent sx={{paddingTop:0, paddingBottom:0}}>
                 <Tag color="var(--tag-grey)" variant="body2" sx={{marginBottom:3}}>{isPoll ? "Poll" : "Post"}</Tag>

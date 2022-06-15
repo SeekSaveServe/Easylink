@@ -12,25 +12,39 @@ export default function EmojiButton({ postId, label, symbol, disabled, name, sta
     const [number, setNumber] = useState(startNumber);
     const idObj = useIdObject(); // { pid } or { uid }
 
+    const [loading, setLoading] = useState(false);
+
     // for some reason, fetching reaction status inside post and passing as prop doesn't work 
         // it passes the prop down correctly but somehow fails to set
     async function fetchReactionStatus() {
         // maybeSingle modifier constantly gives errors, I'm forced to not use it
-        const { data: reactionsData, error } = await supabase
-            .from('post_reactions')
-            .select('reaction1,reaction2,reaction3')
-            .match({
-                ...idObj,
-                post_id: postId
-            })
+        try {
+            setLoading(true);
+            const { data: reactionsData, error } = await supabase
+                .from('post_reactions')
+                .select('reaction1,reaction2,reaction3')
+                .match({
+                    ...idObj,
+                    post_id: postId
+                })
+                
             
-        
-        if (error) throw error;
-        
-        
-        const reaction = reactionsData.length > 0 ? reactionsData[0]?.[name] : undefined;
-        if (!reaction) return;
-        setSelected(reaction);
+            if (error) throw error;
+            
+            
+            const reaction = reactionsData.length > 0 ? reactionsData[0]?.[name] : undefined;
+            if (!reaction) {
+                setLoading(false);
+                return;
+            };
+
+            setSelected(reaction);
+            setLoading(false);
+        } catch (error) {
+            console.log("reaction err", error);
+        } finally {
+            setLoading(false);
+        }
     }
 
     useEffect(() => {
@@ -45,10 +59,10 @@ export default function EmojiButton({ postId, label, symbol, disabled, name, sta
     // }
 
     async function increment() {
+        setLoading(true);
         try {
-            console.log("Increment");
 
-            // the identifying information to insert/ update with
+            // 1. Insert the row if not there
             const matchObj = {
                 ...idObj,
                 post_id: postId,
@@ -60,11 +74,9 @@ export default function EmojiButton({ postId, label, symbol, disabled, name, sta
                 .match(matchObj);
 
             if (error) throw error;
-            console.log("Data from incr", count)
-            
             
 
-            // doesn't exist, do insert
+            // 1a.doesn't exist, do insert
             if (count == 0) {
                 const { data, error } = await supabase
                     .from('post_reactions')
@@ -73,39 +85,61 @@ export default function EmojiButton({ postId, label, symbol, disabled, name, sta
                     ]);
                 
                 if (error) throw error;
-                console.log("Insert success", data);
 
-            } else {
-                // exists: do update
-                const { data, error } = await supabase
-                    .from('post_reactions')
-                    .update({ [name]: true })
-                    .match(matchObj);
-                if (error) throw error;
-                console.log("Update success", data)
-            }
+            } 
 
+            // 2. call rpc increment
+            const { error:rpcErr } = await supabase
+                .rpc('inc_reaction', { 
+                    col_name: name,
+                    post_id: postId,
+                    pid: "pid" in idObj ? idObj["pid"] : null,
+                    uid: "uid" in idObj ? idObj["uid"] : null
+                })
+            
+            if (rpcErr) throw rpcErr;
+            
+            
+            
         } catch (error) {
-            throw error;
-        } 
+        } finally {
+            setLoading(false);
+        }
     }
 
     // call rpc('decrement')
     async function decrement() {
-        console.log("Decrement")
+        setLoading(true);
+
+        try {
+            const { error } = await supabase
+                .rpc('dec_reaction', { 
+                    col_name: name,
+                    post_id: postId,
+                    pid: "pid" in idObj ? idObj["pid"] : null,
+                    uid: "uid" in idObj ? idObj["uid"] : null
+                });
+            
+            if (error) throw error;
+        } catch (error) {
+        } finally {
+            setLoading(false);
+        }
     }
 
     // if not selected: increment. if selected: decrement
     // do optimistic updates: just increase/decrease the num, no need fetch real number first
         // why: e.g it's at 0 -> click -> goes to 2 -> kind of weird (unlike poll where res was hidden first)
     const click = async() => {
-        if (disabled) return;
+        if (disabled || loading) return;
         if (!selected) {
-            await increment();
             setNumber(number + 1);
+            await increment();
+            
         } else {
-            await decrement();
             setNumber(number - 1);
+            await decrement();
+            
         }
 
         setSelected(!selected);
