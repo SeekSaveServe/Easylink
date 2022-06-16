@@ -12,7 +12,6 @@ export default async function fetchData(
   }
 
   function formatUrl() {
-    console.log(formatArray(communities));
     return `http://127.0.0.1:8000/api/${route}/?format=json&searchInput=${
       !user.search ? "" : user.search
     }&communities=${formatArray(communities)}&skills=${formatArray(

@@ -6,7 +6,7 @@ import styles from "./SearchPage.module.css";
 import BasicNavBar from "../../components/BasicNavBar/BasicNavBar";
 import Results from "./Results";
 import RecommendedTags from "./RecommendedTags";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 export default function SearchPage() {
   // Cause the results to refresh
