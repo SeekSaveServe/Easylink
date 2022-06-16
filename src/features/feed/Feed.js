@@ -9,9 +9,13 @@ import BasicNavBar from "../../components/BasicNavBar/BasicNavBar";
 import { Center } from "@chakra-ui/react";
 import axios from "axios";
 import { useEffect, useState } from "react";
+import { Container } from "@mui/material";
+import Tag from "../../components/Tag/Tag";
 
 function Feed() {
   const userProfile = useSelector((state) => state.user);
+  const [showPosts, setShowPosts] = useState(false);
+  
   //  Testing Django API
   const [res, setRes] = useState("not set");
   const instance = axios.create({
@@ -40,23 +44,32 @@ function Feed() {
   const throwKnownError = () => {
     throw new Error("testing Sentry");
   };
+
   return (
     <>
       {/* <button onClick={throwKnownError}> hi </button> */}
       <BasicNavBar />
-      <Box className={styles.parent}>
+      <Container className={styles.parent} maxWidth="lg">
         <Center>
-          <Typography variant="h4" sx={{ margin: "0.5rem 0" }}>
+          {/* <Typography variant="h5" sx={{ margin: "0.5rem 0", fontWeight: "normal" }}>
             <span>Welcome</span>,{" "}
-            <span>{userProfile.username || userProfile.title}</span>
-          </Typography>
+            <span>{userProfile.username}</span>
+          </Typography> */}
+
+          <Tag color="primary.light" fontColor="white" sx={{fontSize:"1.1rem", mt:1, mb:1.5}}>
+            <span>Welcome</span>,{" "}
+            <span>{userProfile.username}</span>
+          </Tag>
+
+
         </Center>
 
-        <Box className={styles.content}>
+        <Center style={{marginBottom:6}}>
+          <Typography variant="h4" color="var(--primary)">Recommendations</Typography>
+        </Center>
+
           <RecommendationsList />
-          <PostsList />
-        </Box>
-      </Box>
+      </Container>
     </>
   );
 }

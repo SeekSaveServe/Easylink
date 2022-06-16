@@ -8,16 +8,19 @@ import useProfileFilter from "../components/ProfileCardList/useProfileFilter";
 import { CardList } from "../components/ProfileCardList/ProfileCardList";
 import { supabase } from "../../supabaseClient";
 import { useEffect, useState } from "react";
+import { CircularProgress } from '@mui/material';
 
 // For use specifically in Feed: pull from recommender API
 function RecommendationsList() {
     const { FilterButton, btnIndex } = useProfileFilter();
     
     const [recommendations, setRecommendations] = useState([]);
+    const [loading, setLoading] = useState(false);
     
     // eventually replace with generated from API - ensure isProject field is available or computable (pid?)
     // for now, get all projects + users and preprocess by adding isProject field 
     async function getRecommendations() {
+        setLoading(true);
         try {
             const { data:projects, error } = await supabase 
                 .from('projects')
@@ -71,36 +74,42 @@ function RecommendationsList() {
             
         } catch (error) {
             console.log("reccs err", error)
+        } finally {
+            setLoading(false);
         }
         
     }
 
     useEffect(() => {
         getRecommendations();
+        
     }, [])
 
-    return (
-        // <Box className={styles.recc}>
-        //     <Typography variant="h4" color="var(--primary)">Recommendations</Typography>
-        //     {showRecommendations(2)}
-        // </Box>
-        // className={`${className} ${styles.recc_box}`}
-        // <Box className={scroll.scroll_parent}>
-        //     <Typography variant="h4" color="var(--primary)">Recommendations</Typography>
-        //         <Box className={scroll.scroll_child}>
-        //             <ProfileCardList data={fakeLinksData}/>
-        //             {/* <Stack spacing={4}>
-        //                 {showRecommendations(10)}
-        //             </Stack> */}
-        //         </Box>
-        // </Box>
+    function displayRecommendations() {
+        if (loading) {
+            return <Center><CircularProgress size={40} sx={{mt:2}}/></Center>;
+        }
 
+        if (recommendations.length == 0) {
+            return (
+                <Center>
+                    <Typography color="gray" variant="h6" sx={{fontWeight:"normal", mt:1}}> Nothing to show </Typography>
+                </Center>
+            )
+        }
+
+        return <CardList data={recommendations} btnIndex={btnIndex} />;
+
+    }
+
+    return (
         <Box>
-            <Center style={{marginBottom:6}}>
+            {/* <Center style={{marginBottom:6}}>
                 <Typography variant="h4" color="var(--primary)">Recommendations</Typography>
                 <FilterButton bg="primary" sx={{margin:"0rem 2rem", width: "20%", display: "block", padding: "0.2rem"}}/>
-            </Center>
-            <CardList data={recommendations} btnIndex={btnIndex} />
+            </Center> */}
+            
+            { displayRecommendations() }
         </Box>
     )
 
