@@ -10,7 +10,7 @@ import { useEffect, useState } from "react";
 import scroll from "../components/scroll/Scroll.module.css";
 
 function RecommendationCard({ refresh, setRefresh, users, projects }) {
-  // console.log(users);
+  console.log(typeof users);
   // console.log(projects);
   return (
     <Card variant="outlined">
@@ -36,12 +36,10 @@ function RecommendationsList({ setLoading, refresh, setRefresh }) {
   const [recommendations, setRecommendations] = useState([]);
 
   function showRecommendations(n) {
-    console.log("show");
     let arr = [];
     setLoading(true);
     for (let i = 0; i < n; i++) {
       // simulate backend
-      console.log(i);
       arr.push(<RecommendationCard key={i} />);
     }
     setLoading(false);
