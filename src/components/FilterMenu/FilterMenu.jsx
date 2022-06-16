@@ -1,25 +1,13 @@
 import {Menu, MenuItem, ListItemText, ListItemIcon, IconButton, Typography, Tooltip } from '@mui/material';
 import { FilterList, Check, Filter } from '@mui/icons-material';
 import { useState } from 'react';
+import TooltipIconButton from '../TooltipIconButton';
 // Generic filter icon menu to use with string value options
 // assumption: index is number and goes 0,1,2... now we can use index on the outside to filter whatever is needed
 // items: [String] e.g ["Users only", "Projects only"]. 
-function TooltipIconButton({ title, icon, ...rest}) {
-    const TitleComponent = () => {
-        return <Typography variant="body2">{title}</Typography>
-    }
-    return (
-        <Tooltip title={<TitleComponent/>} sx={{fontSize:"10rem"}}>
-            <IconButton {...rest}>
-                { icon }
-            </IconButton>
-        </Tooltip>
-    )
-}
 
-function FilterMenu({ items, index, setIndex }) { 
+function FilterMenu({ title, icon, items, index, setIndex }) { 
     const [anchorEl, setAnchorEl] = useState(null);
-    console.log("Filter index", index);
     const open = Boolean(anchorEl);
     const handleClick = (event) => {
         setAnchorEl(event.currentTarget);
@@ -34,7 +22,6 @@ function FilterMenu({ items, index, setIndex }) {
                 handleClose();
                 setIndex(idx);
             }
-            console.log("Text, idx", text, idx);
 
             return (
                 <MenuItem key={idx} onClick={onClick}>
@@ -54,11 +41,9 @@ function FilterMenu({ items, index, setIndex }) {
                 aria-haspopup="true"
                 aria-expanded={open ? 'true' : undefined}
                 onClick={handleClick}
-                icon={<FilterList/>}
-                title="Filter"
-            >
-            <FilterList />
-            </TooltipIconButton>
+                icon={icon}
+                title={title}
+            />
 
             <Menu
                 id="basic-menu"

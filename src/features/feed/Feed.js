@@ -12,14 +12,20 @@ import { useEffect, useState } from "react";
 import { Container } from "@mui/material";
 import Tag from "../../components/Tag/Tag";
 import ListTypeMenu from "./ListTypeMenu";
-import FilterMenu from "./FilterMenu";
+import FilterMenu from "../../components/FilterMenu/FilterMenu";
+import { FilterList, Settings } from "@mui/icons-material";
 
 function Feed() {
   const userProfile = useSelector((state) => state.user);
-  const [showPosts, setShowPosts] = useState(false);
-  const [filterIndex, setFilterIndex] = useState(0); // for FilterMenu
-  const filterItems = showPosts ? ["Posts and polls", "Posts only", "Polls only"] : ["Users and projects", "Users only", "Projects only"];
+  
+  const [typeIndex, setTypeIndex] = useState(0); // 0 - Reccs, 1 - Posts
 
+  const [filterIndex, setFilterIndex] = useState(0); // for FilterMenu
+  const filterItems = typeIndex == 0 ? ["Users and projects", "Users only", "Projects only"] : ["Posts and polls", "Posts only", "Polls only"];
+
+  useEffect(() => {
+    setFilterIndex(0);
+  }, [typeIndex])
   
   //  Testing Django API
   const [res, setRes] = useState("not set");
@@ -64,12 +70,12 @@ function Feed() {
 
         {/* Title and options  */}
         <Center style={{marginBottom:6}}>
-          <Typography variant="h4" color={showPosts ? "var(--secondary)" : "var(--primary)"}>{ showPosts ? "Posts" : "Recommendations"}</Typography>
-          <ListTypeMenu showPosts={showPosts} setShowPosts={setShowPosts}/>
-          <FilterMenu items={filterItems} index={filterIndex} setIndex={setFilterIndex} />
+          <Typography variant="h4" color={typeIndex == 0 ? "var(--primary)" : "var(--secondary)"}>{ typeIndex == 0 ? "Recommendations" : "Posts"}</Typography>
+          <FilterMenu title={"Toggle view"} icon={<Settings/>} items={["Recommendations", "Posts"]} index={typeIndex} setIndex={setTypeIndex} />
+          <FilterMenu title={"Filter settings"} icon={<FilterList/>} items={filterItems} index={filterIndex} setIndex={setFilterIndex} />
         </Center>
 
-          { showPosts ? <PostsList /> : <RecommendationsList /> }
+          { typeIndex == 0 ? <RecommendationsList /> : <PostsList /> }
       </Container>
     </>
   );
