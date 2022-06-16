@@ -41,9 +41,12 @@ function TooltipIconButton({ title, icon, ...rest}) {
 
 const colors = ["#FFE977", "#77FFCE", "#77EFFF"];
 
-function ProfileCard(props) {
+// assumption: passed in data has structure { ...user/project, user_skills:[Tag], user_communities:[Tag], user_interests: [Tag] }
+    // where Tag has structure { name: xxx } -> e.g user_skills: [ { name: 'JS'}, { name: 'Acting' } ]
+    // skills, comm, interests can be retrieved in same query through join
+function ProfileCard({ isProject, info }) {
     const user = useSelector(getUser);
-    let { isProject, info } = props;
+    // let { isProject, info } = props;
 
     isProject = isProject ?? false;
     info = info ?? defaultInfo;
