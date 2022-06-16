@@ -70,12 +70,12 @@ function Feed() {
 
         {/* Title and options  */}
         <Center style={{marginBottom:6}}>
-          <Typography variant="h4" color={typeIndex == 0 ? "var(--primary)" : "var(--secondary)"}>{ typeIndex == 0 ? "Recommendations" : "Posts"}</Typography>
+          <Typography variant="h4" color={typeIndex == 0 ? "var(--primary)" : "var(--secondary)"} sx={{mr:0.5}}>{ typeIndex == 0 ? "Recommendations" : "Posts"}</Typography>
           <FilterMenu title={"Toggle view"} icon={<Settings/>} items={["Recommendations", "Posts"]} index={typeIndex} setIndex={setTypeIndex} />
           <FilterMenu title={"Filter settings"} icon={<FilterList/>} items={filterItems} index={filterIndex} setIndex={setFilterIndex} />
         </Center>
 
-          { typeIndex == 0 ? <RecommendationsList /> : <PostsList /> }
+          { typeIndex == 0 ? <RecommendationsList filterIndex={filterIndex} /> : <PostsList filterIndex={filterIndex} /> }
       </Container>
     </>
   );

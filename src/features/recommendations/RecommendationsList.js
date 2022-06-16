@@ -11,8 +11,8 @@ import { useEffect, useState } from "react";
 import { CircularProgress } from '@mui/material';
 
 // For use specifically in Feed: pull from recommender API
-function RecommendationsList() {
-    const { FilterButton, btnIndex } = useProfileFilter();
+function RecommendationsList({ filterIndex }) {
+    // const { FilterButton, btnIndex } = useProfileFilter();
     
     const [recommendations, setRecommendations] = useState([]);
     const [loading, setLoading] = useState(false);
@@ -38,8 +38,6 @@ function RecommendationsList() {
                 `)
 
             if (error) throw error;
-            console.log("Reccs data", projects);
-            console.log("pid projs", "pid" in projects[0])
 
             const { data:users, error:userErr } = await supabase
                     .from('users')
@@ -59,8 +57,6 @@ function RecommendationsList() {
                     .order('created_at', { ascending: false })
 
             if (error) throw error;
-            console.log("User data", users)
-            console.log("pid check user", "pid" in users[0])
             
             const valid = (datum) => {
                 return datum.user_skills.length > 0 && datum.user_interests.length > 0 
@@ -98,7 +94,7 @@ function RecommendationsList() {
             )
         }
 
-        return <CardList data={recommendations} btnIndex={btnIndex} />;
+        return <CardList data={recommendations} btnIndex={filterIndex} />;
 
     }
 

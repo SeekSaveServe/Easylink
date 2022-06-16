@@ -13,9 +13,9 @@ const map = {
 
 // filter fn to apply on datum
 const filterMap = {
-    0: (datum) => true,
-    1: (datum) => !("pid" in datum),
-    2: (datum) => "pid" in datum
+    0: (datum) => true, // Users and proj
+    1: (datum) => !("pid" in datum), // Users only
+    2: (datum) => "pid" in datum // Proj only
 }
 
 const n = Object.keys(map).length;

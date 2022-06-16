@@ -8,8 +8,15 @@ import { useEffect, useState } from "react";
 import { supabase } from "../../supabaseClient";
 
 // For use specifically in feed: pull from followed projects
-//  Todo: pass actual pids down to PostCard after populating projectsSlice with needed pids
-function PostsList() {
+
+// filterIndex: 0 = both, 1 = posts only, 2 = polls only
+const filterMap = {
+    0: datum => true,
+    1: datum => !datum.isPoll,
+    2: datum => datum.isPoll
+}
+
+function PostsList({ filterIndex }) {
     const [posts, setPosts] = useState([]);
     const [loading, setLoading] = useState(false);
 
@@ -61,7 +68,7 @@ function PostsList() {
         }
 
         return posts.map((post, idx) => {
-            return <PostCard key={idx} data={post}/>
+            return filterMap[filterIndex](post) ? <PostCard key={idx} data={post}/> : <></>;
         });
     }
 
