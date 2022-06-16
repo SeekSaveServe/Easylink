@@ -67,25 +67,12 @@ function PostsList() {
 
     return (
         <div>
-            <Center style={{marginBottom:6}}>
-                <Typography variant="h4" color="var(--secondary)">Posts</Typography>
-            </Center>
             <Scrollable height="25vh">
                 <div style={{display: "flex", flexDirection: "column", alignItems: "center", gap: "1rem",}}>
                     { showPosts() }
                 </div>
             </Scrollable>
         </div>
-        // <Box className={`${scroll.scroll_parent}`}>
-            // <Center>
-            //     <Typography variant="h4" color="var(--secondary)">Posts</Typography>
-            // </Center>
-        //     <Box className={scroll.scroll_child}>
-        //         <Stack spacing={4}>
-        //         { showPosts(10) }
-        //         </Stack>
-        //     </Box>
-        // </Box>
     )
 }
 

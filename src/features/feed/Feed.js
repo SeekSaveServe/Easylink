@@ -11,10 +11,15 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { Container } from "@mui/material";
 import Tag from "../../components/Tag/Tag";
+import ListTypeMenu from "./ListTypeMenu";
+import FilterMenu from "./FilterMenu";
 
 function Feed() {
   const userProfile = useSelector((state) => state.user);
   const [showPosts, setShowPosts] = useState(false);
+  const [filterIndex, setFilterIndex] = useState(0); // for FilterMenu
+  const filterItems = showPosts ? ["Posts and polls", "Posts only", "Polls only"] : ["Users and projects", "Users only", "Projects only"];
+
   
   //  Testing Django API
   const [res, setRes] = useState("not set");
@@ -49,26 +54,22 @@ function Feed() {
     <>
       {/* <button onClick={throwKnownError}> hi </button> */}
       <BasicNavBar />
-      <Container className={styles.parent} maxWidth="lg">
+      <Container className={styles.parent} maxWidth="lg" sx={{padding:"1rem 6rem !important"}}>
         <Center>
-          {/* <Typography variant="h5" sx={{ margin: "0.5rem 0", fontWeight: "normal" }}>
-            <span>Welcome</span>,{" "}
-            <span>{userProfile.username}</span>
-          </Typography> */}
-
           <Tag color="primary.light" fontColor="white" sx={{fontSize:"1.1rem", mt:1, mb:1.5}}>
             <span>Welcome</span>,{" "}
             <span>{userProfile.username}</span>
           </Tag>
-
-
         </Center>
 
+        {/* Title and options  */}
         <Center style={{marginBottom:6}}>
-          <Typography variant="h4" color="var(--primary)">Recommendations</Typography>
+          <Typography variant="h4" color={showPosts ? "var(--secondary)" : "var(--primary)"}>{ showPosts ? "Posts" : "Recommendations"}</Typography>
+          <ListTypeMenu showPosts={showPosts} setShowPosts={setShowPosts}/>
+          <FilterMenu items={filterItems} index={filterIndex} setIndex={setFilterIndex} />
         </Center>
 
-          <RecommendationsList />
+          { showPosts ? <PostsList /> : <RecommendationsList /> }
       </Container>
     </>
   );

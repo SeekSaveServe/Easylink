@@ -29,7 +29,6 @@ function TooltipIconButton({ title, icon, ...rest}) {
     // where Tag has structure { name: xxx } -> e.g user_skills: [ { name: 'JS'}, { name: 'Acting' } ]
     // skills, comm, interests can be retrieved in same query through join
 function ProfileCard({ info }) {
-    const user = useSelector(getUser);
     // let { isProject, info } = props;
 
     const isProject = "pid" in info;
@@ -141,7 +140,7 @@ function ProfileCard({ info }) {
                         title={info.username} 
                         subheader={timeAgo()} 
                         avatar={<LinkableAvatar src={info.avatar_url} imgProps={{style: {objectFit: "stretch"}}}/>  } 
-                        sx={{ml:-1}} 
+                        sx={{ml:0}} 
                     />
                     
                 </Stack>
