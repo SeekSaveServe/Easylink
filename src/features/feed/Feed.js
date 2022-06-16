@@ -9,12 +9,20 @@ import BasicNavBar from "../../components/BasicNavBar/BasicNavBar";
 import { Center } from "@chakra-ui/react";
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { supportsNativeFetch } from "@sentry/utils";
+import { Container } from "@mui/material";
+import Tag from "../../components/Tag/Tag";
+import ListTypeMenu from "./ListTypeMenu";
+import FilterMenu from "./FilterMenu";
 
 function Feed() {
   const userProfile = useSelector((state) => state.user);
+  const [showPosts, setShowPosts] = useState(false);
+  const [filterIndex, setFilterIndex] = useState(0); // for FilterMenu
+  const filterItems = showPosts
+    ? ["Posts and polls", "Posts only", "Polls only"]
+    : ["Users and projects", "Users only", "Projects only"];
+
   //  Testing Django API
-  const [loading, setLoading] = useState(false);
   const [res, setRes] = useState("not set");
   const instance = axios.create({
     baseURL: "http://127.0.0.1:8000/api/",
@@ -23,31 +31,63 @@ function Feed() {
       Authorization: "Token 4e9f4c0735a434e094da78c61faa290881016460",
     },
   });
+  async function test() {
+    try {
+      await fetch("http://127.0.0.1:8000/api/user/?format=json&username=123")
+        .then((a) => a.json())
+        .then((data) => setRes(data[0]));
+    } catch (e) {
+      console.log(e);
+    } finally {
+      console.log("done!");
+    }
+  }
+  useEffect(() => {
+    test();
+  });
+  console.log(res);
 
-  // Testing Django backend
-
-  // useEffect(() => {
-  //   setLoading(true);
-  //   test();
-  // }, loading);
-  // console.log(res);
+  const throwKnownError = () => {
+    throw new Error("testing Sentry");
+  };
 
   return (
     <>
+      {/* <button onClick={throwKnownError}> hi </button> */}
       <BasicNavBar />
-      <Box className={styles.parent}>
+      <Container
+        className={styles.parent}
+        maxWidth="lg"
+        sx={{ padding: "1rem 6rem !important" }}
+      >
         <Center>
-          <Typography variant="h4" sx={{ margin: "0.5rem 0" }}>
-            <span>Welcome</span>,{" "}
-            <span>{userProfile.username || userProfile.title}</span>
-          </Typography>
+          <Tag
+            color="primary.light"
+            fontColor="white"
+            sx={{ fontSize: "1.1rem", mt: 1, mb: 1.5 }}
+          >
+            <span>Welcome</span>, <span>{userProfile.username}</span>
+          </Tag>
         </Center>
 
-        <Box className={styles.content}>
-          <RecommendationsList />
-          <PostsList />
-        </Box>
-      </Box>
+        {/* Title and options  */}
+        <Center style={{ marginBottom: 6 }}>
+          <Typography
+            variant="h4"
+            color={showPosts ? "var(--secondary)" : "var(--primary)"}
+          >
+            {showPosts ? "Posts" : "Recommendations"}
+          </Typography>
+          <ListTypeMenu showPosts={showPosts} setShowPosts={setShowPosts} />
+          <FilterMenu
+            items={filterItems}
+            index={filterIndex}
+            setIndex={setFilterIndex}
+          />
+        </Center>
+
+        {showPosts ? <PostsList /> : <RecommendationsList />}
+      </Container>
     </>
   );
 }
