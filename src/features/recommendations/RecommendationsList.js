@@ -19,7 +19,7 @@ function RecommendationsList() {
     // for now, get all projects + users and preprocess by adding isProject field 
     async function getRecommendations() {
         try {
-            const { data, error } = await supabase 
+            const { data:projects, error } = await supabase 
                 .from('projects')
                 .select(`
                 *,
@@ -35,10 +35,10 @@ function RecommendationsList() {
                 `)
 
             if (error) throw error;
-            console.log("Reccs data", data);
-            console.log("pid projs", "pid" in data[0])
+            console.log("Reccs data", projects);
+            console.log("pid projs", "pid" in projects[0])
 
-            const { data:userData, error:userErr } = await supabase
+            const { data:users, error:userErr } = await supabase
                     .from('users')
                     .select(`
                     *,
@@ -52,12 +52,21 @@ function RecommendationsList() {
                         name
                     )
                     `)
-                    .limit(10)
+                    .limit()
                     .order('created_at', { ascending: false })
 
             if (error) throw error;
-            console.log("User data", userData)
-            console.log("pid check user", "pid" in userData[0])
+            console.log("User data", users)
+            console.log("pid check user", "pid" in users[0])
+            
+            const valid = (datum) => {
+                return datum.user_skills.length > 0 && datum.user_interests.length > 0 
+            }
+
+            setRecommendations(users.concat(projects)
+                .filter(valid)
+                .sort( (i1,i2) => new Date(i2.created_at) - new Date(i1.created_at) )
+            );
 
             
         } catch (error) {
@@ -91,7 +100,7 @@ function RecommendationsList() {
                 <Typography variant="h4" color="var(--primary)">Recommendations</Typography>
                 <FilterButton bg="primary" sx={{margin:"0rem 2rem", width: "20%", display: "block", padding: "0.2rem"}}/>
             </Center>
-            <CardList data={fakeLinksData} btnIndex={btnIndex} />
+            <CardList data={recommendations} btnIndex={btnIndex} />
         </Box>
     )
 
