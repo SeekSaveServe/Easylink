@@ -68,7 +68,6 @@ const ProtectedRoute = ({ children, redirectRoute = "/", active }) => {
   // function to handle loading: either loads user profile or project profile
   const loadProfile = async() => {
     const projectLoaded = await getProjectProfile();
-    console.log(projectLoaded);
     if (!projectLoaded) {
       dispatch(getUserProfile(supabase.auth.user().id))
     }

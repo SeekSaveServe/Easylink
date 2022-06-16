@@ -7,24 +7,7 @@ import BasicButton from "../../../components/BasicButton/BasicButton.js";
 import Tag from "../../../components/Tag/Tag.jsx";
 import { AddLinkOutlined, RssFeedOutlined, CancelOutlined, Email, Telegram} from "@mui/icons-material";
 import { Tooltip, IconButton } from "@mui/material";
-// info needed: username, title, bio, isProject, tags
-const defaultInfo = {
-    username: "Cat Lover",
-    title: "Cat lover, professional photographer, expert coder",
-    bio: "Hi! I love to document the cats of NUS and code!",
-    // skills, interests, communities
-    tags: [["Python", "Meowing", "Photography"], ["Nature", "Software Development", "Photography"], ["USP"]],
-    dateRange: "Now to Dec 2022",
-    email: "defaultemail@gmail.com",
-    telegram: "@telegram_user"
-
-}
-
-function CardButton({ children, sx ,...rest}) {
-    return (
-        <BasicButton sx={{...sx, fontSize: "0.1rem", padding: "0.2rem 0.8rem", display: "inline", width: "auto"}} {...rest}>{children}</BasicButton>
-    )
-}
+import { format, formatDistance } from "date-fns";
 
 function TooltipIconButton({ title, icon, ...rest}) {
     const TitleComponent = () => {
@@ -39,20 +22,30 @@ function TooltipIconButton({ title, icon, ...rest}) {
     )
 }
 
-const colors = ["#FFE977", "#77FFCE", "#77EFFF"];
+// assumption: passed in data has structure
+    //  { ...user/project, user_skills:[Tag], user_communities:[Tag], user_interests: [Tag] }
+        // 2nd assumption: projects have field pid, user has no pid
+        
+    // where Tag has structure { name: xxx } -> e.g user_skills: [ { name: 'JS'}, { name: 'Acting' } ]
+    // skills, comm, interests can be retrieved in same query through join
+function ProfileCard({ info }) {
+    // let { isProject, info } = props;
 
-function ProfileCard(props) {
-    const user = useSelector(getUser);
-    let { isProject, info } = props;
+    const isProject = "pid" in info;
 
-    isProject = isProject ?? false;
-    info = info ?? defaultInfo;
+    const email = info.email;
+    const telegram = info.telegram;
 
-    const email = info.email ?? defaultInfo.email;
-    const telegram = info.telegram ?? defaultInfo.telegram;
 
-    const showEmail = info.showEmail ?? false;
-    const showTele = info.showTele ?? false;
+    // TODO: email/tele vis: "afterlink" || "everyone" -> calculate based on if viewing user has linked
+    const showEmail = Boolean(info.email);
+    const showTele = Boolean(info.telegram);
+
+    const mapName = (d) => d.name;
+
+    const user_skills = info.user_skills.map(mapName);
+    const user_interests = info.user_interests.map(mapName);
+    const user_communities = info.user_communities.map(mapName);
 
     const wordsToTags = (tagStrings, bgColor, fontColor) => {
 
@@ -69,7 +62,7 @@ function ProfileCard(props) {
         const prefix = isProject ? "Looking for people who know " :  "My skills are "
         return (
             <>
-                {prefix} { wordsToTags(info.tags[0], "var(--primary)", "white") }
+                {prefix} { wordsToTags(user_skills, "var(--primary)", "white") }
             </>
         )
     }
@@ -78,13 +71,13 @@ function ProfileCard(props) {
         const prefix = isProject ? "Our interests are " : "I am interested in "
         return (
             <>
-                {prefix} { wordsToTags(info.tags[1], "var(--secondary)", "white") }
+                {prefix} { wordsToTags(user_interests, "var(--secondary)", "white") }
             </>
         )
     }
 
     const communities = () => {
-        return info.tags[2].join(", ")
+        return user_communities.join(", ")
     }
 
     const emailDisplay = () => {
@@ -108,23 +101,58 @@ function ProfileCard(props) {
         ) : <></>;
     }
 
+    const Bio = () => {
+        if (!info.bio) return "";
+        return <>
+            {info.bio} <br></br>
+        </>
+    }
+
+    // calculate dateRange string given start/end date “MMM d Y to MMM d Y”,  call only if isProject
+    const dateRange = () => {
+        const dateString = (date) => format(new Date(date), "MMM d Y");
+        
+        if (!info.start_date && !info.end_date) return "";
+
+        // show only one of the dates if the other is null
+        if (!info.start_date) {
+            return "End: " + dateString(info.end_date);
+        } else if (!info.end_date) {
+            return "Start: " + dateString(info.start_date);
+        }
+
+        return `${dateString(info.start_date)} to ${dateString(info.end_date)}`
+    }
+
+    // for the e.g '4 days ago' subheader based on created_at
+    const timeAgo = () => {
+        if (!info.created_at) return "";
+        return formatDistance(new Date(info.created_at), new Date()) + " ago";
+    }
+
 
     return (
         <Card className={styles.card}>
             <Box className={styles.card_content}>
                 <Stack direction="row" alignContent="center">
                     {/* TODO: replace subheader with calc based on created_at  */}
-                    <CardHeader title="USDevs" subheader="4 days ago" avatar={<div></div>} sx={{mt:0}} />
+                    <CardHeader 
+                        title={info.username} 
+                        subheader={timeAgo()} 
+                        avatar={<LinkableAvatar src={info.avatar_url} imgProps={{style: {objectFit: "stretch"}}}/>  } 
+                        sx={{ml:0}} 
+                    />
                     
                 </Stack>
 
-                    <CardContent sx={{mt:0}}>
-                        <Typography variant="h5" sx={{fontSize: "1.4rem"}} gutterBottom> {info.title}</Typography>
+                    <CardContent sx={{mt:0, width:"100%"}}>
+                       {info.title ? <Typography variant="h5" sx={{fontSize: "1.4rem"}} gutterBottom> {info.title}</Typography> : <></> }
 
-                        <Typography variant="body1" color="text.secondary" sx={{fontSize:"1rem", width:"100%"}}> {info.bio} {" "}
-                        { interests() } {" "} { skills() } </Typography>
+                        <Typography variant="body1" color="text.secondary" sx={{fontSize:"1rem", width:"100%"}}> 
+                        <Bio/>
+                        { interests() } {" "} { skills() }  </Typography>
 
-                        { info.tags[2] ? <Typography variant="body1" color="text.secondary" sx={{mt:2}}>Communities: {communities()} </Typography> : <></> }
+                        { info.user_communities.length > 0 ? <Typography variant="body1" color="text.secondary" sx={{mt:2}}>Communities: {communities()} </Typography> : <></> }
 
 
                         <CardActions>
@@ -132,9 +160,9 @@ function ProfileCard(props) {
                                 <Typography 
                                     variant="subtitle1" 
                                     className={styles.tag} 
-                                    sx={{backgroundColor: "var(--tag-grey)" }}>{isProject ? "Project" : "User"}</Typography>
+                                    sx={{backgroundColor: "var(--tag-grey)", }}>{isProject ? "Project" : "User"}</Typography>
 
-                                    { isProject ? <Typography variant="body" sx={{alignSelf: "center"}}> {info.dateRange} </Typography> : <></>}
+                                    { isProject ? <Typography variant="body" sx={{alignSelf: "center"}}> {dateRange()} </Typography> : <></>}
 
                                 {/* Icon Buttons */}
 
@@ -154,7 +182,7 @@ function ProfileCard(props) {
             </Box>
 
             <Divider orientation="vertical" flexItem/>
-            <LinkableAvatar sx={{ width: "10%", height: "auto" }} variant="square" src={user?.avatar_url} imgProps={{style: {objectFit: "contain"}}}/>       
+            {/* <LinkableAvatar sx={{ width: "10%", height: "auto" }} variant="square" src={info.avatar_url} imgProps={{style: {objectFit: "contain"}}}/>        */}
         </Card>
     )
 }

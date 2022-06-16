@@ -14,8 +14,8 @@ const map = {
 // filter fn to apply on datum
 const filterMap = {
     0: (datum) => true,
-    1: (datum) => !datum.isProject,
-    2: (datum) => datum.isProject
+    1: (datum) => !("pid" in datum),
+    2: (datum) => "pid" in datum
 }
 
 const n = Object.keys(map).length;
@@ -28,7 +28,7 @@ export function CardList({ data, btnIndex }) {
     // TODO: replace with actual data etc
     const showList = () => {
         return data.map((datum, idx) => {
-            return filterMap[btnIndex](datum) ? <ProfileCard isProject={datum.isProject} info={datum} /> : <></>;
+            return filterMap[btnIndex](datum) ? <ProfileCard key={idx} info={datum} /> : <></>;
         });
     }
 

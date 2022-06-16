@@ -185,7 +185,7 @@ function AddPost() {
                     <div>
                         <Typography variant="h6">Preview:</Typography>
                         <RadioGroup column>
-                            {pollOptions.map((option, idx) => <FormControlLabel control={<Radio/>} key={idx} value={option} label={option}></FormControlLabel>)}
+                            {pollOptions.map((option, idx) => <FormControlLabel control={<Radio/>} key={idx} value={idx} label={option}></FormControlLabel>)}
                         </RadioGroup>
                     </div></> : <></> }
 

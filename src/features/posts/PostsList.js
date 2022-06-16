@@ -4,7 +4,6 @@ import scroll from '../components/scroll/Scroll.module.css';
 import { Center, CircularProgress } from "@chakra-ui/react";
 import Scrollable from "../../components/Scrollable";
 import PostCard from "../Projects/PostCard";
-import { fakePosts } from "../Projects/Posts";
 import { useEffect, useState } from "react";
 import { supabase } from "../../supabaseClient";
 
@@ -39,7 +38,7 @@ function PostsList() {
                 throw error;
             } 
 
-            console.log("Posts feed", data);
+            // console.log("Posts feed", data);
             setPosts(data); 
         } catch (error) {
             console.log("Error", error);
@@ -68,25 +67,12 @@ function PostsList() {
 
     return (
         <div>
-            <Center style={{marginBottom:6}}>
-                <Typography variant="h4" color="var(--secondary)">Posts</Typography>
-            </Center>
             <Scrollable height="25vh">
                 <div style={{display: "flex", flexDirection: "column", alignItems: "center", gap: "1rem",}}>
                     { showPosts() }
                 </div>
             </Scrollable>
         </div>
-        // <Box className={`${scroll.scroll_parent}`}>
-            // <Center>
-            //     <Typography variant="h4" color="var(--secondary)">Posts</Typography>
-            // </Center>
-        //     <Box className={scroll.scroll_child}>
-        //         <Stack spacing={4}>
-        //         { showPosts(10) }
-        //         </Stack>
-        //     </Box>
-        // </Box>
     )
 }
 
