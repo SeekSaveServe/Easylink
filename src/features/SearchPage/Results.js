@@ -19,13 +19,15 @@ function RecommendationsList({
   users,
   projects,
 }) {
+  // Triggers when users, refresh and projects have been updated
   useEffect(() => {
     showRecommendations();
-  }, [refresh]);
+  }, [refresh, users, projects]);
 
   const [recommendations, setRecommendations] = useState([]);
   const user = useSelector((state) => state.user);
   function showRecommendations() {
+    console.log("Refreshing");
     let arr = [];
     setLoading(true);
     if (user.filter === "Show All") {
@@ -33,6 +35,7 @@ function RecommendationsList({
       //  Alternates between user and project
       for (let i = 0; i < len; i++) {
         if (i < users.length) {
+          console.log(users[i]);
           arr.push(<ProfileCard info={users[i]} />);
         }
         if (i < projects.length) {
@@ -44,14 +47,18 @@ function RecommendationsList({
         arr.push(<ProfileCard info={users[i]} />);
       }
     } else {
-      console.log(projects.length);
-      for (let i = 0; i < projects.length; i++) {
-        arr.push(<ProfileCard info={projects[i]} />);
+      // for (let i = 0; i < projects.length; i++) {
+      //   arr.push(<ProfileCard info={projects[i]} />);
+      // }
+      for (let i = 0; i < users.length; i++) {
+        arr.push(<ProfileCard info={users[i]} />);
       }
     }
 
     setLoading(false);
-
+    // console.log(arr);
+    // console.log(projects);
+    // console.log(users);
     setRecommendations(arr);
   }
 

@@ -15,6 +15,7 @@ export default function SearchPage() {
   // Data retrieved from search
   const [projects, setProjects] = useState([]);
   const [users, setUsers] = useState([]);
+  console.log("sp", users);
   return (
     <>
       <BasicNavBar />
