@@ -6,21 +6,8 @@ import { getUser } from "../../user/userSlice.js";
 import BasicButton from "../../../components/BasicButton/BasicButton.js";
 import Tag from "../../../components/Tag/Tag.jsx";
 import { AddLinkOutlined, RssFeedOutlined, CancelOutlined, Email, Telegram} from "@mui/icons-material";
-import { Tooltip, IconButton } from "@mui/material";
 import { format, formatDistance } from "date-fns";
-
-function TooltipIconButton({ title, icon, ...rest}) {
-    const TitleComponent = () => {
-        return <Typography variant="body2">{title}</Typography>
-    }
-    return (
-        <Tooltip title={<TitleComponent/>} sx={{fontSize:"10rem"}}>
-            <IconButton {...rest}>
-                { icon }
-            </IconButton>
-        </Tooltip>
-    )
-}
+import TooltipIconButton from "../../../components/TooltipIconButton/TooltipIconButton.jsx";
 
 // assumption: passed in data has structure
     //  { ...user/project, user_skills:[Tag], user_communities:[Tag], user_interests: [Tag] }
