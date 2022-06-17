@@ -4,7 +4,7 @@ import { useSelector } from "react-redux";
 import { Box, Typography, Stack, Paper, Divider } from "@mui/material";
 import styles from "./SearchPage.module.css";
 import BasicNavBar from "../../components/BasicNavBar/BasicNavBar";
-import Results from "./Results";
+import RecommendationsList from "./Results";
 import RecommendedTags from "./RecommendedTags";
 import { useEffect, useState } from "react";
 
@@ -13,20 +13,19 @@ export default function SearchPage() {
   const [refresh, setRefresh] = useState(true);
   const [loading, setLoading] = useState(false);
   // Data retrieved from search
-  const [projects, setProjects] = useState("Not set");
-  const [users, setUsers] = useState("Not set");
-
+  const [projects, setProjects] = useState([]);
+  const [users, setUsers] = useState([]);
   return (
     <>
       <BasicNavBar />
 
       <Box className={styles.content}>
-        <Results
+        <RecommendationsList
           setRefresh={setRefresh}
           setLoading={setLoading}
           refresh={refresh}
           users={users}
-          projecs={projects}
+          projects={projects}
         />
         <RecommendedTags
           setRefresh={setRefresh}

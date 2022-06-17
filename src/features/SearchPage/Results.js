@@ -1,3 +1,4 @@
+import { CircleOutlined } from "@mui/icons-material";
 import {
   Box,
   Typography,
@@ -8,26 +9,8 @@ import {
 } from "@mui/material";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
+import ProfileCard from "../components/ProfileCard/ProfileCard";
 import scroll from "../components/scroll/Scroll.module.css";
-
-function RecommendationCard({ refresh, setRefresh }) {
-  // console.log("i", users);
-  // console.log(projects);
-  return (
-    <Card variant="outlined">
-      <CardHeader title="USDevs" subheader="4 days ago" />
-
-      <CardContent>
-        <Typography variant="h4">Make laundry chill again</Typography>
-        <Typography variant="body2">
-          Hi! We are Project Laundrobot, a sub-project under USDevs working on a
-          hardware-based laundry notification system. We are looking for
-          Developers who knows Python, Raspberry Pi
-        </Typography>
-      </CardContent>
-    </Card>
-  );
-}
 
 function RecommendationsList({
   setLoading,
@@ -37,25 +20,33 @@ function RecommendationsList({
   projects,
 }) {
   useEffect(() => {
-    showRecommendations(10);
+    showRecommendations();
   }, [refresh]);
 
   const [recommendations, setRecommendations] = useState([]);
   const user = useSelector((state) => state.user);
-  function showRecommendations(n) {
+  function showRecommendations() {
     let arr = [];
     setLoading(true);
     if (user.filter === "Show All") {
-      for (let i = 0; i < n; i++) {
-        arr.push(<RecommendationCard key={i} />);
+      const len = Math.max(users.length, projects.length);
+      //  Alternates between user and project
+      for (let i = 0; i < len; i++) {
+        if (i < users.length) {
+          arr.push(<ProfileCard info={users[i]} />);
+        }
+        if (i < projects.length) {
+          arr.push(<ProfileCard info={projects[i]} />);
+        }
       }
     } else if (user.filter === "Show Users") {
-      for (let i = 0; i < n; i++) {
-        arr.push(<RecommendationCard key={i} />);
+      for (let i = 0; i < users.length; i++) {
+        arr.push(<ProfileCard info={users[i]} />);
       }
     } else {
-      for (let i = 0; i < n; i++) {
-        arr.push(<RecommendationCard key={i} />);
+      console.log(projects.length);
+      for (let i = 0; i < projects.length; i++) {
+        arr.push(<ProfileCard info={projects[i]} />);
       }
     }
 

@@ -30,14 +30,20 @@ class UserViewSet(viewsets.ModelViewSet):
         skills = self.request.query_params.get('skills')
         interests = self.request.query_params.get('interests')
         raw_query = f"""SELECT
-            users.username,
-            users.id,
             users.avatar_url,
-            users.title,
             users.bio,
-            string_agg(distinct user_interests.name, ',') as interests,
-            string_agg(distinct user_skills.name, ',') as skills,
-            string_agg(distinct user_communities.name, ',') as communities,
+            users.created_at,
+            users.email,
+            users.email_visibility,
+            users.id,
+            users.profile_visibility,
+            users.telegram,
+            users.telegram_visibility,
+            users.title,
+            users.updated_at,
+            string_agg(distinct user_communities.name, ',') as user_communities,
+            string_agg(distinct user_interests.name, ',') as user_interests,
+            string_agg(distinct user_skills.name, ',') as user_skills,
             count(users.id = users.id) as count
         from users
         inner join user_communities on users.id = user_communities.uid

@@ -29,14 +29,24 @@ class ProjectViewSet(viewsets.ModelViewSet):
         skills = self.request.query_params.get('skills')
         interests = self.request.query_params.get('interests')
         raw_query = f"""SELECT
-        projects.username,
-        projects.pid,
-        projects.avatar_url,
-        projects.title,
-        projects.bio,
-        string_agg(distinct user_interests.name, ',') as interests,
-        string_agg(distinct user_skills.name, ',') as skills,
-        string_agg(distinct user_communities.name, ',') as communities,
+            projects.avatar_url,
+            projects.bio,
+            projects.created_at,
+            projects.email,
+            projects.email_visibility,
+            projects.end_date,
+            projects.parent_id,
+            projects.pid,
+            projects.profile_visibility,
+            projects.start_date,
+            projects.telegram,
+            projects.telegram_visibility,
+            projects.title,
+            projects.uid,
+            projects.updated_at,
+            string_agg(distinct user_communities.name, ',') as user_communities,
+            string_agg(distinct user_interests.name, ',') as user_interests,
+            string_agg(distinct user_skills.name, ',') as user_skills,
         count(projects.pid = projects.pid) as count
         from projects
         inner join user_communities on projects.pid = user_communities.pid
