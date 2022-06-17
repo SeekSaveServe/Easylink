@@ -90,7 +90,7 @@ function Projects() {
 
         </Center>
 
-        <ProfileCardList data={fakeLinksData}/>
+        {/* <ProfileCardList data={fakeLinksData}/> */}
       </Container>
    
     </>

@@ -23,12 +23,12 @@ const n = Object.keys(map).length;
 // pass in the data through props. This component applies further filter based on Users/Projects
 // without button
 // btnIndex indicates filter to apply
-export function CardList({ data, btnIndex }) {
+export function CardList({ data, btnIndex, isJoin }) {
 
     // TODO: replace with actual data etc
     const showList = () => {
         return data.map((datum, idx) => {
-            return filterMap[btnIndex](datum) ? <ProfileCard key={idx} info={datum} /> : <></>;
+            return filterMap[btnIndex](datum) ? <ProfileCard key={idx} info={datum} isJoin={isJoin} /> : <></>;
         });
     }
 
@@ -43,13 +43,13 @@ export function CardList({ data, btnIndex }) {
 }
 
 // with button - this component exists because was previously written as ProfileCardList for a few pages -> don't want to interrupt those imports
-function ProfileCardList({ data }) {
+function ProfileCardList({ data, isJoin }) {
     const { FilterButton, btnIndex } = useProfileFilter();
 
     // TODO: replace with actual data etc
     const showList = (n) => {
         return data.map((datum, idx) => {
-            return filterMap[btnIndex](datum) ? <ProfileCard isProject={datum.isProject} info={datum} /> : <></>;
+            return filterMap[btnIndex](datum) ? <ProfileCard isProject={datum.isProject} info={datum} isJoin={isJoin} /> : <></>;
         });
     }
 
@@ -59,7 +59,7 @@ function ProfileCardList({ data }) {
                 <FilterButton bg="primary" sx={{margin:"1rem 2rem", width: "20%", display: "block", padding: "0.2rem"}}/>
             </Center>
 
-            <CardList data={data} btnIndex={btnIndex}/>
+            <CardList data={data} btnIndex={btnIndex} isJoin={isJoin}/>
         </div>
     )
 }

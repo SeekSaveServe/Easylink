@@ -10,12 +10,16 @@ import { format, formatDistance } from "date-fns";
 import TooltipIconButton from "../../../components/TooltipIconButton/TooltipIconButton.jsx";
 
 // assumption: passed in data has structure
-    //  { ...user/project, user_skills:[Tag], user_communities:[Tag], user_interests: [Tag] }
+    // isJoin == true: { ...user/project, user_skills:[Tag], user_communities:[Tag], user_interests: [Tag] }
         // 2nd assumption: projects have field pid, user has no pid
-        
-    // where Tag has structure { name: xxx } -> e.g user_skills: [ { name: 'JS'}, { name: 'Acting' } ]
-    // skills, comm, interests can be retrieved in same query through join
-function ProfileCard({ info }) {
+        // where Tag has structure { name: xxx } -> e.g user_skills: [ { name: 'JS'}, { name: 'Acting' } ]
+        // skills, comm, interests can be retrieved in same query through join
+    
+    // isJoin == false: { ...user/project, user_skills:"...", user_communities:"...", user_interests: "..."}
+        // where "..." is null, "", "singleton" or comma separated string
+
+    
+function ProfileCard({ info, isJoin }) {
     // let { isProject, info } = props;
 
     const isProject = "pid" in info;
@@ -28,11 +32,20 @@ function ProfileCard({ info }) {
     const showEmail = Boolean(info.email);
     const showTele = Boolean(info.telegram);
 
-    const mapName = (d) => d.name;
+    const mapName = (d) => d.name; // for join query in links
 
-    const user_skills = info.user_skills.map(mapName);
-    const user_interests = info.user_interests.map(mapName);
-    const user_communities = info.user_communities.map(mapName);
+    // comma sep string to array - for isJoin false
+    const stringToArray = (string) => {
+        string = string.trim();
+        if (!Boolean(string)) return []; // covers null,undefined, ""
+
+        return string.split(',');
+
+    }
+
+    const user_skills = isJoin ? info.user_skills.map(mapName) : stringToArray(info.user_skills);
+    const user_interests = isJoin ? info.user_interests.map(mapName) : stringToArray(info.user_interests);
+    const user_communities = isJoin ? info.user_communities.map(mapName) : stringToArray(info.user_communities);
 
     const wordsToTags = (tagStrings, bgColor, fontColor) => {
 

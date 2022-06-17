@@ -16,7 +16,7 @@ function RecommendationsList({ filterIndex }) {
     
     const [recommendations, setRecommendations] = useState([]);
     const [loading, setLoading] = useState(false);
-    
+
     // eventually replace with generated from API - ensure isProject field is available or computable (pid?)
     // for now, get all projects + users and preprocess by adding isProject field 
     async function getRecommendations() {
@@ -61,11 +61,12 @@ function RecommendationsList({ filterIndex }) {
             const valid = (datum) => {
                 return datum.user_skills.length > 0 && datum.user_interests.length > 0 
             }
-
+            
             setRecommendations(users.concat(projects)
                 .filter(valid)
                 .sort( (i1,i2) => new Date(i2.created_at) - new Date(i1.created_at) )
             );
+
 
             
         } catch (error) {
@@ -94,7 +95,7 @@ function RecommendationsList({ filterIndex }) {
             )
         }
 
-        return <CardList data={recommendations} btnIndex={filterIndex} />;
+        return <CardList data={recommendations} btnIndex={filterIndex} isJoin={true}/>;
 
     }
 
