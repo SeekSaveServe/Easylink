@@ -9,6 +9,8 @@ import { CardList } from "../components/ProfileCardList/ProfileCardList";
 import { supabase } from "../../supabaseClient";
 import { useEffect, useState } from "react";
 import { CircularProgress } from '@mui/material';
+import { useDispatch } from "react-redux";
+import { getFeedLinks } from "../Links/linksSlice";
 
 // For use specifically in Feed: pull from recommender API
 function RecommendationsList({ filterIndex }) {
@@ -16,6 +18,7 @@ function RecommendationsList({ filterIndex }) {
     
     const [recommendations, setRecommendations] = useState([]);
     const [loading, setLoading] = useState(false);
+    const dispatch = useDispatch();
 
     // eventually replace with generated from API - ensure isProject field is available or computable (pid?)
     // for now, get all projects + users and preprocess by adding isProject field 
@@ -36,6 +39,7 @@ function RecommendationsList({ filterIndex }) {
                     name
                 )
                 `)
+                .order('created_at', { ascending: false })
 
             if (error) throw error;
 
@@ -79,6 +83,7 @@ function RecommendationsList({ filterIndex }) {
 
     useEffect(() => {
         getRecommendations();
+        dispatch(getFeedLinks());
         
     }, [])
 
