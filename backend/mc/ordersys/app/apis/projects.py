@@ -44,8 +44,8 @@ class ProjectViewSet(viewsets.ModelViewSet):
             projects.title,
             projects.uid,
             projects.updated_at,
-            string_agg(distinct user_communities.name, ',') as user_communities,
             string_agg(distinct user_interests.name, ',') as user_interests,
+            string_agg(distinct user_communities.name, ',') as user_communities,
             string_agg(distinct user_skills.name, ',') as user_skills,
         count(projects.pid = projects.pid) as count
         from projects

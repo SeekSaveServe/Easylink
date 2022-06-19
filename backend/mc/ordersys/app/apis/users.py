@@ -46,8 +46,8 @@ class UserViewSet(viewsets.ModelViewSet):
             string_agg(distinct user_skills.name, ',') as user_skills,
             count(users.id = users.id) as count
         from users
-        inner join user_communities on users.id = user_communities.uid
         inner join user_skills on users.id = user_skills.uid
+        inner join user_communities on users.id = user_communities.uid
         inner join user_interests on users.id = user_interests.uid
         where users.username ~ '{searchInput}'
         and (user_communities.name in ({communities}) 

@@ -30,7 +30,7 @@ function RecommendationsList({
     console.log("Refreshing");
     let arr = [];
     setLoading(true);
-    if (user.filter === "Show All") {
+    if (user.filter == "Show All") {
       const len = Math.max(users.length, projects.length);
       //  Alternates between user and project
       for (let i = 0; i < len; i++) {
@@ -42,18 +42,20 @@ function RecommendationsList({
           arr.push(<ProfileCard info={projects[i]} />);
         }
       }
-    } else if (user.filter === "Show Users") {
+    } else if (user.filter == "Show Users") {
       for (let i = 0; i < users.length; i++) {
         arr.push(<ProfileCard info={users[i]} />);
       }
     } else {
-      // for (let i = 0; i < projects.length; i++) {
-      //   arr.push(<ProfileCard info={projects[i]} />);
-      // }
-      for (let i = 0; i < users.length; i++) {
-        arr.push(<ProfileCard info={users[i]} />);
+      for (let i = 0; i < projects.length; i++) {
+        arr.push(<ProfileCard info={projects[i]} />);
       }
     }
+
+    // TODO: Display a default no result page
+    // if (arr.length === 0) {
+
+    // }
 
     setLoading(false);
     // console.log(arr);

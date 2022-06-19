@@ -53,7 +53,7 @@ function ProfileCard({ info, isJoin }) {
   // comma sep string to array - for isJoin false
   const stringToArray = (string) => {
     // console.log("type check", typeof string, string);
-    string = string.trim();
+    string = string.toString().trim();
     if (!Boolean(string)) return []; // covers null,undefined, ""
 
     return string.split(",");
