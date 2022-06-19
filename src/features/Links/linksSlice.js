@@ -12,78 +12,109 @@ import { supabase } from '../../supabaseClient';
     // no need to make N+1 queries for tele/email vis
 
 
-// structure for one entity: { ...link } from links table
-    // type Link = {
-    //     s_n:bigint,
-    //     uid_sender:uuid,
-    //     uid_receiver:uuid,
-    //     pid_sender:bigint,
-    //     pid_receiver:bigint,
-    //     accepted:Boolean,
-    //     rejected:Boolean,
-    //     created_at:timestamp
-    // }
-
+// structure for one entity: { ...user/project, s_n: link.s_n, pending: Bool, established: Bool, rejected: Bool } from links table
+  // store link.s_n for the corresponding link to enable easy generation
 // Structure of entire slice:   
 //   {
 //       ids: [...],
-//       entities: [link_id: {...}, link_id: {...}, ],
+//       entities: [ id/pid: {...}, id/pid: {...}, ],
 //       loading: 'idle' | 'pending' | 'fulfilled' | 'error'
 //   }
 
 const linksAdapter = createEntityAdapter({
-    selectId: (link) => link.s_n,
-    // bigger dates first -> most recent first
-    // necessary because users and projects are queried separately
-    sortComparer: (a,b) => new Date(b.created_at) - new Date(a.created_at)
+    // use id if user, else use pid
+    selectId: (entity) => entity?.id ? entity.id : entity.pid,
 });
 
-// TODO: replace with call to Django API
-export const getFeedLinks = createAsyncThunk('links/getFeedLinks', async() => {
+// function : Link -> Promise<Augmented user/project object to insert into slice>, possibly {} 
+
+// Assumption: links must have either <prefix>_sender or <prefix>_receiever as current ID
+    // computed in getLinks already, pass down:
+        // prefix: "uid"/"pid"
+        // selectId: idObj.uid or idObj.pid 
+
+// Assumption: pending and rejected can't be True at same time
+// get object with user/project data of link + meta data of pending/established/rejected booleans
+    
+async function getAssociatedUser(link, prefix, selectId) {
+    const { accepted:linkAccepted, rejected: linkRejected } = link;
+
+    let pending = false; 
+    let rejected = false;
+    let established = false;
+    let reqObj = {}; // { id: xxx } or { pid: xxx } - to request linked user/proj from respective tables
+
+    // if I am receiever
+    if (link[`${prefix}_receiver`] == selectId) {
+        if (!linkAccepted && !linkRejected) pending = true;  // incoming, pending
+        else if (linkRejected) rejected = true; // incoming, rejected
+        else if (linkAccepted) established = true; // incoming, established
+
+        // only one can be non-null
+        reqObj = link["uid_sender"] ? { id: link["uid_sender"] } : { pid: link["pid_sender"] };
+    }
+
+    // I am sender
+    else {
+        if (linkAccepted) established = true;
+        else if (linkRejected) rejected = true;
+
+        // both false: we are currently not showing them anything for pending, outgoing links -> skip by checking
+        else return null;
+
+        reqObj = link["uid_receiver"] ? { id: link["uid_receiver"] } : { pid: link["pid_receiver"] };
+    }
+
+    // console.log("link", link);
+    // console.log("Req obj in Links", reqObj);
+    // console.log("P/E/R", { pending, established, rejected });
+    // console.log("---------------")
+
+    // request for the relevant user/proj and return that promise
+    return supabase
+        .from("id" in reqObj ? "users" : "projects")
+        .select('*')
+        .match(reqObj)
+        .maybeSingle()
+        .then((res) => { return { ...res.data, pending, established, rejected, s_n: link.s_n };});
+    
+}
+
+// idObj: { pid: ... } or { uid:...}
+export const getLinks = createAsyncThunk('links/getLinks', async(idObj) => {
+
     try {
-        const { data:projects, error } = await supabase 
-            .from('projects')
-            .select(`
-            *,
-            user_skills (
-                name
-            ),
-            user_interests(
-                name
-            ),
-            user_communities!fk_pid(
-                name
-            )
-            `)
-            .order('created_at', { ascending: false });
+        const isUser = "uid" in idObj;
+        const prefix = isUser ? "uid" : "pid";
+        const selectId = isUser ? idObj.uid : idObj.pid;
 
+        // get all links with current uid/pid as sender or receiver - all relevant links
+        const { data, error } = await supabase
+            .from('links')
+            .select('*')
+            .or(`${prefix}_sender.eq.${selectId},${prefix}_receiver.eq.${selectId}`)
+
+        
         if (error) throw error;
 
-        const { data:users, error:userErr } = await supabase
-                .from('users')
-                .select(`
-                *,
-                user_skills (
-                    name
-                ),
-                user_interests(
-                    name
-                ),
-                user_communities(
-                    name
-                )
-                `)
-                .limit()
-                .order('created_at', { ascending: false });
+        // get promises for all the links
+        const profilePromises = data.map((link) => getAssociatedUser(link, prefix, selectId));
+        // const values = Promise.all(profilePromises).then(values => { 
+        //     values = values.filter(x => x != null);
+        //     console.log("Promise vals", values);
 
-        if (error) throw error;
+        //     return values;
+        // });
 
-        return users.concat(projects);
-                
+        const linkedProfiles = await Promise.all(profilePromises);
+        return linkedProfiles.filter(x => x != null);
+
     } catch (error) {
-        console.log("Error in getFeedLinks", error);
-    } 
+        console.log("getLinks Err", error);
+    }
+
 });
+
 
 
 // Create slice
@@ -93,19 +124,72 @@ const linksSlice = createSlice({
         loading: 'idle'
     }),
     extraReducers: builder => {
-        builder
-        .addCase(getFeedLinks.pending, (state, action) => {
-            state.loading = 'pending';
+        builder.addCase(getLinks.pending, (state, action) => {
+            state.loading =  'pending'
         })
-        .addCase(getFeedLinks.rejected, (state, action) => {
-            state.loading = 'error';
+        .addCase(getLinks.rejected, (state, action) => {
+            state.loading = 'error'
         })
-        .addCase(getFeedLinks.fulfilled, (state, action) => {
-            state.loading = 'fulfilled';
-            linksAdapter.upsertMany(state, action.payload);
+        .addCase(getLinks.fulfilled, (state, action) => {
+            console.log("Links fulfilled payload:", action.payload);
+            // linksAdapter.upsertMany(state, action.payload)
         })
     }
 
 });
 
 export default linksSlice.reducer;
+
+
+
+
+
+
+
+
+// TODO: replace with call to Django API
+// export const getFeedLinks = createAsyncThunk('links/getFeedLinks', async() => {
+//     try {
+//         const { data:projects, error } = await supabase 
+//             .from('projects')
+//             .select(`
+//             *,
+//             user_skills (
+//                 name
+//             ),
+//             user_interests(
+//                 name
+//             ),
+//             user_communities!fk_pid(
+//                 name
+//             )
+//             `)
+//             .order('created_at', { ascending: false });
+
+//         if (error) throw error;
+
+//         const { data:users, error:userErr } = await supabase
+//                 .from('users')
+//                 .select(`
+//                 *,
+//                 user_skills (
+//                     name
+//                 ),
+//                 user_interests(
+//                     name
+//                 ),
+//                 user_communities(
+//                     name
+//                 )
+//                 `)
+//                 .limit()
+//                 .order('created_at', { ascending: false });
+
+//         if (error) throw error;
+
+//         return users.concat(projects);
+                
+//     } catch (error) {
+//         console.log("Error in getFeedLinks", error);
+//     } 
+// });

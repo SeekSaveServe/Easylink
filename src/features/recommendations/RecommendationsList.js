@@ -10,12 +10,14 @@ import { supabase } from "../../supabaseClient";
 import { useEffect, useState } from "react";
 import { CircularProgress } from '@mui/material';
 import { useDispatch } from "react-redux";
-import { getFeedLinks } from "../Links/linksSlice";
+import { getLinks } from "../Links/linksSlice";
+import useIdObject from "../../components/hooks/useIdObject";
 
 // For use specifically in Feed: pull from recommender API
 function RecommendationsList({ filterIndex }) {
     // const { FilterButton, btnIndex } = useProfileFilter();
     
+    const idObj = useIdObject();
     const [recommendations, setRecommendations] = useState([]);
     const [loading, setLoading] = useState(false);
     const dispatch = useDispatch();
@@ -82,10 +84,13 @@ function RecommendationsList({ filterIndex }) {
     }
 
     useEffect(() => {
-        getRecommendations();
-        dispatch(getFeedLinks());
-        
+        getRecommendations();     
+        // dispatch(getLinks(idObj));   
     }, [])
+
+    useEffect(() => {
+        dispatch(getLinks(idObj));
+    })
 
     function displayRecommendations() {
         if (loading) {

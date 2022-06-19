@@ -8,7 +8,9 @@ import Tag from "../../../components/Tag/Tag.jsx";
 import { AddLinkOutlined, RssFeedOutlined, CancelOutlined, Email, Telegram} from "@mui/icons-material";
 import { format, formatDistance } from "date-fns";
 import TooltipIconButton from "../../../components/TooltipIconButton/TooltipIconButton.jsx";
-
+import useIdObject from '../../../components/hooks/useIdObject';
+import { supabase } from "../../../supabaseClient.js";
+import { useState } from "react";
 // assumption: passed in data has structure
     // isJoin == true: { ...user/project, user_skills:[Tag], user_communities:[Tag], user_interests: [Tag] }
         // 2nd assumption: projects have field pid, user has no pid
@@ -26,6 +28,8 @@ function ProfileCard({ info, isJoin }) {
 
     const email = info.email;
     const telegram = info.telegram;
+
+    const idObj = useIdObject();
 
 
     // TODO: email/tele vis: "afterlink" || "everyone" -> calculate based on if viewing user has linked
@@ -46,6 +50,18 @@ function ProfileCard({ info, isJoin }) {
     const user_skills = isJoin ? info.user_skills.map(mapName) : stringToArray(info.user_skills);
     const user_interests = isJoin ? info.user_interests.map(mapName) : stringToArray(info.user_interests);
     const user_communities = isJoin ? info.user_communities.map(mapName) : stringToArray(info.user_communities);
+
+    const calculateHide = () => {
+        // whether current profile is project 
+        const currIsProject = "pid" in idObj;
+
+        return (isProject && currIsProject && idObj.pid == info.pid) || (!isProject && !currIsProject && idObj.uid == info.id)
+
+    }
+
+    const [hideButtons, setHideButtons] = useState(calculateHide());
+
+
 
     const wordsToTags = (tagStrings, bgColor, fontColor) => {
 
@@ -128,6 +144,42 @@ function ProfileCard({ info, isJoin }) {
     const timeAgo = () => {
         if (!info.created_at) return "";
         return formatDistance(new Date(info.created_at), new Date()) + " ago";
+    }  
+
+    // Button functions
+
+    // what happens if u1 -> u2, then u1 hasn't accepted and u2 -> u1 : must check for this case somewhere
+    const addLink = async() => {
+        try {
+            // cases: exists inside links (e.g rejected) vs doesn't exist inside links
+            const insideLinks = false;  // todo: replace with links slice check
+
+            // to insert right fields based on sender / receiver
+            const matchObj = {
+                ["uid" in idObj ? "uid_sender" : "pid_sender"] : "uid" in idObj ? idObj.uid : idObj.pid,
+                [isProject ? "pid_receiver" : "uid_receiver"] : isProject ? info.pid : info.id
+            }
+
+            // console.log(matchObj);
+
+            // do insert
+            if (!insideLinks) {
+                const { data, error } = await supabase
+                    .from('links')
+                    .insert([
+                        {
+                        ...matchObj,
+                        accepted: false,
+                        rejected: false
+                        }
+                    ])
+                
+                if (error) throw error;
+                // console.log("Link succ", data);
+            }
+        } catch (error) {
+            console.log("Link err", error);
+        }
     }
 
 
@@ -156,7 +208,7 @@ function ProfileCard({ info, isJoin }) {
 
 
                         <CardActions>
-                            <Stack direction="row" spacing={2} sx={{ ml:-1, mt: 1, width: "100%", alignItems: "center"}}>
+                            <Stack direction="row" spacing={2} sx={{ ml:0, mt: 1, width: "100%", alignItems: "center", display: hideButtons ? 'none' : ''}}>
                                 <Typography 
                                     variant="subtitle1" 
                                     className={styles.tag} 
@@ -167,7 +219,7 @@ function ProfileCard({ info, isJoin }) {
                                 {/* Icon Buttons */}
 
                                 <div style={{display: "inline-flex", gap:"0.4rem"}}>
-                                    <TooltipIconButton icon={<AddLinkOutlined color="primary" sx={{fontSize:30}}/>} title="Link" />
+                                    <TooltipIconButton icon={<AddLinkOutlined color="primary" sx={{fontSize:30}}/>} title="Link" onClick={addLink} />
                                     { isProject ? <TooltipIconButton icon={<RssFeedOutlined sx={{ color: "var(--secondary)", fontSize:30 }} />} title={"Follow"} /> : <></> }
                                     <TooltipIconButton icon={<CancelOutlined sx={{fontSize:30, color: "error.main"}}/>} title="Not for me" />
                                 </div>

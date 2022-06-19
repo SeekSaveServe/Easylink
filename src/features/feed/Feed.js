@@ -17,7 +17,7 @@ import { FilterList, Settings } from "@mui/icons-material";
 
 function Feed() {
   const userProfile = useSelector((state) => state.user);
-  
+
   const [typeIndex, setTypeIndex] = useState(0); // 0 - Reccs, 1 - Posts
 
   const [filterIndex, setFilterIndex] = useState(0); // for FilterMenu
