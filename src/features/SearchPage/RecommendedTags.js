@@ -77,7 +77,6 @@ function RecommendedTags({
   }, []);
 
   const updateFormState = () => {
-    console.log(filter);
     dispatch(
       update({
         tags: [selectedSkills, selectedInterests, selectedCommunities],

@@ -30,7 +30,8 @@ function RecommendationsList({
     console.log("Refreshing");
     let arr = [];
     setLoading(true);
-    if (user.filter == "Show All") {
+    console.log(user.filter);
+    if (user.searchFilter === "Show All") {
       const len = Math.max(users.length, projects.length);
       //  Alternates between user and project
       for (let i = 0; i < len; i++) {
@@ -42,7 +43,7 @@ function RecommendationsList({
           arr.push(<ProfileCard info={projects[i]} />);
         }
       }
-    } else if (user.filter == "Show Users") {
+    } else if (user.searchFilter === "Show Users") {
       for (let i = 0; i < users.length; i++) {
         arr.push(<ProfileCard info={users[i]} />);
       }
