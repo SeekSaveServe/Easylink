@@ -43,7 +43,10 @@ function RecommendedTags({
 
   // for radial buttons
   const [filter, setFilter] = useState("Show All");
-
+  // Updates form state once upon render
+  useEffect(() => {
+    updateFormState();
+  }, []);
   // update field with key = name attribute, to value = value attribute
   const radioChange = (evt) => {
     setFilter(evt.target.value);
@@ -85,7 +88,16 @@ function RecommendedTags({
     const skil = !selectedSkills.length ? skills : selectedSkills;
     const int = !selectedInterests.length ? interests : selectedInterests;
 
-    fetchData(setUsers, "user", user, comm, skil, int, refresh, setRefresh);
+    fetchData(
+      setUsers,
+      "user",
+      user,
+      comm,
+      skil,
+      int,
+      refresh[0],
+      setRefresh[0]
+    );
     fetchData(
       setProjects,
       "project",
@@ -93,8 +105,8 @@ function RecommendedTags({
       comm,
       skil,
       int,
-      refresh,
-      setRefresh
+      refresh[1],
+      setRefresh[1]
     );
   }, [communities, fetch]);
 
@@ -116,7 +128,16 @@ function RecommendedTags({
     const skil = !selectedSkills.length ? skills : selectedSkills;
     const int = !selectedInterests.length ? interests : selectedInterests;
 
-    fetchData(setUsers, "user", user, comm, skil, int, refresh, setRefresh);
+    fetchData(
+      setUsers,
+      "user",
+      user,
+      comm,
+      skil,
+      int,
+      refresh[0],
+      setRefresh[0]
+    );
     fetchData(
       setProjects,
       "project",
@@ -124,8 +145,8 @@ function RecommendedTags({
       comm,
       skil,
       int,
-      refresh,
-      setRefresh
+      refresh[1],
+      setRefresh[1]
     );
   }
 

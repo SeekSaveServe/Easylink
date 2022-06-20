@@ -27,11 +27,20 @@ function RecommendationsList({
   const [recommendations, setRecommendations] = useState([]);
   const user = useSelector((state) => state.user);
   function showRecommendations() {
-    console.log("Refreshing");
+    // console.log("Refreshing");
     let arr = [];
     setLoading(true);
-    // console.log(user.filter);
-    if (user.searchFilter === "Show All") {
+    // console.log("filter: ", user.searchFilter);
+    if (user.searchFilter === "Show Projects") {
+      for (let i = 0; i < projects.length; i++) {
+        arr.push(<ProfileCard info={projects[i]} />);
+      }
+    } else if (user.searchFilter === "Show Users") {
+      for (let i = 0; i < users.length; i++) {
+        arr.push(<ProfileCard info={users[i]} />);
+      }
+    } else {
+      // console.log("IAM HERE ");
       const len = Math.max(users.length, projects.length);
       //  Alternates between user and project
       for (let i = 0; i < len; i++) {
@@ -43,20 +52,12 @@ function RecommendationsList({
           arr.push(<ProfileCard info={projects[i]} />);
         }
       }
-    } else if (user.searchFilter === "Show Users") {
-      for (let i = 0; i < users.length; i++) {
-        arr.push(<ProfileCard info={users[i]} />);
-      }
-    } else {
-      for (let i = 0; i < projects.length; i++) {
-        arr.push(<ProfileCard info={projects[i]} />);
-      }
     }
     // TODO: Display a default no result page
     // if (arr.length === 0) {
 
     // }
-    console.log(arr);
+    // console.log(arr);
     setLoading(false);
     setRecommendations(arr);
   }

@@ -12,6 +12,7 @@ import fetchData from "./FetchData";
 export default function SearchPage() {
   // Cause the results to refresh
   const [refresh, setRefresh] = useState(true);
+  const [refresh2, setRefresh2] = useState(true);
   const [fetch, setFetch] = useState(true);
   const [loading, setLoading] = useState(false);
   // Data retrieved from search
@@ -38,10 +39,10 @@ export default function SearchPage() {
         />
         <RecommendedTags
           fetch={fetch}
-          setRefresh={setRefresh}
+          setRefresh={[setRefresh, setRefresh2]}
           setLoading={setLoading}
           loading={loading}
-          refresh={refresh}
+          refresh={[refresh, refresh2]}
           setUsers={setUsers}
           setProjects={setProjects}
         />
