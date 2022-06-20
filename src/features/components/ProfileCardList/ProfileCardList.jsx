@@ -4,6 +4,7 @@ import BasicButton from "../../../components/BasicButton";
 import { Center } from "@chakra-ui/react";
 import { useState } from "react";
 import useProfileFilter from "./useProfileFilter";
+import { Typography } from "@mui/material";
 
 const map = {
     0: "Users and projects",
@@ -27,7 +28,7 @@ export function CardList({ data, btnIndex, isJoin }) {
 
     // TODO: replace with actual data etc
     const showList = () => {
-        return data.map((datum, idx) => {
+        return data.length == 0 ? <Center><Typography variant="h5" color="gray" sx={{mt:2}}>Nothing to show</Typography> </Center> : data.map((datum, idx) => {
             return filterMap[btnIndex](datum) ? <ProfileCard key={idx} info={datum} isJoin={isJoin} /> : <></>;
         });
     }

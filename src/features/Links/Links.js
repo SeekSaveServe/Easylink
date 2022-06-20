@@ -75,31 +75,41 @@ export const fakeLinksData = [
   
 ]
 
+// pending, established, rejected
+const filterMap = {
+  0: (link) => link.pending,
+  1: (link) => link.established,
+  2: (link) => link.rejected
+}
 
 function Projects() {
   const [typeIndex, setTypeIndex] = useState(0); // 0: Pending, 1: Established, 2: Rejected
   const typeItems = ["Pending", "Established", "Rejected"];
   const [filterIndex, setFilterIndex] = useState(0); // 0: Users and projects, 1: Users only, 2: Projects only
+  const user = useSelector(state => state.user);
 
   const dispatch = useDispatch();
   const idObj = useIdObject();
 
+  // for some reason, idObj as dependency causes inf loop but user as dependency re-runs properloy
+    // IMPORTANT for links to work
   useUpdateEffect(() => {
     console.log("Runn use eff");
     dispatch(getLinks(idObj));
-  }, [])
+  }, [user])
 
-  const links = useSelector(selectAllLinks);
+  let links = useSelector(selectAllLinks);
+  links = links.filter(filterMap[typeIndex]);
+
   const loading = useSelector(state => state.links.loading);
-  console.log("Links", links);
+  
 
   const showLinks = () => {
     switch (loading) {
       case 'pending':
         return <Center><CircularProgress size={40} sx={{mt:2}}/></Center>;
       case "fulfilled":
-        return links.length == 0 ? <Center><Typography variant="h5" color="gray" sx={{mt:2}}>Nothing to show</Typography> </Center>
-          : <CardList data={links} isJoin={true} btnIndex={filterIndex}/>
+        return <CardList data={links} isJoin={true} btnIndex={filterIndex}/>
       default:
         <Typography variant="h4" color="gray">Idle/Error</Typography> 
       
