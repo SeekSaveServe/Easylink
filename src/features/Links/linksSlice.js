@@ -12,7 +12,7 @@ import { supabase } from '../../supabaseClient';
     // no need to make N+1 queries for tele/email vis
 
 
-// structure for one entity: { ...user/project, s_n: link.s_n, pending: Bool, established: Bool, rejected: Bool } from links table
+// structure for one entity: { ...user/project, s_n: link.s_n, pending: Bool, established: Bool, rejected: Bool, incoming: Bool} from links table
   // store link.s_n for the corresponding link to enable easy generation
 // Structure of entire slice:   
 //   {
@@ -68,6 +68,7 @@ async function getAssociatedUser(link, prefix, selectId) {
     let pending = false; 
     let rejected = false;
     let established = false;
+    let incoming = false;
     let reqObj = {}; // { id: xxx } or { pid: xxx } - to request linked user/proj from respective tables
 
     // if I am receiever
@@ -75,18 +76,17 @@ async function getAssociatedUser(link, prefix, selectId) {
         if (!linkAccepted && !linkRejected) pending = true;  // incoming, pending
         else if (linkRejected) rejected = true; // incoming, rejected
         else if (linkAccepted) established = true; // incoming, established
-
+        
         // only one can be non-null
         reqObj = link["uid_sender"] ? { id: link["uid_sender"] } : { pid: link["pid_sender"] };
+        incoming = true;
     }
 
     // I am sender
     else {
-        if (linkAccepted) established = true;
-        else if (linkRejected) rejected = true;
-
-        // both false: we are currently not showing them anything for pending, outgoing links -> skip by checking
-        else return null;
+        if (!linkAccepted && !linkRejected) pending = true; // pending outgoing
+        else if (linkAccepted) established = true; // established outgoing
+        else if (linkRejected) rejected = true; // rejected outgoing
 
         reqObj = link["uid_receiver"] ? { id: link["uid_receiver"] } : { pid: link["pid_receiver"] };
     }
@@ -102,7 +102,7 @@ async function getAssociatedUser(link, prefix, selectId) {
         .select("id" in reqObj ? userReq : projReq)
         .match(reqObj)
         .maybeSingle()
-        .then((res) => { return { ...res.data, pending, established, rejected, s_n: link.s_n };});
+        .then((res) => { return { ...res.data, pending, established, rejected, s_n: link.s_n, incoming };});
     
 }
 

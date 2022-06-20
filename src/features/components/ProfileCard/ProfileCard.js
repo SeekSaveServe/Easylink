@@ -11,6 +11,7 @@ import TooltipIconButton from "../../../components/TooltipIconButton/TooltipIcon
 import useIdObject from '../../../components/hooks/useIdObject';
 import { supabase } from "../../../supabaseClient.js";
 import { useState } from "react";
+import { selectLinkById } from "../../Links/linksSlice.js";
 // assumption: passed in data has structure
     // isJoin == true: { ...user/project, user_skills:[Tag], user_communities:[Tag], user_interests: [Tag] }
         // 2nd assumption: projects have field pid, user has no pid
@@ -20,12 +21,19 @@ import { useState } from "react";
     // isJoin == false: { ...user/project, user_skills:"...", user_communities:"...", user_interests: "..."}
         // where "..." is null, "", "singleton" or comma separated string
 
+    // when inside Links page: it also has additional fields of { pending:Bool, established:Bool, rejected:Bool, s_n: int8}
+        // where s_n is the link.s_n primary key
+        // can check if s_n is inside to know if i am inside links page
+
     
 function ProfileCard({ info, isJoin }) {
     // let { isProject, info } = props;
 
     const isProject = "pid" in info;
-
+    // get link in slice if present
+    const linkinSlice = useSelector(state => selectLinkById(state, isProject ? info.pid : info.id));
+    const isLink = linkinSlice != undefined;
+    
     const email = info.email;
     const telegram = info.telegram;
 
@@ -194,12 +202,16 @@ function ProfileCard({ info, isJoin }) {
                         avatar={<LinkableAvatar src={info.avatar_url} imgProps={{style: {objectFit: "stretch"}}}/>  } 
                         sx={{ml:0}} 
                     />
+
+                    { isLink ? 
+                        <Tag color={"var(--primary)"} fontColor={"white"} sx={{fontSize: "0.7rem", alignSelf: "flex-start", mt:3}}>{linkinSlice.incoming ? "Incoming" : "Outgoing"}</Tag>
+                        : <></> }
+
                     
                 </Stack>
 
                     <CardContent sx={{mt:0, width:"100%"}}>
                        {info.title ? <Typography variant="h5" sx={{fontSize: "1.4rem"}} gutterBottom> {info.title}</Typography> : <></> }
-
                         <Typography variant="body1" color="text.secondary" sx={{fontSize:"1rem", width:"100%"}}> 
                         <Bio/>
                         { interests() } {" "} { skills() }  </Typography>
