@@ -78,9 +78,11 @@ function ProfileCard({ info, isJoin }) {
     // pending, outgoing links: change not for me to a delete button
     const showDelete = isLink && linkinSlice.pending && !linkinSlice.incoming
 
+    // (linkinSlice?.established || (linkinSlice?.rejected && linkinSlice?.incoming) 
+
     // rejected, outgoing (I sent, and got rejected) -> don't show link and reject btns
-    showLink = showLink && !(linkinSlice?.rejected && !linkinSlice?.incoming)
-    showReject = showReject && !(linkinSlice?.rejected && !linkinSlice?.incoming)
+    showLink = showLink && !(linkinSlice?.rejected && !linkinSlice?.incoming) && !linkinSlice?.established;
+    showReject = showReject && !(linkinSlice?.rejected) && !linkinSlice?.established;
 
 
     // Utility functions
@@ -307,8 +309,8 @@ function ProfileCard({ info, isJoin }) {
                         <CardActions>
                             {/* hide buttons if card is self, or if link is established */}
 
-                            { !loading ? <Stack direction="row" spacing={2} 
-                                sx={{ ml:-1, mt: 1, width: "100%", alignItems: "center", display: (linkinSlice?.established || hideButtons || (linkinSlice?.rejected && linkinSlice?.incoming) ) ? 'none' : ''}}>
+                            <Stack direction="row" spacing={2} 
+                                sx={{ ml:-1, mt: 1, width: "100%", alignItems: "center", }}>
                                 <Typography 
                                     variant="subtitle1" 
                                     className={styles.tag} 
@@ -318,14 +320,16 @@ function ProfileCard({ info, isJoin }) {
 
                                 {/* Icon Buttons */}
 
-                                <div style={{display: "inline-flex", gap:"0.4rem"}}>
+                                {!loading ? <div style={{display: "inline-flex", gap:"0.4rem", display: (hideButtons) ? 'none' : ''}}>
                                     { showLink && !showDelete? <TooltipIconButton icon={<AddLinkOutlined color="primary" sx={{fontSize:30}}/>} title="Link" onClick={addLink} /> : <></> }
                                     { isProject && showFollow ? <TooltipIconButton icon={<RssFeedOutlined sx={{ color: "var(--secondary)", fontSize:30 }} />} title={"Follow"} /> : <></> }
                                     { showReject ? <TooltipIconButton 
                                         icon={showDelete ? <DeleteOutlined sx={{fontSize:30, color: "error.main"}}/> : <CancelOutlined sx={{fontSize:30, color: "error.main"}}/>} 
                                         title={showDelete ? "Delete" : "Not for me"} onClick={rejectLink}/> : <></> }
                                 </div>
-                            </Stack> : <CircularProgress size={30} />}
+                             : <CircularProgress size={30} /> }
+
+                             </Stack>
                             
                             {/* rejected, incoming (someone else sent, you rejected) -> show rejected text */}
                             { (linkinSlice?.rejected && linkinSlice?.incoming) ?  <Tag color="error.main" fontColor="white" sx={{mr:4, mb:0.5}}>Rejected</Tag> : <></> }
