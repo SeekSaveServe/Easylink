@@ -5,7 +5,7 @@ import { useSelector } from "react-redux";
 import { getUser } from "../../user/userSlice.js";
 import BasicButton from "../../../components/BasicButton/BasicButton.js";
 import Tag from "../../../components/Tag/Tag.jsx";
-import { AddLinkOutlined, RssFeedOutlined, CancelOutlined, Email, Telegram} from "@mui/icons-material";
+import { AddLinkOutlined, RssFeedOutlined, CancelOutlined, Email, Telegram, DeleteOutlined} from "@mui/icons-material";
 import { format, formatDistance } from "date-fns";
 import TooltipIconButton from "../../../components/TooltipIconButton/TooltipIconButton.jsx";
 import useIdObject from '../../../components/hooks/useIdObject';
@@ -33,7 +33,7 @@ function ProfileCard({ info, isJoin }) {
     // get link in slice if present
     const linkinSlice = useSelector(state => selectLinkById(state, isProject ? info.pid : info.id));
     const isLink = linkinSlice != undefined;
-    
+
     const email = info.email;
     const telegram = info.telegram;
 
@@ -69,7 +69,14 @@ function ProfileCard({ info, isJoin }) {
 
     const [hideButtons, setHideButtons] = useState(calculateHide());
 
+    const [showLink, setShowLink] = useState(true);
+    const [showFollow, setShowFollow] = useState(true);
+    const [showReject, setShowReject] = useState(true);
+    // pending, outgoing links: change not for me to a delete button
+    const showDelete = isLink && linkinSlice.pending && !linkinSlice.incoming
 
+
+    // Utility functions
 
     const wordsToTags = (tagStrings, bgColor, fontColor) => {
 
@@ -204,7 +211,7 @@ function ProfileCard({ info, isJoin }) {
                     />
 
                     { isLink ? 
-                        <Tag color={"var(--primary)"} fontColor={"white"} sx={{fontSize: "0.7rem", alignSelf: "flex-start", mt:3}}>{linkinSlice.incoming ? "Incoming" : "Outgoing"}</Tag>
+                        <Tag color={linkinSlice.incoming ? "var(--secondary)" : "var(--primary)"} fontColor={"white"} sx={{fontSize: "0.7rem", alignSelf: "flex-start", mt:3}}>{linkinSlice.incoming ? "Incoming" : "Outgoing"}</Tag>
                         : <></> }
 
                     
@@ -219,7 +226,7 @@ function ProfileCard({ info, isJoin }) {
                         { info.user_communities.length > 0 ? <Typography variant="body1" color="text.secondary" sx={{mt:2}}>Communities: {communities()} </Typography> : <></> }
 
 
-                        <CardActions>
+                        <CardActions sx={{display: linkinSlice?.established ? 'none' : ''}}>
                             <Stack direction="row" spacing={2} sx={{ ml:-1, mt: 1, width: "100%", alignItems: "center", display: hideButtons ? 'none' : ''}}>
                                 <Typography 
                                     variant="subtitle1" 
@@ -231,9 +238,11 @@ function ProfileCard({ info, isJoin }) {
                                 {/* Icon Buttons */}
 
                                 <div style={{display: "inline-flex", gap:"0.4rem"}}>
-                                    <TooltipIconButton icon={<AddLinkOutlined color="primary" sx={{fontSize:30}}/>} title="Link" onClick={addLink} />
-                                    { isProject ? <TooltipIconButton icon={<RssFeedOutlined sx={{ color: "var(--secondary)", fontSize:30 }} />} title={"Follow"} /> : <></> }
-                                    <TooltipIconButton icon={<CancelOutlined sx={{fontSize:30, color: "error.main"}}/>} title="Not for me" />
+                                    { showLink && !showDelete? <TooltipIconButton icon={<AddLinkOutlined color="primary" sx={{fontSize:30}}/>} title="Link" onClick={addLink} /> : <></> }
+                                    { isProject && showFollow ? <TooltipIconButton icon={<RssFeedOutlined sx={{ color: "var(--secondary)", fontSize:30 }} />} title={"Follow"} /> : <></> }
+                                    { showReject ? <TooltipIconButton 
+                                        icon={showDelete ? <DeleteOutlined sx={{fontSize:30, color: "error.main"}}/> : <CancelOutlined sx={{fontSize:30, color: "error.main"}}/>} 
+                                        title={showDelete ? "Delete" : "Not for me"} /> : <></> }
                                 </div>
                             </Stack>
 

@@ -74,7 +74,7 @@ async function getAssociatedUser(link, prefix, selectId) {
     // if I am receiever
     if (link[`${prefix}_receiver`] == selectId) {
         if (!linkAccepted && !linkRejected) pending = true;  // incoming, pending
-        else if (linkRejected) rejected = true; // incoming, rejected
+        else if (linkRejected) return null; // incoming, rejected - don't show the card
         else if (linkAccepted) established = true; // incoming, established
         
         // only one can be non-null
