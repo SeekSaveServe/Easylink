@@ -4,7 +4,9 @@ export default async function fetchData(
   user,
   communities,
   skills,
-  interests
+  interests,
+  refresh,
+  setRefresh = null
 ) {
   // changes the array to a suitable form to be
   function formatArray(arr) {
@@ -20,7 +22,7 @@ export default async function fetchData(
   }
 
   async function fetchUser() {
-    // console.log(formatUrl());
+    console.log(formatUrl());
     try {
       // console.log(formatUrl());
       await fetch(formatUrl(), {
@@ -29,7 +31,8 @@ export default async function fetchData(
         },
       })
         .then((a) => a.json())
-        .then((data) => setData(data));
+        .then((data) => setData(data))
+        .then(() => (setRefresh ? setRefresh(!refresh) : void 0));
     } catch (e) {
       console.log(e);
     }

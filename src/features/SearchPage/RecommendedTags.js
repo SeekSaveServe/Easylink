@@ -8,6 +8,7 @@ import {
   FormControlLabel,
   Radio,
   RadioGroup,
+  setRef,
 } from "@mui/material";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -84,9 +85,17 @@ function RecommendedTags({
     const skil = !selectedSkills.length ? skills : selectedSkills;
     const int = !selectedInterests.length ? interests : selectedInterests;
 
-    fetchData(setUsers, "user", user, comm, skil, int);
-    fetchData(setProjects, "project", user, comm, skil, int);
-    setRefresh(!refresh); // triggers a refresh
+    fetchData(setUsers, "user", user, comm, skil, int, refresh, setRefresh);
+    fetchData(
+      setProjects,
+      "project",
+      user,
+      comm,
+      skil,
+      int,
+      refresh,
+      setRefresh
+    );
   }, [communities, fetch]);
 
   const updateFormState = () => {
@@ -107,9 +116,17 @@ function RecommendedTags({
     const skil = !selectedSkills.length ? skills : selectedSkills;
     const int = !selectedInterests.length ? interests : selectedInterests;
 
-    fetchData(setUsers, "user", user, comm, skil, int);
-    fetchData(setProjects, "project", user, comm, skil, int);
-    setRefresh(!refresh); // triggers a refresh
+    fetchData(setUsers, "user", user, comm, skil, int, refresh, setRefresh);
+    fetchData(
+      setProjects,
+      "project",
+      user,
+      comm,
+      skil,
+      int,
+      refresh,
+      setRefresh
+    );
   }
 
   return (
