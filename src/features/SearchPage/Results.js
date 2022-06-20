@@ -22,7 +22,7 @@ function RecommendationsList({
   // Triggers when users, refresh and projects have been updated
   useEffect(() => {
     showRecommendations();
-  }, [refresh, users, projects]);
+  }, [refresh]);
 
   const [recommendations, setRecommendations] = useState([]);
   const user = useSelector((state) => state.user);
@@ -30,13 +30,13 @@ function RecommendationsList({
     console.log("Refreshing");
     let arr = [];
     setLoading(true);
-    console.log(user.filter);
+    // console.log(user.filter);
     if (user.searchFilter === "Show All") {
       const len = Math.max(users.length, projects.length);
       //  Alternates between user and project
       for (let i = 0; i < len; i++) {
         if (i < users.length) {
-          console.log(users[i]);
+          // console.log(users[i]);
           arr.push(<ProfileCard info={users[i]} />);
         }
         if (i < projects.length) {
@@ -52,7 +52,6 @@ function RecommendationsList({
         arr.push(<ProfileCard info={projects[i]} />);
       }
     }
-
     // TODO: Display a default no result page
     // if (arr.length === 0) {
 

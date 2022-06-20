@@ -7,6 +7,7 @@ import BasicNavBar from "../../components/BasicNavBar/BasicNavBar";
 import RecommendationsList from "./Results";
 import RecommendedTags from "./RecommendedTags";
 import { useEffect, useState } from "react";
+import fetchData from "./FetchData";
 
 export default function SearchPage() {
   // Cause the results to refresh
@@ -15,10 +16,12 @@ export default function SearchPage() {
   // Data retrieved from search
   const [projects, setProjects] = useState([]);
   const [users, setUsers] = useState([]);
-  // console.log("sp", users);
+  const user = useSelector((state) => state.user);
+  // console.log(users, projects, "hi");
+
   return (
     <>
-      <BasicNavBar />
+      <BasicNavBar searchInput={user.search} />
 
       <Box className={styles.content}>
         <RecommendationsList

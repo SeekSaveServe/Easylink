@@ -1,5 +1,5 @@
 import { styled, alpha, InputBase } from "@mui/material";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import SearchIcon from "@mui/icons-material/Search";
 import { update } from "../../features/user/userSlice";
 import { Navigate, useNavigate } from "react-router-dom";
@@ -45,11 +45,12 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
   },
 }));
 
-export default function BasicSearchBar() {
+export default function BasicSearchBar({ searchInput = "Search..." }) {
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const [listenerOn, setListenerOn] = useState(false);
+  const user = useSelector((state) => state.user);
 
   const handleChange = () => {
     const input = document.getElementById("searchBar");
@@ -61,9 +62,12 @@ export default function BasicSearchBar() {
           // redirect to search page and update the userslice
           try {
             setLoading(true);
-            dispatch(update({ search: input.value }));
+            dispatch(
+              update({
+                search: input.value,
+              })
+            );
             navigate("/Search", { replace: true });
-            // TODO: Add Backend API connector here
           } catch (error) {
             alert(alert(error.error_decription || error.message));
           } finally {
@@ -81,7 +85,7 @@ export default function BasicSearchBar() {
       </SearchIconWrapper>
       <StyledInputBase
         id="searchBar"
-        placeholder="Search…"
+        placeholder={searchInput}
         inputProps={{ "aria-label": "search" }}
         onChange={handleChange}
       />

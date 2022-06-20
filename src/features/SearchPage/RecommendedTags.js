@@ -76,6 +76,18 @@ function RecommendedTags({
     }
   }, []);
 
+  useEffect(() => {
+    const comm = !selectedCommunities.length
+      ? communities
+      : selectedCommunities;
+    const skil = !selectedSkills.length ? skills : selectedSkills;
+    const int = !selectedInterests.length ? interests : selectedInterests;
+
+    fetchData(setUsers, "user", user, comm, skil, int);
+    fetchData(setProjects, "project", user, comm, skil, int);
+    setRefresh(!refresh); // triggers a refresh
+  }, [communities]);
+
   const updateFormState = () => {
     dispatch(
       update({
