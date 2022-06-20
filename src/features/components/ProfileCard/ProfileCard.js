@@ -1,7 +1,7 @@
-import { Card, CardHeader, CardContent, Typography, Box, CardActions, Stack, CardMedia, Divider, ButtonGroup, Button } from "@mui/material";
+import { Card, CardHeader, CardContent, Typography, Box, CardActions, Stack, CardMedia, Divider, ButtonGroup, Button, CircularProgress } from "@mui/material";
 import LinkableAvatar from "../../../components/LinkableAvatar.js";
 import styles from './ProfileCard.module.css';
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { getUser } from "../../user/userSlice.js";
 import BasicButton from "../../../components/BasicButton/BasicButton.js";
 import Tag from "../../../components/Tag/Tag.jsx";
@@ -12,6 +12,7 @@ import useIdObject from '../../../components/hooks/useIdObject';
 import { supabase } from "../../../supabaseClient.js";
 import { useState } from "react";
 import { selectLinkById } from "../../Links/linksSlice.js";
+import { getLinks } from "../../Links/linksSlice.js";
 // assumption: passed in data has structure
     // isJoin == true: { ...user/project, user_skills:[Tag], user_communities:[Tag], user_interests: [Tag] }
         // 2nd assumption: projects have field pid, user has no pid
@@ -27,7 +28,7 @@ import { selectLinkById } from "../../Links/linksSlice.js";
 
     
 function ProfileCard({ info, isJoin }) {
-    // let { isProject, info } = props;
+    const dispatch = useDispatch();
 
     const isProject = "pid" in info;
     // get link in slice if present
@@ -39,6 +40,8 @@ function ProfileCard({ info, isJoin }) {
 
     const idObj = useIdObject();
 
+    // for card actions
+    const [loading, setLoading] = useState(false);
 
     // TODO: email/tele vis: "afterlink" || "everyone" -> calculate based on if viewing user has linked
     const showEmail = Boolean(info.email);
@@ -162,10 +165,9 @@ function ProfileCard({ info, isJoin }) {
     }  
 
     // Button functions
-
-    // what happens if u1 -> u2, then u1 hasn't accepted and u2 -> u1 : must check for this case somewhere
     const addLink = async() => {
         try {
+            setLoading(true);
             // cases: exists inside links (e.g rejected) vs doesn't exist inside links
             const insideLinks = false;  // todo: replace with links slice check
 
@@ -178,7 +180,7 @@ function ProfileCard({ info, isJoin }) {
             // console.log(matchObj);
 
             // do insert
-            if (!insideLinks) {
+            if (!isLink) {
                 const { data, error } = await supabase
                     .from('links')
                     .insert([
@@ -191,9 +193,23 @@ function ProfileCard({ info, isJoin }) {
                 
                 if (error) throw error;
                 // console.log("Link succ", data);
+
+            } else {
+                // already inside links: this card sent a request to us -> accept by updating row
+                const { data: updateData, error:updateErr } = await supabase
+                    .from('links')
+                    .update({ accepted: true, rejected: false })
+                    .match({ s_n: linkinSlice.s_n })
+                
+                if (updateErr) throw updateErr;
+                console.log("Link update succ", updateData);
+                dispatch(getLinks(idObj));
+
             }
         } catch (error) {
             console.log("Link err", error);
+        } finally {
+            setLoading(false);
         }
     }
 
@@ -226,8 +242,10 @@ function ProfileCard({ info, isJoin }) {
                         { info.user_communities.length > 0 ? <Typography variant="body1" color="text.secondary" sx={{mt:2}}>Communities: {communities()} </Typography> : <></> }
 
 
-                        <CardActions sx={{display: linkinSlice?.established ? 'none' : ''}}>
-                            <Stack direction="row" spacing={2} sx={{ ml:-1, mt: 1, width: "100%", alignItems: "center", display: hideButtons ? 'none' : ''}}>
+                        <CardActions>
+                            {/* hide buttons if card is self, or if link is established */}
+
+                            { !loading ? <Stack direction="row" spacing={2} sx={{ ml:-1, mt: 1, width: "100%", alignItems: "center", display: (linkinSlice?.established || hideButtons) ? 'none' : ''}}>
                                 <Typography 
                                     variant="subtitle1" 
                                     className={styles.tag} 
@@ -244,10 +262,10 @@ function ProfileCard({ info, isJoin }) {
                                         icon={showDelete ? <DeleteOutlined sx={{fontSize:30, color: "error.main"}}/> : <CancelOutlined sx={{fontSize:30, color: "error.main"}}/>} 
                                         title={showDelete ? "Delete" : "Not for me"} /> : <></> }
                                 </div>
-                            </Stack>
+                            </Stack> : <CircularProgress size={30} />}
 
                             {/* Email, Tele */}
-                            <div>
+                            <div style={{marginLeft: "-8px"}}>
                                 { emailDisplay() }
                                 { teleDisplay() }
                             </div>
