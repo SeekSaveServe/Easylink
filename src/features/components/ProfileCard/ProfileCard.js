@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { getUser } from "../../user/userSlice.js";
 import BasicButton from "../../../components/BasicButton/BasicButton.js";
 import Tag from "../../../components/Tag/Tag.jsx";
-import { AddLinkOutlined, RssFeedOutlined, CancelOutlined, Email, Telegram, DeleteOutlined} from "@mui/icons-material";
+import { AddLinkOutlined, RssFeedOutlined, CancelOutlined, Email, Telegram, DeleteOutlined, FamilyRestroomRounded} from "@mui/icons-material";
 import { format, formatDistance } from "date-fns";
 import TooltipIconButton from "../../../components/TooltipIconButton/TooltipIconButton.jsx";
 import useIdObject from '../../../components/hooks/useIdObject';
@@ -72,11 +72,15 @@ function ProfileCard({ info, isJoin }) {
 
     const [hideButtons, setHideButtons] = useState(calculateHide());
 
-    const [showLink, setShowLink] = useState(true);
-    const [showFollow, setShowFollow] = useState(true);
-    const [showReject, setShowReject] = useState(true);
+    let [showLink, setShowLink] = useState(true);
+    let [showFollow, setShowFollow] = useState(true);
+    let [showReject, setShowReject] = useState(true);
     // pending, outgoing links: change not for me to a delete button
     const showDelete = isLink && linkinSlice.pending && !linkinSlice.incoming
+
+    // rejected, outgoing (I sent, and got rejected) -> don't show link and reject btns
+    showLink = showLink && !(linkinSlice?.rejected && !linkinSlice?.incoming)
+    showReject = showReject && !(linkinSlice?.rejected && !linkinSlice?.incoming)
 
 
     // Utility functions
@@ -163,21 +167,20 @@ function ProfileCard({ info, isJoin }) {
         if (!info.created_at) return "";
         return formatDistance(new Date(info.created_at), new Date()) + " ago";
     }  
+    
+    // Button functions// to insert right fields based on sender / receiver
 
-    // Button functions
+    // to insert right fields based on sender / receiver
+    const matchObj = {
+        ["uid" in idObj ? "uid_sender" : "pid_sender"] : "uid" in idObj ? idObj.uid : idObj.pid,
+        [isProject ? "pid_receiver" : "uid_receiver"] : isProject ? info.pid : info.id
+    }
+
     const addLink = async() => {
         try {
             setLoading(true);
             // cases: exists inside links (e.g rejected) vs doesn't exist inside links
-            const insideLinks = false;  // todo: replace with links slice check
 
-            // to insert right fields based on sender / receiver
-            const matchObj = {
-                ["uid" in idObj ? "uid_sender" : "pid_sender"] : "uid" in idObj ? idObj.uid : idObj.pid,
-                [isProject ? "pid_receiver" : "uid_receiver"] : isProject ? info.pid : info.id
-            }
-
-            // console.log(matchObj);
 
             // do insert
             if (!isLink) {
@@ -203,11 +206,70 @@ function ProfileCard({ info, isJoin }) {
                 
                 if (updateErr) throw updateErr;
                 console.log("Link update succ", updateData);
-                dispatch(getLinks(idObj));
+                
 
             }
+
+            dispatch(getLinks(idObj));
         } catch (error) {
             console.log("Link err", error);
+        } finally {
+            setLoading(false);
+        }
+    }
+
+    // for reject/delete
+        // not in links:
+        // - insert row with accepted=false, rej = true, dispatch getLinks 
+        // inside links:
+        // - pending, incoming: update row to acc=false, rej=true, dispatch getLinks 
+        // - pending, outgoing: delete the row from links table completely (cancel the link req)
+
+    const rejectLink = async() => {
+        try {
+            setLoading(true);
+            if (!isLink) {
+                const { data:insData, error: insError} = await supabase 
+                    .from('links')
+                    .insert([
+                        {  
+                            ...matchObj,
+                            accepted: false,
+                            rejected:true
+                        }
+                    ])
+                
+                if (insError) throw insError;
+                console.log("Reject succ (ins):", insData);
+
+                setShowLink(false);
+                setShowReject(false);
+            } else {
+                // curretly reject/delete is only for pending, so we assume link is pending
+                if (linkinSlice.incoming) {
+                    const { data: updateData, error:updateErr } = await supabase
+                    .from('links')
+                    .update({ accepted: false, rejected: true })
+                    .match({ s_n: linkinSlice.s_n })
+
+                    if (updateErr) throw updateErr;
+                    console.log("Update rej succ", updateData);
+
+                 } else {
+                    // delete the link (pending, outgoing)
+                    const { data:delData, error: delErr } = await supabase 
+                        .from('links')
+                        .delete()
+                        .match({ s_n: linkinSlice.s_n })
+                    
+                    if (delErr) throw delErr;
+                    console.log("Del after rej succ", delData);
+                 }
+            }
+
+            dispatch(getLinks(idObj));
+        } catch (error) {
+            console.log("Reject err:", error);
         } finally {
             setLoading(false);
         }
@@ -226,7 +288,7 @@ function ProfileCard({ info, isJoin }) {
                         sx={{ml:0}} 
                     />
 
-                    { isLink ? 
+                    { isLink && !linkinSlice.established ? 
                         <Tag color={linkinSlice.incoming ? "var(--secondary)" : "var(--primary)"} fontColor={"white"} sx={{fontSize: "0.7rem", alignSelf: "flex-start", mt:3}}>{linkinSlice.incoming ? "Incoming" : "Outgoing"}</Tag>
                         : <></> }
 
@@ -245,7 +307,8 @@ function ProfileCard({ info, isJoin }) {
                         <CardActions>
                             {/* hide buttons if card is self, or if link is established */}
 
-                            { !loading ? <Stack direction="row" spacing={2} sx={{ ml:-1, mt: 1, width: "100%", alignItems: "center", display: (linkinSlice?.established || hideButtons) ? 'none' : ''}}>
+                            { !loading ? <Stack direction="row" spacing={2} 
+                                sx={{ ml:-1, mt: 1, width: "100%", alignItems: "center", display: (linkinSlice?.established || hideButtons || (linkinSlice?.rejected && linkinSlice?.incoming) ) ? 'none' : ''}}>
                                 <Typography 
                                     variant="subtitle1" 
                                     className={styles.tag} 
@@ -260,9 +323,12 @@ function ProfileCard({ info, isJoin }) {
                                     { isProject && showFollow ? <TooltipIconButton icon={<RssFeedOutlined sx={{ color: "var(--secondary)", fontSize:30 }} />} title={"Follow"} /> : <></> }
                                     { showReject ? <TooltipIconButton 
                                         icon={showDelete ? <DeleteOutlined sx={{fontSize:30, color: "error.main"}}/> : <CancelOutlined sx={{fontSize:30, color: "error.main"}}/>} 
-                                        title={showDelete ? "Delete" : "Not for me"} /> : <></> }
+                                        title={showDelete ? "Delete" : "Not for me"} onClick={rejectLink}/> : <></> }
                                 </div>
                             </Stack> : <CircularProgress size={30} />}
+                            
+                            {/* rejected, incoming (someone else sent, you rejected) -> show rejected text */}
+                            { (linkinSlice?.rejected && linkinSlice?.incoming) ?  <Tag color="error.main" fontColor="white" sx={{mr:4, mb:0.5}}>Rejected</Tag> : <></> }
 
                             {/* Email, Tele */}
                             <div style={{marginLeft: "-8px"}}>

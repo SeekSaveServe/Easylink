@@ -79,7 +79,7 @@ export const fakeLinksData = [
 const filterMap = {
   0: (link) => link.pending,
   1: (link) => link.established,
-  2: (link) => link.rejected
+  2: (link) => link.rejected && !link.incoming // don't show rejected, incoming links (they sent and you rejected)
 }
 
 function Projects() {
