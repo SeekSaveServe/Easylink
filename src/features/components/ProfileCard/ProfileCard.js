@@ -101,7 +101,7 @@ function ProfileCard({ info, isJoin }) {
             <Typography 
             variant="body1" 
             sx={{display:"inline-flex", flexDirection: "row", alignItems: "center", mr:1}}>
-                <Email sx={{mr:0.5}}/> {email}
+                <Email sx={{mr:0.7}}/> {email}
             </Typography> 
         ) : <></>;
     }
@@ -110,9 +110,9 @@ function ProfileCard({ info, isJoin }) {
         return showTele ? (
             <Typography 
                 variant="body1" 
-                sx={{display:"inline-flex", flexDirection: "row", alignItems: "center", mr:2}}
+                sx={{display:"inline-flex", flexDirection: "row", alignItems: "center", mr:0}}
             >
-                <Telegram/> {telegram}
+                <Telegram sx={{mr:0.5}}/> {telegram}
             </Typography>
         ) : <></>;
     }
@@ -226,8 +226,10 @@ function ProfileCard({ info, isJoin }) {
                             </Stack>
 
                             {/* Email, Tele */}
-                            { emailDisplay() }
-                            { teleDisplay() }
+                            <div>
+                                { emailDisplay() }
+                                { teleDisplay() }
+                            </div>
 
                         </CardActions>
                     </CardContent>

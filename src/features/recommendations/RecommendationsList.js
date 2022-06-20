@@ -90,7 +90,7 @@ function RecommendationsList({ filterIndex }) {
 
     useEffect(() => {
         dispatch(getLinks(idObj));
-    })
+    }, [])
 
     function displayRecommendations() {
         if (loading) {

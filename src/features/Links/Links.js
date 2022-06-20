@@ -1,7 +1,7 @@
 import BasicButton from "../../components/BasicButton";
 import { supabase } from "../../supabaseClient";
 import { useSelector, useDispatch } from "react-redux";
-import { Box, Typography, Stack, Paper, Divider, Tabs, Tab, Container } from "@mui/material";
+import { Box, Typography, Stack, Paper, Divider, Tabs, Tab, Container, CircularProgress } from "@mui/material";
 import BasicNavBar from "../../components/BasicNavBar/BasicNavBar";
 import scroll from '../components/scroll/Scroll.module.css';
 import { useState, useEffect } from "react";
@@ -9,8 +9,11 @@ import { Center } from "@chakra-ui/react";
 import GreyContainer from "../components/GreyContainer";
 import FilterMenu from "../../components/FilterMenu/FilterMenu";
 import { FilterList, Settings } from "@mui/icons-material";
-import { getLinks } from "./linksSlice";
 import useIdObject from "../../components/hooks/useIdObject";
+import { CardList } from "../components/ProfileCardList/ProfileCardList";
+import { selectAllLinks } from "./linksSlice";
+import { getLinks } from "./linksSlice";
+import useUpdateEffect from "../../components/hooks/useUpdateEffect";
 
 export const fakeLinksData = [
   {
@@ -81,15 +84,35 @@ function Projects() {
   const dispatch = useDispatch();
   const idObj = useIdObject();
 
-  useEffect(() => {
+  useUpdateEffect(() => {
+    console.log("Runn use eff");
     dispatch(getLinks(idObj));
-  }, [idObj])
+  }, [])
+
+  const links = useSelector(selectAllLinks);
+  const loading = useSelector(state => state.links.loading);
+  console.log("Links", links);
+
+  const showLinks = () => {
+    switch (loading) {
+      case 'pending':
+        return <Center><CircularProgress size={40} sx={{mt:2}}/></Center>;
+      case "fulfilled":
+        return links.length == 0 ? <Center><Typography variant="h5" color="gray" sx={{mt:2}}>Nothing to show</Typography> </Center>
+          : <CardList data={links} isJoin={true} btnIndex={filterIndex}/>
+      default:
+        <Typography variant="h4" color="gray">Idle/Error</Typography> 
+      
+    }
+  }
+
+
   
   return (
     <>
       <BasicNavBar />
       <GreyContainer>
-        <Center style={{marginBottom: 6}}>
+        <Center style={{marginBottom: 10}}>
           <Typography variant="h4">{typeItems[typeIndex]} Links</Typography>
           <FilterMenu title={"Toggle links"} icon={<Settings/>} items={typeItems} 
           index={typeIndex} setIndex={setTypeIndex}/>
@@ -97,6 +120,9 @@ function Projects() {
             index={filterIndex} setIndex={setFilterIndex}
           />
         </Center>
+        { showLinks() }
+
+        {/* <CardList data={links} isJoin={true} btnIndex={filterIndex}/> */}
 
       </GreyContainer>
     </>

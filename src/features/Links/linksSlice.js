@@ -189,6 +189,10 @@ export default linksSlice.reducer;
 
 export const { clearLinks } = linksSlice.actions;
 
+export const { 
+    selectById: selectLinkById,
+    selectAll: selectAllLinks,
+ } = linksAdapter.getSelectors((state) => state.links);
 
 
 
