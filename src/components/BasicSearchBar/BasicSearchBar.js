@@ -45,7 +45,11 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
   },
 }));
 
-export default function BasicSearchBar({ searchInput = "Search..." }) {
+export default function BasicSearchBar({
+  searchInput = "Search...",
+  setRefresh = null,
+  refresh = null,
+}) {
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
@@ -68,6 +72,8 @@ export default function BasicSearchBar({ searchInput = "Search..." }) {
               })
             );
             navigate("/Search", { replace: true });
+            // Trigger a reload on the search page
+            setRefresh ? setRefresh(!refresh) : void 0;
           } catch (error) {
             alert(alert(error.error_decription || error.message));
           } finally {
@@ -77,7 +83,6 @@ export default function BasicSearchBar({ searchInput = "Search..." }) {
       });
     }
   };
-
   return (
     <Search>
       <SearchIconWrapper>

@@ -20,7 +20,7 @@ export default async function fetchData(
   }
 
   async function fetchUser() {
-    console.log(formatUrl());
+    // console.log(formatUrl());
     try {
       // console.log(formatUrl());
       await fetch(formatUrl(), {

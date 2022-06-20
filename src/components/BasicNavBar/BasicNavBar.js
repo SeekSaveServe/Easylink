@@ -11,7 +11,11 @@ import LinkableAvatar from "../LinkableAvatar.js";
 import BasicSearchBar from "../BasicSearchBar/BasicSearchBar";
 import { replace } from "../../features/user/userSlice";
 
-export default function BasicNavBar({ searchInput = "Search..." }) {
+export default function BasicNavBar({
+  searchInput = "Search...",
+  setRefresh = null,
+  refresh = null,
+}) {
   const userProfile = useSelector((state) => state.user);
   const dispatch = useDispatch();
   const location = useLocation();
@@ -84,7 +88,11 @@ export default function BasicNavBar({ searchInput = "Search..." }) {
           </NavLink>
 
           <Box sx={{ flexGrow: 1, backgroundColor: "var(--primary)" }} />
-          <BasicSearchBar searchInput={searchInput} />
+          <BasicSearchBar
+            searchInput={searchInput}
+            setRefresh={setRefresh}
+            refresh={refresh}
+          />
 
           <BasicButton onClick={signOut} bg="secondary" sx={{ width: "100px" }}>
             Sign Out

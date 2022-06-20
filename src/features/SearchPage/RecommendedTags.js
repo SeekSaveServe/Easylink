@@ -25,6 +25,7 @@ function RecommendedTags({
   loading,
   setUsers,
   setProjects,
+  fetch,
 }) {
   const dispatch = useDispatch();
   const user = useSelector((state) => state.user);
@@ -86,7 +87,7 @@ function RecommendedTags({
     fetchData(setUsers, "user", user, comm, skil, int);
     fetchData(setProjects, "project", user, comm, skil, int);
     setRefresh(!refresh); // triggers a refresh
-  }, [communities]);
+  }, [communities, fetch]);
 
   const updateFormState = () => {
     dispatch(

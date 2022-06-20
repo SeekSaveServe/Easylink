@@ -56,11 +56,8 @@ function RecommendationsList({
     // if (arr.length === 0) {
 
     // }
-
+    console.log(arr);
     setLoading(false);
-    // console.log(arr);
-    // console.log(projects);
-    // console.log(users);
     setRecommendations(arr);
   }
 
