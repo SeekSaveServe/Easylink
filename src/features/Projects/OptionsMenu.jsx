@@ -6,6 +6,7 @@ import { supabase } from "../../supabaseClient";
 import { selectProjectById } from "./projectsSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { replace } from "../user/userSlice";
+import { clearLinks } from "../Links/linksSlice";
 
 // parentId: the pid of the project this menu is associated with
 // for use specifically in ProjectTree
@@ -49,6 +50,7 @@ function OptionsMenu({ parentId }) {
   const handleSwitchProject = async() => {
     dispatch(replace({...project, isProject:true}));
     sessionStorage.setItem('currProject', JSON.stringify({ pid: parentId }))
+    // dispatch(clearLinks());
     handleClose();
   }
 

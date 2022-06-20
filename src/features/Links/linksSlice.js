@@ -36,6 +36,32 @@ const linksAdapter = createEntityAdapter({
 // Assumption: pending and rejected can't be True at same time
 // get object with user/project data of link + meta data of pending/established/rejected booleans
     
+// projReq needs !fk_pid
+const projReq = `
+*,
+user_skills (
+    name
+),
+user_interests(
+    name
+),
+user_communities!fk_pid(
+    name
+)`;
+
+const userReq = `
+*,
+user_skills (
+    name
+),
+user_interests(
+    name
+),
+user_communities(
+    name
+)
+`;
+
 async function getAssociatedUser(link, prefix, selectId) {
     const { accepted:linkAccepted, rejected: linkRejected } = link;
 
@@ -73,7 +99,7 @@ async function getAssociatedUser(link, prefix, selectId) {
     // request for the relevant user/proj and return that promise
     return supabase
         .from("id" in reqObj ? "users" : "projects")
-        .select('*')
+        .select("id" in reqObj ? userReq : projReq)
         .match(reqObj)
         .maybeSingle()
         .then((res) => { return { ...res.data, pending, established, rejected, s_n: link.s_n };});
@@ -116,6 +142,18 @@ export const getLinks = createAsyncThunk('links/getLinks', async(idObj) => {
 });
 
 
+function updateHelper(source, dest) {
+    for (const [key,val] of Object.entries(source)) {
+        dest[key] = val;
+    }
+
+    // delete keys in original dest that are not in source
+    for (const key of Object.keys(dest)) {
+        if (!(key in source)) {
+            delete dest[key];
+        }
+    }
+}
 
 // Create slice
 const linksSlice = createSlice({
@@ -123,6 +161,12 @@ const linksSlice = createSlice({
     initialState: linksAdapter.getInitialState({
         loading: 'idle'
     }),
+    reducers: {
+        clearLinks: (state, action) => {
+            updateHelper({}, state);
+            console.log("clear");
+        }
+    },
     extraReducers: builder => {
         builder.addCase(getLinks.pending, (state, action) => {
             state.loading =  'pending'
@@ -132,13 +176,18 @@ const linksSlice = createSlice({
         })
         .addCase(getLinks.fulfilled, (state, action) => {
             console.log("Links fulfilled payload:", action.payload);
-            // linksAdapter.upsertMany(state, action.payload)
+            // clear the links to empty before to prevent old state from corrupting: e.g if the new one
+            // has zero links, none of the old links from (prev project, previous user, etc) should show up
+            updateHelper({ ids: [], entities: {}, loading: 'fulfilled'}, state);
+            linksAdapter.upsertMany(state, action.payload)
         })
     }
 
 });
 
 export default linksSlice.reducer;
+
+export const { clearLinks } = linksSlice.actions;
 
 
 

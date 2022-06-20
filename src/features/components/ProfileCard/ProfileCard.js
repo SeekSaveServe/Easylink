@@ -208,7 +208,7 @@ function ProfileCard({ info, isJoin }) {
 
 
                         <CardActions>
-                            <Stack direction="row" spacing={2} sx={{ ml:0, mt: 1, width: "100%", alignItems: "center", display: hideButtons ? 'none' : ''}}>
+                            <Stack direction="row" spacing={2} sx={{ ml:-1, mt: 1, width: "100%", alignItems: "center", display: hideButtons ? 'none' : ''}}>
                                 <Typography 
                                     variant="subtitle1" 
                                     className={styles.tag} 
