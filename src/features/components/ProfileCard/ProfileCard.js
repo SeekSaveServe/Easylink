@@ -321,6 +321,30 @@ function ProfileCard({ info, isJoin }) {
         }
     }
 
+    // assumption: only projects can be followed. change this fn if user follow is added
+    const follow = async() => {
+        try {
+            setLoading(true);
+            const { data, error } = await supabase
+                .from('followers')
+                .insert([
+                    {
+                        ["uid" in idObj ? "follower_uid" : "follower_pid"]: "uid" in idObj ? idObj.uid : idObj.pid,
+                        followed_pid: info.pid
+
+                    }
+                ])
+            
+            if (error) throw error;
+            console.log("Follow succ", data);
+        
+        } catch (error) {
+            console.log("Follow err", error);
+        } finally {
+            setLoading(false);
+        }
+    }
+
     // Incoming/Outgoing/You rejected/ They rejected
     function StatusTag() {
         if (!isLink) return <></>
@@ -382,7 +406,7 @@ function ProfileCard({ info, isJoin }) {
 
                                 {!loading ? <div style={{display: "inline-flex", gap:"0.4rem", display: (hideButtons) ? 'none' : ''}}>
                                     { showLink && !showDelete? <TooltipIconButton icon={<AddLinkOutlined color="primary" sx={{fontSize:30}}/>} title="Link" onClick={addLink} /> : <></> }
-                                    { isProject && showFollow ? <TooltipIconButton icon={<RssFeedOutlined sx={{ color: "var(--secondary)", fontSize:30 }} />} title={"Follow"} /> : <></> }
+                                    { isProject && showFollow ? <TooltipIconButton icon={<RssFeedOutlined sx={{ color: "var(--secondary)", fontSize:30 }} />} title={"Follow"} onClick={follow}/> : <></> }
                                     { showReject ? <TooltipIconButton 
                                         icon={showDelete ? <DeleteOutlined sx={{fontSize:30, color: "error.main"}}/> : <CancelOutlined sx={{fontSize:30, color: "error.main"}}/>} 
                                         title={showDelete ? "Delete" : "Not for me"} onClick={rejectLink}/> : <></> }
@@ -391,8 +415,6 @@ function ProfileCard({ info, isJoin }) {
 
                              </Stack>
                             
-                            {/* rejected, incoming (someone else sent, you rejected) -> show rejected text */}
-                            {/* { (linkinSlice?.rejected && linkinSlice?.incoming) ?  <Tag color="error.main" fontColor="white" sx={{mr:4, mb:0.5}}>Rejected</Tag> : <></> } */}
                             {/* Email, Tele */}
                             <div style={{marginLeft: "-8px"}}>
                                 { emailDisplay() }
