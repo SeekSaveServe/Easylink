@@ -11,14 +11,17 @@ import LinkableAvatar from "../LinkableAvatar.js";
 import BasicSearchBar from "../BasicSearchBar/BasicSearchBar";
 import { replace } from "../../features/user/userSlice";
 
-
-export default function BasicNavBar() {
+export default function BasicNavBar({
+  searchInput = "Search...",
+  setRefresh = null,
+  refresh = null,
+}) {
   const userProfile = useSelector((state) => state.user);
   const dispatch = useDispatch();
   const location = useLocation();
 
   const signOut = async () => {
-    sessionStorage.removeItem("currProject"); 
+    sessionStorage.removeItem("currProject");
     dispatch(replace({})); // clear userSlice so it doesn't pre-fill signup
     await supabase.auth.signOut();
   };
@@ -59,7 +62,8 @@ export default function BasicNavBar() {
           <NavLink
             to="/projects"
             style={({ isActive }) =>
-              (isActive || ["/addproject", "/addpost"].includes(location.pathname))
+              isActive ||
+              ["/addproject", "/addpost"].includes(location.pathname)
                 ? {
                     color: "white",
                   }
@@ -84,7 +88,11 @@ export default function BasicNavBar() {
           </NavLink>
 
           <Box sx={{ flexGrow: 1, backgroundColor: "var(--primary)" }} />
-          <BasicSearchBar />
+          <BasicSearchBar
+            searchInput={searchInput}
+            setRefresh={setRefresh}
+            refresh={refresh}
+          />
 
           <BasicButton onClick={signOut} bg="secondary" sx={{ width: "100px" }}>
             Sign Out

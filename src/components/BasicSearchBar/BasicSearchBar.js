@@ -1,5 +1,5 @@
 import { styled, alpha, InputBase } from "@mui/material";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import SearchIcon from "@mui/icons-material/Search";
 import { update } from "../../features/user/userSlice";
 import { Navigate, useNavigate } from "react-router-dom";
@@ -45,35 +45,68 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
   },
 }));
 
-export default function BasicSearchBar() {
+export default function BasicSearchBar({
+  searchInput = "Search...",
+  setRefresh = null,
+  refresh = null,
+}) {
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const [listenerOn, setListenerOn] = useState(false);
+  const user = useSelector((state) => state.user);
 
+  // document.addEventListener("DOMContentLoaded", () => {
+  //   const input = document.getElementById("searchBar");
+  //   input.addEventListener("keypress", function (event) {
+  //     if (event.key === "Enter") {
+  //       event.preventDefault();
+  //       // redirect to search page and update the userslice
+  //       try {
+  //         setLoading(true);
+  //         dispatch(
+  //           update({
+  //             search: input.value,
+  //           })
+  //         );
+  //         navigate("/Search", { replace: true });
+  //         // Trigger a reload on the search page
+  //         setRefresh ? setRefresh(!refresh) : void 0;
+  //       } catch (error) {
+  //         alert(alert(error.error_decription || error.message));
+  //       } finally {
+  //         setLoading(false);
+  //       }
+  //     }
+  //   });
+  // });
   const handleChange = () => {
     const input = document.getElementById("searchBar");
-    if (!listenerOn) {
-      setListenerOn(true);
-      input.addEventListener("keypress", function (event) {
-        if (event.key === "Enter") {
-          event.preventDefault();
-          // redirect to search page and update the userslice
-          try {
-            setLoading(true);
-            dispatch(update({ search: input.value }));
-            navigate("/Search", { replace: true });
-            // TODO: Add Backend API connector here
-          } catch (error) {
-            alert(alert(error.error_decription || error.message));
-          } finally {
-            setLoading(false);
-          }
+    // if (!listenerOn) {
+    //   setListenerOn(true);
+    input.addEventListener("keypress", function (event) {
+      if (event.key === "Enter") {
+        event.preventDefault();
+        // redirect to search page and update the userslice
+        try {
+          setLoading(true);
+          dispatch(
+            update({
+              search: input.value,
+            })
+          );
+          navigate("/Search", { replace: true });
+          // Trigger a reload on the search page
+          setRefresh ? setRefresh(!refresh) : void 0;
+        } catch (error) {
+          alert(alert(error.error_decription || error.message));
+        } finally {
+          setLoading(false);
         }
-      });
-    }
+      }
+    });
+    // }
   };
-
   return (
     <Search>
       <SearchIconWrapper>
@@ -81,7 +114,7 @@ export default function BasicSearchBar() {
       </SearchIconWrapper>
       <StyledInputBase
         id="searchBar"
-        placeholder="Search…"
+        placeholder={searchInput}
         inputProps={{ "aria-label": "search" }}
         onChange={handleChange}
       />

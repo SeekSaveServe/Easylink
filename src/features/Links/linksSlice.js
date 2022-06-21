@@ -12,12 +12,22 @@ import { supabase } from '../../supabaseClient';
     // no need to make N+1 queries for tele/email vis
 
 
-// structure for one entity: { ...user/project, s_n: link.s_n, pending: Bool, established: Bool, rejected: Bool, incoming: Bool} from links table
-  // store link.s_n for the corresponding link to enable easy generation
+// structure for one entity: { ...link } from links table
+    // type Link = {
+    //     s_n:bigint,
+    //     uid_sender:uuid,
+    //     uid_receiver:uuid,
+    //     pid_sender:bigint,
+    //     pid_receiver:bigint,
+    //     accepted:Boolean,
+    //     rejected:Boolean,
+    //     created_at:timestamp
+    // }
+
 // Structure of entire slice:   
 //   {
 //       ids: [...],
-//       entities: [ id/pid: {...}, id/pid: {...}, ],
+//       entities: [link_id: {...}, link_id: {...}, ],
 //       loading: 'idle' | 'pending' | 'fulfilled' | 'error'
 //   }
 
