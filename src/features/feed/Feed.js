@@ -1,6 +1,6 @@
 import BasicButton from "../../components/BasicButton";
 import { supabase } from "../../supabaseClient";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Box, Typography, Stack, Paper, Divider } from "@mui/material";
 import styles from "./Feed.module.css";
 import RecommendationsList from "../recommendations";
@@ -15,6 +15,8 @@ import ListTypeMenu from "./ListTypeMenu";
 import FilterMenu from "../../components/FilterMenu/FilterMenu";
 import { FilterList, Settings } from "@mui/icons-material";
 import GreyContainer from "../components/GreyContainer";
+import { getFollowed } from "../followers/followerSlice";
+import useIdObject from "../../components/hooks/useIdObject";
 
 function Feed() {
   const userProfile = useSelector((state) => state.user);
@@ -23,7 +25,8 @@ function Feed() {
 
   const [filterIndex, setFilterIndex] = useState(0); // for FilterMenu
   const filterItems = typeIndex == 0 ? ["Users and projects", "Users only", "Projects only"] : ["Posts and polls", "Posts only", "Polls only"];
-
+  const dispatch = useDispatch();
+  const idObj = useIdObject();
   // useEffect(() => {
   //   setFilterIndex(0);
   // }, [typeIndex])
@@ -50,6 +53,8 @@ function Feed() {
   }
   useEffect(() => {
     test();
+    dispatch(getFollowed(idObj));
+
   });
   console.log(res);
 

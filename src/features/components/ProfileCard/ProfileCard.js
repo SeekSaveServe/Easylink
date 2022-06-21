@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { getUser } from "../../user/userSlice.js";
 import BasicButton from "../../../components/BasicButton/BasicButton.js";
 import Tag from "../../../components/Tag/Tag.jsx";
-import { AddLinkOutlined, RssFeedOutlined, CancelOutlined, Email, Telegram, DeleteOutlined, FamilyRestroomRounded} from "@mui/icons-material";
+import { AddLinkOutlined, RssFeedOutlined, CancelOutlined, Email, Telegram, DeleteOutlined, FamilyRestroomRounded, LeakRemoveOutlined} from "@mui/icons-material";
 import { format, formatDistance } from "date-fns";
 import TooltipIconButton from "../../../components/TooltipIconButton/TooltipIconButton.jsx";
 import useIdObject from '../../../components/hooks/useIdObject';
@@ -13,6 +13,8 @@ import { supabase } from "../../../supabaseClient.js";
 import { useState } from "react";
 import { selectLinkById } from "../../Links/linksSlice.js";
 import { getLinks } from "../../Links/linksSlice.js";
+import { getFollowed, isFollowing, selectFollowedById } from "../../followers/followerSlice.js";
+
 // assumption: passed in data has structure
     // isJoin == true: { ...user/project, user_skills:[Tag], user_communities:[Tag], user_interests: [Tag] }
         // 2nd assumption: projects have field pid, user has no pid
@@ -79,12 +81,15 @@ function ProfileCard({ info, isJoin }) {
     // pending, outgoing links: change not for me to a delete button
     const showDelete = isLink && linkinSlice.pending && !linkinSlice.incoming
 
-    // (linkinSlice?.established || (linkinSlice?.rejected && linkinSlice?.incoming) 
-
     // rejected, outgoing (I sent, and got rejected) -> don't show link and reject btns
     showLink = showLink && !isLink || (!(linkinSlice?.rejected && !linkinSlice?.incoming) && !linkinSlice?.established);
     showReject = showReject && (!isLink) || linkinSlice?.pending; // only show reject for pending
 
+    const isFollow = useSelector(state => isFollowing(state, info?.pid));
+    // showFollow = showFollow && !isFollow // hide if following this profile
+
+    // check if curr user is following this profile
+    
 
     // Utility functions
 
@@ -322,21 +327,34 @@ function ProfileCard({ info, isJoin }) {
     }
 
     // assumption: only projects can be followed. change this fn if user follow is added
+    const followedObj = useSelector(state => selectFollowedById(state, info?.pid))
     const follow = async() => {
         try {
-            setLoading(true);
-            const { data, error } = await supabase
-                .from('followers')
-                .insert([
-                    {
-                        ["uid" in idObj ? "follower_uid" : "follower_pid"]: "uid" in idObj ? idObj.uid : idObj.pid,
-                        followed_pid: info.pid
+            if (isFollow) {
+                const { data, error } = await supabase
+                    .from('followers')
+                    .delete()
+                    .match({
+                        s_n: followedObj.s_n
+                    })
+                
+                if (error) throw error;
+            } else {
+                setLoading(true);
+                const { data, error } = await supabase
+                    .from('followers')
+                    .insert([
+                        {
+                            ["uid" in idObj ? "follower_uid" : "follower_pid"]: "uid" in idObj ? idObj.uid : idObj.pid,
+                            followed_pid: info.pid
 
-                    }
-                ])
-            
-            if (error) throw error;
-            console.log("Follow succ", data);
+                        }
+                    ])
+                
+                if (error) throw error;
+            }
+
+            dispatch(getFollowed(idObj));
         
         } catch (error) {
             console.log("Follow err", error);
@@ -406,7 +424,8 @@ function ProfileCard({ info, isJoin }) {
 
                                 {!loading ? <div style={{display: "inline-flex", gap:"0.4rem", display: (hideButtons) ? 'none' : ''}}>
                                     { showLink && !showDelete? <TooltipIconButton icon={<AddLinkOutlined color="primary" sx={{fontSize:30}}/>} title="Link" onClick={addLink} /> : <></> }
-                                    { isProject && showFollow ? <TooltipIconButton icon={<RssFeedOutlined sx={{ color: "var(--secondary)", fontSize:30 }} />} title={"Follow"} onClick={follow}/> : <></> }
+                                    { isProject && showFollow ? <TooltipIconButton icon={isFollow ? <LeakRemoveOutlined sx={{ color: "var(--secondary)", fontSize:30 }}/> 
+                                        : <RssFeedOutlined sx={{ color: "var(--secondary)", fontSize:30 }} />} title={isFollow ? "Unfollow" : "Follow"} onClick={follow}/> : <></> }
                                     { showReject ? <TooltipIconButton 
                                         icon={showDelete ? <DeleteOutlined sx={{fontSize:30, color: "error.main"}}/> : <CancelOutlined sx={{fontSize:30, color: "error.main"}}/>} 
                                         title={showDelete ? "Delete" : "Not for me"} onClick={rejectLink}/> : <></> }
