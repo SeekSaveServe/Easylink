@@ -28,7 +28,7 @@ SECRET_KEY = 'django-insecure-p$n1ubzvq5bj@!m-xqu*pn+or^)%(@scn4(w$ho8f$n-%@51jo
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = ['murmuring-basin-78610.herokuapp.com', '.vercel.app', '.now.sh']
+ALLOWED_HOSTS = ['https://easylink-mu.vercel.app/', 'murmuring-basin-78610.herokuapp.com', '.vercel.app', '.now.sh']
 
 
 # Application definition
@@ -51,7 +51,8 @@ INSTALLED_APPS = [
 # define which origins are allowed
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:3000",
-    "http://127.0.0.1:8000"
+    "http://127.0.0.1:8000",
+    "https://easylink-mu.vercel.app/"
 ]
 MIDDLEWARE = [
     'whitenoise.middleware.WhiteNoiseMiddleware',
