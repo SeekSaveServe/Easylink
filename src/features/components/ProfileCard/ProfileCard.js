@@ -67,6 +67,7 @@ function ProfileCard({ info, isJoin }) {
         const currIsProject = "pid" in idObj;
 
         return (isProject && currIsProject && idObj.pid == info.pid) || (!isProject && !currIsProject && idObj.uid == info.id)
+            || (linkinSlice?.rejected && linkinSlice?.outgoing); // hide all buttons if rejected,outgoing
 
     }
 
@@ -81,8 +82,8 @@ function ProfileCard({ info, isJoin }) {
     // (linkinSlice?.established || (linkinSlice?.rejected && linkinSlice?.incoming) 
 
     // rejected, outgoing (I sent, and got rejected) -> don't show link and reject btns
-    showLink = showLink && !(linkinSlice?.rejected && !linkinSlice?.incoming) && !linkinSlice?.established;
-    showReject = showReject && !(linkinSlice?.rejected) && !linkinSlice?.established;
+    showLink = showLink && !isLink || (!(linkinSlice?.rejected && !linkinSlice?.incoming) && !linkinSlice?.established);
+    showReject = showReject && (!isLink) || linkinSlice?.pending; // only show reject for pending
 
 
     // Utility functions
@@ -178,6 +179,13 @@ function ProfileCard({ info, isJoin }) {
         [isProject ? "pid_receiver" : "uid_receiver"] : isProject ? info.pid : info.id
     }
 
+    const outgoingObj = matchObj; // sender = me, receiver = other party
+    const incomingObj = {
+        [isProject ? "pid_sender" : "uid_sender"] : isProject ? info.pid : info.id,
+        ["uid" in idObj ? "uid_receiver" : "pid_receiver"] :  "uid" in idObj ? idObj.uid : idObj.pid
+
+    } // sender = other, receiver = me
+
     const addLink = async() => {
         try {
             setLoading(true);
@@ -200,14 +208,29 @@ function ProfileCard({ info, isJoin }) {
                 // console.log("Link succ", data);
 
             } else {
-                // already inside links: this card sent a request to us -> accept by updating row
-                const { data: updateData, error:updateErr } = await supabase
+                // if rejected, incoming -> change to pending, outgoing
+                    // because rejected, incoming could be either: they sent a req, I rejected OR I rejected without any pending
+                    // so easier to default to pending, outgoing
+                if (linkinSlice.rejected && linkinSlice.incoming) {
+                    const { data: updateData, error:updateErr } = await supabase
                     .from('links')
-                    .update({ accepted: true, rejected: false })
+                    .update({ accepted: false, rejected: false, ...outgoingObj })
                     .match({ s_n: linkinSlice.s_n })
-                
-                if (updateErr) throw updateErr;
-                console.log("Link update succ", updateData);
+
+                    if (updateErr) throw updateErr;
+                    console.log("Link update succ (rejected, incoming", updateData);
+;
+                } else {
+                    // is definitely pending, incoming: hide link for pendig, outgoing + established + rejected, outgoing
+                    const { data: updateData, error:updateErr } = await supabase
+                        .from('links')
+                        .update({ accepted: true, rejected: false })
+                        .match({ s_n: linkinSlice.s_n })
+                    
+                    if (updateErr) throw updateErr;
+                    console.log("Link update succ", updateData);
+
+                }
                 
 
             }
@@ -230,12 +253,13 @@ function ProfileCard({ info, isJoin }) {
     const rejectLink = async() => {
         try {
             setLoading(true);
+            // I reject off the bat: rejected, incoming
             if (!isLink) {
                 const { data:insData, error: insError} = await supabase 
                     .from('links')
                     .insert([
                         {  
-                            ...matchObj,
+                            ...incomingObj,
                             accepted: false,
                             rejected:true
                         }
