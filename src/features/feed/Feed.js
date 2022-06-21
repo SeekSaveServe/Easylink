@@ -17,16 +17,19 @@ import { FilterList, Settings } from "@mui/icons-material";
 
 function Feed() {
   const userProfile = useSelector((state) => state.user);
-  
+
   const [typeIndex, setTypeIndex] = useState(0); // 0 - Reccs, 1 - Posts
 
   const [filterIndex, setFilterIndex] = useState(0); // for FilterMenu
-  const filterItems = typeIndex == 0 ? ["Users and projects", "Users only", "Projects only"] : ["Posts and polls", "Posts only", "Polls only"];
+  const filterItems =
+    typeIndex == 0
+      ? ["Users and projects", "Users only", "Projects only"]
+      : ["Posts and polls", "Posts only", "Polls only"];
 
   useEffect(() => {
     setFilterIndex(0);
-  }, [typeIndex])
-  
+  }, [typeIndex]);
+
   //  Testing Django API
   const [res, setRes] = useState("not set");
   const instance = axios.create({
@@ -60,22 +63,51 @@ function Feed() {
     <>
       {/* <button onClick={throwKnownError}> hi </button> */}
       <BasicNavBar />
-      <Container className={styles.parent} maxWidth="lg" sx={{padding:"1rem 6rem !important"}}>
+      <Container
+        className={styles.parent}
+        maxWidth="lg"
+        sx={{ padding: "1rem 6rem !important" }}
+      >
         <Center>
-          <Tag color="primary.light" fontColor="white" sx={{fontSize:"1.1rem", mt:1, mb:1.5}}>
-            <span>Welcome</span>,{" "}
-            <span>{userProfile.username}</span>
+          <Tag
+            color="primary.light"
+            fontColor="white"
+            sx={{ fontSize: "1.1rem", mt: 1, mb: 1.5 }}
+          >
+            <span>Welcome</span>, <span>{userProfile.username}</span>
           </Tag>
         </Center>
 
         {/* Title and options  */}
-        <Center style={{marginBottom:6}}>
-          <Typography variant="h4" color={typeIndex == 0 ? "var(--primary)" : "var(--secondary)"} sx={{mr:0.5}}>{ typeIndex == 0 ? "Recommendations" : "Posts"}</Typography>
-          <FilterMenu title={"Toggle view"} icon={<Settings/>} items={["Recommendations", "Posts"]} index={typeIndex} setIndex={setTypeIndex} />
-          <FilterMenu title={"Filter settings"} icon={<FilterList/>} items={filterItems} index={filterIndex} setIndex={setFilterIndex} />
+        <Center style={{ marginBottom: 6 }}>
+          <Typography
+            variant="h4"
+            color={typeIndex == 0 ? "var(--primary)" : "var(--secondary)"}
+            sx={{ mr: 0.5 }}
+          >
+            {typeIndex == 0 ? "Recommendations" : "Posts"}
+          </Typography>
+          <FilterMenu
+            title={"Toggle view"}
+            icon={<Settings />}
+            items={["Recommendations", "Posts"]}
+            index={typeIndex}
+            setIndex={setTypeIndex}
+          />
+          <FilterMenu
+            title={"Filter settings"}
+            icon={<FilterList />}
+            items={filterItems}
+            index={filterIndex}
+            setIndex={setFilterIndex}
+          />
         </Center>
 
-          { typeIndex == 0 ? <RecommendationsList filterIndex={filterIndex} /> : <PostsList filterIndex={filterIndex} /> }
+        {typeIndex == 0 ? (
+          <RecommendationsList filterIndex={filterIndex} />
+        ) : (
+          <PostsList filterIndex={filterIndex} />
+        )}
       </Container>
     </>
   );

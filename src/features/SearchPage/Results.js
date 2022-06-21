@@ -1,3 +1,4 @@
+import { CircleOutlined } from "@mui/icons-material";
 import {
   Box,
   Typography,
@@ -7,43 +8,57 @@ import {
   Stack,
 } from "@mui/material";
 import { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
+import ProfileCard from "../components/ProfileCard/ProfileCard";
 import scroll from "../components/scroll/Scroll.module.css";
 
-function RecommendationCard({ refresh, setRefresh }) {
-  return (
-    <Card variant="outlined">
-      <CardHeader title="USDevs" subheader="4 days ago" />
-
-      <CardContent>
-        <Typography variant="h4">Make laundry chill again</Typography>
-        <Typography variant="body2">
-          Hi! We are Project Laundrobot, a sub-project under USDevs working on a
-          hardware-based laundry notification system. We are looking for
-          Developers who knows Python, Raspberry Pi
-        </Typography>
-      </CardContent>
-    </Card>
-  );
-}
-
-function RecommendationsList({ setLoading, refresh, setRefresh }) {
+function RecommendationsList({
+  setLoading,
+  refresh,
+  setRefresh,
+  users,
+  projects,
+}) {
+  // Triggers when users, refresh and projects have been updated
   useEffect(() => {
-    showRecommendations(10);
+    showRecommendations();
   }, [refresh]);
 
   const [recommendations, setRecommendations] = useState([]);
-
-  function showRecommendations(n) {
-    console.log("show");
+  const user = useSelector((state) => state.user);
+  function showRecommendations() {
+    // console.log("Refreshing");
     let arr = [];
     setLoading(true);
-    for (let i = 0; i < n; i++) {
-      // simulate backend
-      console.log(i);
-      arr.push(<RecommendationCard key={i} />);
+    // console.log("filter: ", user.searchFilter);
+    if (user.searchFilter === "Show Projects") {
+      for (let i = 0; i < projects.length; i++) {
+        arr.push(<ProfileCard info={projects[i]} />);
+      }
+    } else if (user.searchFilter === "Show Users") {
+      for (let i = 0; i < users.length; i++) {
+        arr.push(<ProfileCard info={users[i]} />);
+      }
+    } else {
+      // console.log("IAM HERE ");
+      const len = Math.max(users.length, projects.length);
+      //  Alternates between user and project
+      for (let i = 0; i < len; i++) {
+        if (i < users.length) {
+          // console.log(users[i]);
+          arr.push(<ProfileCard info={users[i]} />);
+        }
+        if (i < projects.length) {
+          arr.push(<ProfileCard info={projects[i]} />);
+        }
+      }
     }
-    setLoading(false);
+    // TODO: Display a default no result page
+    // if (arr.length === 0) {
 
+    // }
+    // console.log(arr);
+    setLoading(false);
     setRecommendations(arr);
   }
 

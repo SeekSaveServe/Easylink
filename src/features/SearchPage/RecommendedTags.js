@@ -8,6 +8,7 @@ import {
   FormControlLabel,
   Radio,
   RadioGroup,
+  setRef,
 } from "@mui/material";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -18,7 +19,15 @@ import Checkmarks from "../../components/Checkmarks";
 import BasicButton from "../../components/BasicButton";
 import BasicLoadingButton from "../../components/BasicLoadingButton/BasicLoadingButton";
 import RadioWithLabel from "../../components/RadioWithLabel";
-function RecommendedTags({ refresh, setRefresh, loading }) {
+import fetchData from "./FetchData";
+function RecommendedTags({
+  refresh,
+  setRefresh,
+  loading,
+  setUsers,
+  setProjects,
+  fetch,
+}) {
   const dispatch = useDispatch();
   const user = useSelector((state) => state.user);
 
@@ -34,13 +43,15 @@ function RecommendedTags({ refresh, setRefresh, loading }) {
 
   // for radial buttons
   const [filter, setFilter] = useState("Show All");
-
+  // Updates form state once upon render
+  useEffect(() => {
+    updateFormState();
+  }, []);
   // update field with key = name attribute, to value = value attribute
   const radioChange = (evt) => {
     setFilter(evt.target.value);
   };
 
-  // Placeholder tags for now
   async function obtainTags(tag) {
     const { data, error } = await supabase
       .from(tag)
@@ -70,6 +81,35 @@ function RecommendedTags({ refresh, setRefresh, loading }) {
     }
   }, []);
 
+  useEffect(() => {
+    const comm = !selectedCommunities.length
+      ? communities
+      : selectedCommunities;
+    const skil = !selectedSkills.length ? skills : selectedSkills;
+    const int = !selectedInterests.length ? interests : selectedInterests;
+
+    fetchData(
+      setUsers,
+      "user",
+      user,
+      comm,
+      skil,
+      int,
+      refresh[0],
+      setRefresh[0]
+    );
+    fetchData(
+      setProjects,
+      "project",
+      user,
+      comm,
+      skil,
+      int,
+      refresh[1],
+      setRefresh[1]
+    );
+  }, [communities, fetch]);
+
   const updateFormState = () => {
     dispatch(
       update({
@@ -79,11 +119,35 @@ function RecommendedTags({ refresh, setRefresh, loading }) {
     );
   };
 
-  //   const navigate = useNavigate();
   async function handleSubmit(e) {
     e.preventDefault();
     updateFormState();
-    setRefresh(!refresh); // triggers a refresh
+    const comm = !selectedCommunities.length
+      ? communities
+      : selectedCommunities;
+    const skil = !selectedSkills.length ? skills : selectedSkills;
+    const int = !selectedInterests.length ? interests : selectedInterests;
+
+    fetchData(
+      setUsers,
+      "user",
+      user,
+      comm,
+      skil,
+      int,
+      refresh[0],
+      setRefresh[0]
+    );
+    fetchData(
+      setProjects,
+      "project",
+      user,
+      comm,
+      skil,
+      int,
+      refresh[1],
+      setRefresh[1]
+    );
   }
 
   return (
@@ -117,7 +181,7 @@ function RecommendedTags({ refresh, setRefresh, loading }) {
           name="row-radio-buttons-group"
           onChange={radioChange}
         >
-          <RadioWithLabel value="Show Projects" label="Show Users" />
+          <RadioWithLabel value="Show Projects" label="Show Projects" />
           <RadioWithLabel value="Show Users" label="Show Users" />
           <RadioWithLabel value="Show All" label="Show All" />
         </RadioGroup>
