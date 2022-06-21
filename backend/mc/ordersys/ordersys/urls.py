@@ -21,12 +21,16 @@ from app.apis import CourseViewSet
 from app.apis import TableViewSet
 from app.apis import UserViewSet
 from app.apis import ProjectViewSet
+from app.apis import UserViewSetRecommendation
+from app.apis import ProjectViewSetRecommendation
 
 router = routers.DefaultRouter()
 router.register(r'course', CourseViewSet)
 router.register(r'table', TableViewSet)
 router.register(r'user', UserViewSet, basename='Users')
 router.register(r'project', ProjectViewSet, basename='Projects')
+router.register(r'projectRecommendation', ProjectViewSet, basename='Projects')
+router.register(r'userRecommendation', UserViewSet, basename='Users')
 
 urlpatterns = [
 path('api/', include(router.urls)),
