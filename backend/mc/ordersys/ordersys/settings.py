@@ -28,7 +28,7 @@ SECRET_KEY = 'django-insecure-p$n1ubzvq5bj@!m-xqu*pn+or^)%(@scn4(w$ho8f$n-%@51jo
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = ['murmuring-basin-78610.herokuapp.com']
+ALLOWED_HOSTS = ['murmuring-basin-78610.herokuapp.com', '.vercel.app']
 
 
 # Application definition
