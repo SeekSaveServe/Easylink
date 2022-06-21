@@ -176,15 +176,24 @@ function ProfileCard({ info, isJoin }) {
     // to insert right fields based on sender / receiver
     const matchObj = {
         ["uid" in idObj ? "uid_sender" : "pid_sender"] : "uid" in idObj ? idObj.uid : idObj.pid,
-        [isProject ? "pid_receiver" : "uid_receiver"] : isProject ? info.pid : info.id
+        [isProject ? "pid_receiver" : "uid_receiver"] : isProject ? info.pid : info.id,
+        ["uid" in idObj ? "pid_sender" : "uid_sender"] : null,
+        [isProject ? "uid_receiver" : "pid_receiver"] : null
     }
 
     const outgoingObj = matchObj; // sender = me, receiver = other party
+
+    // incoming: set uid_sender/pid_sender to null 
     const incomingObj = {
         [isProject ? "pid_sender" : "uid_sender"] : isProject ? info.pid : info.id,
-        ["uid" in idObj ? "uid_receiver" : "pid_receiver"] :  "uid" in idObj ? idObj.uid : idObj.pid
+        ["uid" in idObj ? "uid_receiver" : "pid_receiver"] :  "uid" in idObj ? idObj.uid : idObj.pid,
+        [isProject ? "uid_sender" : "pid_sender"] : null,
+        ["uid" in idObj ? "pid_receiver" : "uid_receiver"] : null
+
 
     } // sender = other, receiver = me
+
+
 
     const addLink = async() => {
         try {
@@ -268,10 +277,21 @@ function ProfileCard({ info, isJoin }) {
                 if (insError) throw insError;
                 console.log("Reject succ (ins):", insData);
 
-                setShowLink(false);
-                setShowReject(false);
+                // setShowLink(false);
+                // setShowReject(false);
             } else {
-                // curretly reject/delete is only for pending, so we assume link is pending
+                // // only show for rejected incoming: change to pendig, outgoing
+                // if (linkinSlice.rejected) {
+                //     const { data: updateData, error:updateErr } = await supabase
+                //     .from('links')
+                //     .update({ accepted: false, rejected: false })
+                //     .match({ s_n: linkinSlice.s_n, ...outgoingObj })
+
+                //     if (updateErr) throw updateErr;
+                //     console.log("Update rej succ", updateData);
+                // }
+
+                // definitely pending: pending, incoming -> rejected, incoming
                 if (linkinSlice.incoming) {
                     const { data: updateData, error:updateErr } = await supabase
                     .from('links')
@@ -301,6 +321,24 @@ function ProfileCard({ info, isJoin }) {
         }
     }
 
+    // Incoming/Outgoing/You rejected/ They rejected
+    function StatusTag() {
+        if (!isLink) return <></>
+        if (linkinSlice.established) {
+            return <Tag color="var(--primary)" 
+            fontColor={"white"} sx={{fontSize: "0.7rem", alignSelf: "flex-start", mt:3}}>Established</Tag>
+        }
+
+        if (linkinSlice.pending) {
+            return <Tag color={linkinSlice.incoming ? "var(--secondary)" : "var(--primary)"} fontColor={"white"} sx={{fontSize: "0.7rem", alignSelf: "flex-start", mt:3}}>{linkinSlice.incoming ? "Incoming" : "Outgoing"}</Tag>
+        }
+
+        if (linkinSlice.rejected) {
+            return <Tag color={"error.main"} fontColor={"white"} sx={{fontSize: "0.7rem", alignSelf: "flex-start", mt:3}}>{linkinSlice.incoming ? "You rejected" : "They rejected"}</Tag>
+        }
+
+        return <></>
+    }
 
     return (
         <Card className={styles.card}>
@@ -314,9 +352,7 @@ function ProfileCard({ info, isJoin }) {
                         sx={{ml:0}} 
                     />
 
-                    { isLink && !linkinSlice.established ? 
-                        <Tag color={linkinSlice.incoming ? "var(--secondary)" : "var(--primary)"} fontColor={"white"} sx={{fontSize: "0.7rem", alignSelf: "flex-start", mt:3}}>{linkinSlice.incoming ? "Incoming" : "Outgoing"}</Tag>
-                        : <></> }
+                    <StatusTag/>
 
                     
                 </Stack>
@@ -356,8 +392,7 @@ function ProfileCard({ info, isJoin }) {
                              </Stack>
                             
                             {/* rejected, incoming (someone else sent, you rejected) -> show rejected text */}
-                            { (linkinSlice?.rejected && linkinSlice?.incoming) ?  <Tag color="error.main" fontColor="white" sx={{mr:4, mb:0.5}}>Rejected</Tag> : <></> }
-
+                            {/* { (linkinSlice?.rejected && linkinSlice?.incoming) ?  <Tag color="error.main" fontColor="white" sx={{mr:4, mb:0.5}}>Rejected</Tag> : <></> } */}
                             {/* Email, Tele */}
                             <div style={{marginLeft: "-8px"}}>
                                 { emailDisplay() }
