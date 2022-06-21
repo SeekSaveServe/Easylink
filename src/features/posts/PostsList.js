@@ -6,6 +6,8 @@ import Scrollable from "../../components/Scrollable";
 import PostCard from "../Projects/PostCard";
 import { useEffect, useState } from "react";
 import { supabase } from "../../supabaseClient";
+import { useSelector } from 'react-redux';
+import { selectAllFollowed } from '../followers/followerSlice';
 
 // For use specifically in feed: pull from followed projects
 
@@ -19,6 +21,8 @@ const filterMap = {
 function PostsList({ filterIndex }) {
     const [posts, setPosts] = useState([]);
     const [loading, setLoading] = useState(false);
+    const followedIds = useSelector(selectAllFollowed)?.map(row => row.followed_pid);
+    console.log("Followed ids", followedIds);
 
     // TODO: change to fetch posts from followed projects only
     const fetchPostsAndProjects = async() => {
@@ -38,6 +42,7 @@ function PostsList({ filterIndex }) {
                         avatar_url
                     )
                 `)
+                .in('pid', followedIds)
                 .order('created_at', { ascending: false })
             
             if (error) {
