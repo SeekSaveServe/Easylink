@@ -15,71 +15,37 @@ import useProfileFilter from "../components/ProfileCardList/useProfileFilter";
 import { CardList } from "../components/ProfileCardList/ProfileCardList";
 import { supabase } from "../../supabaseClient";
 import { useEffect, useState } from "react";
-import { CircularProgress } from '@mui/material';
+import { CircularProgress } from "@mui/material";
 import { useDispatch } from "react-redux";
 import { getFeedLinks } from "../Links/linksSlice";
 import { getLinks } from "../Links/linksSlice";
 import useIdObject from "../../components/hooks/useIdObject";
+import fetchData from "../SearchPage/FetchData";
 
 // For use specifically in Feed: pull from recommender API
 function RecommendationsList({ filterIndex }) {
-    // const { FilterButton, btnIndex } = useProfileFilter();
-    
-    const idObj = useIdObject();
-    const [recommendations, setRecommendations] = useState([]);
-    const [loading, setLoading] = useState(false);
-    const dispatch = useDispatch();
+  // const { FilterButton, btnIndex } = useProfileFilter();
 
-    useEffect(() => {
-        getRecommendations();
-        // dispatch(getFeedLinks());
-        
-    }, [])
+  const idObj = useIdObject();
+  const [recommendations, setRecommendations] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const dispatch = useDispatch();
+  const [refresh, setRefresh] = useState(false);
+  const [refresh2, setRefresh2] = useState(false);
+  const [users, setUsers] = useState([]);
+  const [projects, setProjects] = useState([]);
 
-//   const [recommendations, setRecommendations] = useState([]);
-//   const [loading, setLoading] = useState(false);
+  useEffect(() => {
+    getRecommendations();
+    // dispatch(getFeedLinks());
+  }, [refresh, refresh2]);
 
   // eventually replace with generated from API - ensure isProject field is available or computable (pid?)
   // for now, get all projects + users and preprocess by adding isProject field
   async function getRecommendations() {
     setLoading(true);
     try {
-      const { data: projects, error } = await supabase.from("projects").select(`
-                *,
-                user_skills (
-                    name
-                ),
-                user_interests(
-                    name
-                ),
-                user_communities!fk_pid(
-                    name
-                )
-                `)
-                .order('created_at', { ascending: false })
-
-      if (error) throw error;
-
-      const { data: users, error: userErr } = await supabase
-        .from("users")
-        .select(
-          `
-                    *,
-                    user_skills (
-                        name
-                    ),
-                    user_interests(
-                        name
-                    ),
-                    user_communities(
-                        name
-                    )
-                    `
-        )
-        .limit()
-        .order("created_at", { ascending: false });
-
-      if (error) throw error;
+      // Fetch data
 
       const valid = (datum) => {
         return datum.user_skills.length > 0 && datum.user_interests.length > 0;
@@ -98,18 +64,18 @@ function RecommendationsList({ filterIndex }) {
     }
   }
 
-//   useEffect(() => {
-//     getRecommendations();
-//   }, []);
+  //   useEffect(() => {
+  //     getRecommendations();
+  //   }, []);
 
-    useEffect(() => {
-        getRecommendations();     
-        // dispatch(getLinks(idObj));   
-    }, [])
+  useEffect(() => {
+    getRecommendations();
+    // dispatch(getLinks(idObj));
+  }, []);
 
-    useEffect(() => {
-        dispatch(getLinks(idObj));
-    }, [])
+  useEffect(() => {
+    dispatch(getLinks(idObj));
+  }, []);
 
   function displayRecommendations() {
     if (loading) {
@@ -120,23 +86,33 @@ function RecommendationsList({ filterIndex }) {
       );
     }
 
-    
-
     function displayRecommendations() {
-        if (loading) {
-            return <Center><CircularProgress size={40} sx={{mt:2}}/></Center>;
-        }
+      if (loading) {
+        return (
+          <Center>
+            <CircularProgress size={40} sx={{ mt: 2 }} />
+          </Center>
+        );
+      }
 
-        if (recommendations.length == 0) {
-            return (
-                <Center>
-                    <Typography color="gray" variant="h6" sx={{fontWeight:"normal", mt:1}}> Nothing to show </Typography>
-                </Center>
-            )
-        }
+      if (recommendations.length == 0) {
+        return (
+          <Center>
+            <Typography
+              color="gray"
+              variant="h6"
+              sx={{ fontWeight: "normal", mt: 1 }}
+            >
+              {" "}
+              Nothing to show{" "}
+            </Typography>
+          </Center>
+        );
+      }
 
-        return <CardList data={recommendations} btnIndex={filterIndex} isJoin={true}/>;
-
+      return (
+        <CardList data={recommendations} btnIndex={filterIndex} isJoin={true} />
+      );
     }
 
     return (
