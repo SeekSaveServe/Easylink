@@ -3,7 +3,7 @@ import { Navigate, useNavigate } from "react-router-dom";
 import { supabase } from "../../supabaseClient";
 import { useSelector, useDispatch } from 'react-redux';
 import { getUserProfile, replace } from "../../features/user/userSlice";
-
+import { projReq } from "../constants/requestStrings";
 // Redirects to sign in page if the user is not logged in
 // https://www.robinwieruch.de/react-router-private-routes/
 const ProtectedRoute = ({ children, redirectRoute = "/", active }) => {
@@ -12,6 +12,10 @@ const ProtectedRoute = ({ children, redirectRoute = "/", active }) => {
   const [session, setSession] = useState(null);
 
   const projects = useSelector(state => state.projects);
+
+
+
+  
 
   // return true if project was loaded else false
   const getProjectProfile = async() => {
@@ -36,7 +40,7 @@ const ProtectedRoute = ({ children, redirectRoute = "/", active }) => {
       
       const { data, error } = await supabase
         .from('projects')
-        .select('*')
+        .select(projReq)
         .match({ pid: pid })
         .limit(1)
         .maybeSingle()
@@ -53,6 +57,7 @@ const ProtectedRoute = ({ children, redirectRoute = "/", active }) => {
 
       } else {
           cachedProject = data;
+          console.log("")
       }
     }
 

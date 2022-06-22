@@ -22,6 +22,9 @@ import { supabase } from '../../supabaseClient';
 //       loading: 'idle' | 'pending' | 'fulfilled' | 'error'
 //   }
 
+import { projReq } from '../../components/constants/requestStrings';
+import { formatProfileDatum } from '../../components/constants/formatProfileDatum';
+
 const projectsAdapter = createEntityAdapter({
     selectId: (project) => project.pid
 });
@@ -127,14 +130,14 @@ function delay(ms) {
 // Async Thunks
 export const getProjects = createAsyncThunk('projects/getProjects', async() => {
     const { data, error } = await supabase.from('projects')
-    .select('*')
+    .select(projReq)
     .match({ uid: supabase.auth.user().id })
 
 
     // const { data, error } = await getData();
 
     if (error) throw error;
-    return data;
+    return data.map(formatProfileDatum);
 });
 
 // Create Slice
