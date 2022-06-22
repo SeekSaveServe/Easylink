@@ -20,7 +20,9 @@ export const getUserProfile = createAsyncThunk(
     }
 )
 
-const initialState = {};
+const initialState = {
+    loading: 'idle'
+};
 
 // after: dest updated to match source exactly
 // can't just assign inside redux

@@ -19,6 +19,13 @@ import { getFollowed } from "../followers/followerSlice";
 import useIdObject from "../../components/hooks/useIdObject";
 
 function Feed() {
+  const idObj = useIdObject();
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(getFollowed(idObj));
+  })
+  
   const userProfile = useSelector((state) => state.user);
   // to trigger recommendationlist to refresh
   const [fetch, setFetch] = useState(false);

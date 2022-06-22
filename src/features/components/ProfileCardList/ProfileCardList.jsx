@@ -31,7 +31,7 @@ export function CardList({ data, btnIndex, isJoin }) {
 
     // TODO: replace with actual data etc
     const showList = () => {
-        return list.length == 0 ? <Center><Typography variant="h5" color="gray" sx={{mt:2}}>Nothing to show</Typography> </Center> : list
+        return list.length == 0 ? <Center><Typography variant="h5" color="gray" sx={{mt:2}}></Typography> </Center> : list
     }
 
     return (

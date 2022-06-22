@@ -29,6 +29,7 @@ function RecommendationsList({ filterIndex, fetch }) {
   const idObj = useIdObject();
   const [recommendations, setRecommendations] = useState([]);
   const [loading, setLoading] = useState(false);
+  console.log("Loading", loading);
   const dispatch = useDispatch();
   const [refresh1, setRefresh] = useState(false);
   const [refresh2, setRefresh2] = useState(false);
@@ -49,55 +50,79 @@ function RecommendationsList({ filterIndex, fetch }) {
     return data;
   }
 
-  useEffect(() => {
-    obtainTags("unique_skills").then((res) =>
-      setSkills([res.map((obj) => obj.name)][0])
-    );
+  async function getTags() {
+    const unique_skills = (await obtainTags("unique_skills")).map(d => d.name);
+    const unique_interests = (await obtainTags("unique_interests")).map(d => d.name);
+    const unique_communities = (await obtainTags("unique_communities")).map(d => d.name);
+    return { unique_skills, unique_interests, unique_communities }
+  }
 
-    obtainTags("unique_interests").then((res) =>
-      setInterests([res.map((obj) => obj.name)][0])
-    );
+  // useEffect(() => {
+  //   obtainTags("unique_skills").then((res) =>
+  //     setSkills([res.map((obj) => obj.name)][0])
+  //   );
 
-    obtainTags("unique_communities").then((res) =>
-      setCommunities([res.map((obj) => obj.name)][0])
-    );
-  }, []);
 
   // eventually replace with generated from API - ensure isProject field is available or computable (pid?)
   // for now, get all projects + users and preprocess by adding isProject field
   async function getRecommendations() {
     setLoading(true);
     try {
+      const { unique_skills, unique_interests, unique_communities } = await getTags();
+      // await Promise.all([fetchData(
+      //   setUsers,
+      //   "user",
+      //   user,
+      //   !user.user_communities || (user.user_communities.length === 0) ? unique_communities : user.user_communities,
+      //   !user.user_skills || (user.user_skills.length === 0)? unique_skills : user.user_skills,
+      //   !user.user_interests || (user.user_interests.length === 0) ? unique_interests : user.user_interests,
+      //   refresh1,
+      //   setRefresh
+      // ), fetchData(
+      //   setProjects,
+      //   "project",
+      //   user,
+      //   !user.user_communities || (user.user_communities.length === 0) ? unique_communities : user.user_communities,
+      //   !user.user_skills || (user.user_skills.length === 0)? unique_skills : user.user_skills,
+      //   !user.user_interests || (user.user_interests.length === 0) ? unique_interests : user.user_interests,
+      //   refresh2,
+      //   setRefresh
+      // )])
+
       // Fetch data
       await fetchData(
         setUsers,
         "user",
         user,
-        !user.user_communities ? communities : user.user_communities,
-        !user.user_skills ? skills : user.user_skills,
-        !user.user_interests ? interests : user.user_interests,
+        !user.user_communities || (user.user_communities.length === 0) ? unique_communities : user.user_communities,
+        !user.user_skills || (user.user_skills.length === 0)? unique_skills : user.user_skills,
+        !user.user_interests || (user.user_interests.length === 0) ? unique_interests : user.user_interests,
         refresh1,
         setRefresh
       );
-      await fetchData(
+     await fetchData(
         setProjects,
         "project",
         user,
-        !user.user_communities ? communities : user.user_communities,
-        !user.user_skill ? skills : user.user_skills,
-        !user.user_interests ? interests : user.user_interests,
+        !user.user_communities || (user.user_communities.length === 0) ? unique_communities : user.user_communities,
+        !user.user_skills || (user.user_skills.length === 0)? unique_skills : user.user_skills,
+        !user.user_interests || (user.user_interests.length === 0) ? unique_interests : user.user_interests,
         refresh2,
         setRefresh2
       );
 
+
       const valid = (datum) => {
         return datum.user_skills.length > 0 && datum.user_interests.length > 0;
       };
+
+      
     } catch (error) {
       console.log("reccs err", error);
     } finally {
       setLoading(false);
     }
+
   }
 
   useEffect(() => {
@@ -109,7 +134,7 @@ function RecommendationsList({ filterIndex, fetch }) {
   }, []);
 
   useEffect(() => {
-    displayRecommendations();
+    // displayRecommendations();
     setRecommendations(
       users
         .concat(projects)
@@ -126,20 +151,20 @@ function RecommendationsList({ filterIndex, fetch }) {
       );
     }
 
-    if (recommendations.length === 0) {
-      return (
-        <Center>
-          <Typography
-            color="gray"
-            variant="h6"
-            sx={{ fontWeight: "normal", mt: 1 }}
-          >
-            {" "}
-            Nothing to show{" "}
-          </Typography>
-        </Center>
-      );
-    }
+    // if (recommendations.length === 0) {
+    //   return (
+    //     <Center>
+    //       <Typography
+    //         color="gray"
+    //         variant="h6"
+    //         sx={{ fontWeight: "normal", mt: 1 }}
+    //       >
+    //         {" "}
+    //         Nothing to show{" "}
+    //       </Typography>
+    //     </Center>
+    //   );
+    // }
 
     return (
       <CardList data={recommendations} btnIndex={filterIndex} isJoin={false} />

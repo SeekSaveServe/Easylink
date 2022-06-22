@@ -4,6 +4,7 @@ import { supabase } from "../../supabaseClient";
 import { useSelector, useDispatch } from 'react-redux';
 import { getUserProfile, replace } from "../../features/user/userSlice";
 import { projReq } from "../constants/requestStrings";
+import { formatProfileDatum } from "../constants/formatProfileDatum";
 // Redirects to sign in page if the user is not logged in
 // https://www.robinwieruch.de/react-router-private-routes/
 const ProtectedRoute = ({ children, redirectRoute = "/", active }) => {
@@ -12,10 +13,6 @@ const ProtectedRoute = ({ children, redirectRoute = "/", active }) => {
   const [session, setSession] = useState(null);
 
   const projects = useSelector(state => state.projects);
-
-
-
-  
 
   // return true if project was loaded else false
   const getProjectProfile = async() => {
@@ -38,12 +35,14 @@ const ProtectedRoute = ({ children, redirectRoute = "/", active }) => {
         // when projects has not been loaded -> avoid loading all projects just to check e.g when /feed
         // must check since proj could have been deleted
       
-      const { data, error } = await supabase
+      let { data, error } = await supabase
         .from('projects')
         .select(projReq)
         .match({ pid: pid })
         .limit(1)
         .maybeSingle()
+      
+      data = formatProfileDatum(data);
       
       if (error) {
         throw error;
