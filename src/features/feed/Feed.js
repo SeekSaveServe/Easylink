@@ -20,7 +20,8 @@ import useIdObject from "../../components/hooks/useIdObject";
 
 function Feed() {
   const userProfile = useSelector((state) => state.user);
-
+  // to trigger recommendationlist to refresh
+  const [fetch, setFetch] = useState(false);
   const [typeIndex, setTypeIndex] = useState(0); // 0 - Reccs, 1 - Posts
 
   const [filterIndex, setFilterIndex] = useState(0); // for FilterMenu
@@ -28,7 +29,6 @@ function Feed() {
     typeIndex == 0
       ? ["Users and projects", "Users only", "Projects only"]
       : ["Posts and polls", "Posts only", "Polls only"];
-  const dispatch = useDispatch();
 
   return (
     <>
@@ -70,8 +70,8 @@ function Feed() {
           />
         </Center>
 
-        {typeIndex == 0 ? (
-          <RecommendationsList filterIndex={filterIndex} />
+        {typeIndex === 0 ? (
+          <RecommendationsList filterIndex={filterIndex} fetch={fetch} />
         ) : (
           <PostsList filterIndex={filterIndex} />
         )}

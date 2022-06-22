@@ -23,14 +23,14 @@ import useIdObject from "../../components/hooks/useIdObject";
 import fetchData from "../SearchPage/FetchData";
 
 // For use specifically in Feed: pull from recommender API
-function RecommendationsList({ filterIndex }) {
+function RecommendationsList({ filterIndex, fetch }) {
   // const { FilterButton, btnIndex } = useProfileFilter();
 
   const idObj = useIdObject();
   const [recommendations, setRecommendations] = useState([]);
   const [loading, setLoading] = useState(false);
   const dispatch = useDispatch();
-  const [refresh, setRefresh] = useState(false);
+  const [refresh1, setRefresh] = useState(false);
   const [refresh2, setRefresh2] = useState(false);
   const [users, setUsers] = useState([]);
   const [projects, setProjects] = useState([]);
@@ -49,19 +49,19 @@ function RecommendationsList({ filterIndex }) {
     return data;
   }
 
-  useEffect(() => {
-    obtainTags("unique_skills").then((res) =>
-      setSkills([res.map((obj) => obj.name)][0])
-    );
+  // useEffect(() => {
+  //   obtainTags("unique_skills").then((res) =>
+  //     setSkills([res.map((obj) => obj.name)][0])
+  //   );
 
-    obtainTags("unique_interests").then((res) =>
-      setInterests([res.map((obj) => obj.name)][0])
-    );
+  //   obtainTags("unique_interests").then((res) =>
+  //     setInterests([res.map((obj) => obj.name)][0])
+  //   );
 
-    obtainTags("unique_communities").then((res) =>
-      setCommunities([res.map((obj) => obj.name)][0])
-    );
-  }, []);
+  //   obtainTags("unique_communities").then((res) =>
+  //     setCommunities([res.map((obj) => obj.name)][0])
+  //   );
+  // }, []);
 
   // eventually replace with generated from API - ensure isProject field is available or computable (pid?)
   // for now, get all projects + users and preprocess by adding isProject field
@@ -69,33 +69,30 @@ function RecommendationsList({ filterIndex }) {
     setLoading(true);
     try {
       // Fetch data
-      fetchData(
+      await fetchData(
         setUsers,
         "user",
         user,
         !user.user_communities ? communities : user.user_communities,
         !user.user_skills ? skills : user.user_skills,
-        !user.user_interests ? interests : user.user_interests
+        !user.user_interests ? interests : user.user_interests,
+        refresh1,
+        setRefresh
       );
-      fetchData(
+      await fetchData(
         setProjects,
         "project",
         user,
         !user.user_communities ? communities : user.user_communities,
         !user.user_skill ? skills : user.user_skills,
-        !user.user_interests ? interests : user.user_interests
+        !user.user_interests ? interests : user.user_interests,
+        refresh2,
+        setRefresh2
       );
 
       const valid = (datum) => {
         return datum.user_skills.length > 0 && datum.user_interests.length > 0;
       };
-
-      setRecommendations(
-        users
-          .concat(projects)
-          .filter(valid)
-          .sort((i1, i2) => new Date(i2.created_at) - new Date(i1.created_at))
-      );
     } catch (error) {
       console.log("reccs err", error);
     } finally {
@@ -105,11 +102,20 @@ function RecommendationsList({ filterIndex }) {
 
   useEffect(() => {
     getRecommendations();
-  }, []);
+  }, [fetch]);
 
   useEffect(() => {
     dispatch(getLinks(idObj));
   }, []);
+
+  useEffect(() => {
+    displayRecommendations();
+    setRecommendations(
+      users
+        .concat(projects)
+        .sort((i1, i2) => new Date(i2.created_at) - new Date(i1.created_at))
+    );
+  }, [refresh1, refresh2]);
 
   function displayRecommendations() {
     if (loading) {
@@ -136,7 +142,7 @@ function RecommendationsList({ filterIndex }) {
     }
 
     return (
-      <CardList data={recommendations} btnIndex={filterIndex} isJoin={true} />
+      <CardList data={recommendations} btnIndex={filterIndex} isJoin={false} />
     );
   }
 
