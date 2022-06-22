@@ -1,20 +1,22 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { supabase } from '../../supabaseClient';
-
+import { userReq } from '../../components/constants/requestStrings';
+import { formatProfileDatum } from '../../components/constants/formatProfileDatum';
 // Async Thunks
+
 export const getUserProfile = createAsyncThunk(
     'user/getUserProfile',
     async(uuid) => {
         const { data: userProfile, error } = await supabase
         .from('users')
-        .select('*')
+        .select(userReq)
         .eq('id', uuid)
         .single();
 
         if (error) {
             throw error;
         } 
-        return userProfile;
+        return formatProfileDatum(userProfile);
     }
 )
 
