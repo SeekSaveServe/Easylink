@@ -20,47 +20,15 @@ import useIdObject from "../../components/hooks/useIdObject";
 
 function Feed() {
   const userProfile = useSelector((state) => state.user);
-
+  // to trigger recommendationlist to refresh
+  const [fetch, setFetch] = useState(false);
   const [typeIndex, setTypeIndex] = useState(0); // 0 - Reccs, 1 - Posts
 
   const [filterIndex, setFilterIndex] = useState(0); // for FilterMenu
-  const filterItems = typeIndex == 0 ? ["Users and projects", "Users only", "Projects only"] : ["Posts and polls", "Posts only", "Polls only"];
-  const dispatch = useDispatch();
-  const idObj = useIdObject();
-  // useEffect(() => {
-  //   setFilterIndex(0);
-  // }, [typeIndex])
-  
-  //  Testing Django API
-  const [res, setRes] = useState("not set");
-  const instance = axios.create({
-    baseURL: "http://127.0.0.1:8000/api/",
-    timeout: 1000,
-    headers: {
-      Authorization: "Token 4e9f4c0735a434e094da78c61faa290881016460",
-    },
-  });
-  async function test() {
-    try {
-      await fetch("http://127.0.0.1:8000/api/user/?format=json&username=123")
-        .then((a) => a.json())
-        .then((data) => setRes(data[0]));
-    } catch (e) {
-      console.log(e);
-    } finally {
-      console.log("done!");
-    }
-  }
-  useEffect(() => {
-    test();
-    dispatch(getFollowed(idObj));
-
-  });
-  console.log(res);
-
-  const throwKnownError = () => {
-    throw new Error("testing Sentry");
-  };
+  const filterItems =
+    typeIndex == 0
+      ? ["Users and projects", "Users only", "Projects only"]
+      : ["Posts and polls", "Posts only", "Polls only"];
 
   return (
     <>
@@ -68,20 +36,45 @@ function Feed() {
       <BasicNavBar />
       <GreyContainer>
         <Center>
-          <Tag color="primary.light" fontColor="white" sx={{fontSize:"1.1rem", mt:1, mb:1.5}}>
-            <span>Welcome</span>,{" "}
-            <span>{userProfile.username}</span>
+          <Tag
+            color="primary.light"
+            fontColor="white"
+            sx={{ fontSize: "1.1rem", mt: 1, mb: 1.5 }}
+          >
+            <span>Welcome</span>, <span>{userProfile.username}</span>
           </Tag>
         </Center>
 
         {/* Title and options  */}
-        <Center style={{marginBottom:6}}>
-          <Typography variant="h4" color={typeIndex == 0 ? "var(--primary)" : "var(--secondary)"} sx={{mr:0.5}}>{ typeIndex == 0 ? "Recommendations" : "Posts"}</Typography>
-          <FilterMenu title={"Toggle view"} icon={<Settings/>} items={["Recommendations", "Posts"]} index={typeIndex} setIndex={setTypeIndex} />
-          <FilterMenu title={"Filter profiles"} icon={<FilterList/>} items={filterItems} index={filterIndex} setIndex={setFilterIndex} />
+        <Center style={{ marginBottom: 6 }}>
+          <Typography
+            variant="h4"
+            color={typeIndex == 0 ? "var(--primary)" : "var(--secondary)"}
+            sx={{ mr: 0.5 }}
+          >
+            {typeIndex == 0 ? "Recommendations" : "Posts"}
+          </Typography>
+          <FilterMenu
+            title={"Toggle view"}
+            icon={<Settings />}
+            items={["Recommendations", "Posts"]}
+            index={typeIndex}
+            setIndex={setTypeIndex}
+          />
+          <FilterMenu
+            title={"Filter profiles"}
+            icon={<FilterList />}
+            items={filterItems}
+            index={filterIndex}
+            setIndex={setFilterIndex}
+          />
         </Center>
 
-          { typeIndex == 0 ? <RecommendationsList filterIndex={filterIndex} /> : <PostsList filterIndex={filterIndex} /> }
+        {typeIndex === 0 ? (
+          <RecommendationsList filterIndex={filterIndex} fetch={fetch} />
+        ) : (
+          <PostsList filterIndex={filterIndex} />
+        )}
       </GreyContainer>
     </>
   );

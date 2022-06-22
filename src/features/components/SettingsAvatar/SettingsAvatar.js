@@ -28,10 +28,7 @@ export default function SettingsAvatar({ url, size, onUpload }) {
       const url = URL.createObjectURL(data);
       setAvatarUrl(url);
     } catch (error) {
-      showAlert(
-        error.error_description || error.message,
-        "error"
-      );
+      showAlert(error.error_description || error.message, "error");
     }
   };
 
@@ -65,7 +62,11 @@ export default function SettingsAvatar({ url, size, onUpload }) {
   };
 
   return (
-    <div class={styles.container} style={{ width: size }} aria-live="polite">
+    <div
+      className={styles.container}
+      style={{ width: size }}
+      aria-live="polite"
+    >
       {/* <BasicAvatar
         src={avatarUrl}
         alt={avatarUrl ? "Avatar" : "No image"}
@@ -104,7 +105,7 @@ export default function SettingsAvatar({ url, size, onUpload }) {
         </IconButton>
       </label> */}
 
-      <IconButton component="span" class={styles.image}>
+      <IconButton component="span" className={styles.image}>
         <BasicAvatar
           src={avatarUrl}
           alt={avatarUrl ? "Avatar" : "No image"}
@@ -112,7 +113,7 @@ export default function SettingsAvatar({ url, size, onUpload }) {
         />
         <input
           accept="image/*"
-          class={styles.overlay}
+          className={styles.overlay}
           multiple
           type="file"
           onChange={uploadAvatar}
