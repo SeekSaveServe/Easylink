@@ -15,16 +15,18 @@ export default async function fetchData(
 
   function formatUrl() {
     // local host
-    return `http://127.0.0.1:8000/api/${route}/?format=json&searchInput=${
-      !user.search ? "" : user.search
-    }&communities=${formatArray(communities)}&skills=${formatArray(
-      skills
-    )}&interests=${formatArray(interests)}`;
-    // return `https://murmuring-basin-78610.herokuapp.com/api/${route}/?format=json&searchInput=${
+    // return `http://127.0.0.1:8000/api/${route}/?format=json&searchInput=${
     //   !user.search ? "" : user.search
     // }&communities=${formatArray(communities)}&skills=${formatArray(
     //   skills
     // )}&interests=${formatArray(interests)}`;
+
+    // Heroku
+    return `https://murmuring-basin-78610.herokuapp.com/api/${route}/?format=json&searchInput=${
+      !user.search ? "" : user.search
+    }&communities=${formatArray(communities)}&skills=${formatArray(
+      skills
+    )}&interests=${formatArray(interests)}`;
   }
 
   async function fetchUser() {
