@@ -35,15 +35,15 @@ function RecommendationsList({ filterIndex }) {
   const [users, setUsers] = useState([]);
   const [projects, setProjects] = useState([]);
   const user = useSelector((state) => state.user);
-  
+
   // eventually replace with generated from API - ensure isProject field is available or computable (pid?)
   // for now, get all projects + users and preprocess by adding isProject field
   async function getRecommendations() {
     setLoading(true);
     try {
       // Fetch data
-      fetchData(setUsers, "user", user, user., user., user.);
-      fetchData(setProjects, "project", user, user., user., user.);
+      // fetchData(setUsers, "user", user, user., user., user.);
+      // fetchData(setProjects, "project", user, user., user., user.);
 
       const valid = (datum) => {
         return datum.user_skills.length > 0 && datum.user_interests.length > 0;
