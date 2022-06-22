@@ -24,7 +24,6 @@ export default async function fetchData(
   async function fetchUser() {
     // console.log(formatUrl());
     try {
-      // console.log(formatUrl());
       await fetch(formatUrl(), {
         headers: {
           Authorization: "4e9f4c0735a434e094da78c61faa290881016460",

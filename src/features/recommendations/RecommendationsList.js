@@ -16,7 +16,7 @@ import { CardList } from "../components/ProfileCardList/ProfileCardList";
 import { supabase } from "../../supabaseClient";
 import { useEffect, useState } from "react";
 import { CircularProgress } from "@mui/material";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { getFeedLinks } from "../Links/linksSlice";
 import { getLinks } from "../Links/linksSlice";
 import useIdObject from "../../components/hooks/useIdObject";
@@ -34,18 +34,16 @@ function RecommendationsList({ filterIndex }) {
   const [refresh2, setRefresh2] = useState(false);
   const [users, setUsers] = useState([]);
   const [projects, setProjects] = useState([]);
-
-  useEffect(() => {
-    getRecommendations();
-    // dispatch(getFeedLinks());
-  }, [refresh, refresh2]);
-
+  const user = useSelector((state) => state.user);
+  
   // eventually replace with generated from API - ensure isProject field is available or computable (pid?)
   // for now, get all projects + users and preprocess by adding isProject field
   async function getRecommendations() {
     setLoading(true);
     try {
       // Fetch data
+      fetchData(setUsers, "user", user, user., user., user.);
+      fetchData(setProjects, "project", user, user., user., user.);
 
       const valid = (datum) => {
         return datum.user_skills.length > 0 && datum.user_interests.length > 0;
@@ -64,13 +62,8 @@ function RecommendationsList({ filterIndex }) {
     }
   }
 
-  //   useEffect(() => {
-  //     getRecommendations();
-  //   }, []);
-
   useEffect(() => {
     getRecommendations();
-    // dispatch(getLinks(idObj));
   }, []);
 
   useEffect(() => {
@@ -86,32 +79,18 @@ function RecommendationsList({ filterIndex }) {
       );
     }
 
-    function displayRecommendations() {
-      if (loading) {
-        return (
-          <Center>
-            <CircularProgress size={40} sx={{ mt: 2 }} />
-          </Center>
-        );
-      }
-
-      if (recommendations.length == 0) {
-        return (
-          <Center>
-            <Typography
-              color="gray"
-              variant="h6"
-              sx={{ fontWeight: "normal", mt: 1 }}
-            >
-              {" "}
-              Nothing to show{" "}
-            </Typography>
-          </Center>
-        );
-      }
-
+    if (recommendations.length === 0) {
       return (
-        <CardList data={recommendations} btnIndex={filterIndex} isJoin={true} />
+        <Center>
+          <Typography
+            color="gray"
+            variant="h6"
+            sx={{ fontWeight: "normal", mt: 1 }}
+          >
+            {" "}
+            Nothing to show{" "}
+          </Typography>
+        </Center>
       );
     }
 
@@ -120,16 +99,7 @@ function RecommendationsList({ filterIndex }) {
     );
   }
 
-  return (
-    <Box>
-      {/* <Center style={{marginBottom:6}}>
-                <Typography variant="h4" color="var(--primary)">Recommendations</Typography>
-                <FilterButton bg="primary" sx={{margin:"0rem 2rem", width: "20%", display: "block", padding: "0.2rem"}}/>
-            </Center> */}
-
-      {displayRecommendations()}
-    </Box>
-  );
+  return <Box>{displayRecommendations()}</Box>;
 }
 
 export default RecommendationsList;
