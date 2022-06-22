@@ -23,7 +23,7 @@ export default async function fetchData(
 
     // Heroku https://murmuring-basin-78610.herokuapp.com/
 
-    return `http://127.0.0.1:8000/api/${route}/?format=json&searchInput=${
+    return `https://murmuring-basin-78610.herokuapp.com/api/${route}/?format=json&searchInput=${
       !user.search ? "" : user.search
     }&communities=${formatArray(communities)}&skills=${formatArray(
       skills
