@@ -49,19 +49,19 @@ function RecommendationsList({ filterIndex, fetch }) {
     return data;
   }
 
-  // useEffect(() => {
-  //   obtainTags("unique_skills").then((res) =>
-  //     setSkills([res.map((obj) => obj.name)][0])
-  //   );
+  useEffect(() => {
+    obtainTags("unique_skills").then((res) =>
+      setSkills([res.map((obj) => obj.name)][0])
+    );
 
-  //   obtainTags("unique_interests").then((res) =>
-  //     setInterests([res.map((obj) => obj.name)][0])
-  //   );
+    obtainTags("unique_interests").then((res) =>
+      setInterests([res.map((obj) => obj.name)][0])
+    );
 
-  //   obtainTags("unique_communities").then((res) =>
-  //     setCommunities([res.map((obj) => obj.name)][0])
-  //   );
-  // }, []);
+    obtainTags("unique_communities").then((res) =>
+      setCommunities([res.map((obj) => obj.name)][0])
+    );
+  }, []);
 
   // eventually replace with generated from API - ensure isProject field is available or computable (pid?)
   // for now, get all projects + users and preprocess by adding isProject field
