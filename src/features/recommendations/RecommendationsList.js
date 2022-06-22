@@ -36,14 +36,55 @@ function RecommendationsList({ filterIndex }) {
   const [projects, setProjects] = useState([]);
   const user = useSelector((state) => state.user);
 
+  // obtain all unique interests and tags
+  const [skills, setSkills] = useState([]);
+  const [interests, setInterests] = useState([]);
+  const [communities, setCommunities] = useState([]);
+
+  async function obtainTags(tag) {
+    const { data, error } = await supabase
+      .from(tag)
+      .select("name")
+      .is("in_login", true);
+    return data;
+  }
+
+  useEffect(() => {
+    obtainTags("unique_skills").then((res) =>
+      setSkills([res.map((obj) => obj.name)][0])
+    );
+
+    obtainTags("unique_interests").then((res) =>
+      setInterests([res.map((obj) => obj.name)][0])
+    );
+
+    obtainTags("unique_communities").then((res) =>
+      setCommunities([res.map((obj) => obj.name)][0])
+    );
+  }, []);
+
   // eventually replace with generated from API - ensure isProject field is available or computable (pid?)
   // for now, get all projects + users and preprocess by adding isProject field
   async function getRecommendations() {
     setLoading(true);
     try {
       // Fetch data
-      // fetchData(setUsers, "user", user, user., user., user.);
-      // fetchData(setProjects, "project", user, user., user., user.);
+      fetchData(
+        setUsers,
+        "user",
+        user,
+        !user.user_communities ? communities : user.user_communities,
+        !user.user_skills ? skills : user.user_skills,
+        !user.user_interests ? interests : user.user_interests
+      );
+      fetchData(
+        setProjects,
+        "project",
+        user,
+        !user.user_communities ? communities : user.user_communities,
+        !user.user_skill ? skills : user.user_skills,
+        !user.user_interests ? interests : user.user_interests
+      );
 
       const valid = (datum) => {
         return datum.user_skills.length > 0 && datum.user_interests.length > 0;
