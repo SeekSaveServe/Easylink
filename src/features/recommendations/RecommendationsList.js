@@ -92,7 +92,7 @@ function RecommendationsList({ filterIndex, fetch }) {
       // Fetch data
       await fetchData(
         setUsers,
-        "user",
+        "userRecommendation",
         user,
         !user.user_communities || (user.user_communities.length === 0) ? unique_communities : user.user_communities,
         !user.user_skills || (user.user_skills.length === 0)? unique_skills : user.user_skills,
@@ -102,7 +102,7 @@ function RecommendationsList({ filterIndex, fetch }) {
       );
      await fetchData(
         setProjects,
-        "project",
+        "projectRecommendation",
         user,
         !user.user_communities || (user.user_communities.length === 0) ? unique_communities : user.user_communities,
         !user.user_skills || (user.user_skills.length === 0)? unique_skills : user.user_skills,
