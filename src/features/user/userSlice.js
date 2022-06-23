@@ -63,6 +63,7 @@ export const userSlice = createSlice({
             // for (const [key, val] of Object.entries(action.payload)) {
             //     state[key] = val
             // }
+            state.loading='f'
             updateHelper(action.payload, state);
 
         })

@@ -335,16 +335,6 @@ function ProfileCard({ info, isJoin }) {
         // setShowLink(false);
         // setShowReject(false);
       } else {
-        // // only show for rejected incoming: change to pendig, outgoing
-        // if (linkinSlice.rejected) {
-        //     const { data: updateData, error:updateErr } = await supabase
-        //     .from('links')
-        //     .update({ accepted: false, rejected: false })
-        //     .match({ s_n: linkinSlice.s_n, ...outgoingObj })
-
-        //     if (updateErr) throw updateErr;
-        //     console.log("Update rej succ", updateData);
-        // }
 
         // definitely pending: pending, incoming -> rejected, incoming
         if (linkinSlice.incoming) {
@@ -604,7 +594,6 @@ function ProfileCard({ info, isJoin }) {
       </Box>
 
       <Divider orientation="vertical" flexItem />
-      {/* <LinkableAvatar sx={{ width: "10%", height: "auto" }} variant="square" src={info.avatar_url} imgProps={{style: {objectFit: "contain"}}}/>        */}
     </Card>
   );
 }
