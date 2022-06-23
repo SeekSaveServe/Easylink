@@ -127,7 +127,7 @@ function RecommendationsList({ filterIndex, fetch }) {
 
   useEffect(() => {
     getRecommendations();
-  }, [fetch]);
+  }, [fetch, user]);
 
   useEffect(() => {
     dispatch(getLinks(idObj));
