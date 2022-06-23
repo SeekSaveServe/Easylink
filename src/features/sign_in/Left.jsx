@@ -7,6 +7,7 @@ import styles from "./../components/left/Left.module.css";
 import { FormGroup, FormControlLabel, Checkbox } from "@mui/material";
 import { Email, LockOutlined } from "@mui/icons-material";
 import { useAlert } from "../../components/Alert/AlertContext";
+import CreateDummyUsers from "./Create_Dummy_Users";
 
 function Left({ logo, msg, formState, updateState, handleSignIn }) {
   const showAlert = useAlert();
@@ -27,7 +28,6 @@ function Left({ logo, msg, formState, updateState, handleSignIn }) {
       // showAlert("Signed in!", "success");
     } catch (error) {
       showAlert(error.error_description || error.message, "error");
-
     } finally {
       setLoading(false);
     }
@@ -49,7 +49,7 @@ function Left({ logo, msg, formState, updateState, handleSignIn }) {
           id="outlined-email-input"
           value={formState.email}
           onChange={updateState}
-          icon={<Email/>}
+          icon={<Email />}
         ></BasicTextField>
 
         <BasicTextField
@@ -60,16 +60,24 @@ function Left({ logo, msg, formState, updateState, handleSignIn }) {
           id="outlined-password-input"
           value={formState.password}
           onChange={updateState}
-          icon={<LockOutlined/>}
+          icon={<LockOutlined />}
         ></BasicTextField>
 
         <FormGroup>
-          <FormControlLabel control={<Checkbox />} label="Remember Me"></FormControlLabel>
+          <FormControlLabel
+            control={<Checkbox />}
+            label="Remember Me"
+          ></FormControlLabel>
         </FormGroup>
 
         <BasicButton bg="secondary" onClick={handleLogin}>
           Sign in
         </BasicButton>
+
+        {/* DO NOT UNCOMMENT THIS WITHOUT A GOOD REASON */}
+        {/* <BasicButton bg="secondary" onClick={CreateDummyUsers}>
+          CREATE USERS
+        </BasicButton> */}
       </form>
     </div>
   );
