@@ -2,6 +2,8 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { supabase } from '../../supabaseClient';
 import { userReq } from '../../components/constants/requestStrings';
 import { formatProfileDatum } from '../../components/constants/formatProfileDatum';
+import updateHelper from '../../components/constants/updateHelper';
+
 // Async Thunks
 
 export const getUserProfile = createAsyncThunk(
@@ -23,21 +25,6 @@ export const getUserProfile = createAsyncThunk(
 const initialState = {
     loading: 'idle'
 };
-
-// after: dest updated to match source exactly
-// can't just assign inside redux
-function updateHelper(source, dest) {
-    for (const [key,val] of Object.entries(source)) {
-        dest[key] = val;
-    }
-
-    // delete keys in original dest that are not in source
-    for (const key of Object.keys(dest)) {
-        if (!(key in source)) {
-            delete dest[key];
-        }
-    }
-}
 
 export const userSlice = createSlice({
     name: 'user',

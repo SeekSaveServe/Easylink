@@ -4,6 +4,7 @@ import {
     createAsyncThunk,
   } from '@reduxjs/toolkit'
 import { supabase } from '../../supabaseClient';
+import updateHelper from '../../components/constants/updateHelper';
 
 // Use to store followed projects -> facilitate posts and card check
 
@@ -37,18 +38,6 @@ export const getFollowed = createAsyncThunk('followers/getFollowed', async(idObj
 
 })
 
-function updateHelper(source, dest) {
-    for (const [key,val] of Object.entries(source)) {
-        dest[key] = val;
-    }
-
-    // delete keys in original dest that are not in source
-    for (const key of Object.keys(dest)) {
-        if (!(key in source)) {
-            delete dest[key];
-        }
-    }
-}
 
 const followerSlice = createSlice({
     name: 'followed',

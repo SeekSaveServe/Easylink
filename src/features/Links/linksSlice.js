@@ -4,6 +4,7 @@ import {
     createAsyncThunk,
   } from '@reduxjs/toolkit'
 import { supabase } from '../../supabaseClient';
+import updateHelper from '../../components/constants/updateHelper';
 
 // Use this slice for both storing Feed recommendations and for Links page
   // why: when in Feed and someone clicks one of the buttons it has to be removed, don't want to reload upon click
@@ -150,20 +151,6 @@ export const getLinks = createAsyncThunk('links/getLinks', async(idObj) => {
     }
 
 });
-
-
-function updateHelper(source, dest) {
-    for (const [key,val] of Object.entries(source)) {
-        dest[key] = val;
-    }
-
-    // delete keys in original dest that are not in source
-    for (const key of Object.keys(dest)) {
-        if (!(key in source)) {
-            delete dest[key];
-        }
-    }
-}
 
 // Create slice
 const linksSlice = createSlice({

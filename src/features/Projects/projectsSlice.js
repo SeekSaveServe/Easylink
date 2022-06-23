@@ -4,6 +4,8 @@ import {
     createAsyncThunk,
   } from '@reduxjs/toolkit'
 import { supabase } from '../../supabaseClient';
+import updateHelper from '../../components/constants/updateHelper';
+
 // Faciliates CRUD on normalised objects
 // structure for one entity:
     //   {
@@ -159,6 +161,7 @@ const projectsSlice = createSlice({
             state.loading = 'fulfilled';
             const data = preprocess(action.payload);
             
+            updateHelper({ ids:[], entities: {}, loading: 'fulfilled', rootsIds:[] }, state);
             // upsert does shallow copy for existing data
             projectsAdapter.upsertMany(state, data.idMapping);
             state.rootIds = data.rootIds;
