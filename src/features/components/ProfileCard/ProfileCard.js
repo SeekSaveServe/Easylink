@@ -73,8 +73,8 @@ function ProfileCard({ info, isJoin }) {
   const [loading, setLoading] = useState(false);
 
   // TODO: email/tele vis: "afterlink" || "everyone" -> calculate based on if viewing user has linked
-  const showEmail = Boolean(info.email);
-  const showTele = Boolean(info.telegram);
+  const showEmail = Boolean(info.email) && (info.email_visibility == "everyone" || linkinSlice?.established);
+  const showTele = Boolean(info.telegram) && (info.telegram_visibility == "everyone" || linkinSlice?.established)
 
   const mapName = (d) => d.name; // for join query in links
 

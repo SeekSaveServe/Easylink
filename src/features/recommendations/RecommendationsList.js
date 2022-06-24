@@ -127,19 +127,36 @@ function RecommendationsList({ filterIndex, fetch }) {
 
   useEffect(() => {
     getRecommendations();
-  }, [fetch]);
+  }, [fetch, user]);
 
   useEffect(() => {
     dispatch(getLinks(idObj));
   }, []);
 
+
+
+  function interleave(users, projects) {
+    const arr = [];
+    const len = Math.max(users.length, projects.length);
+      //  Alternates between user and project
+      for (let i = 0; i < len; i++) {
+        if (i < users.length) {
+          // console.log(users[i]);
+          arr.push(users[i]);
+        }
+        if (i < projects.length) {
+          arr.push(projects[i]);
+        }
+      }
+    
+    return arr;
+  }
+
   useEffect(() => {
     // displayRecommendations();
-    setRecommendations(
-      users
-        .concat(projects)
-        .sort((i1, i2) => new Date(i2.created_at) - new Date(i1.created_at))
-    );
+    
+    setRecommendations(interleave(users, projects))
+    
   }, [refresh1, refresh2]);
 
   function displayRecommendations() {
