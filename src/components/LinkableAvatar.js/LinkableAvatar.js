@@ -46,7 +46,18 @@ function LinkableAvatar(props) {
   useEffect(() => {
     downloadImage(src);
   }, [src]);
-  return <Avatar onClick={onClick} src={avatarUrl} {...rest}></Avatar>;
+  return (
+    <Avatar
+      onClick={onClick}
+      src={avatarUrl}
+      style={{
+        display: "flex",
+        alignItems: "center",
+        flexWrap: "wrap",
+      }}
+      {...rest}
+    ></Avatar>
+  );
 }
 
 export default LinkableAvatar;

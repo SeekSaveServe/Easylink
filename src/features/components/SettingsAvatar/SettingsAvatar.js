@@ -109,7 +109,13 @@ export default function SettingsAvatar({ url, size, onUpload }) {
         <BasicAvatar
           src={avatarUrl}
           alt={avatarUrl ? "Avatar" : "No image"}
-          style={{ height: size, width: size }}
+          style={{
+            height: size,
+            width: size,
+            display: "flex",
+            alignItems: "center",
+            flexWrap: "wrap",
+          }}
         />
         <input
           accept="image/*"

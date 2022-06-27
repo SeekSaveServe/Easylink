@@ -4,7 +4,16 @@ import { Avatar } from "@mui/material";
 function BasicAvatar(props) {
   const { ...rest } = props;
 
-  return <Avatar {...rest}></Avatar>;
+  return (
+    <Avatar
+      style={{
+        display: "flex",
+        alignItems: "center",
+        flexWrap: "wrap",
+      }}
+      {...rest}
+    ></Avatar>
+  );
 }
 
 export default BasicAvatar;
