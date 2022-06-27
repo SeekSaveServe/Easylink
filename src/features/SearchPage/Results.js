@@ -11,6 +11,7 @@ import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import ProfileCard from "../components/ProfileCard/ProfileCard";
 import scroll from "../components/scroll/Scroll.module.css";
+import { CardList } from '../components/ProfileCardList/ProfileCardList';
 
 function RecommendationsList({
   setLoading,
@@ -33,11 +34,11 @@ function RecommendationsList({
     // console.log("filter: ", user.searchFilter);
     if (user.searchFilter === "Show Projects") {
       for (let i = 0; i < projects.length; i++) {
-        arr.push(<ProfileCard info={projects[i]} />);
+        arr.push(projects[i]);
       }
     } else if (user.searchFilter === "Show Users") {
       for (let i = 0; i < users.length; i++) {
-        arr.push(<ProfileCard info={users[i]} />);
+        arr.push(users[i]);
       }
     } else {
       // console.log("IAM HERE ");
@@ -46,10 +47,10 @@ function RecommendationsList({
       for (let i = 0; i < len; i++) {
         if (i < users.length) {
           // console.log(users[i]);
-          arr.push(<ProfileCard info={users[i]} />);
+          arr.push(users[i]);
         }
         if (i < projects.length) {
-          arr.push(<ProfileCard info={projects[i]} />);
+          arr.push(projects[i]);
         }
       }
     }
@@ -60,6 +61,7 @@ function RecommendationsList({
     // console.log(arr);
     setLoading(false);
     setRecommendations(arr);
+    console.log("data", arr);
   }
 
   return (
@@ -69,7 +71,8 @@ function RecommendationsList({
       </Typography>
 
       <Box className={scroll.scroll_child}>
-        <Stack spacing={4}>{recommendations}</Stack>
+        {/* <Stack spacing={4}>{recommendations}</Stack> */}
+        <CardList data={recommendations} btnIndex={0} isJoin={false}/>
       </Box>
     </Box>
   );
