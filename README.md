@@ -21,24 +21,14 @@
   <img src="https://raw.githubusercontent.com/SeekSaveServe/Easylink/main/.github/images/Milestone%20I%20poster.png" width="480" height="720">
 </div>
 
-### TODO (Milestone II): 
-
-- [x] Implemented sign in, sign up pages with basic CRUD
-- [x] Implemented landing page (feed) for successful sign in and sign up
-- [ ] Integrate GraphQL into frontend
-- [ ] Write Search and Recommendation API using Django 
-- [ ] Implement projects
-- [ ] Implement links page
-- [ ] Implement Search page
-- [ ] Perform comprehensive testing
 
 <br/><br/>
 
 | Item | Link                               |
 |------------|-------------------------------------------|
-|Poster    | [Poster Link](https://drive.google.com/file/d/1wCtL-hbDkBIJ7BIxCj1KG_ELLYVvq6m2/view?usp=sharing) |
-| Detailed Doc       | [Docs Link](https://docs.google.com/document/d/1fp2qiw4Wva24M1gQuMgI8Wd4vBF7FVN-eMRUA0AEosA/edit?usp=sharing) |
-| Video Overview | [Video Link](https://youtu.be/z4C5g51rQ9o) |
+|Poster    | [Poster Link](https://drive.google.com/file/d/1oNQk4ZUF8r40zXbpuJWs2pjOzV-xuV8N/view?usp=sharing) |
+| Detailed Doc       | [Docs Link](https://docs.google.com/document/d/14df0svuI6hbuEBz3AFaZRu9XlCSBOMxT6ttG6P3Rrt8/edit?usp=sharing) |
+| Video Overview | [Video Link](https://drive.google.com/file/d/1zjdBnr4mDW9adcGxWh4uDSPeoicFEeRm/view?usp=sharing) |
 | Figma Prototype | [Figma Link](https://tinyurl.com/Easylink-figma) |
 <br/>
 
