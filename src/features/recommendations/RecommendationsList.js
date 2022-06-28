@@ -22,6 +22,8 @@ import { getLinks } from "../Links/linksSlice";
 import useIdObject from "../../components/hooks/useIdObject";
 import fetchData from "../SearchPage/FetchData";
 import { deleteKeys } from "../user/userSlice";
+import { Loading } from "../../components/constants/loading";
+import { searchLoaded, getTags } from "../SearchPage/searchSlice";
 
 // For use specifically in Feed: pull from recommender API
 function RecommendationsList({ filterIndex, fetch }) {
@@ -36,7 +38,9 @@ function RecommendationsList({ filterIndex, fetch }) {
   const [refresh2, setRefresh2] = useState(false);
   const [users, setUsers] = useState([]);
   const [projects, setProjects] = useState([]);
+
   const user = useSelector((state) => state.user);
+  const search = useSelector(state => state.search);
 
   // obtain all unique interests and tags
   const [skills, setSkills] = useState([]);
@@ -66,75 +70,83 @@ function RecommendationsList({ filterIndex, fetch }) {
 
   // eventually replace with generated from API - ensure isProject field is available or computable (pid?)
   // for now, get all projects + users and preprocess by adding isProject field
-  async function getRecommendations() {
-    setLoading(true);
-    try {
-      const { unique_skills, unique_interests, unique_communities } = await getTags();
-      // await Promise.all([fetchData(
-      //   setUsers,
-      //   "user",
-      //   user,
-      //   !user.user_communities || (user.user_communities.length === 0) ? unique_communities : user.user_communities,
-      //   !user.user_skills || (user.user_skills.length === 0)? unique_skills : user.user_skills,
-      //   !user.user_interests || (user.user_interests.length === 0) ? unique_interests : user.user_interests,
-      //   refresh1,
-      //   setRefresh
-      // ), fetchData(
-      //   setProjects,
-      //   "project",
-      //   user,
-      //   !user.user_communities || (user.user_communities.length === 0) ? unique_communities : user.user_communities,
-      //   !user.user_skills || (user.user_skills.length === 0)? unique_skills : user.user_skills,
-      //   !user.user_interests || (user.user_interests.length === 0) ? unique_interests : user.user_interests,
-      //   refresh2,
-      //   setRefresh
-      // )])
+  // async function getRecommendations() {
+  //   setLoading(true);
+  //   try {
+  //     const { unique_skills, unique_interests, unique_communities } = await getTags();
+  //     // await Promise.all([fetchData(
+  //     //   setUsers,
+  //     //   "user",
+  //     //   user,
+  //     //   !user.user_communities || (user.user_communities.length === 0) ? unique_communities : user.user_communities,
+  //     //   !user.user_skills || (user.user_skills.length === 0)? unique_skills : user.user_skills,
+  //     //   !user.user_interests || (user.user_interests.length === 0) ? unique_interests : user.user_interests,
+  //     //   refresh1,
+  //     //   setRefresh
+  //     // ), fetchData(
+  //     //   setProjects,
+  //     //   "project",
+  //     //   user,
+  //     //   !user.user_communities || (user.user_communities.length === 0) ? unique_communities : user.user_communities,
+  //     //   !user.user_skills || (user.user_skills.length === 0)? unique_skills : user.user_skills,
+  //     //   !user.user_interests || (user.user_interests.length === 0) ? unique_interests : user.user_interests,
+  //     //   refresh2,
+  //     //   setRefresh
+  //     // )])
 
-      // Fetch data
-      await fetchData(
-        setUsers,
-        "userRecommendation",
-        user,
-        !user.user_communities || (user.user_communities.length === 0) ? unique_communities : user.user_communities,
-        !user.user_skills || (user.user_skills.length === 0)? unique_skills : user.user_skills,
-        !user.user_interests || (user.user_interests.length === 0) ? unique_interests : user.user_interests,
-        refresh1,
-        setRefresh
-      );
-     await fetchData(
-        setProjects,
-        "projectRecommendation",
-        user,
-        !user.user_communities || (user.user_communities.length === 0) ? unique_communities : user.user_communities,
-        !user.user_skills || (user.user_skills.length === 0)? unique_skills : user.user_skills,
-        !user.user_interests || (user.user_interests.length === 0) ? unique_interests : user.user_interests,
-        refresh2,
-        setRefresh2
-      );
+  //     // Fetch data
+  //     await fetchData(
+  //       setUsers,
+  //       "userRecommendation",
+  //       user,
+  //       !user.user_communities || (user.user_communities.length === 0) ? unique_communities : user.user_communities,
+  //       !user.user_skills || (user.user_skills.length === 0)? unique_skills : user.user_skills,
+  //       !user.user_interests || (user.user_interests.length === 0) ? unique_interests : user.user_interests,
+  //       refresh1,
+  //       setRefresh
+  //     );
+  //    await fetchData(
+  //       setProjects,
+  //       "projectRecommendation",
+  //       user,
+  //       !user.user_communities || (user.user_communities.length === 0) ? unique_communities : user.user_communities,
+  //       !user.user_skills || (user.user_skills.length === 0)? unique_skills : user.user_skills,
+  //       !user.user_interests || (user.user_interests.length === 0) ? unique_interests : user.user_interests,
+  //       refresh2,
+  //       setRefresh2
+  //     );
 
 
-      const valid = (datum) => {
-        return datum.user_skills.length > 0 && datum.user_interests.length > 0;
-      };
+  //     const valid = (datum) => {
+  //       return datum.user_skills.length > 0 && datum.user_interests.length > 0;
+  //     };
 
       
-    } catch (error) {
-      console.log("reccs err", error);
-    } finally {
-      setLoading(false);
-    }
+  //   } catch (error) {
+  //     console.log("reccs err", error);
+  //   } finally {
+  //     setLoading(false);
+  //   }
 
+  // }
+
+  // useEffect(() => {
+  //   dispatch(deleteKeys(["search", "searchFilter"]));
+  //   console.log("recc use eff", user?.search);
+  //   getRecommendations();
+  // }, [fetch, user]);
+
+  const userLoaded = "id" in user || "pid" in user;
+  const isSearchLoaded = useSelector(searchLoaded)
+
+  async function getRecommendations() {
+    console.log("userloaded, searchloaded", userLoaded, isSearchLoaded);
   }
 
   useEffect(() => {
-    dispatch(deleteKeys(["search", "searchFilter"]));
-    console.log("recc use eff", user?.search);
-    getRecommendations();
-  }, [fetch, user]);
-
-  useEffect(() => {
     dispatch(getLinks(idObj));
-  }, []);
+    getRecommendations();
+  }, [user, search]);
 
 
 
@@ -155,12 +167,12 @@ function RecommendationsList({ filterIndex, fetch }) {
     return arr;
   }
 
-  useEffect(() => {
-    // displayRecommendations();
+  // useEffect(() => {
+  //   // displayRecommendations();
     
-    setRecommendations(interleave(users, projects))
+  //   setRecommendations(interleave(users, projects))
     
-  }, [refresh1, refresh2]);
+  // }, [refresh1, refresh2]);
 
   function displayRecommendations() {
     if (loading) {

@@ -3,14 +3,11 @@
 
 
 export default async function fetchData(
-  setData,
   route,
   user,
   communities,
   skills,
   interests,
-  refresh,
-  setRefresh = null
 ) {
   // changes the array to a suitable form to be
   function formatArray(arr) {
@@ -62,8 +59,10 @@ export default async function fetchData(
       const data = await res.json();
       console.log("Data from fetch and URL", data, formatUrl());
 
-      setData(data);
-      setRefresh(setRefresh ? setRefresh(!refresh): void 0);
+      return data;
+
+      // setData(data);
+      // setRefresh(setRefresh ? setRefresh(!refresh): void 0);
 
 
     } catch (e) {
@@ -73,7 +72,7 @@ export default async function fetchData(
     //   console.log("Done!");
     // }
   }
-  fetchUser();
+  return fetchUser();
 }
 
 

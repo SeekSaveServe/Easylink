@@ -4,6 +4,7 @@
     // try to wait until loaded
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 import { supabase } from '../../supabaseClient';
+import { Loading } from '../../components/constants/loading';
 
 const initialState = {
     search: '', // search input
@@ -11,7 +12,7 @@ const initialState = {
     unique_skills: null,
     unique_interests: null,
     unique_communities: null, // null: not loaded
-    loading: 'idle' // 'idle' | 'pending' | 'fulfilled' | 'error'
+    loading: Loading.IDLE // 'idle' | 'pending' | 'fulfilled' | 'error'
 }
 
 
@@ -46,13 +47,13 @@ const searchSlice = createSlice({
     },
     extraReducers: (builder) => {
         builder.addCase(getUniqueTags.pending, (state, _) => {
-            state.loading = 'pending';
+            state.loading = Loading.PENDING;
         })
         .addCase(getUniqueTags.rejected, (state, _) => {
-            state.loading = 'error';
+            state.loading = Loading.ERROR;
         })
         .addCase(getUniqueTags.fulfilled, (state, action) => {
-            state.fulfilled = 'fulfilled';
+            state.loading = Loading.FULFILLED;
             console.log("Unique tags", action.payload);
             for (const [key,val] of Object.entries(action.payload)) {
                 state[key] = val;
@@ -62,3 +63,13 @@ const searchSlice = createSlice({
 })
 
 export default searchSlice.reducer;
+
+export const searchLoaded = (state) => state.search.loading == Loading.FULFILLED;
+
+export const getTags = (state) => { 
+    return { 
+        unique_skills: state.search.unique_skills, 
+        unique_communities: state.search.unique_communities, 
+        unique_interests: state.search.unique_interests
+    } 
+};
