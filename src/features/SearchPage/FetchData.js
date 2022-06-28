@@ -23,9 +23,13 @@ export default async function fetchData(
 
     // Heroku https://murmuring-basin-78610.herokuapp.com/
 
-    const rootUrl = process.env.NODE_ENV == 'production' ? "https://murmuring-basin-78610.herokuapp.com"  
-      : "http://127.0.0.1:8000";
+    // Digital Ocean: https://dolphin-app-aeqog.ondigitalocean.app/
 
+    // const rootUrl = process.env.NODE_ENV == 'production' ? "https://murmuring-basin-78610.herokuapp.com"  
+    //   : "http://127.0.0.1:8000";
+
+    const rootUrl = "https://dolphin-app-aeqog.ondigitalocean.app";
+    
     return `${rootUrl}/api/${route}/?format=json&searchInput=${
       !user.search ? "" : user.search
     }&communities=${formatArray(communities)}&skills=${formatArray(
