@@ -21,9 +21,9 @@ function RecommendationsList({
   projects,
 }) {
   // Triggers when users, refresh and projects have been updated
-  useEffect(() => {
-    showRecommendations();
-  }, [refresh]);
+  // useEffect(() => {
+  //   showRecommendations();
+  // }, [refresh]);
 
   const [recommendations, setRecommendations] = useState([]);
   const user = useSelector((state) => state.user);

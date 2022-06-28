@@ -44,71 +44,71 @@ function RecommendedTags({
   // for radial buttons
   const [filter, setFilter] = useState("Show All");
   // Updates form state once upon render
-  useEffect(() => {
-    updateFormState();
-  }, []);
+  // useEffect(() => {
+  //   updateFormState();
+  // }, []);
   // update field with key = name attribute, to value = value attribute
   const radioChange = (evt) => {
     setFilter(evt.target.value);
   };
 
-  async function obtainTags(tag) {
-    const { data, error } = await supabase
-      .from(tag)
-      .select("name")
-      .is("in_login", true);
-    return data;
-  }
+  // async function obtainTags(tag) {
+  //   const { data, error } = await supabase
+  //     .from(tag)
+  //     .select("name")
+  //     .is("in_login", true);
+  //   return data;
+  // }
 
-  useEffect(() => {
-    obtainTags("unique_skills").then((res) =>
-      setSkills([res.map((obj) => obj.name)][0])
-    );
+  // useEffect(() => {
+  //   obtainTags("unique_skills").then((res) =>
+  //     setSkills([res.map((obj) => obj.name)][0])
+  //   );
 
-    obtainTags("unique_interests").then((res) =>
-      setInterests([res.map((obj) => obj.name)][0])
-    );
+  //   obtainTags("unique_interests").then((res) =>
+  //     setInterests([res.map((obj) => obj.name)][0])
+  //   );
 
-    obtainTags("unique_communities").then((res) =>
-      setCommunities([res.map((obj) => obj.name)][0])
-    );
+  //   obtainTags("unique_communities").then((res) =>
+  //     setCommunities([res.map((obj) => obj.name)][0])
+  //   );
 
-    if (user?.searchTags) {
-      const tags = user.searchTags;
-      setSelectedSkills(tags[0]);
-      setSelectedInterests(tags[1]);
-      setSelectedCommunities(tags[2]);
-    }
-  }, []);
+  //   if (user?.searchTags) {
+  //     const tags = user.searchTags;
+  //     setSelectedSkills(tags[0]);
+  //     setSelectedInterests(tags[1]);
+  //     setSelectedCommunities(tags[2]);
+  //   }
+  // }, []);
 
-  useEffect(() => {
-    const comm = !selectedCommunities.length
-      ? communities
-      : selectedCommunities;
-    const skil = !selectedSkills.length ? skills : selectedSkills;
-    const int = !selectedInterests.length ? interests : selectedInterests;
+  // useEffect(() => {
+  //   const comm = !selectedCommunities.length
+  //     ? communities
+  //     : selectedCommunities;
+  //   const skil = !selectedSkills.length ? skills : selectedSkills;
+  //   const int = !selectedInterests.length ? interests : selectedInterests;
 
-    fetchData(
-      setUsers,
-      "user",
-      user,
-      comm,
-      skil,
-      int,
-      refresh[0],
-      setRefresh[0]
-    );
-    fetchData(
-      setProjects,
-      "project",
-      user,
-      comm,
-      skil,
-      int,
-      refresh[1],
-      setRefresh[1]
-    );
-  }, [communities, fetch]);
+  //   fetchData(
+  //     setUsers,
+  //     "user",
+  //     user,
+  //     comm,
+  //     skil,
+  //     int,
+  //     refresh[0],
+  //     setRefresh[0]
+  //   );
+  //   fetchData(
+  //     setProjects,
+  //     "project",
+  //     user,
+  //     comm,
+  //     skil,
+  //     int,
+  //     refresh[1],
+  //     setRefresh[1]
+  //   );
+  // }, [communities, fetch]);
 
   const updateFormState = () => {
     dispatch(

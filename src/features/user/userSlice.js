@@ -70,5 +70,7 @@ export const { update, replace, deleteKeys } = userSlice.actions;
 
 export const getUser = (state) => state.user;
 
+export const userLoaded = (state) => "id" in state.user || "pid" in state.user;
+
 
 export default userSlice.reducer;

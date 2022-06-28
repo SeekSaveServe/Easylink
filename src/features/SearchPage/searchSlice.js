@@ -39,7 +39,7 @@ const searchSlice = createSlice({
     reducers: {
         // copy action.payload keys into slice
         // assume it has search, searchFilter or both
-        update: (state, action) => {
+        updateSearch: (state, action) => {
             for (const [key,val] of Object.entries(action.payload)) {
                 state[key] = val;
             }
@@ -65,6 +65,8 @@ const searchSlice = createSlice({
 export default searchSlice.reducer;
 
 export const searchLoaded = (state) => state.search.loading == Loading.FULFILLED;
+
+export const { updateSearch } = searchSlice.actions;
 
 export function selectUniqueTags(state) {
     return {

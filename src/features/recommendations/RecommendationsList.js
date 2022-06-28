@@ -21,7 +21,7 @@ import { getFeedLinks } from "../Links/linksSlice";
 import { getLinks } from "../Links/linksSlice";
 import useIdObject from "../../components/hooks/useIdObject";
 import fetchData from "../SearchPage/FetchData";
-import { deleteKeys } from "../user/userSlice";
+import { deleteKeys, userLoaded } from "../user/userSlice";
 import { Loading } from "../../components/constants/loading";
 import { searchLoaded, selectUniqueTags } from "../SearchPage/searchSlice";
 
@@ -153,7 +153,7 @@ function RecommendationsList({ filterIndex, fetch }) {
   }
 
 
-  const userLoaded = "id" in user || "pid" in user;
+  const isUserLoaded = useSelector(userLoaded);
   const isSearchLoaded = useSelector(searchLoaded);
   const uniqueTags = useSelector(selectUniqueTags);
 
@@ -197,7 +197,7 @@ function RecommendationsList({ filterIndex, fetch }) {
   }
 
   useEffect(() => {
-    if (!(userLoaded && isSearchLoaded)) return;
+    if (!(isUserLoaded && isSearchLoaded)) return;
     dispatch(getLinks(idObj));
     getRecommendations();
   }, [user, search]);
