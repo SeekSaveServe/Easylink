@@ -24,7 +24,7 @@ import fetchData from "../SearchPage/FetchData";
 import { deleteKeys, userLoaded } from "../user/userSlice";
 import { Loading } from "../../components/constants/loading";
 import { searchLoaded, selectUniqueTags } from "../SearchPage/searchSlice";
-
+import interleave from "../../components/constants/interleave";
 // For use specifically in Feed: pull from recommender API
 function RecommendationsList({ filterIndex, fetch }) {
   // const { FilterButton, btnIndex } = useProfileFilter();
@@ -135,22 +135,7 @@ function RecommendationsList({ filterIndex, fetch }) {
   //   console.log("recc use eff", user?.search);
   //   getRecommendations();
   // }, [fetch, user]);
-  function interleave(users, projects) {
-    const arr = [];
-    const len = Math.max(users.length, projects.length);
-      //  Alternates between user and project
-      for (let i = 0; i < len; i++) {
-        if (i < users.length) {
-          // console.log(users[i]);
-          arr.push(users[i]);
-        }
-        if (i < projects.length) {
-          arr.push(projects[i]);
-        }
-      }
-    
-    return arr;
-  }
+  
 
 
   const isUserLoaded = useSelector(userLoaded);
@@ -159,30 +144,29 @@ function RecommendationsList({ filterIndex, fetch }) {
 
   const pickArray = (first, second) => first.length == 0 ? second : first;
   async function getRecommendations() {
-    // console.log("userloaded, searchloaded", userLoaded, isSearchLoaded);
-    //if (!(userLoaded && isSearchLoaded)) return;
+    console.log("userloaded, searchloaded", userLoaded, isSearchLoaded);
+    if (!(userLoaded && isSearchLoaded)) return;
 
-    // console.log("Unique tags from rec", uniqueTags);
+    console.log("Unique tags from rec", uniqueTags);
 
     const { user_skills, user_interests, user_communities } = user;
     const { unique_communities, unique_interests, unique_skills } = uniqueTags;
 
-    // console.log("User skills, ints, comms", user_skills, user_interests, user_communities);
-    // console.log("Unique SIC:", unique_skills, unique_interests, unique_communities);
+    console.log("User skills, ints, comms", user_skills, user_interests, user_communities);
+    console.log("Unique SIC:", unique_skills, unique_interests, unique_communities);
 
     const fetchSkills = pickArray(user_skills, unique_skills);
     const fetchInterests = pickArray(user_interests, unique_interests);
     const fetchCommunities = pickArray(user_communities, unique_communities);
 
-    // console.log("Fetch SIC", fetchSkills, fetchInterests, fetchCommunities);
-
+    console.log("Fetch SIC", fetchSkills, fetchInterests, fetchCommunities);
     
     try {
       setLoading(true);
-      const users = await fetchData("userRecommendation", "", fetchCommunities, fetchSkills, fetchCommunities);
-      // console.log("Users from fetchData", users);
-      const projects = await fetchData("projectRecommendation", "", fetchCommunities, fetchSkills, fetchCommunities);
-      // console.log("Projects from fetchData", projects);
+      const users = await fetchData("userRecommendation", "", fetchCommunities, fetchSkills, fetchInterests);
+      console.log("Users from fetchData", users);
+      const projects = await fetchData("projectRecommendation", "", fetchCommunities, fetchSkills, fetchInterests);
+      console.log("Projects from fetchData", projects);
 
       setRecommendations(interleave(users, projects));
     } catch (error) {
@@ -192,7 +176,6 @@ function RecommendationsList({ filterIndex, fetch }) {
     }
     
 
-    // const users = await fetchData("userRecommendation", "", )
     
   }
 
