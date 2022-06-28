@@ -23,7 +23,7 @@ import useIdObject from "../../components/hooks/useIdObject";
 import fetchData from "../SearchPage/FetchData";
 import { deleteKeys } from "../user/userSlice";
 import { Loading } from "../../components/constants/loading";
-import { searchLoaded, getTags } from "../SearchPage/searchSlice";
+import { searchLoaded, selectUniqueTags } from "../SearchPage/searchSlice";
 
 // For use specifically in Feed: pull from recommender API
 function RecommendationsList({ filterIndex, fetch }) {
@@ -135,21 +135,6 @@ function RecommendationsList({ filterIndex, fetch }) {
   //   console.log("recc use eff", user?.search);
   //   getRecommendations();
   // }, [fetch, user]);
-
-  const userLoaded = "id" in user || "pid" in user;
-  const isSearchLoaded = useSelector(searchLoaded)
-
-  async function getRecommendations() {
-    console.log("userloaded, searchloaded", userLoaded, isSearchLoaded);
-  }
-
-  useEffect(() => {
-    dispatch(getLinks(idObj));
-    getRecommendations();
-  }, [user, search]);
-
-
-
   function interleave(users, projects) {
     const arr = [];
     const len = Math.max(users.length, projects.length);
@@ -166,6 +151,60 @@ function RecommendationsList({ filterIndex, fetch }) {
     
     return arr;
   }
+
+
+  const userLoaded = "id" in user || "pid" in user;
+  const isSearchLoaded = useSelector(searchLoaded);
+  const uniqueTags = useSelector(selectUniqueTags);
+
+  const pickArray = (first, second) => first.length == 0 ? second : first;
+  async function getRecommendations() {
+    // console.log("userloaded, searchloaded", userLoaded, isSearchLoaded);
+    //if (!(userLoaded && isSearchLoaded)) return;
+
+    // console.log("Unique tags from rec", uniqueTags);
+
+    const { user_skills, user_interests, user_communities } = user;
+    const { unique_communities, unique_interests, unique_skills } = uniqueTags;
+
+    // console.log("User skills, ints, comms", user_skills, user_interests, user_communities);
+    // console.log("Unique SIC:", unique_skills, unique_interests, unique_communities);
+
+    const fetchSkills = pickArray(user_skills, unique_skills);
+    const fetchInterests = pickArray(user_interests, unique_interests);
+    const fetchCommunities = pickArray(user_communities, unique_communities);
+
+    // console.log("Fetch SIC", fetchSkills, fetchInterests, fetchCommunities);
+
+    
+    try {
+      setLoading(true);
+      const users = await fetchData("userRecommendation", "", fetchCommunities, fetchSkills, fetchCommunities);
+      // console.log("Users from fetchData", users);
+      const projects = await fetchData("projectRecommendation", "", fetchCommunities, fetchSkills, fetchCommunities);
+      // console.log("Projects from fetchData", projects);
+
+      setRecommendations(interleave(users, projects));
+    } catch (error) {
+      throw error;
+    } finally {
+      setLoading(false);
+    }
+    
+
+    // const users = await fetchData("userRecommendation", "", )
+    
+  }
+
+  useEffect(() => {
+    if (!(userLoaded && isSearchLoaded)) return;
+    dispatch(getLinks(idObj));
+    getRecommendations();
+  }, [user, search]);
+
+
+
+  
 
   // useEffect(() => {
   //   // displayRecommendations();

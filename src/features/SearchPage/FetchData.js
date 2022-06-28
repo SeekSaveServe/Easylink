@@ -4,7 +4,7 @@
 
 export default async function fetchData(
   route,
-  user,
+  search,
   communities,
   skills,
   interests,
@@ -32,7 +32,7 @@ export default async function fetchData(
     const rootUrl = "https://dolphin-app-aeqog.ondigitalocean.app";
 
     return `${rootUrl}/api/${route}/?format=json&searchInput=${
-      !user.search ? "" : user.search
+      !search ? "" : search
     }&communities=${formatArray(communities)}&skills=${formatArray(
       skills
     )}&interests=${formatArray(interests)}`;

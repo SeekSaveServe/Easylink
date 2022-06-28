@@ -66,10 +66,18 @@ export default searchSlice.reducer;
 
 export const searchLoaded = (state) => state.search.loading == Loading.FULFILLED;
 
-export const getTags = (state) => { 
-    return { 
+export function selectUniqueTags(state) {
+    return {
         unique_skills: state.search.unique_skills, 
         unique_communities: state.search.unique_communities, 
         unique_interests: state.search.unique_interests
-    } 
-};
+    }
+}
+
+// export const getTags = (state) => { 
+//     return { 
+//         unique_skills: state.search.unique_skills, 
+//         unique_communities: state.search.unique_communities, 
+//         unique_interests: state.search.unique_interests
+//     } 
+// };
