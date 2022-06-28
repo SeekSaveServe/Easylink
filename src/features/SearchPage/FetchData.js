@@ -29,8 +29,8 @@ export default async function fetchData(
     // const rootUrl = process.env.NODE_ENV == 'production' ? "https://murmuring-basin-78610.herokuapp.com"  
     //   : "http://127.0.0.1:8000";
 
-    // const rootUrl = "https://dolphin-app-aeqog.ondigitalocean.app";
-    const rootUrl = "http://127.0.0.1:8000";
+    const rootUrl = "https://dolphin-app-aeqog.ondigitalocean.app";
+    // const rootUrl = "http://127.0.0.1:8000";
 
     return `${rootUrl}/api/${route}/?format=json&searchInput=${
       !search ? "" : search
