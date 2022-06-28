@@ -21,6 +21,7 @@ import { getFeedLinks } from "../Links/linksSlice";
 import { getLinks } from "../Links/linksSlice";
 import useIdObject from "../../components/hooks/useIdObject";
 import fetchData from "../SearchPage/FetchData";
+import { deleteKeys } from "../user/userSlice";
 
 // For use specifically in Feed: pull from recommender API
 function RecommendationsList({ filterIndex, fetch }) {
@@ -126,6 +127,8 @@ function RecommendationsList({ filterIndex, fetch }) {
   }
 
   useEffect(() => {
+    dispatch(deleteKeys(["search", "searchFilter"]));
+    console.log("recc use eff", user?.search);
     getRecommendations();
   }, [fetch, user]);
 

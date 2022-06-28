@@ -74,7 +74,7 @@ function RecommendedTags({
     );
 
     if (user?.searchTags) {
-      const tags = user.tsearchTags;
+      const tags = user.searchTags;
       setSelectedSkills(tags[0]);
       setSelectedInterests(tags[1]);
       setSelectedCommunities(tags[2]);

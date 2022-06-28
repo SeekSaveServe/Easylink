@@ -21,6 +21,10 @@ export default function SearchPage() {
   const user = useSelector((state) => state.user);
   // console.log(users, projects, "hi");
 
+  useEffect(() => {
+    console.log("Search page load");
+  }, [])
+
   return (
     <>
       <BasicNavBar

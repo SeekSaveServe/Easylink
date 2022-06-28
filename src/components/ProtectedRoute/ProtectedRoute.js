@@ -5,6 +5,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { getUserProfile, replace } from "../../features/user/userSlice";
 import { projReq } from "../constants/requestStrings";
 import { formatProfileDatum } from "../constants/formatProfileDatum";
+import { getUniqueTags } from "../../features/SearchPage/searchSlice";
 // Redirects to sign in page if the user is not logged in
 // https://www.robinwieruch.de/react-router-private-routes/
 const ProtectedRoute = ({ children, redirectRoute = "/", active }) => {
@@ -71,6 +72,7 @@ const ProtectedRoute = ({ children, redirectRoute = "/", active }) => {
 
   // function to handle loading: either loads user profile or project profile
   const loadProfile = async() => {
+    dispatch(getUniqueTags());
     const projectLoaded = await getProjectProfile();
     if (!projectLoaded) {
       dispatch(getUserProfile(supabase.auth.user().id))
@@ -93,6 +95,7 @@ const ProtectedRoute = ({ children, redirectRoute = "/", active }) => {
       // if (!projectLoaded) {
       //   dispatch(getUserProfile(supabase.auth.user().id))
       // }
+      
       loadProfile();
     }
     
