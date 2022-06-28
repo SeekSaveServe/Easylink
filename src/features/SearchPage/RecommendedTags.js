@@ -20,6 +20,7 @@ import BasicButton from "../../components/BasicButton";
 import BasicLoadingButton from "../../components/BasicLoadingButton/BasicLoadingButton";
 import RadioWithLabel from "../../components/RadioWithLabel";
 import fetchData from "./FetchData";
+import { searchLoaded, updateSearch } from "./searchSlice";
 function RecommendedTags({
   refresh,
   setRefresh,
@@ -31,6 +32,8 @@ function RecommendedTags({
   const dispatch = useDispatch();
   const user = useSelector((state) => state.user);
 
+  const search = useSelector(state => state.search);
+
   // State of selected tags
   const [selectedSkills, setSelectedSkills] = useState([]);
   const [selectedInterests, setSelectedInterests] = useState([]);
@@ -40,6 +43,15 @@ function RecommendedTags({
   const [skills, setSkills] = useState([]);
   const [interests, setInterests] = useState([]);
   const [communities, setCommunities] = useState([]);
+
+  const isSearchLoaded = useSelector(searchLoaded);
+
+  useEffect(() => {
+    console.log("Ran useeff in recc tags");
+    setSkills(search.unique_skills);
+    setInterests(search.unique_interests);
+    setCommunities(search.unique_communities);
+  }, [search])
 
   // for radial buttons
   const [filter, setFilter] = useState("Show All");
@@ -121,33 +133,44 @@ function RecommendedTags({
 
   async function handleSubmit(e) {
     e.preventDefault();
-    updateFormState();
-    const comm = !selectedCommunities.length
-      ? communities
-      : selectedCommunities;
-    const skil = !selectedSkills.length ? skills : selectedSkills;
-    const int = !selectedInterests.length ? interests : selectedInterests;
+    console.log("Dispatch in recc tagsobj", {
+      selectedSkills,
+      selectedInterests,
+      selectedCommunities
+    });
+    dispatch(updateSearch({
+      selectedSkills,
+      selectedInterests,
+      selectedCommunities,
+      searchFilter: filter
+    }))
+    // updateFormState();
+    // const comm = !selectedCommunities.length
+    //   ? communities
+    //   : selectedCommunities;
+    // const skil = !selectedSkills.length ? skills : selectedSkills;
+    // const int = !selectedInterests.length ? interests : selectedInterests;
 
-    fetchData(
-      setUsers,
-      "user",
-      user,
-      comm,
-      skil,
-      int,
-      refresh[0],
-      setRefresh[0]
-    );
-    fetchData(
-      setProjects,
-      "project",
-      user,
-      comm,
-      skil,
-      int,
-      refresh[1],
-      setRefresh[1]
-    );
+    // fetchData(
+    //   setUsers,
+    //   "user",
+    //   user,
+    //   comm,
+    //   skil,
+    //   int,
+    //   refresh[0],
+    //   setRefresh[0]
+    // );
+    // fetchData(
+    //   setProjects,
+    //   "project",
+    //   user,
+    //   comm,
+    //   skil,
+    //   int,
+    //   refresh[1],
+    //   setRefresh[1]
+    // );
   }
 
   return (
@@ -180,6 +203,7 @@ function RecommendedTags({
           aria-labelledby="demo-row-radio-buttons-group-label"
           name="row-radio-buttons-group"
           onChange={radioChange}
+          value={filter}
         >
           <RadioWithLabel value="Show Projects" label="Show Projects" />
           <RadioWithLabel value="Show Users" label="Show Users" />

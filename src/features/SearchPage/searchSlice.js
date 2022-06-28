@@ -6,12 +6,18 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 import { supabase } from '../../supabaseClient';
 import { Loading } from '../../components/constants/loading';
 
+// maybe could have put this state in SearchPage, but we need to mutate it from outside when navigating there + avoid prop drilling
+// not a strong redux use case but is a bit useful nonetheless
+
 const initialState = {
     search: '', // search input
     searchFilter:  '',    // 'Show All' || 'Show Projects' || 'Show Users' || ('Show All'/ anything else),
-    unique_skills: null,
-    unique_interests: null,
-    unique_communities: null, // null: not loaded
+    unique_skills: [],
+    unique_interests: [],
+    unique_communities: [], // null: not loaded,
+    selectedSkills:[],
+    selectedInterests:[],
+    selectedCommunities:[],
     loading: Loading.IDLE // 'idle' | 'pending' | 'fulfilled' | 'error'
 }
 
@@ -38,7 +44,7 @@ const searchSlice = createSlice({
     initialState,
     reducers: {
         // copy action.payload keys into slice
-        // assume it has search, searchFilter or both
+        // assume it has one or more of the keys in initialState and input is valid
         updateSearch: (state, action) => {
             for (const [key,val] of Object.entries(action.payload)) {
                 state[key] = val;
