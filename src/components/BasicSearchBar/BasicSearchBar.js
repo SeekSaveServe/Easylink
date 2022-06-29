@@ -46,7 +46,7 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 }));
 
 export default function BasicSearchBar({
-  searchInput = "Search...",
+  // searchInput = "Search...",
   setRefresh = null,
   refresh = null,
 }) {
@@ -55,6 +55,9 @@ export default function BasicSearchBar({
   const navigate = useNavigate();
   const [listenerOn, setListenerOn] = useState(false);
   const user = useSelector((state) => state.user);
+
+  const searchInput = useSelector(state => state.search.search);
+  console.log("Re-render search bar");
 
   // document.addEventListener("DOMContentLoaded", () => {
   //   const input = document.getElementById("searchBar");
@@ -88,30 +91,30 @@ export default function BasicSearchBar({
     );
 
     const input = document.getElementById("searchBar");
-    // if (!listenerOn) {
-    //   setListenerOn(true);
-    // input.addEventListener("keypress", function (event) {
-    //   if (event.key === "Enter") {
-    //     event.preventDefault();
-    //     // redirect to search page and update the userslice
-    //     try {
-    //       setLoading(true);
-    //       dispatch(
-    //         updateSearch({
-    //           search: input.value,
-    //         })
-    //       );
-    //       navigate("/Search", { replace: true });
-    //       // Trigger a reload on the search page
-    //       // setRefresh ? setRefresh(!refresh) : void 0;
-    //     } catch (error) {
-    //       alert(alert(error.error_decription || error.message));
-    //     } finally {
-    //       setLoading(false);
-    //     }
-    //   }
-    // });
-    // }
+    if (!listenerOn) {
+      setListenerOn(true);
+    input.addEventListener("keypress", function (event) {
+      if (event.key === "Enter") {
+        event.preventDefault();
+        // redirect to search page and update the userslice
+        try {
+          setLoading(true);
+          dispatch(
+            updateSearch({
+              search: input.value,
+            })
+          );
+          navigate("/Search", { replace: true });
+          // Trigger a reload on the search page
+          // setRefresh ? setRefresh(!refresh) : void 0;
+        } catch (error) {
+          alert(alert(error.error_decription || error.message));
+        } finally {
+          setLoading(false);
+        }
+      }
+    });
+    }
   };
   return (
     <Search>

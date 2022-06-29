@@ -20,7 +20,8 @@ import BasicButton from "../../components/BasicButton";
 import BasicLoadingButton from "../../components/BasicLoadingButton/BasicLoadingButton";
 import RadioWithLabel from "../../components/RadioWithLabel";
 import fetchData from "./FetchData";
-import { searchLoaded, updateSearch } from "./searchSlice";
+import { searchLoaded, selectUniqueTags, updateSearch } from "./searchSlice";
+import { shallowEqual } from "react-redux";
 function RecommendedTags({
   refresh,
   setRefresh,
@@ -44,14 +45,15 @@ function RecommendedTags({
   const [interests, setInterests] = useState([]);
   const [communities, setCommunities] = useState([]);
 
-  const isSearchLoaded = useSelector(searchLoaded);
+  // const isSearchLoaded = useSelector(searchLoaded, shallowEqual);
+  const uniqueTags = useSelector(selectUniqueTags, shallowEqual);
 
   useEffect(() => {
     console.log("Ran useeff in recc tags");
     setSkills(search.unique_skills);
     setInterests(search.unique_interests);
     setCommunities(search.unique_communities);
-  }, [search])
+  }, [uniqueTags])
 
   // for radial buttons
   const [filter, setFilter] = useState("Show All");

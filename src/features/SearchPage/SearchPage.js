@@ -19,10 +19,10 @@ export default function SearchPage() {
   const [projects, setProjects] = useState([]);
   const [users, setUsers] = useState([]);
   const user = useSelector((state) => state.user);
-  // console.log(users, projects, "hi");
+  console.log(users, projects, "hi");
 
-  const search = useSelector(state => state.search);
-  console.log("Search obj in SearchPage", search);
+  // const searchText = useSelector(state => state.search.search);
+  // console.log("Search page re-render");
 
   useEffect(() => {
     console.log("Search page load");
@@ -31,7 +31,6 @@ export default function SearchPage() {
   return (
     <>
       <BasicNavBar
-        searchInput={search.search}
         setRefresh={setFetch}
         refresh={fetch}
       />
