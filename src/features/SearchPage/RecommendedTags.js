@@ -138,12 +138,14 @@ function RecommendedTags({
     //   selectedInterests,
     //   selectedCommunities
     // });
+    const input = document.getElementById("searchBar");
     dispatch(
       updateSearch({
         selectedSkills,
         selectedInterests,
         selectedCommunities,
         searchFilter: filter,
+        search: input.value,
       })
     );
     // updateFormState();

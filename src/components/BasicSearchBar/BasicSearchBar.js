@@ -85,14 +85,14 @@ export default function BasicSearchBar({
     // if (!listenerOn) {
     //   setListenerOn(true);
     input.addEventListener("keypress", function (event) {
-      dispatch(
-        updateSearch({
-          search: input.value,
-        })
-      );
       if (event.key === "Enter") {
         event.preventDefault();
         // redirect to search page and update the userslice
+        dispatch(
+          updateSearch({
+            search: input.value,
+          })
+        );
         try {
           setLoading(true);
           navigate("/Search", { replace: true });

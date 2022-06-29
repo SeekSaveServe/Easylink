@@ -21,12 +21,12 @@ export default function SearchPage() {
   const user = useSelector((state) => state.user);
   // console.log(users, projects, "hi");
 
-  const search = useSelector(state => state.search);
-  console.log("Search obj in SearchPage", search);
+  const search = useSelector((state) => state.search);
+  // console.log("Search obj in SearchPage", search);
 
   useEffect(() => {
     console.log("Search page load");
-  }, [])
+  }, []);
 
   return (
     <>

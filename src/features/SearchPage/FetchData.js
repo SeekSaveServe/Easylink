@@ -1,13 +1,12 @@
 // if selected skills,int, comm (either from user profile or actual search) empty, use all
 // on Feed page search input should be empty - to get everything possible (and route is different)
 
-
 export default async function fetchData(
   route,
   search,
   communities,
   skills,
-  interests,
+  interests
 ) {
   // changes the array to a suitable form to be
   function formatArray(arr) {
@@ -26,7 +25,7 @@ export default async function fetchData(
 
     // Digital Ocean: https://dolphin-app-aeqog.ondigitalocean.app/
 
-    // const rootUrl = process.env.NODE_ENV == 'production' ? "https://murmuring-basin-78610.herokuapp.com"  
+    // const rootUrl = process.env.NODE_ENV == 'production' ? "https://murmuring-basin-78610.herokuapp.com"
     //   : "http://127.0.0.1:8000";
 
     const rootUrl = "https://dolphin-app-aeqog.ondigitalocean.app";
@@ -40,7 +39,7 @@ export default async function fetchData(
   }
 
   async function fetchUser() {
-    console.log(formatUrl());
+    // console.log(formatUrl());
     try {
       // await fetch(formatUrl(), {
       //   headers: {
@@ -58,14 +57,12 @@ export default async function fetchData(
       });
 
       const data = await res.json();
-      console.log("Data from fetch and URL", data, formatUrl());
+      // console.log("Data from fetch and URL", data, formatUrl());
 
       return data;
 
       // setData(data);
       // setRefresh(setRefresh ? setRefresh(!refresh): void 0);
-
-
     } catch (e) {
       console.log(e);
     }
@@ -75,9 +72,6 @@ export default async function fetchData(
   }
   return fetchUser();
 }
-
-
-
 
 // export default async function fetchData(
 //   setData,
@@ -106,7 +100,7 @@ export default async function fetchData(
 
 //     // Digital Ocean: https://dolphin-app-aeqog.ondigitalocean.app/
 
-//     // const rootUrl = process.env.NODE_ENV == 'production' ? "https://murmuring-basin-78610.herokuapp.com"  
+//     // const rootUrl = process.env.NODE_ENV == 'production' ? "https://murmuring-basin-78610.herokuapp.com"
 //     //   : "http://127.0.0.1:8000";
 
 //     const rootUrl = "https://dolphin-app-aeqog.ondigitalocean.app";
@@ -142,7 +136,6 @@ export default async function fetchData(
 //       setData(data);
 //       setRefresh(setRefresh ? setRefresh(!refresh): void 0);
 
-
 //     } catch (e) {
 //       console.log(e);
 //     }
@@ -152,5 +145,3 @@ export default async function fetchData(
 //   }
 //   fetchUser();
 // }
-
-

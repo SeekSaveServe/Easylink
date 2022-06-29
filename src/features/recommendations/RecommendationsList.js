@@ -145,26 +145,26 @@ function RecommendationsList({ filterIndex, fetch }) {
 
   const pickArray = (first, second) => (first.length == 0 ? second : first);
   async function getRecommendations() {
-    console.log("userloaded, searchloaded", userLoaded, isSearchLoaded);
+    // console.log("userloaded, searchloaded", userLoaded, isSearchLoaded);
     if (!(userLoaded && isSearchLoaded)) return;
 
-    console.log("Unique tags from rec", uniqueTags);
+    // console.log("Unique tags from rec", uniqueTags);
 
     const { user_skills, user_interests, user_communities } = user;
     const { unique_communities, unique_interests, unique_skills } = uniqueTags;
 
-    console.log(
-      "User skills, ints, comms",
-      user_skills,
-      user_interests,
-      user_communities
-    );
-    console.log(
-      "Unique SIC:",
-      unique_skills,
-      unique_interests,
-      unique_communities
-    );
+    // console.log(
+    //   "User skills, ints, comms",
+    //   user_skills,
+    //   user_interests,
+    //   user_communities
+    // );
+    // console.log(
+    //   "Unique SIC:",
+    //   unique_skills,
+    //   unique_interests,
+    //   unique_communities
+    // );
 
     const fetchSkills = pickArray(user_skills, unique_skills);
     const fetchInterests = pickArray(user_interests, unique_interests);
