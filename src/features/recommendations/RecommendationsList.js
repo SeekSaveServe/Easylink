@@ -177,7 +177,7 @@ function RecommendationsList({ filterIndex, fetch }) {
         fetchSkills,
         fetchInterests
       );
-      // console.log("Users from fetchData", users);
+      console.log("Users from fetchData", users);
       const projects = await fetchData(
         "projectRecommendation",
         "",
@@ -185,7 +185,7 @@ function RecommendationsList({ filterIndex, fetch }) {
         fetchSkills,
         fetchInterests
       );
-      // console.log("Projects from fetchData", projects);
+      console.log("Projects from fetchData", projects);
 
       setRecommendations(interleave(users, projects));
     } catch (error) {
