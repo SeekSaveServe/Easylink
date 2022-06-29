@@ -1,7 +1,7 @@
 import { styled, alpha, InputBase } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
 import SearchIcon from "@mui/icons-material/Search";
-import { update } from "../../features/user/userSlice";
+import { updateSearch } from "../../features/SearchPage/searchSlice";
 import { Navigate, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 
@@ -88,16 +88,16 @@ export default function BasicSearchBar({
       if (event.key === "Enter") {
         event.preventDefault();
         // redirect to search page and update the userslice
+        dispatch(
+          updateSearch({
+            search: input.value,
+          })
+        );
         try {
           setLoading(true);
-          dispatch(
-            update({
-              search: input.value,
-            })
-          );
           navigate("/Search", { replace: true });
           // Trigger a reload on the search page
-          setRefresh ? setRefresh(!refresh) : void 0;
+          // setRefresh ? setRefresh(!refresh) : void 0;
         } catch (error) {
           alert(alert(error.error_decription || error.message));
         } finally {

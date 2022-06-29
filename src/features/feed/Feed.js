@@ -17,14 +17,18 @@ import { FilterList, Settings } from "@mui/icons-material";
 import GreyContainer from "../components/GreyContainer";
 import { getFollowed } from "../followers/followerSlice";
 import useIdObject from "../../components/hooks/useIdObject";
+import { deleteKeys } from "../user/userSlice";
+import { getUniqueTags } from "../SearchPage/searchSlice";
 
 function Feed() {
   const idObj = useIdObject();
   const dispatch = useDispatch();
+  const user = useSelector(state => state.user);
 
   useEffect(() => {
+    // dispatch(getUniqueTags());
     dispatch(getFollowed(idObj));
-  })
+  }, [])
   
   const userProfile = useSelector((state) => state.user);
   // to trigger recommendationlist to refresh

@@ -43,6 +43,15 @@ export const userSlice = createSlice({
         replace: (state, action) => {
             updateHelper(action.payload, state);
         },
+
+        // action.payload: list of keys to delete
+        // remove the keys entirely from user slice
+        deleteKeys: (state, action) => {
+            console.log("To del", action.payload);
+            for (const key of action.payload) {
+                delete state[key];
+            }
+        }
     },
     extraReducers: (builder) => {
         builder.addCase(getUserProfile.fulfilled, (state, action) => {
@@ -57,9 +66,11 @@ export const userSlice = createSlice({
     }
 })
 
-export const { update, replace } = userSlice.actions;
+export const { update, replace, deleteKeys } = userSlice.actions;
 
 export const getUser = (state) => state.user;
+
+export const userLoaded = (state) => "id" in state.user || "pid" in state.user;
 
 
 export default userSlice.reducer;
