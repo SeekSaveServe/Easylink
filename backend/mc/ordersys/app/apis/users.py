@@ -49,7 +49,7 @@ class UserViewSet(viewsets.ModelViewSet):
         inner join user_skills on users.id = user_skills.uid
         inner join user_communities on users.id = user_communities.uid
         inner join user_interests on users.id = user_interests.uid
-        where users.username ~ '{searchInput}'
+        where users.username ~* '{searchInput}'
         and (user_communities.name in ({communities}) 
         and user_skills.name in ({skills})
         and user_interests.name in ({interests}))
@@ -93,7 +93,7 @@ class UserViewSetRecommendation(viewsets.ModelViewSet):
         inner join user_skills on users.id = user_skills.uid
         inner join user_communities on users.id = user_communities.uid
         inner join user_interests on users.id = user_interests.uid
-        where users.username ~ '{searchInput}'
+        where users.username ~* '{searchInput}'
         or (user_communities.name in ({communities}) 
         or user_skills.name in ({skills})
         or user_interests.name in ({interests}))
