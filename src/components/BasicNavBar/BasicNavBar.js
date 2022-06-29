@@ -12,14 +12,14 @@ import BasicSearchBar from "../BasicSearchBar/BasicSearchBar";
 import { replace } from "../../features/user/userSlice";
 
 export default function BasicNavBar({
-  searchInput = "Search...",
   setRefresh = null,
   refresh = null,
 }) {
   const userProfile = useSelector((state) => state.user);
   const dispatch = useDispatch();
   const location = useLocation();
-
+  console.log("Navbar render");
+  
   const signOut = async () => {
     sessionStorage.removeItem("currProject");
     dispatch(replace({})); // clear userSlice so it doesn't pre-fill signup
@@ -89,7 +89,6 @@ export default function BasicNavBar({
 
           <Box sx={{ flexGrow: 1, backgroundColor: "var(--primary)" }} />
           <BasicSearchBar
-            searchInput={searchInput}
             setRefresh={setRefresh}
             refresh={refresh}
           />

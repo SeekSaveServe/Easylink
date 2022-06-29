@@ -20,7 +20,13 @@ import BasicButton from "../../components/BasicButton";
 import BasicLoadingButton from "../../components/BasicLoadingButton/BasicLoadingButton";
 import RadioWithLabel from "../../components/RadioWithLabel";
 import fetchData from "./FetchData";
-import { searchLoaded, updateSearch } from "./searchSlice";
+import {
+  searchLoaded,
+  selectUniqueTags,
+  updateSearch,
+  updateSearchWithRefresh,
+} from "./searchSlice";
+import { shallowEqual } from "react-redux";
 function RecommendedTags({
   refresh,
   setRefresh,

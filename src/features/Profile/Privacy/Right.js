@@ -237,9 +237,20 @@ export default function Right({ contact }) {
   }
 
   const updateFormState = () => {
+    // dispatch(
+    //   update({
+    //     tags: [selectedSkills, selectedInterests, selectedCommunities],
+    //     telegram,
+    //     telegram_visibility: contact.telegram_visibility,
+    //     email_visibility: contact.email_visibility,
+    //   })
+    // );
+
     dispatch(
       update({
-        tags: [selectedSkills, selectedInterests, selectedCommunities],
+        user_skills: selectedSkills,
+        user_interests: selectedInterests,
+        user_communities: selectedCommunities,
         telegram,
         telegram_visibility: contact.telegram_visibility,
         email_visibility: contact.email_visibility,

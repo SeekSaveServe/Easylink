@@ -14,13 +14,14 @@ import ProfileCard from "../components/ProfileCard/ProfileCard";
 import scroll from "../components/scroll/Scroll.module.css";
 import { CardList } from '../components/ProfileCardList/ProfileCardList';
 import { userLoaded } from "../user/userSlice";
-import { searchLoaded } from "./searchSlice";
+import { searchLoaded, selectSelectedTags } from "./searchSlice";
 import { selectUniqueTags } from "./searchSlice";
 import fetchData from "./FetchData";
 import interleave from "../../components/constants/interleave";
 import useIdObject from "../../components/hooks/useIdObject";
 import { getLinks } from "../Links/linksSlice";
 import { getFollowed } from "../followers/followerSlice";
+import { shallowEqual, useStore } from "react-redux";
 
 function RecommendationsList() {
   // Triggers when users, refresh and projects have been updated
@@ -36,16 +37,29 @@ function RecommendationsList() {
 
   const [loading, setLoading] = useState(false);
 
-  const search = useSelector(state => state.search);
+  // const search = useSelector(state => state.search);
   const isUserLoaded = useSelector(userLoaded);
   const isSearchLoaded = useSelector(searchLoaded);
-  const uniqueTags = useSelector(selectUniqueTags);
+  const uniqueTags = useSelector(selectUniqueTags, shallowEqual); // shallowEqual to re-render ONLY when the particular selector changes regardless of rest
+  const selectedTags = useSelector(selectSelectedTags, shallowEqual);
+  const searchFilter = useSelector(state => state.search.searchFilter);
+
+  const store = useStore();
   const pickArray = (first, second) => first.length == 0 ? second : first;
+
+  // console.log("Results render;")
 
   async function getRecommendations() {
     // console.log("is loaded from res", isUserLoaded, isSearchLoaded);
     
-    const { search: searchInput, searchFilter, selectedSkills, selectedInterests, selectedCommunities } = search;
+    // const { search: searchInput, searchFilter, selectedSkills, selectedInterests, selectedCommunities } = search;
+    const { selectedSkills, selectedInterests, selectedCommunities } = selectedTags;
+
+    // Problem: search input is updated everytime changed, causing re-render here which is undesirable (only want re-render on apply filter or enter)
+      // this caused search bar to lag heavily
+    // Solution: useStore hook -> does not re-render the component. can access store on demand when needed
+      // I only need searchInput when getReccs fires, not every single time it changes
+    const searchInput = store.getState().search.search;
     const { unique_communities, unique_interests, unique_skills } = uniqueTags;
 
     // console.log("Selected SIC", selectedSkills, selectedInterests, selectedCommunities, searchInput, searchFilter);
@@ -90,12 +104,14 @@ function RecommendationsList() {
   
   }
 
+  const refresh = useSelector(state => state.search.refresh);
   useEffect(() => {
+    console.log("user search load", isUserLoaded, isSearchLoaded);
     if (!(isUserLoaded && isSearchLoaded)) return;
+    getRecommendations();
     dispatch(getLinks(idObj));
     dispatch(getFollowed(idObj));
-    getRecommendations();
-  }, [search])
+  }, [refresh])
 
 
   // function showRecommendations() {

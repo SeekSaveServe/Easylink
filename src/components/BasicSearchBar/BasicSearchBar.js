@@ -1,7 +1,10 @@
 import { styled, alpha, InputBase } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
 import SearchIcon from "@mui/icons-material/Search";
-import { updateSearch } from "../../features/SearchPage/searchSlice";
+import {
+  updateSearch,
+  updateSearchWithRefresh,
+} from "../../features/SearchPage/searchSlice";
 import { Navigate, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 
@@ -46,7 +49,7 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 }));
 
 export default function BasicSearchBar({
-  searchInput = "Search...",
+  // searchInput = "Search...",
   setRefresh = null,
   refresh = null,
 }) {
@@ -55,6 +58,9 @@ export default function BasicSearchBar({
   const navigate = useNavigate();
   const [listenerOn, setListenerOn] = useState(false);
   const user = useSelector((state) => state.user);
+
+  const searchInput = useSelector((state) => state.search.search);
+  console.log("Search bar render");
 
   // document.addEventListener("DOMContentLoaded", () => {
   //   const input = document.getElementById("searchBar");
@@ -80,32 +86,38 @@ export default function BasicSearchBar({
   //     }
   //   });
   // });
-  const handleChange = () => {
+  const handleChange = (evt) => {
+    dispatch(
+      updateSearch({
+        search: evt.target.value,
+      })
+    );
+
     const input = document.getElementById("searchBar");
-    // if (!listenerOn) {
-    //   setListenerOn(true);
-    input.addEventListener("keypress", function (event) {
-      dispatch(
-        updateSearch({
-          search: input.value,
-        })
-      );
-      if (event.key === "Enter") {
-        event.preventDefault();
-        // redirect to search page and update the userslice
-        try {
-          setLoading(true);
-          navigate("/Search", { replace: true });
-          // Trigger a reload on the search page
-          // setRefresh ? setRefresh(!refresh) : void 0;
-        } catch (error) {
-          alert(alert(error.error_decription || error.message));
-        } finally {
-          setLoading(false);
+    if (!listenerOn) {
+      setListenerOn(true);
+      input.addEventListener("keypress", function (event) {
+        dispatch(
+          updateSearch({
+            search: input.value,
+          })
+        );
+        if (event.key === "Enter") {
+          event.preventDefault();
+          // redirect to search page and update the userslice
+          try {
+            setLoading(true);
+            navigate("/Search", { replace: true });
+            // Trigger a reload on the search page
+            // setRefresh ? setRefresh(!refresh) : void 0;
+          } catch (error) {
+            alert(alert(error.error_decription || error.message));
+          } finally {
+            setLoading(false);
+          }
         }
-      }
-    });
-    // }
+      });
+    }
   };
   return (
     <Search>

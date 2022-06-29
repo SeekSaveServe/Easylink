@@ -18,7 +18,8 @@ const initialState = {
     selectedSkills:[],
     selectedInterests:[],
     selectedCommunities:[],
-    loading: Loading.IDLE // 'idle' | 'pending' | 'fulfilled' | 'error'
+    loading: Loading.IDLE, // 'idle' | 'pending' | 'fulfilled' | 'error',
+    refresh: false 
 }
 
 
@@ -49,6 +50,14 @@ const searchSlice = createSlice({
             for (const [key,val] of Object.entries(action.payload)) {
                 state[key] = val;
             }
+        },
+
+        // same as updateSearch but force refresh
+        updateSearchWithRefresh: (state, action) => {
+            for (const [key,val] of Object.entries(action.payload)) {
+                state[key] = val;
+            }
+            state.refresh = !state.refresh;
         }
     },
     extraReducers: (builder) => {
@@ -72,7 +81,7 @@ export default searchSlice.reducer;
 
 export const searchLoaded = (state) => state.search.loading == Loading.FULFILLED;
 
-export const { updateSearch } = searchSlice.actions;
+export const { updateSearch, updateSearchWithRefresh } = searchSlice.actions;
 
 export function selectUniqueTags(state) {
     return {
@@ -81,6 +90,17 @@ export function selectUniqueTags(state) {
         unique_interests: state.search.unique_interests
     }
 }
+
+export function selectSelectedTags(state) {
+    const search = state.search;
+    return {
+        selectedSkills: search.selectedSkills,
+        selectedInterests: search.selectedInterests,
+        selectedCommunities: search.selectedCommunities
+    }
+}
+
+export const selectSearchInput = state => state.search.search;
 
 // export const getTags = (state) => { 
 //     return { 
