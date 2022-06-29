@@ -5,15 +5,16 @@ import { Box, Typography, Stack, Paper, Divider } from "@mui/material";
 import BasicNavBar from "../../components/BasicNavBar/BasicNavBar";
 import Upperhalf from "./Upperhalf";
 import Lowerhalf from "./Lowerhalf";
+import {Container} from "@mui/material";
 
 function Profile() {
   return (
     <>
       <BasicNavBar />
-      <Paper>
+      <Container sx={{maxWidth: 'xl', backgroundColor: "#EEECEC", mt:0.5, height: "100vh"}}>
         <Upperhalf />{" "}
-      </Paper>
-      <Lowerhalf />{" "}
+        <Lowerhalf />{" "}
+      </Container>
     </>
   );
 }

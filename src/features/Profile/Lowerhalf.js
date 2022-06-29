@@ -55,15 +55,15 @@ export default function Lowerhalf() {
   }, []);
   return (
     <>
-      <Center>
+      {/* <Center>
         <Typography variant="h5" component="div">
           {title}
         </Typography>
       </Center>
       <Center>
         <Typography variant="body2">{bio}</Typography>
-      </Center>
-      <Center>
+      </Center> */}
+      {/* <Center>
         <Card>
           <CardContent> {links} links </CardContent>
         </Card>
@@ -73,7 +73,7 @@ export default function Lowerhalf() {
         <Card>
           <CardContent> {following} Followers </CardContent>
         </Card>
-      </Center>
+      </Center> */}
     </>
   );
 }
