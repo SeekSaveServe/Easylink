@@ -18,7 +18,8 @@ const initialState = {
     selectedSkills:[],
     selectedInterests:[],
     selectedCommunities:[],
-    loading: Loading.IDLE // 'idle' | 'pending' | 'fulfilled' | 'error'
+    loading: Loading.IDLE, // 'idle' | 'pending' | 'fulfilled' | 'error',
+    refresh: false 
 }
 
 

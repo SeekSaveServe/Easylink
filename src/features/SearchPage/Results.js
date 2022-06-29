@@ -95,7 +95,7 @@ function RecommendationsList() {
     dispatch(getLinks(idObj));
     dispatch(getFollowed(idObj));
     getRecommendations();
-  }, [search])
+  }, [search.refresh])
 
 
   // function showRecommendations() {

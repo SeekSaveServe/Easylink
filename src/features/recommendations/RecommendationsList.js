@@ -25,6 +25,7 @@ import { deleteKeys, userLoaded } from "../user/userSlice";
 import { Loading } from "../../components/constants/loading";
 import { searchLoaded, selectUniqueTags } from "../SearchPage/searchSlice";
 import interleave from "../../components/constants/interleave";
+import { shallowEqual } from "react-redux";
 // For use specifically in Feed: pull from recommender API
 function RecommendationsList({ filterIndex, fetch }) {
   // const { FilterButton, btnIndex } = useProfileFilter();
@@ -32,7 +33,7 @@ function RecommendationsList({ filterIndex, fetch }) {
   const idObj = useIdObject();
   const [recommendations, setRecommendations] = useState([]);
   const [loading, setLoading] = useState(false);
-  console.log("Loading", loading);
+  console.log("Loading from recclisit", loading);
   const dispatch = useDispatch();
   const [refresh1, setRefresh] = useState(false);
   const [refresh2, setRefresh2] = useState(false);
@@ -40,7 +41,7 @@ function RecommendationsList({ filterIndex, fetch }) {
   const [projects, setProjects] = useState([]);
 
   const user = useSelector((state) => state.user);
-  const search = useSelector(state => state.search);
+  // const search = useSelector(state => state.search);
 
   // obtain all unique interests and tags
   const [skills, setSkills] = useState([]);
@@ -139,8 +140,13 @@ function RecommendationsList({ filterIndex, fetch }) {
 
 
   const isUserLoaded = useSelector(userLoaded);
-  const isSearchLoaded = useSelector(searchLoaded);
-  const uniqueTags = useSelector(selectUniqueTags);
+
+  // by default, if the object ref for the state changes at all component re-renders
+  // but when updating searchInput in search bar i'm updating searchSlice -> causes re-render even though I only depend on other parts of Search slice
+    // Solution: use shallowEqual selector: checks shallow equality, so no re-render when shallowEqual is true -> won't re-render just because
+    // of search input
+  const isSearchLoaded = useSelector(searchLoaded, shallowEqual);
+  const uniqueTags = useSelector(selectUniqueTags, shallowEqual);
 
   const pickArray = (first, second) => first.length == 0 ? second : first;
   async function getRecommendations() {
@@ -179,11 +185,13 @@ function RecommendationsList({ filterIndex, fetch }) {
     
   }
 
+  // useEffect on user and searchLoaded: ReccList only depends on user's selected tags and the unique tags from search
+    // to use in case one or more of user's tags are empty
   useEffect(() => {
     if (!(isUserLoaded && isSearchLoaded)) return;
     dispatch(getLinks(idObj));
     getRecommendations();
-  }, [user, search]);
+  }, [user, isSearchLoaded]);
 
 
 
