@@ -1,7 +1,7 @@
 import { styled, alpha, InputBase } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
 import SearchIcon from "@mui/icons-material/Search";
-import { updateSearch } from "../../features/SearchPage/searchSlice";
+import { updateSearch, updateSearchWithRefresh } from "../../features/SearchPage/searchSlice";
 import { Navigate, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 
@@ -57,7 +57,7 @@ export default function BasicSearchBar({
   const user = useSelector((state) => state.user);
 
   const searchInput = useSelector(state => state.search.search);
-  console.log("Re-render search bar");
+  console.log("Search bar render");
 
   // document.addEventListener("DOMContentLoaded", () => {
   //   const input = document.getElementById("searchBar");
@@ -100,7 +100,7 @@ export default function BasicSearchBar({
         try {
           setLoading(true);
           dispatch(
-            updateSearch({
+            updateSearchWithRefresh({
               search: input.value,
             })
           );

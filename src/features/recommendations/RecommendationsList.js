@@ -33,7 +33,7 @@ function RecommendationsList({ filterIndex, fetch }) {
   const idObj = useIdObject();
   const [recommendations, setRecommendations] = useState([]);
   const [loading, setLoading] = useState(false);
-  console.log("Loading from recclisit", loading);
+  // console.log("ReccList render", loading);
   const dispatch = useDispatch();
   const [refresh1, setRefresh] = useState(false);
   const [refresh2, setRefresh2] = useState(false);
@@ -150,29 +150,29 @@ function RecommendationsList({ filterIndex, fetch }) {
 
   const pickArray = (first, second) => first.length == 0 ? second : first;
   async function getRecommendations() {
-    console.log("userloaded, searchloaded", userLoaded, isSearchLoaded);
+    // console.log("userloaded, searchloaded", userLoaded, isSearchLoaded);
     if (!(userLoaded && isSearchLoaded)) return;
 
-    console.log("Unique tags from rec", uniqueTags);
+    // console.log("Unique tags from rec", uniqueTags);
 
     const { user_skills, user_interests, user_communities } = user;
     const { unique_communities, unique_interests, unique_skills } = uniqueTags;
 
-    console.log("User skills, ints, comms", user_skills, user_interests, user_communities);
-    console.log("Unique SIC:", unique_skills, unique_interests, unique_communities);
+    // console.log("User skills, ints, comms", user_skills, user_interests, user_communities);
+    // console.log("Unique SIC:", unique_skills, unique_interests, unique_communities);
 
     const fetchSkills = pickArray(user_skills, unique_skills);
     const fetchInterests = pickArray(user_interests, unique_interests);
     const fetchCommunities = pickArray(user_communities, unique_communities);
 
-    console.log("Fetch SIC", fetchSkills, fetchInterests, fetchCommunities);
+    // console.log("Fetch SIC", fetchSkills, fetchInterests, fetchCommunities);
     
     try {
       setLoading(true);
       const users = await fetchData("userRecommendation", "", fetchCommunities, fetchSkills, fetchInterests);
-      console.log("Users from fetchData", users);
+      // console.log("Users from fetchData", users);
       const projects = await fetchData("projectRecommendation", "", fetchCommunities, fetchSkills, fetchInterests);
-      console.log("Projects from fetchData", projects);
+      // console.log("Projects from fetchData", projects);
 
       setRecommendations(interleave(users, projects));
     } catch (error) {

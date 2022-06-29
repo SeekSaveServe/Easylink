@@ -22,7 +22,7 @@ export default function SearchPage() {
   console.log(users, projects, "hi");
 
   // const searchText = useSelector(state => state.search.search);
-  // console.log("Search page re-render");
+  console.log("Search page re-render");
 
   useEffect(() => {
     console.log("Search page load");

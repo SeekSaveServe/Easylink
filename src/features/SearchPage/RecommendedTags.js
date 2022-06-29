@@ -20,7 +20,7 @@ import BasicButton from "../../components/BasicButton";
 import BasicLoadingButton from "../../components/BasicLoadingButton/BasicLoadingButton";
 import RadioWithLabel from "../../components/RadioWithLabel";
 import fetchData from "./FetchData";
-import { searchLoaded, selectUniqueTags, updateSearch } from "./searchSlice";
+import { searchLoaded, selectUniqueTags, updateSearch, updateSearchWithRefresh } from "./searchSlice";
 import { shallowEqual } from "react-redux";
 function RecommendedTags({
   refresh,
@@ -31,9 +31,7 @@ function RecommendedTags({
   fetch,
 }) {
   const dispatch = useDispatch();
-  const user = useSelector((state) => state.user);
-
-  const search = useSelector(state => state.search);
+  // const user = useSelector((state) => state.user);
 
   // State of selected tags
   const [selectedSkills, setSelectedSkills] = useState([]);
@@ -47,12 +45,12 @@ function RecommendedTags({
 
   // const isSearchLoaded = useSelector(searchLoaded, shallowEqual);
   const uniqueTags = useSelector(selectUniqueTags, shallowEqual);
-
+  // console.log("ReccTags render");
   useEffect(() => {
-    console.log("Ran useeff in recc tags");
-    setSkills(search.unique_skills);
-    setInterests(search.unique_interests);
-    setCommunities(search.unique_communities);
+    // console.log("Ran useeff in recc tags");
+    setSkills(uniqueTags.unique_skills);
+    setInterests(uniqueTags.unique_interests);
+    setCommunities(uniqueTags.unique_communities);
   }, [uniqueTags])
 
   // for radial buttons
@@ -140,7 +138,7 @@ function RecommendedTags({
       selectedInterests,
       selectedCommunities
     });
-    dispatch(updateSearch({
+    dispatch(updateSearchWithRefresh({
       selectedSkills,
       selectedInterests,
       selectedCommunities,

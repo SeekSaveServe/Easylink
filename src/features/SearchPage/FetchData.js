@@ -58,7 +58,7 @@ export default async function fetchData(
       });
 
       const data = await res.json();
-      console.log("Data from fetch and URL", data, formatUrl());
+      // console.log("Data from fetch and URL", data, formatUrl());
 
       return data;
 

@@ -18,6 +18,7 @@ export default function BasicNavBar({
   const userProfile = useSelector((state) => state.user);
   const dispatch = useDispatch();
   const location = useLocation();
+  console.log("Navbar render");
   
   const signOut = async () => {
     sessionStorage.removeItem("currProject");
