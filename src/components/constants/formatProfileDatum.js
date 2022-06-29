@@ -11,3 +11,19 @@ export function formatProfileDatum(datum) {
         user_communities: mapName(datum.user_communities)
     }
 }
+export const stringToArray = (string) => {
+    string = string.trim();
+    if (!Boolean(string)) return []; // covers null,undefined, ""
+
+    return string.split(",");
+  };
+
+
+export const formatProfileStringsToArray = (profile) => {
+    return {
+        ...profile,
+        user_skills: stringToArray(profile.user_skills),
+        user_interests: stringToArray(profile.user_interests),
+        user_communities: stringToArray(profile.user_communities),
+    }
+}

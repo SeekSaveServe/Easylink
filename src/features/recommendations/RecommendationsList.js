@@ -146,8 +146,6 @@ function RecommendationsList({ filterIndex, fetch }) {
   const pickArray = (first, second) => (first.length == 0 ? second : first);
   async function getRecommendations() {
     // console.log("userloaded, searchloaded", userLoaded, isSearchLoaded);
-    if (!(userLoaded && isSearchLoaded)) return;
-
     // console.log("Unique tags from rec", uniqueTags);
 
     const { user_skills, user_interests, user_communities } = user;

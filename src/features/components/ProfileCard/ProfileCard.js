@@ -40,6 +40,7 @@ import {
   isFollowing,
   selectFollowedById,
 } from "../../followers/followerSlice.js";
+import { stringToArray } from "../../../components/constants/formatProfileDatum.js";
 
 // assumption: passed in data has structure
 // isJoin == true: { ...user/project, user_skills:[Tag], user_communities:[Tag], user_interests: [Tag] }
@@ -79,12 +80,7 @@ function ProfileCard({ info, isJoin }) {
   const mapName = (d) => d.name; // for join query in links
 
   // comma sep string to array - for isJoin false
-  const stringToArray = (string) => {
-    string = string.trim();
-    if (!Boolean(string)) return []; // covers null,undefined, ""
-
-    return string.split(",");
-  };
+  
 
   const user_skills = isJoin
     ? info.user_skills.map(mapName)
@@ -455,6 +451,7 @@ function ProfileCard({ info, isJoin }) {
               <LinkableAvatar
                 src={info.avatar_url}
                 imgProps={{ style: { objectFit: "stretch" } }}
+                info={info}
               />
             }
             sx={{ ml: 0 }}

@@ -7,8 +7,8 @@ import { Stack, Typography } from "@mui/material";
 import styles from './Upperhalf.module.css';
 import Tag from "../../components/Tag/Tag";
 // everything until before tabs
-export default function Upperhalf() {
-  const user = useSelector(state => state.user);
+export default function Upperhalf({ user, isPublic }) {
+  // const user = useSelector(state => state.user);
   const title = user.username;
   const subtitle = user.title;
   const isProject = user?.isProject == true;
@@ -43,8 +43,8 @@ export default function Upperhalf() {
 
   return (
     <Box>
-      <ClickableSetting fontSize="large" />
-        <Stack spacing={1.2}>
+      { isPublic ? <></> : <ClickableSetting fontSize="large" /> }
+        <Stack spacing={1.2}> 
           <Center>
           
           <Stack spacing={0.5}>
