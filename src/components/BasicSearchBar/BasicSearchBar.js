@@ -85,16 +85,16 @@ export default function BasicSearchBar({
     // if (!listenerOn) {
     //   setListenerOn(true);
     input.addEventListener("keypress", function (event) {
+      dispatch(
+        updateSearch({
+          search: input.value,
+        })
+      );
       if (event.key === "Enter") {
         event.preventDefault();
         // redirect to search page and update the userslice
         try {
           setLoading(true);
-          dispatch(
-            updateSearch({
-              search: input.value,
-            })
-          );
           navigate("/Search", { replace: true });
           // Trigger a reload on the search page
           // setRefresh ? setRefresh(!refresh) : void 0;

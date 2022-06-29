@@ -32,7 +32,7 @@ function RecommendedTags({
   const dispatch = useDispatch();
   const user = useSelector((state) => state.user);
 
-  const search = useSelector(state => state.search);
+  const search = useSelector((state) => state.search);
 
   // State of selected tags
   const [selectedSkills, setSelectedSkills] = useState([]);
@@ -44,14 +44,14 @@ function RecommendedTags({
   const [interests, setInterests] = useState([]);
   const [communities, setCommunities] = useState([]);
 
-  const isSearchLoaded = useSelector(searchLoaded);
+  // const isSearchLoaded = useSelector(searchLoaded);
 
   useEffect(() => {
-    console.log("Ran useeff in recc tags");
+    // console.log("Ran useeff in recc tags");
     setSkills(search.unique_skills);
     setInterests(search.unique_interests);
     setCommunities(search.unique_communities);
-  }, [search])
+  }, [search]);
 
   // for radial buttons
   const [filter, setFilter] = useState("Show All");
@@ -133,17 +133,19 @@ function RecommendedTags({
 
   async function handleSubmit(e) {
     e.preventDefault();
-    console.log("Dispatch in recc tagsobj", {
-      selectedSkills,
-      selectedInterests,
-      selectedCommunities
-    });
-    dispatch(updateSearch({
-      selectedSkills,
-      selectedInterests,
-      selectedCommunities,
-      searchFilter: filter
-    }))
+    // console.log("Dispatch in recc tagsobj", {
+    //   selectedSkills,
+    //   selectedInterests,
+    //   selectedCommunities
+    // });
+    dispatch(
+      updateSearch({
+        selectedSkills,
+        selectedInterests,
+        selectedCommunities,
+        searchFilter: filter,
+      })
+    );
     // updateFormState();
     // const comm = !selectedCommunities.length
     //   ? communities
