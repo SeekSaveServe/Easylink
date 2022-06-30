@@ -52,7 +52,7 @@ class ProjectViewSet(viewsets.ModelViewSet):
         inner join user_communities on projects.pid = user_communities.pid
         inner join user_skills on projects.pid = user_skills.pid
         inner join user_interests on projects.pid = user_interests.pid
-        where projects.username ~ '{searchInput}'
+        where projects.username ~* '{searchInput}'
         and (user_communities.name in ({communities}) 
         and user_skills.name in ({skills})
         and user_interests.name in ({interests}))
@@ -99,7 +99,7 @@ class ProjectViewSetRecommendation(viewsets.ModelViewSet):
         inner join user_communities on projects.pid = user_communities.pid
         inner join user_skills on projects.pid = user_skills.pid
         inner join user_interests on projects.pid = user_interests.pid
-        where projects.username ~ '{searchInput}'
+        where projects.username ~* '{searchInput}'
         or (user_communities.name in ({communities}) 
         or user_skills.name in ({skills})
         or user_interests.name in ({interests}))
