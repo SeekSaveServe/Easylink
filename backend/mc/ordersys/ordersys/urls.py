@@ -23,6 +23,7 @@ from app.apis import UserViewSet
 from app.apis import ProjectViewSet
 from app.apis import UserViewSetRecommendation
 from app.apis import ProjectViewSetRecommendation
+from app.apis import Train_User_Models
 
 router = routers.DefaultRouter()
 router.register(r'course', CourseViewSet)
@@ -31,6 +32,7 @@ router.register(r'user', UserViewSet, basename='Users')
 router.register(r'project', ProjectViewSet, basename='Projects')
 router.register(r'projectRecommendation', ProjectViewSet, basename='Projects')
 router.register(r'userRecommendation', UserViewSet, basename='Users')
+router.register(r'trainUser', Train_User_Models)
 
 urlpatterns = [
 path('api/', include(router.urls)),

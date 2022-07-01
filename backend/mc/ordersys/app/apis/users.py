@@ -1,8 +1,8 @@
 from rest_framework import viewsets, permissions
 
 from app.models import Users, UserCommunities, UserCommunities, UserSkills
-from app.serializers import UserSerializer
-
+from app.serializers import UserSerializer, UserIDTagsSerializer
+from app.apis.RecommendationSys import *
 """
 Logic behind UserViewSet:
 1. Filter by tags (userCommunities, UserInterests, UserSkills)
@@ -106,3 +106,17 @@ class UserViewSetRecommendation(viewsets.ModelViewSet):
         return queryset
     serializer_class = UserSerializer
     # permission_classes=  [UserPermissions]
+
+class Train_User_Models(viewsets.ModelViewSet):    
+    queryset = Users.objects.raw("""SELECT
+            users.id,
+            string_agg(distinct user_communities.name, ',') ||
+            string_agg(distinct user_interests.name, ',') ||
+            string_agg(distinct user_skills.name, ',') as tags
+        from users
+        inner join user_skills on users.id = user_skills.uid
+        inner join user_communities on users.id = user_communities.uid
+        inner join user_interests on users.id = user_interests.uid
+		Group by users.id
+    """)
+    serializer_class = UserIDTagsSerializer
