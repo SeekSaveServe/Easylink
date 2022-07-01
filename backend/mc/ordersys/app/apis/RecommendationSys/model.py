@@ -73,6 +73,6 @@ def calculate_similarity(profile: list[str], fname: str) -> "Panda dataframe":
     # Output
     final = pd.DataFrame(similar_sentences, columns=["id", "Score"])
     return final
-    
-train_project_model()
-print(calculate_similarity(['Other Communities', 'GUI', 'USP'], fnameProject))
+
+# train_project_model()
+# print(calculate_similarity(['Other Communities', 'GUI', 'USP'], fnameProject))
