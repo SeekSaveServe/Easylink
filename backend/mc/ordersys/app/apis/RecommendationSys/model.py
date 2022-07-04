@@ -64,20 +64,16 @@ def train_project_model():
     model.save(fnameProject)
 
 def calculate_similarity(profile: list[str]) -> "json":
-    print("wrapper")
     return calculate_similarity_internal(profile, fnameProject)
 
 def calculate_similarity_internal(profile: list[str], fname: str) -> "json":
     # model
     model = Doc2Vec.load(fname)
-    print("loaded!")
     # Create new sentence and vectorize it. 
     # new_sentence = ["Service", "Programming", "House", "Interest Groups"]
     new_sentence_vectorized = model.infer_vector(profile)
-    print("calculating")
     # Calculate cosine similarity. 
     similar_sentences = model.dv.most_similar(positive=[new_sentence_vectorized])
-    print("done!")
     # Output
     return dict(similar_sentences)
 
