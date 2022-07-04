@@ -1,4 +1,9 @@
 from rest_framework import viewsets, permissions
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework.decorators import api_view
+from django.shortcuts import render
+from django.http import HttpResponse
 
 from app.models import Users, UserCommunities, UserCommunities, UserSkills
 from app.serializers import UserSerializer, UserIDTagsSerializer
@@ -103,20 +108,12 @@ class UserViewSetRecommendation(viewsets.ModelViewSet):
         queryset = Users.objects.raw(raw_query)
         # print(queryset)
         # print(username)
+        train_user_model()
         return queryset
     serializer_class = UserSerializer
     # permission_classes=  [UserPermissions]
-
-class Train_User_Models(viewsets.ModelViewSet):    
-    queryset = Users.objects.raw("""SELECT
-            users.id,
-            string_agg(distinct user_communities.name, ',') ||
-            string_agg(distinct user_interests.name, ',') ||
-            string_agg(distinct user_skills.name, ',') as tags
-        from users
-        inner join user_skills on users.id = user_skills.uid
-        inner join user_communities on users.id = user_communities.uid
-        inner join user_interests on users.id = user_interests.uid
-		Group by users.id
-    """)
-    serializer_class = UserIDTagsSerializer
+    
+def Train_User_Models(request):
+    # Test : http://127.0.0.1:8000/trainUser/
+    train_user_model()
+    return HttpResponse("Trained user model!")

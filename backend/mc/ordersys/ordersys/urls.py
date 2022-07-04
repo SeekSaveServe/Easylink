@@ -30,9 +30,8 @@ router.register(r'course', CourseViewSet)
 router.register(r'table', TableViewSet)
 router.register(r'user', UserViewSet, basename='Users')
 router.register(r'project', ProjectViewSet, basename='Projects')
-router.register(r'projectRecommendation', ProjectViewSet, basename='Projects')
-router.register(r'userRecommendation', UserViewSet, basename='Users')
-router.register(r'trainUser', Train_User_Models)
+router.register(r'projectRecommendation', ProjectViewSetRecommendation, basename='Projects')
+router.register(r'userRecommendation', UserViewSetRecommendation, basename='Users')
 
 urlpatterns = [
 path('api/', include(router.urls)),

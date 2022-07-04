@@ -3,9 +3,10 @@
 from gensim.models.doc2vec import Doc2Vec, TaggedDocument
 from gensim.test.utils import get_tmpfile
 
-# from app.apis.RecommendationSys.functions import *
-from functions import *
+from app.apis.RecommendationSys.functions import *
+# from functions import *
 import pandas as pd
+import json 
 
 fnameUser = 'UserModel'
 fnameProject = 'ProjectModel'
@@ -71,8 +72,7 @@ def calculate_similarity(profile: list[str], fname: str) -> "Panda dataframe":
     similar_sentences = model.dv.most_similar(positive=[new_sentence_vectorized])
 
     # Output
-    final = pd.DataFrame(similar_sentences, columns=["id", "Score"])
-    return final
+    return json.dumps(dict(similar_sentences))
 
 # train_project_model()
 # print(calculate_similarity(['Other Communities', 'GUI', 'USP'], fnameProject))
