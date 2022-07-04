@@ -1,9 +1,19 @@
 import BasicButton from "../../components/BasicButton";
 import { supabase } from "../../supabaseClient";
 import { useSelector, useDispatch } from "react-redux";
-import { Box, Typography, Stack, Paper, Divider, Tabs, Tab, Container, CircularProgress } from "@mui/material";
+import {
+  Box,
+  Typography,
+  Stack,
+  Paper,
+  Divider,
+  Tabs,
+  Tab,
+  Container,
+  CircularProgress,
+} from "@mui/material";
 import BasicNavBar from "../../components/BasicNavBar/BasicNavBar";
-import scroll from '../components/scroll/Scroll.module.css';
+import scroll from "../components/scroll/Scroll.module.css";
 import { useState, useEffect } from "react";
 import { Center } from "@chakra-ui/react";
 import GreyContainer from "../components/GreyContainer";
@@ -21,28 +31,36 @@ export const fakeLinksData = [
     title: "Cat lover, professional photographer, expert coder",
     bio: "Hi! I love to document the cats of NUS and code!",
     // skills, interests, communities
-    tags: [["Python", "Meowing", "Photography"], ["Nature", "Software Development", "Photography"], ["USP", "NUS"]],
+    s: [
+      ["Python", "Meowing", "Photography"],
+      ["Nature", "Software Development", "Photography"],
+      ["USP", "NUS"],
+    ],
     dateRange: "Now to Dec 2022",
     isProject: false,
     email: "catlover@gmail.com",
-    telegram:"@CatLover",
-    // TODO: just for testing, replace with calculated 
+    telegram: "@CatLover",
+    // TODO: just for testing, replace with calculated
     showEmail: true,
-    showTele: true
+    showTele: true,
   },
   {
     username: "USDevs",
     title: "Make laundry chill",
     bio: "Hi! We are Project Laundrobot, a subproject under USDevs working on a hardware based laundry notification system.",
     // skills, interests, communities
-    tags: [["Python", "Software Development", "Raspberry Pi"], ["Developers"], ["USP"]],
+    tags: [
+      ["Python", "Software Development", "Raspberry Pi"],
+      ["Developers"],
+      ["USP"],
+    ],
     dateRange: "Now to Dec 2022",
     isProject: true,
     email: "usdevs@gmail.com",
     telegram: "@USDevs",
-    
+
     showEmail: true,
-    showTele: false
+    showTele: false,
   },
   {
     username: "Web_Lover",
@@ -56,7 +74,7 @@ export const fakeLinksData = [
     telegram: "@WebLover",
 
     showEmail: false,
-    showTele: true
+    showTele: true,
   },
   {
     username: "Livecore",
@@ -70,70 +88,79 @@ export const fakeLinksData = [
     telegram: "@livecore",
 
     showEmail: false,
-    showTele: false
-  }
-  
-]
+    showTele: false,
+  },
+];
 
 // pending, established, rejected
 const filterMap = {
   0: (link) => link.pending,
   1: (link) => link.established,
-  2: (link) => link.rejected // don't show rejected, incoming links (they sent and you rejected)
-}
+  2: (link) => link.rejected, // don't show rejected, incoming links (they sent and you rejected)
+};
 
 function Projects() {
   const [typeIndex, setTypeIndex] = useState(0); // 0: Pending, 1: Established, 2: Rejected
   const typeItems = ["Pending", "Established", "Rejected"];
   const [filterIndex, setFilterIndex] = useState(0); // 0: Users and projects, 1: Users only, 2: Projects only
-  const user = useSelector(state => state.user);
+  const user = useSelector((state) => state.user);
 
   const dispatch = useDispatch();
   const idObj = useIdObject();
 
   // for some reason, idObj as dependency causes inf loop but user as dependency re-runs properloy
-    // IMPORTANT for links to work
+  // IMPORTANT for links to work
   useUpdateEffect(() => {
     console.log("Runn use eff");
     dispatch(getLinks(idObj));
-  }, [user])
+  }, [user]);
 
   let links = useSelector(selectAllLinks);
   links = links.filter(filterMap[typeIndex]);
 
-  const loading = useSelector(state => state.links.loading);
-  
+  const loading = useSelector((state) => state.links.loading);
 
   const showLinks = () => {
     switch (loading) {
-      case 'pending':
-        return <Center><CircularProgress size={40} sx={{mt:2}}/></Center>;
+      case "pending":
+        return (
+          <Center>
+            <CircularProgress size={40} sx={{ mt: 2 }} />
+          </Center>
+        );
       case "fulfilled":
-        return <CardList data={links} isJoin={true} btnIndex={filterIndex}/>
+        return <CardList data={links} isJoin={true} btnIndex={filterIndex} />;
       default:
-        <Typography variant="h4" color="gray">Idle/Error</Typography> 
-      
+        <Typography variant="h4" color="gray">
+          Idle/Error
+        </Typography>;
     }
-  }
+  };
 
-
-  
   return (
     <>
       <BasicNavBar />
       <GreyContainer>
-        <Center style={{marginBottom: 10}}>
+        <Center style={{ marginBottom: 10 }}>
           <Typography variant="h4">{typeItems[typeIndex]} Links</Typography>
-          <FilterMenu title={"Toggle links"} icon={<Settings/>} items={typeItems} 
-          index={typeIndex} setIndex={setTypeIndex}/>
-          <FilterMenu title={"Filter profiles"} icon={<FilterList/>} items={["Users and projects", "Users only", "Projects only"]}
-            index={filterIndex} setIndex={setFilterIndex}
+          <FilterMenu
+            title={"Toggle links"}
+            icon={<Settings />}
+            items={typeItems}
+            index={typeIndex}
+            setIndex={setTypeIndex}
+          />
+          <FilterMenu
+            title={"Filter profiles"}
+            icon={<FilterList />}
+            items={["Users and projects", "Users only", "Projects only"]}
+            index={filterIndex}
+            setIndex={setFilterIndex}
           />
         </Center>
-        { showLinks() }
+        {showLinks()}
 
         {/* <CardList data={links} isJoin={true} btnIndex={filterIndex}/> */}
-
       </GreyContainer>
     </>
   );
