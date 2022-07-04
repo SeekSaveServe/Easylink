@@ -119,7 +119,7 @@ def Train_User_Models(request):
     train_user_model()
     return HttpResponse("Trained user model!")
 
-def Get_Cosine(request):
-    # Test : http://127.0.0.1:8000/recommendCosine?tags='Other Communities','GUI','USP'
+def Get_Cosine_User(request):
+    # Test : http://127.0.0.1:8000/recommendCosineUser?tags='Other Communities','GUI','USP'
     tags = list(map(lambda x: x[1:-1], request.GET.get('tags','').split(",")))
-    return JsonResponse(calculate_similarity(tags))
+    return JsonResponse(calculate_similarity_user(tags))

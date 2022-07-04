@@ -17,7 +17,7 @@ vec_size = 60
 alpha = 0.25
 epochs = 300
 # limits the number of results returned
-topN = 50
+topN = 10
 
 def train_user_model():
     common_texts = dict(get_users())
@@ -31,9 +31,6 @@ def train_user_model():
     
     # Create doc2vec model.
     # so far this seems optimal
-    vec_size = 60
-    alpha = 0.25
-    epochs = 300
     model = Doc2Vec(tagged_documents, vector_size=vec_size,
                     alpha=alpha,
                     min_alpha=0.00025,
@@ -45,7 +42,6 @@ def train_user_model():
 
 def train_project_model():
     common_texts = dict(get_projects())
-
     # Tagging documents. Each sentences(set of words) are mapped unique index.
     # Tagged documents are input for doc2vec model. 
     tagged_documents = []
@@ -63,8 +59,11 @@ def train_project_model():
     # saves model (saved in the current directory in cld)
     model.save(fnameProject)
 
-def calculate_similarity(profile: list[str]) -> "json":
+def calculate_similarity_project(profile: list[str]) -> "json":
     return calculate_similarity_internal(profile, fnameProject)
+
+def calculate_similarity_user(profile: list[str]) -> "json":
+    return calculate_similarity_internal(profile, fnameUser)
 
 def calculate_similarity_internal(profile: list[str], fname: str) -> "json":
     # model
@@ -73,8 +72,9 @@ def calculate_similarity_internal(profile: list[str], fname: str) -> "json":
     # new_sentence = ["Service", "Programming", "House", "Interest Groups"]
     new_sentence_vectorized = model.infer_vector(profile)
     # Calculate cosine similarity. 
-    similar_sentences = model.dv.most_similar(positive=[new_sentence_vectorized])
+    similar_sentences = model.dv.most_similar(positive=[new_sentence_vectorized], topn=topN)
     # Output
+    similar_sentences = list(map(lambda x: (str(x[0]), x[1]), similar_sentences))
     return dict(similar_sentences)
 
 # train_project_model()

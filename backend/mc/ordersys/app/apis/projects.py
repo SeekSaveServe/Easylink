@@ -1,6 +1,6 @@
 from rest_framework import viewsets, permissions
 from django.shortcuts import render
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 
 from app.models import Projects
 from app.serializers import ProjectSerializer
@@ -120,3 +120,8 @@ def Train_Project_Models(request):
     # Test : http://127.0.0.1:8000/trainProject/
     train_project_model()
     return HttpResponse("Trained project model!")
+
+def Get_Cosine_Project(request):
+    # Test : http://127.0.0.1:8000/recommendCosineProject?tags='Other Communities','GUI','USP'
+    tags = list(map(lambda x: x[1:-1], request.GET.get('tags','').split(",")))
+    return JsonResponse(calculate_similarity_project(tags))
