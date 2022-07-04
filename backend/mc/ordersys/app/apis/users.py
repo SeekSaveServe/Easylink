@@ -4,6 +4,7 @@ from rest_framework.response import Response
 from rest_framework.decorators import api_view
 from django.shortcuts import render
 from django.http import HttpResponse
+from django.http import JsonResponse
 
 from app.models import Users, UserCommunities, UserCommunities, UserSkills
 from app.serializers import UserSerializer, UserIDTagsSerializer
@@ -112,8 +113,13 @@ class UserViewSetRecommendation(viewsets.ModelViewSet):
         return queryset
     serializer_class = UserSerializer
     # permission_classes=  [UserPermissions]
-    
+
 def Train_User_Models(request):
     # Test : http://127.0.0.1:8000/trainUser/
     train_user_model()
     return HttpResponse("Trained user model!")
+
+def Get_Cosine(request):
+    # Test : http://127.0.0.1:8000/recommendCosine?tags='Other Communities','GUI','USP'
+    tags = list(map(lambda x: x[1:-1], request.GET.get('tags','').split(",")))
+    return JsonResponse(calculate_similarity(tags))

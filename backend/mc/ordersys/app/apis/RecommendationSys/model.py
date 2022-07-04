@@ -16,6 +16,9 @@ fnameProject = 'ProjectModel'
 vec_size = 60
 alpha = 0.25
 epochs = 300
+# limits the number of results returned
+topN = 50
+
 def train_user_model():
     common_texts = dict(get_users())
 
@@ -60,19 +63,23 @@ def train_project_model():
     # saves model (saved in the current directory in cld)
     model.save(fnameProject)
 
-def calculate_similarity(profile: list[str], fname: str) -> "Panda dataframe":
+def calculate_similarity(profile: list[str]) -> "json":
+    print("wrapper")
+    return calculate_similarity_internal(profile, fnameProject)
+
+def calculate_similarity_internal(profile: list[str], fname: str) -> "json":
     # model
     model = Doc2Vec.load(fname)
-
+    print("loaded!")
     # Create new sentence and vectorize it. 
     # new_sentence = ["Service", "Programming", "House", "Interest Groups"]
     new_sentence_vectorized = model.infer_vector(profile)
-
+    print("calculating")
     # Calculate cosine similarity. 
     similar_sentences = model.dv.most_similar(positive=[new_sentence_vectorized])
-
+    print("done!")
     # Output
-    return json.dumps(dict(similar_sentences))
+    return dict(similar_sentences)
 
 # train_project_model()
 # print(calculate_similarity(['Other Communities', 'GUI', 'USP'], fnameProject))
