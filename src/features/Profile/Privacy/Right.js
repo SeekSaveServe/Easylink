@@ -11,6 +11,7 @@ import { update } from "../../user/userSlice";
 import UploadAvatar from "../../components/UploadAvatar";
 import BasicButton from "../../../components/BasicButton";
 import { useAlert } from "../../../components/Alert/AlertContext";
+import ProfileEMAUpdate from "../../../components/Update_EMA/ProfileEMAUpate";
 
 export default function Right({ contact }) {
   const dispatch = useDispatch();
@@ -144,7 +145,7 @@ export default function Right({ contact }) {
       } catch (error) {
         showAlert(error.error_description || error.message, "error");
       }
-      
+
       try {
         for (let i = 0; i < selectedCommunities.length; i++) {
           const { error } = isUser
@@ -249,6 +250,13 @@ export default function Right({ contact }) {
 
   async function handleSubmit(e) {
     e.preventDefault();
+    // Update EMA before the other states
+    const id = isUser ? supabase.auth.user().id : user.pid;
+    ProfileEMAUpdate(id, isUser, user.tags, [
+      selectedSkills,
+      selectedInterests,
+      selectedCommunities,
+    ]);
     updateFormState();
     updateSupabase();
   }
