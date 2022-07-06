@@ -31,7 +31,6 @@ export default function Upperhalf({ user, isPublic }) {
     return (
       <Center style={{marginBottom:1}}>
         <Stack>
-          {/* <Center><Typography variant="subtitle1">{header}</Typography></Center> */}
           <Stack direction="row" spacing={1}>
           <Typography variant="subtitle1">{header}</Typography>
             {tagFn()}
@@ -48,7 +47,7 @@ export default function Upperhalf({ user, isPublic }) {
           <Center>
           
           <Stack spacing={0.5}>
-              <Center><DisplayAvatar sx={{ height: 70, width: 70, mt:-4}}/></Center>
+              <Center><DisplayAvatar src={user?.avatar_url} sx={{ height: 70, width: 70, mt:-1}}/></Center>
               <Typography variant="h5" component="div" sx={{textAlign: "center"}}>
                   {title}
               </Typography>
