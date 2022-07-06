@@ -73,25 +73,8 @@ function ProfileCard({ info, isJoin }) {
 
   // for card actions
   const [loading, setLoading] = useState(false);
-  const { link, reject, followProfile } = useProfileActions(info);
+  const { addLink, rejectLink, follow } = useProfileActions(info, setLoading);
 
-  const loadingDecorator = (fn, dispatchFn) => {
-    async function decorated() {
-      setLoading(true);
-      await fn();
-      setLoading(false);
-      dispatchFn();
-    }
-
-    return decorated;
-  }
-
-  const linksDispatch = () => dispatch(getLinks(idObj));
-  const followedDispatch = () => dispatch(getFollowed(idObj));
-
-  const addLink = loadingDecorator(link, linksDispatch);
-  const rejectLink = loadingDecorator(reject, linksDispatch);
-  const follow = loadingDecorator(followProfile, followedDispatch);
 
   // TODO: email/tele vis: "afterlink" || "everyone" -> calculate based on if viewing user has linked
   const showEmail = Boolean(info.email) && (info.email_visibility == "everyone" || linkinSlice?.established);

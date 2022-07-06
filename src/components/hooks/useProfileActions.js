@@ -49,7 +49,7 @@ function useProfileActions(info, setLoading) {
     // Functions
 
     // Link button
-    const addLink = async () => {
+    const link = async () => {
         try {
         //   setLoading(true);
           // cases: exists inside links (e.g rejected) vs doesn't exist inside links
@@ -106,7 +106,7 @@ function useProfileActions(info, setLoading) {
             // inside links:
             // - pending, incoming: update row to acc=false, rej=true, dispatch getLinks
             // - pending, outgoing: delete the row from links table completely (cancel the link req)
-      const rejectLink = async () => {
+      const reject = async () => {
         try {
         //   setLoading(true);
           // I reject off the bat: rejected, incoming
@@ -158,7 +158,7 @@ function useProfileActions(info, setLoading) {
       };
 
       // Follow
-      const follow = async () => {
+      const followProject = async () => {
         try {
         //   setLoading(true);
             // unfollow
@@ -192,10 +192,28 @@ function useProfileActions(info, setLoading) {
         }
       };
 
+      const loadingDecorator = (fn, dispatchFn) => {
+        async function decorated() {
+          setLoading(true);
+          await fn();
+          setLoading(false);
+          dispatchFn();
+        }
+    
+        return decorated;
+      }
+    
+      const linksDispatch = () => dispatch(getLinks(idObj));
+      const followedDispatch = () => dispatch(getFollowed(idObj));
+
+      const addLink = loadingDecorator(link, linksDispatch);
+      const rejectLink = loadingDecorator(reject, linksDispatch);
+      const follow = loadingDecorator(followProject, followedDispatch);
+
       return {
-        link:addLink,
-        reject:rejectLink,
-        followProfile: follow
+        addLink,
+        rejectLink,
+        follow
       }
 
 }
