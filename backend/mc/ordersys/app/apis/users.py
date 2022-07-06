@@ -1,8 +1,14 @@
 from rest_framework import viewsets, permissions
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework.decorators import api_view
+from django.shortcuts import render
+from django.http import HttpResponse
+from django.http import JsonResponse
 
 from app.models import Users, UserCommunities, UserCommunities, UserSkills
-from app.serializers import UserSerializer
-
+from app.serializers import UserSerializer, UserIDTagsSerializer
+from app.apis.RecommendationSys import *
 """
 Logic behind UserViewSet:
 1. Filter by tags (userCommunities, UserInterests, UserSkills)
@@ -49,7 +55,7 @@ class UserViewSet(viewsets.ModelViewSet):
         inner join user_skills on users.id = user_skills.uid
         inner join user_communities on users.id = user_communities.uid
         inner join user_interests on users.id = user_interests.uid
-        where users.username ~ '{searchInput}'
+        where users.username ~* '{searchInput}'
         and (user_communities.name in ({communities}) 
         and user_skills.name in ({skills})
         and user_interests.name in ({interests}))
@@ -93,7 +99,7 @@ class UserViewSetRecommendation(viewsets.ModelViewSet):
         inner join user_skills on users.id = user_skills.uid
         inner join user_communities on users.id = user_communities.uid
         inner join user_interests on users.id = user_interests.uid
-        where users.username ~ '{searchInput}'
+        where users.username ~* '{searchInput}'
         or (user_communities.name in ({communities}) 
         or user_skills.name in ({skills})
         or user_interests.name in ({interests}))
@@ -103,6 +109,17 @@ class UserViewSetRecommendation(viewsets.ModelViewSet):
         queryset = Users.objects.raw(raw_query)
         # print(queryset)
         # print(username)
+        train_user_model()
         return queryset
     serializer_class = UserSerializer
     # permission_classes=  [UserPermissions]
+
+def Train_User_Models(request):
+    # Test : http://127.0.0.1:8000/trainUser/
+    train_user_model()
+    return HttpResponse("Trained user model!")
+
+def Get_Cosine_User(request):
+    # Test : http://127.0.0.1:8000/recommendCosineUser?tags='Other Communities','GUI','USP'
+    tags = list(map(lambda x: x[1:-1], request.GET.get('tags','').split(",")))
+    return JsonResponse(calculate_similarity_user(tags))

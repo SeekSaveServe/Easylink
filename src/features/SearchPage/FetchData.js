@@ -55,7 +55,12 @@ export default async function fetchData(
         //   Authorization: "4e9f4c0735a434e094da78c61faa290881016460",
         // },
       });
-      console.log("Res after fetch:", res);
+      console.log("Res from fetch", res);
+      if (!res.ok) {
+        console.log("Error in fetch:", formatUrl(), res);
+        throw res;
+      }
+
 
       const data = await res.json();
       console.log("Data from fetch and URL", data, formatUrl());

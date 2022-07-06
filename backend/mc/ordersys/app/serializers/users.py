@@ -9,3 +9,9 @@ class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = Users
         fields = "__all__"
+
+class UserIDTagsSerializer(serializers.ModelSerializer):
+    tags = serializers.CharField(read_only=True)
+    class Meta:
+        model = Users
+        fields = "__all__"
