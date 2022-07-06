@@ -6,6 +6,14 @@ import { useDispatch } from "react-redux";
 import { supabase } from "../../supabaseClient";
 import { getLinks } from "../../features/Links/linksSlice";
 import { isFollowing, selectFollowedById, getFollowed } from "../../features/followers/followerSlice";
+import TooltipIconButton from "../TooltipIconButton/TooltipIconButton";
+import { AddLinkOutlined, LeakRemoveOutlined, RssFeedOutlined, DeleteOutlined, CancelOutlined } from "@mui/icons-material";
+
+
+function ConditionalDisplay(props) {
+    const { display, component } = props;
+    return display ? component : <></>;
+}
 
 function useProfileActions(info, setLoading) {
     const isProject = "pid" in info;
@@ -18,10 +26,22 @@ function useProfileActions(info, setLoading) {
 
     const isLink = linkinSlice != undefined;
 
-    const isFollow = useSelector((state) => isFollowing(state, info?.pid));
+    const isFollow = useSelector((state) => isFollowing(state, info?.pid)); // am I following this profile
     const followedObj = useSelector((state) =>
-    selectFollowedById(state, info?.pid)
-  );
+      selectFollowedById(state, info?.pid)
+    ); // corresponding row in followers table for this profile (if we are following them) or undefined
+
+    // TODO bug: might show link button at first when isLink is true due to undefined (haven't loaded) 
+        // make false when links is still loading
+    const showDelete = isLink && linkinSlice.pending && !linkinSlice.incoming;
+
+    // rejected, outgoing (I sent, and got rejected) -> don't show link and reject btns
+    // also don't show link for established
+    const showLink = (!isLink) || (!(linkinSlice?.rejected && !linkinSlice?.incoming) &&
+        !linkinSlice?.established);
+
+    const showReject = (!isLink) || linkinSlice?.pending; // only show reject for pending or when not in links at all
+
 
             // to insert right fields based on sender / receiver
     const matchObj = {
@@ -208,14 +228,159 @@ function useProfileActions(info, setLoading) {
 
       const addLink = loadingDecorator(link, linksDispatch);
       const rejectLink = loadingDecorator(reject, linksDispatch);
-      const follow = loadingDecorator(followProject, followedDispatch);
+      const follow = loadingDecorator(followProject, followedDispatch);        
 
-      return {
-        addLink,
-        rejectLink,
-        follow
-      }
+      // Buttons
+      const LinkButton = <ConditionalDisplay 
+        display={showLink && !showDelete}
+        component={
+            <TooltipIconButton
+            icon={
+            <AddLinkOutlined
+                color="primary"
+                sx={{ fontSize: 30 }}
+            />
+            }
+            title="Link"
+            onClick={addLink}
+            />
+        }
+        />;
+      
+      const FollowButton = <ConditionalDisplay 
+        display={isProject}
+        component={
+            <TooltipIconButton
+                icon={
+                isFollow ? (
+                    <LeakRemoveOutlined
+                    sx={{ color: "var(--secondary)", fontSize: 30 }}
+                    />
+                ) : (
+                    <RssFeedOutlined
+                    sx={{ color: "var(--secondary)", fontSize: 30 }}
+                    />
+                )
+                }
+                title={isFollow ? "Unfollow" : "Follow"}
+                onClick={follow}
+            />
+        }
+        />;
+       
+       const RejectButton = <ConditionalDisplay 
+        display={showReject}
+        component={
+            <TooltipIconButton
+                icon={
+                showDelete ? (
+                    <DeleteOutlined
+                    sx={{ fontSize: 30, color: "error.main" }}
+                    />
+                ) : (
+                    <CancelOutlined
+                    sx={{ fontSize: 30, color: "error.main" }}
+                    />
+                )
+                }
+                title={showDelete ? "Delete" : "Not for me"}
+                onClick={rejectLink}
+            />
+        }
+       />;
+
+
+    //   const LinkButton = () => 
+        // showLink && !showDelete ?<TooltipIconButton
+        //     icon={
+        //     <AddLinkOutlined
+        //         color="primary"
+        //         sx={{ fontSize: 30 }}
+        //     />
+        //     }
+        //     title="Link"
+        //     onClick={addLink}
+        // />
+
+    //   const FollowButton = () => 
+
+    //   return {
+    //     addLink,
+    //     rejectLink,
+    //     follow
+    //   }
+
+    return {
+        LinkButton,
+        FollowButton,
+        RejectButton
+    }
+
+}
+
+function useProfileActionButtons(info, setLoading) {
 
 }
 
 export default useProfileActions;
+
+// Link
+
+ {/* {showLink && !showDelete ? (
+                    <TooltipIconButton
+                      icon={
+                        <AddLinkOutlined
+                          color="primary"
+                          sx={{ fontSize: 30 }}
+                        />
+                      }
+                      title="Link"
+                      onClick={addLink}
+                    />
+                  ) : (
+                    <></>
+                  )} */}
+
+
+// Follow
+{/* {isProject && showFollow ? (
+<TooltipIconButton
+    icon={
+    isFollow ? (
+        <LeakRemoveOutlined
+        sx={{ color: "var(--secondary)", fontSize: 30 }}
+        />
+    ) : (
+        <RssFeedOutlined
+        sx={{ color: "var(--secondary)", fontSize: 30 }}
+        />
+    )
+    }
+    title={isFollow ? "Unfollow" : "Follow"}
+    onClick={follow}
+/>
+) : (
+<></>
+)} */}
+
+// Reject/Delete
+
+{/* {showReject ? (
+<TooltipIconButton
+    icon={
+    showDelete ? (
+        <DeleteOutlined
+        sx={{ fontSize: 30, color: "error.main" }}
+        />
+    ) : (
+        <CancelOutlined
+        sx={{ fontSize: 30, color: "error.main" }}
+        />
+    )
+    }
+    title={showDelete ? "Delete" : "Not for me"}
+    onClick={rejectLink}
+/>
+) : (
+<></>
+)} */}

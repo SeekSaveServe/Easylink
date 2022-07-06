@@ -8,7 +8,7 @@ export default function DisplayAvatar(props) {
   // Obtaining the avatar from database
   const [avatarUrl, setAvatarUrl] = useState(null);
   const showAlert = useAlert();
-  const src = useSelector((state) => props.src != undefined ? props.src : state.user.avatar_url);
+  const src = useSelector((state) => "src" in props ? props.src : state.user.avatar_url);
 
   const downloadImage = async (path) => {
     if (!path) {

@@ -25,6 +25,7 @@ const n = Object.keys(map).length;
 // without button
 // btnIndex indicates filter to apply
 export function CardList({ data, btnIndex, isJoin }) {
+    console.log("Card List render");
     const list = data.map((datum, idx) => {
         return filterMap[btnIndex](datum) ? <ProfileCard key={idx} info={datum} isJoin={isJoin} /> : null;
     }).filter(x => x != null);

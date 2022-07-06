@@ -6,12 +6,17 @@ import DisplayAvatar from "../components/DisplayAvatar/DisplayAvatar";
 import { Stack, Typography } from "@mui/material";
 import styles from './Upperhalf.module.css';
 import Tag from "../../components/Tag/Tag";
+import useProfileActions from "../../components/hooks/useProfileActions";
+import { useState } from "react";
 // everything until before tabs
 export default function Upperhalf({ user, isPublic }) {
   // const user = useSelector(state => state.user);
   const title = user.username;
   const subtitle = user.title;
   const isProject = user?.isProject == true;
+  const [loading, setLoading] = useState(false);
+
+  const { LinkButton, FollowButton, RejectButton } = useProfileActions(user, setLoading);
   const DefaultMsg = () => <Typography variant="subtitle1" color="gray">Nothing to show</Typography>;
 
   const skills = () => {
@@ -45,22 +50,29 @@ export default function Upperhalf({ user, isPublic }) {
       { isPublic ? <></> : <ClickableSetting fontSize="large" /> }
         <Stack spacing={1.2}> 
           <Center>
-          
-          <Stack spacing={0.5}>
-              <Center><DisplayAvatar src={user?.avatar_url} sx={{ height: 70, width: 70, mt:-1}}/></Center>
-              <Typography variant="h5" component="div" sx={{textAlign: "center"}}>
-                  {title}
-              </Typography>
+            <Stack spacing={0.5}>
+                <Center><DisplayAvatar src={user?.avatar_url} sx={{ height: 70, width: 70, mt:-1}}/></Center>
+                <Typography variant="h5" component="div" sx={{textAlign: "center"}}>
+                    {title}
+                </Typography>
 
-              <Typography variant="subtitle1" component="div" sx={{textAlign:"center"}}>
-                  {subtitle}
-              </Typography>
-          </Stack>
+                <Typography variant="subtitle1" component="div" sx={{textAlign:"center"}}>
+                    {subtitle}
+                </Typography>
+            </Stack>
           </Center>
           {/* <div className={styles.box}>text</div> */}
           
           { tagDisplay(isProject ? "Skills wanted:" : "Skills:", skills) }
           { tagDisplay(isProject ? "Related interests:" : "Interests:", interests) }
+
+          <Center>
+            {isPublic ? <Stack direction="row">
+                { LinkButton }
+                { FollowButton }
+                { RejectButton }
+              </Stack> : <></> }
+          </Center>
 
         </Stack>
             

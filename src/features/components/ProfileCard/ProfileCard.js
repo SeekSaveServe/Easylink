@@ -55,8 +55,13 @@ import useProfileActions from "../../../components/hooks/useProfileActions.js";
 // when inside Links page: it also has additional fields of { pending:Bool, established:Bool, rejected:Bool, s_n: int8}
 // where s_n is the link.s_n primary key
 // can check if s_n is inside to know if i am inside links page
+function ConditionalDisplay(props) {
+  const { display, component } = props;
+  return display ?  component() : <></>;
+}
 
 function ProfileCard({ info, isJoin }) {
+  console.log("PROFILE CARD RENDER");
   const dispatch = useDispatch();
   //   console.log(info);
   const isProject = "pid" in info;
@@ -73,7 +78,7 @@ function ProfileCard({ info, isJoin }) {
 
   // for card actions
   const [loading, setLoading] = useState(false);
-  const { addLink, rejectLink, follow } = useProfileActions(info, setLoading);
+  const { LinkButton, FollowButton, RejectButton } = useProfileActions(info, setLoading);
 
 
   // TODO: email/tele vis: "afterlink" || "everyone" -> calculate based on if viewing user has linked
@@ -361,58 +366,11 @@ function ProfileCard({ info, isJoin }) {
                     display: hideButtons ? "none" : "",
                   }}
                 >
-                  {showLink && !showDelete ? (
-                    <TooltipIconButton
-                      icon={
-                        <AddLinkOutlined
-                          color="primary"
-                          sx={{ fontSize: 30 }}
-                        />
-                      }
-                      title="Link"
-                      onClick={addLink}
-                    />
-                  ) : (
-                    <></>
-                  )}
-                  {isProject && showFollow ? (
-                    <TooltipIconButton
-                      icon={
-                        isFollow ? (
-                          <LeakRemoveOutlined
-                            sx={{ color: "var(--secondary)", fontSize: 30 }}
-                          />
-                        ) : (
-                          <RssFeedOutlined
-                            sx={{ color: "var(--secondary)", fontSize: 30 }}
-                          />
-                        )
-                      }
-                      title={isFollow ? "Unfollow" : "Follow"}
-                      onClick={follow}
-                    />
-                  ) : (
-                    <></>
-                  )}
-                  {showReject ? (
-                    <TooltipIconButton
-                      icon={
-                        showDelete ? (
-                          <DeleteOutlined
-                            sx={{ fontSize: 30, color: "error.main" }}
-                          />
-                        ) : (
-                          <CancelOutlined
-                            sx={{ fontSize: 30, color: "error.main" }}
-                          />
-                        )
-                      }
-                      title={showDelete ? "Delete" : "Not for me"}
-                      onClick={rejectLink}
-                    />
-                  ) : (
-                    <></>
-                  )}
+
+                { LinkButton }
+                { FollowButton }
+                { RejectButton }
+                 
                 </div>
               ) : (
                 <CircularProgress size={30} />
@@ -428,6 +386,8 @@ function ProfileCard({ info, isJoin }) {
             </div>
           </CardActions>
         </CardContent>
+
+        {/* <ConditionalDisplay display={true} component={() => <BasicButton bg="primary">Button test</BasicButton>}/> */}
       </Box>
 
       <Divider orientation="vertical" flexItem />
