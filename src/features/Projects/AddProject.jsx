@@ -31,6 +31,8 @@ import BasicLoadingButton from "../../components/BasicLoadingButton/BasicLoading
 import { supabase } from "../../supabaseClient";
 import { useEffect } from "react";
 import { useAlert } from "../../components/Alert/AlertContext";
+import NewProfileEMAUpdate from "../../components/Update_EMA/NewProfileEMAUpdate";
+import UpdateModel from "../../components/Update_EMA/UpdateModel";
 
 function AddProject() {
   const navigate = useNavigate();
@@ -145,7 +147,13 @@ function AddProject() {
         uploadTag("user_interests", selectedInterests, pid),
         uploadTag("user_communities", selectedCommunities, pid),
       ]);
-
+      // Update EMA table and retrain model
+      NewProfileEMAUpdate(pid, false, [
+        selectedSkills,
+        selectedInterests,
+        selectedCommunities,
+      ]);
+      UpdateModel(false);
       navigate("/projects", { replace: true });
     } catch (error) {
       showAlert(error.error_description || error.message, "error");
