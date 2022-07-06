@@ -41,6 +41,7 @@ import {
   selectFollowedById,
 } from "../../followers/followerSlice.js";
 import { stringToArray } from "../../../components/constants/formatProfileDatum.js";
+import useProfileActions from "../../../components/hooks/useProfileActions.js";
 
 // assumption: passed in data has structure
 // isJoin == true: { ...user/project, user_skills:[Tag], user_communities:[Tag], user_interests: [Tag] }
@@ -72,6 +73,25 @@ function ProfileCard({ info, isJoin }) {
 
   // for card actions
   const [loading, setLoading] = useState(false);
+  const { link, reject, followProfile } = useProfileActions(info);
+
+  const loadingDecorator = (fn, dispatchFn) => {
+    async function decorated() {
+      setLoading(true);
+      await fn();
+      setLoading(false);
+      dispatchFn();
+    }
+
+    return decorated;
+  }
+
+  const linksDispatch = () => dispatch(getLinks(idObj));
+  const followedDispatch = () => dispatch(getFollowed(idObj));
+
+  const addLink = loadingDecorator(link, linksDispatch);
+  const rejectLink = loadingDecorator(reject, linksDispatch);
+  const follow = loadingDecorator(followProfile, followedDispatch);
 
   // TODO: email/tele vis: "afterlink" || "everyone" -> calculate based on if viewing user has linked
   const showEmail = Boolean(info.email) && (info.email_visibility == "everyone" || linkinSlice?.established);
@@ -118,6 +138,7 @@ function ProfileCard({ info, isJoin }) {
       !linkinSlice?.established);
   showReject = (showReject && !isLink) || linkinSlice?.pending; // only show reject for pending
 
+  // are we following this profile
   const isFollow = useSelector((state) => isFollowing(state, info?.pid));
   // showFollow = showFollow && !isFollow // hide if following this profile
 
@@ -232,170 +253,6 @@ function ProfileCard({ info, isJoin }) {
 
   // Button functions// to insert right fields based on sender / receiver
 
-  // to insert right fields based on sender / receiver
-  const matchObj = {
-    ["uid" in idObj ? "uid_sender" : "pid_sender"]:
-      "uid" in idObj ? idObj.uid : idObj.pid,
-    [isProject ? "pid_receiver" : "uid_receiver"]: isProject
-      ? info.pid
-      : info.id,
-    ["uid" in idObj ? "pid_sender" : "uid_sender"]: null,
-    [isProject ? "uid_receiver" : "pid_receiver"]: null,
-  };
-
-  const outgoingObj = matchObj; // sender = me, receiver = other party
-
-  // incoming: set uid_sender/pid_sender to null
-  const incomingObj = {
-    [isProject ? "pid_sender" : "uid_sender"]: isProject ? info.pid : info.id,
-    ["uid" in idObj ? "uid_receiver" : "pid_receiver"]:
-      "uid" in idObj ? idObj.uid : idObj.pid,
-    [isProject ? "uid_sender" : "pid_sender"]: null,
-    ["uid" in idObj ? "pid_receiver" : "uid_receiver"]: null,
-  }; // sender = other, receiver = me
-
-  const addLink = async () => {
-    try {
-      setLoading(true);
-      // cases: exists inside links (e.g rejected) vs doesn't exist inside links
-
-      // do insert
-      if (!isLink) {
-        const { data, error } = await supabase.from("links").insert([
-          {
-            ...matchObj,
-            accepted: false,
-            rejected: false,
-          },
-        ]);
-
-        if (error) throw error;
-        // console.log("Link succ", data);
-      } else {
-        // if rejected, incoming -> change to pending, outgoing
-        // because rejected, incoming could be either: they sent a req, I rejected OR I rejected without any pending
-        // so easier to default to pending, outgoing
-        if (linkinSlice.rejected && linkinSlice.incoming) {
-          const { data: updateData, error: updateErr } = await supabase
-            .from("links")
-            .update({ accepted: false, rejected: false, ...outgoingObj })
-            .match({ s_n: linkinSlice.s_n });
-
-          if (updateErr) throw updateErr;
-          console.log("Link update succ (rejected, incoming", updateData);
-        } else {
-          // is definitely pending, incoming: hide link for pendig, outgoing + established + rejected, outgoing
-          const { data: updateData, error: updateErr } = await supabase
-            .from("links")
-            .update({ accepted: true, rejected: false })
-            .match({ s_n: linkinSlice.s_n });
-
-          if (updateErr) throw updateErr;
-          console.log("Link update succ", updateData);
-        }
-      }
-
-      dispatch(getLinks(idObj));
-    } catch (error) {
-      console.log("Link err", error);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  // for reject/delete
-  // not in links:
-  // - insert row with accepted=false, rej = true, dispatch getLinks
-  // inside links:
-  // - pending, incoming: update row to acc=false, rej=true, dispatch getLinks
-  // - pending, outgoing: delete the row from links table completely (cancel the link req)
-
-  const rejectLink = async () => {
-    try {
-      setLoading(true);
-      // I reject off the bat: rejected, incoming
-      if (!isLink) {
-        const { data: insData, error: insError } = await supabase
-          .from("links")
-          .insert([
-            {
-              ...incomingObj,
-              accepted: false,
-              rejected: true,
-            },
-          ]);
-
-        if (insError) throw insError;
-        console.log("Reject succ (ins):", insData);
-
-        // setShowLink(false);
-        // setShowReject(false);
-      } else {
-
-        // definitely pending: pending, incoming -> rejected, incoming
-        if (linkinSlice.incoming) {
-          const { data: updateData, error: updateErr } = await supabase
-            .from("links")
-            .update({ accepted: false, rejected: true })
-            .match({ s_n: linkinSlice.s_n });
-
-          if (updateErr) throw updateErr;
-          console.log("Update rej succ", updateData);
-        } else {
-          // delete the link (pending, outgoing)
-          const { data: delData, error: delErr } = await supabase
-            .from("links")
-            .delete()
-            .match({ s_n: linkinSlice.s_n });
-
-          if (delErr) throw delErr;
-          console.log("Del after rej succ", delData);
-        }
-      }
-
-      dispatch(getLinks(idObj));
-    } catch (error) {
-      console.log("Reject err:", error);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  // assumption: only projects can be followed. change this fn if user follow is added
-  const followedObj = useSelector((state) =>
-    selectFollowedById(state, info?.pid)
-  );
-  const follow = async () => {
-    try {
-      if (isFollow) {
-        const { data, error } = await supabase
-          .from("followers")
-          .delete()
-          .match({
-            s_n: followedObj.s_n,
-          });
-
-        if (error) throw error;
-      } else {
-        setLoading(true);
-        const { data, error } = await supabase.from("followers").insert([
-          {
-            ["uid" in idObj ? "follower_uid" : "follower_pid"]:
-              "uid" in idObj ? idObj.uid : idObj.pid,
-            followed_pid: info.pid,
-          },
-        ]);
-
-        if (error) throw error;
-      }
-
-      dispatch(getFollowed(idObj));
-    } catch (error) {
-      console.log("Follow err", error);
-    } finally {
-      setLoading(false);
-    }
-  };
 
   // Incoming/Outgoing/You rejected/ They rejected
   function StatusTag() {
