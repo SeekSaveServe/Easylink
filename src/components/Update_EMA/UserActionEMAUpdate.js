@@ -99,7 +99,9 @@ export default function UserActionEMAUpdate(id, isUser, tags) {
 
   // wrapper function
   const updateTag = async (tag) => {
+    // update existing rows belonging to the user
     updateValue(tag);
+    // adding new rows that did not exist before
     addNewSkill(tag);
     addNewInterest(tag);
     addNewCommunity(tag);
