@@ -26,12 +26,12 @@ export default function UserActionEMAUpdate(id, isUser, tags) {
         tags[2].includes(row)["community"]
       ) {
         await supabase
-          .from("ema_scire")
+          .from("ema_score")
           .update({ score: row["score"] * alpha + (1 - alpha) })
           .match({ s_n: row["s_n"] });
       } else {
         await supabase
-          .from("ema_scire")
+          .from("ema_score")
           .update({ score: row["score"] * alpha })
           .match({ s_n: row["s_n"] });
       }
@@ -43,13 +43,16 @@ export default function UserActionEMAUpdate(id, isUser, tags) {
   const addNewSkill = async (tag) => {
     // insert with newValue as score
     const { error } = isUser
-      ? await supabase.from("ema_score").insert([
-          {
-            uid: id,
-            skill: tag,
-            score: newVal,
-          },
-        ])
+      ? await supabase
+          .from("ema_score")
+          .insert([
+            {
+              uid: id,
+              skill: tag,
+              score: newVal,
+            },
+          ])
+          .not()
       : await supabase.from("ema_score").insert([
           {
             pid: id,
