@@ -1,9 +1,12 @@
+import { useState } from "react";
 import { supabase } from "../../supabaseClient";
 
 export default function UserActionEMAUpdate(id, isUser, tags) {
   // Constant values, alpha decays the prev value
   const alpha = 0.7;
   const newVal = 0.6;
+  const existingTags = [];
+
   const updateValue = async (tag) => {
     // read the value for each tag
     const { data, error } = isUser
@@ -19,6 +22,15 @@ export default function UserActionEMAUpdate(id, isUser, tags) {
           .or(`skill.eq(${tag}),interest.eq(${tag}),community.eq(${tag})`);
     // updates the old value
     data.forEach(async (row) => {
+      // store existing tags
+      if (row["skill"]) {
+        existingTags.push(row["skill"]);
+      } else if (row["interest"]) {
+        existingTags.push(row["interest"]);
+      } else {
+        existingTags.push(row["community"]);
+      }
+
       // if tags in the newly interacted row
       if (
         tags[0].includes(row["skill"]) ||
@@ -41,63 +53,66 @@ export default function UserActionEMAUpdate(id, isUser, tags) {
   // The following 3 functions adds a new skill / interest / community
   // to the ema table with a score of newVal
   const addNewSkill = async (tag) => {
-    // insert with newValue as score
-    const { error } = isUser
-      ? await supabase
-          .from("ema_score")
-          .insert([
+    if (!existingTags.includes(tag)) {
+      // insert with newValue as score
+      const { error } = isUser
+        ? await supabase.from("ema_score").insert([
             {
               uid: id,
               skill: tag,
               score: newVal,
             },
           ])
-          .not()
-      : await supabase.from("ema_score").insert([
-          {
-            pid: id,
-            skill: tag,
-            score: newVal,
-          },
-        ]);
+        : await supabase.from("ema_score").insert([
+            {
+              pid: id,
+              skill: tag,
+              score: newVal,
+            },
+          ]);
+    }
   };
 
   const addNewInterest = async (tag) => {
-    // insert with newValue as score
-    const { error } = isUser
-      ? await supabase.from("ema_score").insert([
-          {
-            uid: id,
-            interest: tag,
-            score: newVal,
-          },
-        ])
-      : await supabase.from("ema_score").insert([
-          {
-            pid: id,
-            interest: tag,
-            score: newVal,
-          },
-        ]);
+    if (!existingTags.includes(tag)) {
+      // insert with newValue as score
+      const { error } = isUser
+        ? await supabase.from("ema_score").insert([
+            {
+              uid: id,
+              interest: tag,
+              score: newVal,
+            },
+          ])
+        : await supabase.from("ema_score").insert([
+            {
+              pid: id,
+              interest: tag,
+              score: newVal,
+            },
+          ]);
+    }
   };
 
   const addNewCommunity = async (tag) => {
-    // insert with newValue as score
-    const { error } = isUser
-      ? await supabase.from("ema_score").insert([
-          {
-            uid: id,
-            community: tag,
-            score: newVal,
-          },
-        ])
-      : await supabase.from("ema_score").insert([
-          {
-            pid: id,
-            community: tag,
-            score: newVal,
-          },
-        ]);
+    if (!existingTags.includes(tag)) {
+      // insert with newValue as score
+      const { error } = isUser
+        ? await supabase.from("ema_score").insert([
+            {
+              uid: id,
+              community: tag,
+              score: newVal,
+            },
+          ])
+        : await supabase.from("ema_score").insert([
+            {
+              pid: id,
+              community: tag,
+              score: newVal,
+            },
+          ]);
+    }
   };
 
   // wrapper function
