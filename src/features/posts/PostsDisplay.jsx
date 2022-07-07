@@ -11,7 +11,7 @@ const filterMap = {
     2: datum => datum.isPoll
 }
 
-export function PostsDisplay({ posts, loading, filterIndex }) {
+export function PostsDisplay({ posts, loading, filterIndex, gutterHeight }) {
     const postsDisplay = () => {
         if (loading) {
             return <CircularProgress />;
@@ -29,7 +29,7 @@ export function PostsDisplay({ posts, loading, filterIndex }) {
     }
 
     return (
-        <Scrollable height="25vh">
+        <Scrollable height={gutterHeight ? gutterHeight : "25vh" }>
             <div style={{display: "flex", flexDirection: "column", alignItems: "center", gap: "1rem",}}>
                 { postsDisplay() }
             </div>

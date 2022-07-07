@@ -63,28 +63,10 @@ function PostsList({ filterIndex }) {
         fetchPostsAndProjects();
     }, []);
 
-    // function showPosts() {
-    //     if (loading) {
-    //         return <CircularProgress />
-    //     }
-        
-    //     if (posts.length == 0) {
-    //         return <Typography variant="h6" color="gray" sx={{fontWeight:"normal", mt:1}}> No posts to show </Typography>
-    //     }
-
-    //     return posts.map((post, idx) => {
-    //         return filterMap[filterIndex](post) ? <PostCard key={idx} data={post}/> : <></>;
-    //     });
-    // }
-
     return (
         <div>
             <PostsDisplay posts={posts} loading={loading} filterIndex={filterIndex}/>
-            {/* <Scrollable height="25vh">
-                <div style={{display: "flex", flexDirection: "column", alignItems: "center", gap: "1rem",}}>
-                    { showPosts() }
-                </div>
-            </Scrollable> */}
+   
         </div>
     )
 }
