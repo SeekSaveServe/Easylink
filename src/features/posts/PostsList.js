@@ -9,6 +9,7 @@ import { supabase } from "../../supabaseClient";
 import { useSelector } from 'react-redux';
 import { selectAllFollowed } from '../followers/followerSlice';
 import { PostsDisplay } from "./PostsDisplay";
+import { postsReqWithProject } from '../../components/constants/requestStrings';
 
 // For use specifically in feed: pull from followed projects
 
@@ -34,14 +35,7 @@ function PostsList({ filterIndex }) {
         try {
             const { data, error } = await supabase
                 .from('posts')
-                .select(`
-                    *,
-                    projects!posts_pid_fkey (
-                        pid,
-                        username,
-                        avatar_url
-                    )
-                `)
+                .select(postsReqWithProject)
                 .in('pid', followedIds)
                 .order('created_at', { ascending: false })
             
@@ -65,7 +59,7 @@ function PostsList({ filterIndex }) {
 
     return (
         <div>
-            <PostsDisplay posts={posts} loading={loading} filterIndex={filterIndex}/>
+            <PostsDisplay data={posts} loading={loading} filterIndex={filterIndex}/>
    
         </div>
     )

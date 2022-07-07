@@ -5,7 +5,7 @@ import {
   } from '@reduxjs/toolkit'
 import { supabase } from '../../supabaseClient';
 import updateHelper from '../../components/constants/updateHelper';
-import { projReq } from '../../components/constants/requestStrings';
+import { userReq, projReq } from '../../components/constants/requestStrings';
 // Use to store followed projects -> facilitate posts and card check
 
 // store followers rows directly. only need access to followed_pid to get posts on feed page
@@ -14,6 +14,36 @@ import { projReq } from '../../components/constants/requestStrings';
 const followerAdapter = createEntityAdapter({
     selectId: entity => entity?.followed_pid || entity?.followed_uid
 })
+
+// get user / project objects corresponding to followers
+export const getFollowersForProject = async(selectId) => {
+    try {
+        const { data, error } = await supabase
+            .from('followers')
+            .select(`
+            s_n,
+            users!followers_follower_uid_fkey(
+                ${userReq}
+            ),
+            projects!followers_follower_pid_fkey(
+               ${projReq}
+            )
+            `)
+            .match({ followed_pid : selectId})
+        
+        if (error) throw error;
+        
+
+        // format of each is: { s_n, users: {} or null, projects: {} or null }. convert to the object itself 
+        return data.map((datum) => {
+            if (datum.users) return datum.users;
+            if (datum.projects) return datum.projects;
+        });
+
+    } catch (error) {
+        console.log("Err fetching followers for project:", error);
+    }
+}
 
 // get array of projects that the user is following
 export const getFollowedProjectsForUser = async(isUser, selectId) => {

@@ -66,7 +66,6 @@ function ConditionalDisplay(props) {
 }
 
 function ProfileCard({ info }) {
-  console.log("PROFILE CARD RENDER");
   const isJoin = isJoinFn(info);
   
   const dispatch = useDispatch();

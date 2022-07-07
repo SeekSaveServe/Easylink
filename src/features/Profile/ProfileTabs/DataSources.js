@@ -1,6 +1,7 @@
 
+import { postsReqWithProject } from "../../../components/constants/requestStrings";
 import { supabase } from "../../../supabaseClient";
-import { getFollowedProjectsForUser } from "../../followers/followerSlice";
+import { getFollowedProjectsForUser, getFollowersForProject } from "../../followers/followerSlice";
 import { getAssociatedUser } from "../../Links/linksSlice";
 const isUserFn = (user) => "id" in user;
 const selectIdFn = (user) => isUserFn(user) ? user.id : user.pid;
@@ -35,7 +36,22 @@ export async function followingSource(user) {
     return getFollowedProjectsForUser(isUserFn(user), selectIdFn(user));
 }
 
-// get all posts this project made
+// get all posts this project made - augment posts with needed project info
 export async function postsSource(project) {
-    
+    try {
+        const { data, error } = await supabase
+            .from('posts')
+            .select(postsReqWithProject)
+            .match({ pid: project.pid })
+        
+        if (error) throw error;
+        return data;
+    } catch (error) {
+        console.log("Error fetching posts in Profile:", error);
+    }
+}
+
+// get followers for the project: array of user / project objects
+export async function followersSource(project) {
+    return getFollowersForProject(project.pid);
 }

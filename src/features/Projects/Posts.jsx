@@ -87,7 +87,6 @@ function Posts() {
                 }
                 return post;
             });
-            console.log("POSTS IN POSTS TAB", dataWithProject);
             setPosts(dataWithProject);
             
 
@@ -97,21 +96,6 @@ function Posts() {
             setLoading(false);
         }
     }
-
-    // const postsDisplay = () => {
-    //     if (loading) {
-    //         return <CircularProgress />;
-    //     }
-
-    //     return posts.length == 0 ? <Typography variant="h6" color="gray" sx={{mt:1, fontWeight:"normal"}}>Nothing to show</Typography> : 
-    //         posts.map((post, idx) => {
-    //         const data = {
-    //             ...post,
-    //             projects: { pid, username: project.username, avatar_url: project.avatar_url }
-    //         }
-    //         return <PostCard sx={{width: "90%", ml:1, mt:1}} data={data} key={idx}/>
-    //     })
-    // }
 
     useEffect(() => {
         getPosts();
@@ -134,7 +118,7 @@ function Posts() {
             <Typography variant="h6">Announcements by {project.username}</Typography>
         </Center>
 
-        <PostsDisplay posts={posts} loading={loading} filterIndex={0} gutterHeight="35vh"/>
+        <PostsDisplay data={posts} loading={loading} filterIndex={0} gutterHeight="35vh"/>
         </>
     )
 }

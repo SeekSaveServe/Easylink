@@ -11,7 +11,8 @@ const filterMap = {
     2: datum => datum.isPoll
 }
 
-export function PostsDisplay({ posts, loading, filterIndex, gutterHeight }) {
+export function PostsDisplay({ data, loading, filterIndex, gutterHeight }) {
+    const posts = data;
     const postsDisplay = () => {
         if (loading) {
             return <CircularProgress />;
@@ -19,12 +20,7 @@ export function PostsDisplay({ posts, loading, filterIndex, gutterHeight }) {
 
         return posts.length == 0 ? <Typography variant="h6" color="gray" sx={{mt:1, fontWeight:"normal"}}>Nothing to show</Typography> : 
             posts.map((post, idx) => {
-            // const data = {
-            //     ...post,
-            //     projects: { post.pid, username: project.username, avatar_url: project.avatar_url }
-            // }
             return filterMap[filterIndex](post) ? <PostCard key={idx} data={post}/> : <></>;
-            // return <PostCard sx={{width: "90%", ml:1, mt:1}} data={data} key={idx}/>
         })
     }
 

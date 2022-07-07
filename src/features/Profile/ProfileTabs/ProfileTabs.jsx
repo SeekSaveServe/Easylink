@@ -2,12 +2,13 @@ import { ButtonGroup, Typography } from "@mui/material";
 import { Center } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import TabButton from "./TabButton";
-import CardListFromSource from "./CardListFromSource";
-import { establishedLinksSource, followingSource } from "./DataSources";
+import { CardListFromSource, PostListFromSource } from "./ListFromSource";
+import { establishedLinksSource, followersSource, followingSource, postsSource } from "./DataSources";
 import useIdObject from "../../../components/hooks/useIdObject";
 import { useDispatch } from "react-redux";
 import { getLinks } from "../../Links/linksSlice";
 import { getFollowed } from "../../followers/followerSlice";
+import { CardList } from "../../components/ProfileCardList/ProfileCardList";
 
 // user: the user / project for this profile
 function ProfileTabs({ user }) {
@@ -17,12 +18,12 @@ function ProfileTabs({ user }) {
 
     // Lazy evaluation for tabs
     const BioTab = () => {
-        return <Center><Typography variant="h5">{user.bio}</Typography></Center>
+        return <Center style={{marginTop:2}}><Typography variant="h5">{user.bio}</Typography></Center>
     }
-
-    const LinksTab = () => <CardListFromSource sourceFn={() => establishedLinksSource(user)}/>
-
-    const FollowingTab = () => <CardListFromSource sourceFn={() => followingSource(user)} />
+    const LinksTab = () => <CardListFromSource sourceFn={() => establishedLinksSource(user)}/>;
+    const FollowingTab = () => <CardListFromSource sourceFn={() => followingSource(user)} />;
+    const PostsTab = () => <PostListFromSource sourceFn={() => postsSource(user)}/>;
+    const FollowersTab = () => <CardListFromSource sourceFn={() => followersSource(user)}/>
 
     // get current links and projects followed so profile card can change accordingly
     useEffect(() => {
@@ -33,8 +34,8 @@ function ProfileTabs({ user }) {
     const tags = {
         0: { name: "Bio", component: BioTab },
         1: { name: "Links", component: LinksTab },
-        2: { name: "Posts", isProject: true, component: () => <Typography variant="h5">Posts {console.log("Posts show")}</Typography> },
-        3: { name: "Followers",  isProject: true , component: () => <Typography variant="h5">Followers {console.log("Followers show")}</Typography>},
+        2: { name: "Posts", isProject: true, component: PostsTab },
+        3: { name: "Followers",  isProject: true , component: FollowersTab},
         4: { name: "Following", component: FollowingTab } 
     };
 
@@ -57,9 +58,7 @@ function ProfileTabs({ user }) {
             </ButtonGroup>
         </Center>
         
-        {/* <Center> */}
         { tags[selected].component() }
-        {/* </Center> */}
         </div>
     )
 }
