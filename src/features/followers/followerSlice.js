@@ -15,6 +15,7 @@ const followerAdapter = createEntityAdapter({
     selectId: entity => entity?.followed_pid || entity?.followed_uid
 })
 
+// get projects being followed - so we can change the follow button as needed
 export const getFollowed = createAsyncThunk('followers/getFollowed', async(idObj) => {
     const isUser = "uid" in idObj;
     const suffix = isUser ? "uid" : "pid";

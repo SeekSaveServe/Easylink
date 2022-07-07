@@ -4,14 +4,33 @@ import { useEffect, useState } from "react";
 import TabButton from "./TabButton";
 import CardListFromSource from "./CardListFromSource";
 import { establishedLinksSource } from "./DataSources";
+import useIdObject from "../../../components/hooks/useIdObject";
+import { useDispatch } from "react-redux";
+import { getLinks } from "../../Links/linksSlice";
+import { getFollowed } from "../../followers/followerSlice";
 
 // user: the user / project for this profile
 function ProfileTabs({ user }) {
     const [selected, setSelected] = useState(0);
+    const dispatch = useDispatch();
+    const idObj = useIdObject();
+
+    // Lazy evaluation for tabs
+    const BioTab = () => {
+        return <Center><Typography variant="h5">{user.bio}</Typography></Center>
+    }
+
     const LinksTab = () => <CardListFromSource sourceFn={() => establishedLinksSource(user)}/>
 
+
+    // get current links and projects followed so profile card can change accordingly
+    useEffect(() => {
+        dispatch(getLinks(idObj));
+        dispatch(getFollowed(idObj));
+    })
+
     const tags = {
-        0: { name: "Bio", component: () => <Typography variant="h5">{user.bio}</Typography> },
+        0: { name: "Bio", component: BioTab },
         1: { name: "Links", component: LinksTab },
         2: { name: "Posts", isProject: true, component: () => <Typography variant="h5">Posts {console.log("Posts show")}</Typography> },
         3: { name: "Followers",  isProject: true , component: () => <Typography variant="h5">Followers {console.log("Followers show")}</Typography>},
@@ -31,15 +50,15 @@ function ProfileTabs({ user }) {
     }
     return (
         <div>
-        <Center>
+        <Center style={{marginBottom:5}}>
             <ButtonGroup>
                 { showTabs() }
             </ButtonGroup>
         </Center>
         
-        <Center>
+        {/* <Center> */}
         { tags[selected].component() }
-        </Center>
+        {/* </Center> */}
         </div>
     )
 }
