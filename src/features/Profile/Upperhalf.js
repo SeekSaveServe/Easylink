@@ -8,6 +8,8 @@ import styles from './Upperhalf.module.css';
 import Tag from "../../components/Tag/Tag";
 import useProfileActions from "../../components/hooks/useProfileActions";
 import { useState } from "react";
+import TooltipIconButton from "../../components/TooltipIconButton";
+import { Settings } from "@mui/icons-material";
 // everything until before tabs
 export default function Upperhalf({ user, isPublic }) {
   // const user = useSelector(state => state.user);
@@ -47,7 +49,7 @@ export default function Upperhalf({ user, isPublic }) {
 
   return (
     <Box>
-      { isPublic ? <></> : <ClickableSetting fontSize="large" /> }
+      { isPublic ? <></> : <ClickableSetting/> }
         <Stack spacing={1.2}> 
           <Center>
             <Stack spacing={0.5}>
