@@ -17,6 +17,10 @@ const followerAdapter = createEntityAdapter({
 
 // get user / project objects corresponding to followers
 export const getFollowersForProject = async(selectId) => {
+    // invalid selectId: null or undefined
+    if (selectId == null) {
+        return []
+    }
     try {
         const { data, error } = await supabase
             .from('followers')

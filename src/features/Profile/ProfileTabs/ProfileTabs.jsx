@@ -13,6 +13,9 @@ import { CardList } from "../../components/ProfileCardList/ProfileCardList";
 // user: the user / project for this profile
 function ProfileTabs({ user }) {
     const [selected, setSelected] = useState(0);
+    useEffect(() => {
+        setSelected(0);
+    }, [user])
     const dispatch = useDispatch();
     const idObj = useIdObject();
 
