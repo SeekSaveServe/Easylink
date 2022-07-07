@@ -3,6 +3,9 @@
 
 const mapName = arr => arr.map(d => d.name);
 
+export const isJoin = (user) => typeof(user.user_skills) == 'object'&& user.user_skills != null;
+
+// format when isJoin
 export function formatProfileDatum(datum) {
     return {
         ...datum,
@@ -19,11 +22,22 @@ export const stringToArray = (string) => {
   };
 
 
+// format when from API
 export const formatProfileStringsToArray = (profile) => {
     return {
         ...profile,
         user_skills: stringToArray(profile.user_skills),
         user_interests: stringToArray(profile.user_interests),
         user_communities: stringToArray(profile.user_communities),
+    }
+}
+
+// isJoin: skills, comms, ints are array of objects like [{ name:... }]
+// not isJoin (from API): skills, comms, ints is a comma sep string
+export function formatProfile(profile) {
+    if (isJoin(profile)) {
+        return formatProfileDatum(profile);
+    } else {
+        return formatProfileStringsToArray(profile);
     }
 }

@@ -42,6 +42,7 @@ import {
 } from "../../followers/followerSlice.js";
 import { stringToArray } from "../../../components/constants/formatProfileDatum.js";
 import useProfileActions from "../../../components/hooks/useProfileActions.js";
+import { isJoin as isJoinFn } from "../../../components/constants/formatProfileDatum.js";
 
 // assumption: passed in data has structure
 // isJoin == true: { ...user/project, user_skills:[Tag], user_communities:[Tag], user_interests: [Tag] }
@@ -52,6 +53,10 @@ import useProfileActions from "../../../components/hooks/useProfileActions.js";
 // isJoin == false: { ...user/project, user_skills:"...", user_communities:"...", user_interests: "..."}
 // where "..." is null, "", "singleton" or comma separated string
 
+  // isJoin can be calculated: check random field (user_skills, all fields must at least be populated)
+    // typoef(user_skills) == 'object' and user_skills != null => isJoin = true -> extra check because typeof(null) is object
+    // else isJoin is false
+
 // when inside Links page: it also has additional fields of { pending:Bool, established:Bool, rejected:Bool, s_n: int8}
 // where s_n is the link.s_n primary key
 // can check if s_n is inside to know if i am inside links page
@@ -60,8 +65,10 @@ function ConditionalDisplay(props) {
   return display ?  component() : <></>;
 }
 
-function ProfileCard({ info, isJoin }) {
+function ProfileCard({ info }) {
   console.log("PROFILE CARD RENDER");
+  const isJoin = isJoinFn(info);
+  
   const dispatch = useDispatch();
   //   console.log(info);
   const isProject = "pid" in info;

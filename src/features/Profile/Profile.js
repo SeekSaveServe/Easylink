@@ -1,4 +1,5 @@
 import BasicButton from "../../components/BasicButton";
+import { formatProfile } from "../../components/constants/formatProfileDatum";
 import { supabase } from "../../supabaseClient";
 import { useSelector } from "react-redux";
 import { Box, Typography, Stack, Paper, Divider } from "@mui/material";
@@ -37,8 +38,9 @@ function Profile() {
   }
 
   const isPublic = !isPrivate();
-  const user = isPublic ? formatProfileStringsToArray(optionalProfile) : currUser; // to pass down
-  console.log("Pub profile", optionalProfile);
+
+  // why format: profile from feed has strings
+  const user = isPublic ? formatProfile(optionalProfile) : currUser; // to pass down
   return (
     <>
       <BasicNavBar />
