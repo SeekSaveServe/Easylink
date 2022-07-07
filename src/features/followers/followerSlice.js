@@ -5,7 +5,7 @@ import {
   } from '@reduxjs/toolkit'
 import { supabase } from '../../supabaseClient';
 import updateHelper from '../../components/constants/updateHelper';
-
+import { projReq } from '../../components/constants/requestStrings';
 // Use to store followed projects -> facilitate posts and card check
 
 // store followers rows directly. only need access to followed_pid to get posts on feed page
@@ -15,11 +15,42 @@ const followerAdapter = createEntityAdapter({
     selectId: entity => entity?.followed_pid || entity?.followed_uid
 })
 
-// get projects being followed - so we can change the follow button as needed
-export const getFollowed = createAsyncThunk('followers/getFollowed', async(idObj) => {
-    const isUser = "uid" in idObj;
+// get array of projects that the user is following
+export const getFollowedProjectsForUser = async(isUser, selectId) => {
     const suffix = isUser ? "uid" : "pid";
-    const selectId = isUser ? idObj.uid : idObj.pid;
+    try {
+        // include user_skills,ints, comms for each requested project using projReq
+        const { data, error } = await supabase
+            .from('followers')
+            .select(`
+            s_n,
+            projects!followers_followed_pid_fkey(
+               ${projReq}
+            )
+            `)
+            .match({
+                [`follower_${suffix}`]: selectId
+            })
+        
+        if (error) throw error;
+        
+        // each member of data looks like { s_n, projects: {} }
+        // convert to just projects objects
+        let returnedData =  data.map(d => d.projects);
+        console.log("Get followed succ", returnedData);
+        return returnedData;
+
+    } catch (error) {
+        console.log("Get followed err", error);
+    }
+
+}
+
+// isUser: true/false, selectId: either pid or uid
+// function gets only the followers table rows, not the projects themselves
+    // so that we can use this slice to check if a particular project is being followed, etc.
+export const getFollowedForUser = async(isUser, selectId) => {
+    const suffix = isUser ? "uid" : "pid";
 
     try {
         const { data, error } = await supabase
@@ -36,7 +67,12 @@ export const getFollowed = createAsyncThunk('followers/getFollowed', async(idObj
     } catch (error) {
         console.log("Get followed err", error);
     }
-
+}
+// get projects being followed - so we can change the follow button as needed
+export const getFollowed = createAsyncThunk('followers/getFollowed', async(idObj) => {
+    const isUser = "uid" in idObj;
+    const selectId = isUser ? idObj.uid : idObj.pid;
+    return getFollowedForUser(isUser, selectId);
 })
 
 

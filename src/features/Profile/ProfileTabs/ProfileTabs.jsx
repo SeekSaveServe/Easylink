@@ -3,7 +3,7 @@ import { Center } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import TabButton from "./TabButton";
 import CardListFromSource from "./CardListFromSource";
-import { establishedLinksSource } from "./DataSources";
+import { establishedLinksSource, followingSource } from "./DataSources";
 import useIdObject from "../../../components/hooks/useIdObject";
 import { useDispatch } from "react-redux";
 import { getLinks } from "../../Links/linksSlice";
@@ -22,6 +22,7 @@ function ProfileTabs({ user }) {
 
     const LinksTab = () => <CardListFromSource sourceFn={() => establishedLinksSource(user)}/>
 
+    const FollowingTab = () => <CardListFromSource sourceFn={() => followingSource(user)} />
 
     // get current links and projects followed so profile card can change accordingly
     useEffect(() => {
@@ -34,7 +35,7 @@ function ProfileTabs({ user }) {
         1: { name: "Links", component: LinksTab },
         2: { name: "Posts", isProject: true, component: () => <Typography variant="h5">Posts {console.log("Posts show")}</Typography> },
         3: { name: "Followers",  isProject: true , component: () => <Typography variant="h5">Followers {console.log("Followers show")}</Typography>},
-        4: { name: "Following", component: () => <Typography variant="h5">Following {console.log("Following show")}</Typography> },
+        4: { name: "Following", component: FollowingTab } 
     };
 
     function showTabs() {
