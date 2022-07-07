@@ -73,7 +73,13 @@ user_communities(
 )
 `;
 
-async function getAssociatedUser(link, prefix, selectId) {
+// input: 
+    // link: link row from links table (link is assumed to have one of uid/pid_sender/receiver == selectId)
+    // prefix: uid/pid
+    // selectId: either uid value or pid value
+
+// output: Promise<Datum> where Datum is the User/Project row augmented with Link row data 
+export async function getAssociatedUser(link, prefix, selectId) {
     const { accepted:linkAccepted, rejected: linkRejected } = link;
 
     let pending = false; 

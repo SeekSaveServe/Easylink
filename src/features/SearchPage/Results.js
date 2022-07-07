@@ -27,7 +27,7 @@ function RecommendationsList() {
   // useEffect(() => {
   //   showRecommendations();
   // }, [refresh]);
-
+  console.log("Search results render");
   const [recommendations, setRecommendations] = useState([]);
   const user = useSelector((state) => state.user);
 

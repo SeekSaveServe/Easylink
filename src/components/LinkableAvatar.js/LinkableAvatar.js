@@ -11,10 +11,15 @@ function LinkableAvatar(props) {
   let navigate = useNavigate();
   const showAlert = useAlert();
 
-  const { page_url, src, ...rest } = props;
+  // info prop: pass the info to the url being redirected to (usually Profile) 
+  const { page_url, src, info,...rest } = props;
   const link = page_url ? page_url : "/Profile";
   const onClick = () => {
-    navigate(link, { replace: true });
+    if (info) {
+      navigate(link, { replace: true, state:info });
+    } else {
+      navigate(link, { replace: true });
+    }    
   };
   // Obtaining the avatar from database
   const [avatarUrl, setAvatarUrl] = useState(null);

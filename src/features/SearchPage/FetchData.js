@@ -39,7 +39,7 @@ export default async function fetchData(
   }
 
   async function fetchUser() {
-    console.log(formatUrl());
+    console.log("Url before fetch", formatUrl());
     try {
       // await fetch(formatUrl(), {
       //   headers: {
@@ -51,9 +51,9 @@ export default async function fetchData(
       //   .then(() => (setRefresh ? setRefresh(!refresh) : void 0));
 
       const res = await fetch(formatUrl(), {
-        headers: {
-          Authorization: "4e9f4c0735a434e094da78c61faa290881016460",
-        },
+        // headers: {
+        //   Authorization: "4e9f4c0735a434e094da78c61faa290881016460",
+        // },
       });
       console.log("Res from fetch", res);
       if (!res.ok) {

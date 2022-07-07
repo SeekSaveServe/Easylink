@@ -24,6 +24,7 @@ function Feed() {
   const idObj = useIdObject();
   const dispatch = useDispatch();
   const user = useSelector(state => state.user);
+  console.log("Feed component render");
 
   useEffect(() => {
     // dispatch(getUniqueTags());

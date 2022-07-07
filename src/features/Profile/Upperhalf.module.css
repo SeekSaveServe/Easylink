@@ -1,0 +1,12 @@
+.container {
+    display: flex;
+  }
+  .box {
+    flex: 1;
+    display: flex;
+    /* justify-content: center; */
+  }
+  
+  .box:first-child > span { margin-right: auto; }
+  
+  .box:last-child  > span { margin-left: auto;  }

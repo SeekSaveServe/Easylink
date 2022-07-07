@@ -23,7 +23,10 @@ export const getUserProfile = createAsyncThunk(
 )
 
 const initialState = {
-    loading: 'idle'
+    loading: 'idle',
+    user_skills: [],
+    user_interests: [],
+    user_communities: []
 };
 
 export const userSlice = createSlice({

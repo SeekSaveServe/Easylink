@@ -6,9 +6,10 @@ import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import BasicButton from "../../components/BasicButton";
 import { supabase } from "../../supabaseClient";
+import ProfileTabs from "./ProfileTabs";
 
-export default function Lowerhalf() {
-  const user = useSelector((state) => state.user);
+export default function Lowerhalf({ user, isPublic }) {
+  // const user = useSelector((state) => state.user);
   const title = user.username;
   const bio = user.bio ? user.bio : "No Bio";
   const [links, setLinks] = useState("loading");
@@ -55,15 +56,16 @@ export default function Lowerhalf() {
   }, []);
   return (
     <>
-      <Center>
+    <ProfileTabs user={user}/>
+      {/* <Center>
         <Typography variant="h5" component="div">
           {title}
         </Typography>
       </Center>
       <Center>
         <Typography variant="body2">{bio}</Typography>
-      </Center>
-      <Center>
+      </Center> */}
+      {/* <Center>
         <Card>
           <CardContent> {links} links </CardContent>
         </Card>
@@ -73,7 +75,7 @@ export default function Lowerhalf() {
         <Card>
           <CardContent> {following} Followers </CardContent>
         </Card>
-      </Center>
+      </Center> */}
     </>
   );
 }

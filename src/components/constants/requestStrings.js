@@ -25,3 +25,13 @@ export const projReq = `
       name
   )
   `;
+
+// to request posts with relevant project info
+export const postsReqWithProject = `
+*,
+projects!posts_pid_fkey (
+    pid,
+    username,
+    avatar_url
+)
+`

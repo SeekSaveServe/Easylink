@@ -9,6 +9,7 @@ import { supabase } from "../../supabaseClient";
 import { useAlert } from "../../components/Alert/AlertContext";
 import { useSelector } from "react-redux";
 import { selectProjectById } from "./projectsSlice";
+import { PostsDisplay } from "../posts/PostsDisplay";
 
 // For the Posts tab under Projects. Show posts and polls made by the switched project
 // export const fakePosts = [
@@ -79,29 +80,21 @@ function Posts() {
                 .order('created_at', { ascending: false })
             
             if (error) throw error;
+            const dataWithProject = data.map((post, idx) => {
+                post = {
+                    ...post,
+                    projects: { pid, username: project.username, avatar_url: project.avatar_url }
+                }
+                return post;
+            });
+            setPosts(dataWithProject);
             
-            setPosts(data);
 
         } catch (error) {
             showAlert(error.error_description || error.message, "error");
         } finally {
             setLoading(false);
         }
-    }
-
-    const postsDisplay = () => {
-        if (loading) {
-            return <CircularProgress />;
-        }
-
-        return posts.length == 0 ? <Typography variant="h6" color="gray" sx={{mt:1, fontWeight:"normal"}}>Nothing to show</Typography> : 
-            posts.map((post, idx) => {
-            const data = {
-                ...post,
-                projects: { pid, username: project.username, avatar_url: project.avatar_url }
-            }
-            return <PostCard sx={{width: "90%", ml:1, mt:1}} data={data} key={idx}/>
-        })
     }
 
     useEffect(() => {
@@ -125,11 +118,7 @@ function Posts() {
             <Typography variant="h6">Announcements by {project.username}</Typography>
         </Center>
 
-        <Scrollable height="25vh">
-            <div style={{display: "flex", flexDirection: "column", alignItems: "center", gap: "1rem",}}>
-                { postsDisplay() }
-            </div>
-        </Scrollable>
+        <PostsDisplay data={posts} loading={loading} filterIndex={0} gutterHeight="35vh"/>
         </>
     )
 }
