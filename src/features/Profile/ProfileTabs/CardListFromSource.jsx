@@ -19,11 +19,11 @@ export default function CardListFromSource({ sourceFn }) {
 
     useEffect(() => {
       getData();
-    }, [])
+    }, [sourceFn])
 
     return (
         <>
-            { loading ? <CircularProgress size={30}/> : <CardList data={data} isJoin={true} btnIndex={0} gutterHeight="55vh"/> }
+            { loading ? <CircularProgress size={30}/> : <CardList data={data} isJoin={true} btnIndex={0} gutterHeight="50vh"/> }
         </>
     )
 }
