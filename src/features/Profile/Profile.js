@@ -44,7 +44,7 @@ function Profile() {
       <BasicNavBar />
       <GreyContainer>
         <Upperhalf isPublic={isPublic} user={user}/>{" "}
-        <Lowerhalf />{" "}
+        <Lowerhalf user={user} />{" "}
       </GreyContainer>
     </>
   );
