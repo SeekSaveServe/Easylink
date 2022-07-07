@@ -34,3 +34,8 @@ export async function establishedLinksSource(user) {
 export async function followingSource(user) {
     return getFollowedProjectsForUser(isUserFn(user), selectIdFn(user));
 }
+
+// get all posts this project made
+export async function postsSource(project) {
+    
+}
