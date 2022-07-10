@@ -24,19 +24,19 @@ const n = Object.keys(map).length;
 // pass in the data through props. This component applies further filter based on Users/Projects
 // without button
 // btnIndex indicates filter to apply
-export function CardList({ data, btnIndex, isJoin }) {
+export function CardList({ data, btnIndex, isJoin, gutterHeight }) {
     const list = data.map((datum, idx) => {
         return filterMap[btnIndex](datum) ? <ProfileCard key={idx} info={datum} isJoin={isJoin} /> : null;
     }).filter(x => x != null);
 
     // TODO: replace with actual data etc
     const showList = () => {
-        return list.length == 0 ? <Center><Typography variant="h5" color="gray" sx={{mt:2}}></Typography> </Center> : list
+        return list.length == 0 ? <Center><Typography variant="h6" color="gray" sx={{mt:1, fontWeight:"normal"}}>Nothing to show</Typography> </Center> : list
     }
 
     return (
         <div>
-            <Scrollable height="30vh">
+            <Scrollable height={gutterHeight ? gutterHeight : "30vh"}>
                 { showList() }
             </Scrollable>
         </div>

@@ -1,5 +1,6 @@
 import { Settings } from "@mui/icons-material";
 import { Navigate, useNavigate } from "react-router-dom";
+import TooltipIconButton from "../../../components/TooltipIconButton";
 
 export default function ClickableSetting(props) {
   let navigate = useNavigate();
@@ -7,5 +8,6 @@ export default function ClickableSetting(props) {
     navigate("/Settings", { replace: true });
   };
 
-  return <Settings {...props} onClick={onClick} />;
+  return <TooltipIconButton title="Settings" icon={<Settings sx={{ fontSize:35}}/>} onClick={onClick}/>
+  // return <Settings {...props} onClick={onClick} />;
 }
