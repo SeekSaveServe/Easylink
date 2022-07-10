@@ -59,6 +59,14 @@ export function formatEMARows(ema_rows) {
 	return ema_rows.map(augmentRow);
 }
 
+// input: row: { tag, type }, array: array of rows
+// output: true if a row exists in array with same tag and type
+	// There is technically no guarantee of uniqueness across categories e.g 'JS' in both unique_skills and unique_interests
+	// If this part gets slow, turn all checks into hash map based
+function rowExists(row, array) {
+	return array.find(obj => obj.tag == row.tag && obj.type == row.type) != undefined;
+}
+
 // tags: [skills, interests, comms]
 // update for the clicking user -> useIdObject id
 export default async function UserActionEMAUpdate(id, isUser, tags) {
@@ -69,8 +77,9 @@ export default async function UserActionEMAUpdate(id, isUser, tags) {
 		// tag: actual text
 		// type: 'skill' | 'interest' | 'community'
 	const addNewRows = async(newRows) => {
+		if (newRows.length == 0) return;
 		try {
-			const { data, error } = await supabase
+			const { data, error } = supabase
 				.from('ema_score')
 				.insert(newRows.map(row => {
 					return {
@@ -78,35 +87,61 @@ export default async function UserActionEMAUpdate(id, isUser, tags) {
 						[row.type]: row.tag,
 						score: NEW_VALUE
 					}
-				}));
-			
-			if (error) throw error;
-			
-			console.log("New rows:", data);
+				}))
+				.then(val => console.log('add new rows val', val))
+				.catch(err => console.log("New rows err", err))
 		} catch (error) {
 			console.log("Err inserting new rows", error);
 		}
 	}
-
-	addNewRows(formatInteracting(tags));
 	
-	// try {
+	
+	try {
+		
+		// get existing EMA rows for this user
+		const { data, error } = await supabase
+			.from('ema_score')
+			.select('*')
+			.match(matchObj);
 
-	// 	// get existing EMA rows for this user
-	// 	const { data, error } = await supabase
-	// 		.from('ema_score')
-	// 		.select('*')
-	// 		.match(matchObj);
+		if(error) throw error;
 
-	// 	if(error) throw error;
-	// 	console.log("EMA for this user", data);
-	// } catch (error) {
-	// 	console.log("Err updating EMA", error)
-	// }
+		// both have an array of objects conforming to { tag:<>. type: <> }
+		const interactingTags = formatInteracting(tags);
+		const existingEMATags = formatEMARows(data);
+		console.log("Interacting", interactingTags);
+		console.log("Existing", existingEMATags);
+
+		// for each existing EMA row: if interacting tags has, no-decay update. else, decay update
+		existingEMATags.forEach((row) => {
+			if (rowExists(row, interactingTags)) {
+				// no decay / less decay
+				 supabase
+					.from("ema_score")
+					.update({ score: row["score"] * ALPHA + (1 - ALPHA) })
+					.match({ s_n: row["s_n"] })
+					.then(val => console.log("no-decay succ", val))
+					.catch(err => console.log("no-decay err", err))
+			} else {
+				supabase
+					.from("ema_score")
+					.update({ score: row["score"] * ALPHA })
+					.match({ s_n: row["s_n"] })
+					.then(val => console.log("decay-succ", val))
+					.catch(err => console.log("decay-err", err))
+			}
+		});
+
+		// for each interacting tag: if not in existing, add new
+		addNewRows(
+			interactingTags.filter(row => !rowExists(row, existingEMATags))
+		)
+
+
+	} catch (error) {
+		console.log("Err updating EMA", error)
+	}
   
-
-
-
 
   // Constant values, alpha decays the prev value
   // const alpha = 0.7;
@@ -143,10 +178,10 @@ export default async function UserActionEMAUpdate(id, isUser, tags) {
   //       tags[1].includes(row["interest"]) ||
   //       tags[2].includes(row)["community"]
   //     ) {
-  //       await supabase
-  //         .from("ema_score")
-  //         .update({ score: row["score"] * alpha + (1 - alpha) })
-  //         .match({ s_n: row["s_n"] });
+        // await supabase
+        //   .from("ema_score")
+        //   .update({ score: row["score"] * alpha + (1 - alpha) })
+        //   .match({ s_n: row["s_n"] });
   //     } else {
   //       await supabase
   //         .from("ema_score")

@@ -21,8 +21,6 @@ function ConditionalDisplay(props) {
 // info: info for the profile we are viewing (so it includes tags etc)
 function useProfileActions(info, setLoading) {
     info = formatProfile(info);
-    console.log("format", info);
-
     const isProject = "pid" in info;
     const linkinSlice = useSelector((state) =>
     selectLinkById(state, isProject ? info.pid : info.id)
@@ -208,6 +206,8 @@ function useProfileActions(info, setLoading) {
     
             if (error) throw error;
           } else {
+            // new follow: update EMA
+            EMAUpdate();
             const { data, error } = await supabase.from("followers").insert([
               {
                 ["uid" in idObj ? "follower_uid" : "follower_pid"]:
@@ -304,27 +304,6 @@ function useProfileActions(info, setLoading) {
         }
        />;
 
-
-    //   const LinkButton = () => 
-        // showLink && !showDelete ?<TooltipIconButton
-        //     icon={
-        //     <AddLinkOutlined
-        //         color="primary"
-        //         sx={{ fontSize: 30 }}
-        //     />
-        //     }
-        //     title="Link"
-        //     onClick={addLink}
-        // />
-
-    //   const FollowButton = () => 
-
-    //   return {
-    //     addLink,
-    //     rejectLink,
-    //     follow
-    //   }
-
     return {
         LinkButton,
         FollowButton,
@@ -333,9 +312,6 @@ function useProfileActions(info, setLoading) {
 
 }
 
-function useProfileActionButtons(info, setLoading) {
-
-}
 
 export default useProfileActions;
 
