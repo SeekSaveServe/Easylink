@@ -1,11 +1,12 @@
 // function to take a user or project from join query and convert to array of strings format 
  // for user_skills, ints, comm
 
-const mapName = arr => arr.map(d => d.name);
+// in case the array is already correctly formatted (d will be string) don't change
+const mapName = arr => arr.map(d => typeof d === 'object' ? d.name : d);
 
 export const isJoin = (user) => typeof(user.user_skills) == 'object'&& user.user_skills != null;
 
-// format when isJoin
+// format when isJoin: user_<tag>:[ { name:xxx }, ...]
 export function formatProfileDatum(datum) {
     return {
         ...datum,
