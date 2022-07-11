@@ -1,25 +1,43 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { supabase } from '../../supabaseClient';
 import { userReq } from '../../components/constants/requestStrings';
-import { formatProfileDatum } from '../../components/constants/formatProfileDatum';
+import { formatProfile, formatProfileDatum } from '../../components/constants/formatProfileDatum';
 import updateHelper from '../../components/constants/updateHelper';
 
 // Async Thunks
 
-export const getUserProfile = createAsyncThunk(
-    'user/getUserProfile',
-    async(uuid) => {
-        const { data: userProfile, error } = await supabase
+// get full users given many uids (get in one query instead of re-running getFullUser)
+export const getFullUsers = async(uids) => {
+    if (uids.length == 0) return [];
+    const { data, error } = await supabase
         .from('users')
         .select(userReq)
-        .eq('id', uuid)
+        .in('id', uids)
+
+        if (error) {
+            throw error;
+        } 
+        return data.map(formatProfile);
+        
+}
+
+// get full user (one only)
+export const getFullUser = async(uid) => {
+    const { data: userProfile, error } = await supabase
+        .from('users')
+        .select(userReq)
+        .eq('id', uid)
         .single();
 
         if (error) {
             throw error;
         } 
-        return formatProfileDatum(userProfile);
-    }
+        return formatProfile(userProfile);
+}
+
+export const getUserProfile = createAsyncThunk(
+    'user/getUserProfile',
+    getFullUser
 )
 
 const initialState = {

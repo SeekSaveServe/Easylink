@@ -24,8 +24,10 @@ import BasicLoadingButton from "../../components/BasicLoadingButton/BasicLoading
 import { supabase } from "../../supabaseClient";
 import { update } from "../user/userSlice";
 import LinkableAvatar from "../../components/LinkableAvatar.js";
-import BasicTextField from '../../components/Basic Textfield';
+import BasicTextField from "../../components/Basic Textfield";
 import { useAlert } from "../../components/Alert/AlertContext";
+import NewProfileEMAUpdate from "../../components/Update_EMA/NewProfileEMAUpdate";
+import UpdateModel from "../../components/Update_EMA/UpdateModel";
 
 // rest is props for Checkbox, not FCL
 function CheckboxWithLabel({ label, ...rest }) {
@@ -100,10 +102,10 @@ function PrivacySettings() {
           avatar_url: avatar_url,
           email: email,
           telegram: telegram,
-          telegram_visibility:contact.telegram_visibility,
-          email_visibility:contact.email_visibility,
+          telegram_visibility: contact.telegram_visibility,
+          email_visibility: contact.email_visibility,
           title: title,
-          bio: bio
+          bio: bio,
         },
       ]);
 
@@ -139,17 +141,22 @@ function PrivacySettings() {
         }
       }
     }
-
+    console.log(tags);
+    // Update EMA table and retrain model
+    NewProfileEMAUpdate(user.id, true, tags);
+    UpdateModel(true);
     navigate("/", { replace: true });
   }
 
   const handleBack = () => {
-    dispatch(update({
-      telegram_visibility:contact.telegram_visibility,
-      email_visibility: contact.email_visibility,
-      title: title,
-      bio: bio
-    }));
+    dispatch(
+      update({
+        telegram_visibility: contact.telegram_visibility,
+        email_visibility: contact.email_visibility,
+        title: title,
+        bio: bio,
+      })
+    );
 
     navigate("/Registration_Tags", { replace: true });
   };
@@ -159,7 +166,7 @@ function PrivacySettings() {
         height: "100vh",
         backgroundColor: "var(--bg-grey)",
         paddingTop: 40,
-        overflow: "auto"
+        overflow: "auto",
       }}
     >
       <Container
@@ -170,10 +177,12 @@ function PrivacySettings() {
           marginTop: 0,
         }}
       >
-      
         <Box sx={{ display: "flex", width: "100%" }}>
           <div style={{ flex: 1 }}>
-            <LinkableAvatar src={user?.avatar_url} sx={{height: 75, width: 75}}/>
+            <LinkableAvatar
+              src={user?.avatar_url}
+              sx={{ height: 75, width: 75 }}
+            />
           </div>
           <img src={logo} alt="Logo" style={{ width: "170px" }} />
           {/*  https://stackoverflow.com/questions/38948102/center-one-and-right-left-align-other-flexbox-element*/}
@@ -198,21 +207,21 @@ function PrivacySettings() {
               alignItems: "center",
             }}
           >
-            <BasicTextField 
+            <BasicTextField
               label="Title"
               type="text"
               margin="normal"
-              sx={{width: "100%" }}
+              sx={{ width: "100%" }}
               helperText="A title to introduce yourself in recommendations"
               value={title}
               onChange={(evt) => setTitle(evt.target.value)}
             />
 
-            <BasicTextField 
+            <BasicTextField
               label="Bio"
               type="text"
               margin="normal"
-              sx={{width: "100%", mb: 3}}
+              sx={{ width: "100%", mb: 3 }}
               helperText="A short description to introduce yourself"
               multiline
               value={bio}
@@ -260,10 +269,14 @@ function PrivacySettings() {
               <RadioWithLabel value="everyone" label="Everyone" />
             </RadioGroup>
           </Box>
-          
-          <Stack sx={{mt:2}} direction="row" spacing={3}> 
-            <div style={{flexGrow: 1}}>
-              <BasicButton bg="secondary" onClick={handleBack} sx={{paddingLeft: "2rem", paddingRight: "2rem"}} >
+
+          <Stack sx={{ mt: 2 }} direction="row" spacing={3}>
+            <div style={{ flexGrow: 1 }}>
+              <BasicButton
+                bg="secondary"
+                onClick={handleBack}
+                sx={{ paddingLeft: "2rem", paddingRight: "2rem" }}
+              >
                 Back
               </BasicButton>
             </div>

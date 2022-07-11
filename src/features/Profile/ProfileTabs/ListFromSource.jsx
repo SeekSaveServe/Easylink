@@ -32,12 +32,12 @@ export function ListFromSource({ sourceFn, List }) {
 
 // sourceFn: void => Promise<[T ? super User or T ? super Project]>
 export function CardListFromSource({ sourceFn }) {
-    const CurriedProfileList = ({ data }) => <CardList data={data} isJoin={true} btnIndex="0" gutterHeight="50vh"/>;
+    const CurriedProfileList = ({ data }) => <CardList data={data} isJoin={true} btnIndex="0" gutterHeight="60vh"/>;
     return <ListFromSource sourceFn={sourceFn} List={CurriedProfileList}/>
 }
 
 export function PostListFromSource({ sourceFn }) {
-    const CurriedPostList = ({ data }) => <PostsDisplay data={data} filterIndex={0} gutterHeight="55vh"/>;
+    const CurriedPostList = ({ data }) => <PostsDisplay data={data} filterIndex={0} gutterHeight="65vh"/>;
     return <ListFromSource sourceFn={sourceFn} List={CurriedPostList}/>
 }
 

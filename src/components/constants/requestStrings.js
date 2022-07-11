@@ -1,5 +1,4 @@
-// To request user or project with user_skills, interests, comm. at the same time
-
+//To request user or project with user_skills, interests, comm. at the same time
 export const userReq = `
 *,
 user_skills (
@@ -35,3 +34,7 @@ projects!posts_pid_fkey (
     avatar_url
 )
 `
+
+export const isUser = (datum) => "id" in datum;
+export const matchObj = (datum) => isUser(datum) ?  { uid: datum.id } : { pid: datum.pid };
+

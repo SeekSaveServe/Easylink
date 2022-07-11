@@ -11,6 +11,8 @@ import { update } from "../../user/userSlice";
 import UploadAvatar from "../../components/UploadAvatar";
 import BasicButton from "../../../components/BasicButton";
 import { useAlert } from "../../../components/Alert/AlertContext";
+import ProfileEMAUpdate from "../../../components/Update_EMA/ProfileEMAUpate";
+import UpdateModel from "../../../components/Update_EMA/UpdateModel";
 
 export default function Right({ contact }) {
   const dispatch = useDispatch();
@@ -28,6 +30,12 @@ export default function Right({ contact }) {
   const [skills, setSkills] = useState([]);
   const [interests, setInterests] = useState([]);
   const [communities, setCommunities] = useState([]);
+
+  // need to retain a copy of the current preferences before change
+  const [originalSkills, setOriginalSkills] = useState([]);
+  const [originalInterests, setOriginalInterests] = useState([]);
+  const [originalCommunities, setOriginalCommunities] = useState([]);
+  // const [originalTags, setOriginalTags] = useState([]);
 
   // Alert
   const showAlert = useAlert();
@@ -79,19 +87,22 @@ export default function Right({ contact }) {
 
     obtainUserTags("user_skills").then((res) =>
       res
-        ? setSelectedSkills([res.map((obj) => obj.name)][0])
+        ? (setSelectedSkills([res.map((obj) => obj.name)][0]),
+          setOriginalSkills([res.map((obj) => obj.name)][0]))
         : setSelectedSkills([])
     );
 
     obtainUserTags("user_interests").then((res) =>
       res
-        ? setSelectedInterests([res.map((obj) => obj.name)][0])
+        ? (setSelectedInterests([res.map((obj) => obj.name)][0]),
+          setOriginalInterests([res.map((obj) => obj.name)][0]))
         : console.log(res)
     );
 
     obtainUserTags("user_communities").then((res) =>
       res
-        ? setSelectedCommunities([res.map((obj) => obj.name)][0])
+        ? (setSelectedCommunities([res.map((obj) => obj.name)][0]),
+          setOriginalCommunities([res.map((obj) => obj.name)][0]))
         : setSelectedCommunities([])
     );
 
@@ -144,7 +155,7 @@ export default function Right({ contact }) {
       } catch (error) {
         showAlert(error.error_description || error.message, "error");
       }
-      
+
       try {
         for (let i = 0; i < selectedCommunities.length; i++) {
           const { error } = isUser
@@ -252,8 +263,18 @@ export default function Right({ contact }) {
 
   async function handleSubmit(e) {
     e.preventDefault();
+    // Update EMA before the other states
+    const id = isUser ? supabase.auth.user().id : user.pid;
+    ProfileEMAUpdate(
+      id,
+      isUser,
+      [originalSkills, originalInterests, originalCommunities],
+      [selectedSkills, selectedInterests, selectedCommunities]
+    );
     updateFormState();
     updateSupabase();
+    // May need to check if there is a need to update model if training takes too long
+    UpdateModel(isUser);
   }
 
   return (

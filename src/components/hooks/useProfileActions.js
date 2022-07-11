@@ -8,6 +8,8 @@ import { getLinks } from "../../features/Links/linksSlice";
 import { isFollowing, selectFollowedById, getFollowed } from "../../features/followers/followerSlice";
 import TooltipIconButton from "../TooltipIconButton/TooltipIconButton";
 import { AddLinkOutlined, LeakRemoveOutlined, RssFeedOutlined, DeleteOutlined, CancelOutlined } from "@mui/icons-material";
+import { formatProfile } from "../constants/formatProfileDatum";
+import UserActionEMAUpdate, { buildInteractingMap, formatInteracting } from "../Update_EMA/UserActionEMAUpdate";
 
 
 function ConditionalDisplay(props) {
@@ -15,13 +17,17 @@ function ConditionalDisplay(props) {
     return display ? component : <></>;
 }
 
+
+// info: info for the profile we are viewing (so it includes tags etc)
 function useProfileActions(info, setLoading) {
+    info = formatProfile(info);
     const isProject = "pid" in info;
     const linkinSlice = useSelector((state) =>
     selectLinkById(state, isProject ? info.pid : info.id)
   );
 
     const idObj = useIdObject();
+    
     const dispatch = useDispatch();
 
     const isLink = linkinSlice != undefined;
@@ -65,11 +71,18 @@ function useProfileActions(info, setLoading) {
         ["uid" in idObj ? "pid_receiver" : "uid_receiver"]: null,
         }; // sender = other, receiver = me
 
-
+      
+    const EMAUpdate = () => { 
+      const isUser = "uid" in idObj;
+      const id = isUser ? idObj.uid : idObj.pid;
+      const tagsArray = [info.user_skills, info.user_interests, info.user_communities];
+      UserActionEMAUpdate(id, isUser, tagsArray); 
+    }
     // Functions
 
     // Link button
     const link = async () => {
+        EMAUpdate();
         try {
         //   setLoading(true);
           // cases: exists inside links (e.g rejected) vs doesn't exist inside links
@@ -193,6 +206,8 @@ function useProfileActions(info, setLoading) {
     
             if (error) throw error;
           } else {
+            // new follow: update EMA
+            EMAUpdate();
             const { data, error } = await supabase.from("followers").insert([
               {
                 ["uid" in idObj ? "follower_uid" : "follower_pid"]:
@@ -289,27 +304,6 @@ function useProfileActions(info, setLoading) {
         }
        />;
 
-
-    //   const LinkButton = () => 
-        // showLink && !showDelete ?<TooltipIconButton
-        //     icon={
-        //     <AddLinkOutlined
-        //         color="primary"
-        //         sx={{ fontSize: 30 }}
-        //     />
-        //     }
-        //     title="Link"
-        //     onClick={addLink}
-        // />
-
-    //   const FollowButton = () => 
-
-    //   return {
-    //     addLink,
-    //     rejectLink,
-    //     follow
-    //   }
-
     return {
         LinkButton,
         FollowButton,
@@ -318,9 +312,6 @@ function useProfileActions(info, setLoading) {
 
 }
 
-function useProfileActionButtons(info, setLoading) {
-
-}
 
 export default useProfileActions;
 

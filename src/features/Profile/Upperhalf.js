@@ -19,7 +19,7 @@ export default function Upperhalf({ user, isPublic }) {
   const [loading, setLoading] = useState(false);
 
   const { LinkButton, FollowButton, RejectButton } = useProfileActions(user, setLoading);
-  const DefaultMsg = () => <Typography variant="subtitle1" color="gray">Nothing to show</Typography>;
+  const DefaultMsg = () => <Typography variant="subtitle1" color="gray" component="span">Nothing to show</Typography>;
 
   const skills = () => {
     return user.user_skills.length == 0 ? <DefaultMsg/> :
@@ -32,6 +32,10 @@ export default function Upperhalf({ user, isPublic }) {
     return user.user_interests.length == 0 ? <DefaultMsg/> : user.user_interests.map((val, idx) => {
       return <Tag color="var(--secondary)" fontColor="white" key={idx}>{val}</Tag>
     })
+  }
+
+  const communities = () => {
+    return user.user_communities.length == 0 ? <DefaultMsg /> : user.user_communities.join(', ')
   }
 
   const tagDisplay = (header, tagFn) => {
@@ -67,6 +71,12 @@ export default function Upperhalf({ user, isPublic }) {
           
           { tagDisplay(isProject ? "Skills wanted:" : "Skills:", skills) }
           { tagDisplay(isProject ? "Related interests:" : "Interests:", interests) }
+          <Center>
+            <Typography variant="subtitle1">
+              Communities: <Typography component="span" color="gray">{user.user_communities.length == 0 ? <DefaultMsg/> : 
+                user.user_communities.join(', ')}</Typography>
+            </Typography> 
+          </Center>
 
           <Center>
             {isPublic ? <Stack direction="row">
