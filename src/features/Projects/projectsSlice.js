@@ -25,7 +25,19 @@ import updateHelper from '../../components/constants/updateHelper';
 //   }
 
 import { projReq } from '../../components/constants/requestStrings';
-import { formatProfileDatum } from '../../components/constants/formatProfileDatum';
+import { formatProfile, formatProfileDatum } from '../../components/constants/formatProfileDatum';
+
+// get full projects including user_skills,ints, comms formatted as arrays of strings
+export const getFullProjects = async(pids) => {
+  const { data, error } = await supabase
+    .from('projects')
+    .select(projReq)
+    .in('pid', pids)
+
+    if (error) throw error;
+    console.log("DATA proj fet", data);
+    return data.map(formatProfile);
+}
 
 const projectsAdapter = createEntityAdapter({
     selectId: (project) => project.pid

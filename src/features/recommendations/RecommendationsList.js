@@ -20,7 +20,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { getFeedLinks } from "../Links/linksSlice";
 import { getLinks } from "../Links/linksSlice";
 import useIdObject from "../../components/hooks/useIdObject";
-import fetchData from "../SearchPage/FetchData";
+import fetchData, { fetchRecommendations } from "../SearchPage/FetchData";
 import { deleteKeys, userLoaded } from "../user/userSlice";
 import { Loading } from "../../components/constants/loading";
 import { searchLoaded, selectUniqueTags } from "../SearchPage/searchSlice";
@@ -31,7 +31,7 @@ function RecommendationsList({ filterIndex, fetch }) {
 
   const idObj = useIdObject();
   const [recommendations, setRecommendations] = useState([]);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   console.log("Loading from recclist", loading);
   const dispatch = useDispatch();
   const [refresh1, setRefresh] = useState(false);
@@ -87,28 +87,37 @@ function RecommendationsList({ filterIndex, fetch }) {
 
     try {
       setLoading(true);
-      const users = await fetchData(
-        "userRecommendation",
-        "",
-        fetchCommunities,
-        fetchSkills,
-        fetchInterests
-      );
-      // console.log("Users from fetchData", users);
-      const projects = await fetchData(
-        "projectRecommendation",
-        "",
-        fetchCommunities,
-        fetchSkills,
-        fetchInterests
-      );
+
+      Promise.all(
+        [fetchRecommendations(true, ["Programming", "Service", "USP"]),
+        fetchRecommendations(false, ["Programming", "Service", "USP"])]
+      ).then(values => {
+         setRecommendations(interleave(values[0], values[1]));
+         setLoading(false);
+      });
+
+      // const users = await fetchData(
+      //   "userRecommendation",
+      //   "",
+      //   fetchCommunities,
+      //   fetchSkills,
+      //   fetchInterests
+      // );
+      // // console.log("Users from fetchData", users);
+      // const projects = await fetchData(
+      //   "projectRecommendation",
+      //   "",
+      //   fetchCommunities,
+      //   fetchSkills,
+      //   fetchInterests
+      // );
       // console.log("Projects from fetchData", projects);
 
-      setRecommendations(interleave(users, projects));
+      // setRecommendations(interleave(users, projects));
     } catch (error) {
       throw error;
     } finally {
-      setLoading(false);
+      //setLoading(false);
     }
   }
 
@@ -123,6 +132,7 @@ function RecommendationsList({ filterIndex, fetch }) {
   function displayRecommendations() {
     console.log("Display reccs run");
     if (loading) {
+      console.log("--SHOW LOADING---");
       return (
         <Center>
           <CircularProgress size={40} sx={{ mt: 2 }} />

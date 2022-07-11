@@ -1,6 +1,33 @@
+import { getFullProjects } from "../Projects/projectsSlice";
+import { getFullUsers } from "../user/userSlice";
+
+
+const RECOMMEND_COSINE_PREFIX = "recommendCosine";
+const ROOT_URL = "https://dolphin-app-aeqog.ondigitalocean.app";
+
+// changes the array to a suitable form to be
+function formatArray(arr) {
+  return "'" + arr.toString().replaceAll(",", "','") + "'";
+}
+
+// has different URL format and args from fetchData
+// isUser: true to get recCosineUser, else get recCosineProject
+// tags: comma sep array
+export async function fetchRecommendations(isUser, tags) {
+  const route = RECOMMEND_COSINE_PREFIX + (isUser ? "User" : "Project");
+  const url = `${ROOT_URL}/${route}?tags=${formatArray(tags)}`;
+
+  // get reccs first
+  const res = await fetch(url);
+  const reccs = await res.json();
+
+  // reccs is an Object with id -> score -> convert to an array of ids sorted by score
+  const sortedIds = Object.keys(reccs).sort((a,b) => reccs[a] - reccs[b]);
+  return isUser ? getFullUsers(sortedIds) : getFullProjects(sortedIds);
+}
+
 // if selected skills,int, comm (either from user profile or actual search) empty, use all
 // on Feed page search input should be empty - to get everything possible (and route is different)
-
 export default async function fetchData(
   route,
   search,
@@ -8,11 +35,7 @@ export default async function fetchData(
   skills,
   interests
 ) {
-  // changes the array to a suitable form to be
-  function formatArray(arr) {
-    return "'" + arr.toString().replaceAll(",", "','") + "'";
-  }
-
+  
   function formatUrl() {
     // local host
     // return `http://127.0.0.1:8000/api/${route}/?format=json&searchInput=${
@@ -28,7 +51,7 @@ export default async function fetchData(
     // const rootUrl = process.env.NODE_ENV == 'production' ? "https://murmuring-basin-78610.herokuapp.com"
     //   : "http://127.0.0.1:8000";
 
-    const rootUrl = "https://dolphin-app-aeqog.ondigitalocean.app";
+    const rootUrl = ROOT_URL;
     // const rootUrl = "http://127.0.0.1:8000";
 
     return `${rootUrl}/api/${route}/?format=json&searchInput=${
