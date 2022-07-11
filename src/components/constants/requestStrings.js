@@ -35,4 +35,6 @@ projects!posts_pid_fkey (
 )
 `
 
+export const isUser = (datum) => "id" in datum;
+export const matchObj = (datum) => isUser(datum) ?  { uid: datum.id } : { pid: datum.pid };
 

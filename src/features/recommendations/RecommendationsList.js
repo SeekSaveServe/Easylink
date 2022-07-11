@@ -20,7 +20,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { getFeedLinks } from "../Links/linksSlice";
 import { getLinks } from "../Links/linksSlice";
 import useIdObject from "../../components/hooks/useIdObject";
-import  { fetchRecommendations } from "../SearchPage/FetchData";
+import  { fetchEMATags, fetchRecommendations } from "../SearchPage/FetchData";
 import { deleteKeys, userLoaded } from "../user/userSlice";
 import { Loading } from "../../components/constants/loading";
 import { searchLoaded, selectUniqueTags } from "../SearchPage/searchSlice";
@@ -74,6 +74,7 @@ function RecommendationsList({ filterIndex, fetch }) {
   const uniqueTags = useSelector(selectUniqueTags);
 
   const pickArray = (first, second) => (first.length == 0 ? second : first);
+
   async function getRecommendations() {
     
     const { user_skills, user_interests, user_communities } = user; // the user's selected SIC
@@ -82,17 +83,27 @@ function RecommendationsList({ filterIndex, fetch }) {
     const fetchSkills = pickArray(user_skills, unique_skills);
     const fetchInterests = pickArray(user_interests, unique_interests);
     const fetchCommunities = pickArray(user_communities, unique_communities);
+    
+    const fetchArray = () => [...fetchSkills, ...fetchInterests, ...fetchCommunities];
 
-    console.log("Fetch SIC", fetchSkills, fetchInterests, fetchCommunities);
+    console.log("Fetch SIC", fetchArray());
+    
 
     try {
       setLoading(true);
+      const emaTags = await fetchEMATags(user);
+
+      // in case EMA is empty: this happens for old users and causes a small bug where feed changes for no reason
+      const reccTags = emaTags.length == 0 ? fetchArray() : emaTags;
+
+      // fetch EMA tags sorted
       const values = await Promise.all(
         [
-          fetchRecommendations(true, ["Programming", "Service", "USP"]),
-          fetchRecommendations(false, ["Programming", "Service", "USP"])
+          fetchRecommendations(true, reccTags),
+          fetchRecommendations(false, reccTags)
         ]
       );
+      
       setRecommendations(interleave(values[0], values[1]));
 
 

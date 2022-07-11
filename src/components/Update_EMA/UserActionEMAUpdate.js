@@ -59,6 +59,8 @@ export function formatEMARows(ema_rows) {
 	return ema_rows.map(augmentRow);
 }
 
+
+
 // input: row: { tag, type }, array: array of rows
 // output: true if a row exists in array with same tag and type
 	// There is technically no guarantee of uniqueness across categories e.g 'JS' in both unique_skills and unique_interests

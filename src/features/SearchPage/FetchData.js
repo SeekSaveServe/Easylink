@@ -1,13 +1,41 @@
+import { matchObj } from "../../components/constants/requestStrings";
+import { supabase } from "../../supabaseClient";
 import { getFullProjects } from "../Projects/projectsSlice";
 import { getFullUsers } from "../user/userSlice";
-
+import { formatEMARows } from "../../components/Update_EMA/UserActionEMAUpdate";
 
 const RECOMMEND_COSINE_PREFIX = "recommendCosine";
 const ROOT_URL = "https://dolphin-app-aeqog.ondigitalocean.app";
+const EMA_TAGS_K = 10;
 
 // changes the array to a suitable form to be
 function formatArray(arr) {
   return "'" + arr.toString().replaceAll(",", "','") + "'";
+}
+
+// input: datum to fetch for (user/proj)
+// output: top k ema tags by score
+export async function fetchEMATags(datum) {
+  console.log("Datum in fetchEMA", datum);
+  console.log("match obj", matchObj(datum));
+  
+  try {
+    const { data, error } = await supabase
+      .from('ema_score')
+      .select('*')
+      .match(matchObj(datum))
+      .order('score', { ascending: false })
+      .limit(EMA_TAGS_K)
+
+    if (error) throw error;
+
+    return formatEMARows(data).map(d => d.tag);
+
+  } catch (error) {
+    console.log("Err fetching EMA", error);
+  }
+  
+
 }
 
 // has different URL format and args from fetchData
@@ -16,6 +44,8 @@ function formatArray(arr) {
 export async function fetchRecommendations(isUser, tags) {
   const route = RECOMMEND_COSINE_PREFIX + (isUser ? "User" : "Project");
   const url = `${ROOT_URL}/${route}?tags=${formatArray(tags)}`;
+
+  console.log("Fetch reccs url", url);
 
   // get reccs first
   const res = await fetch(url);
