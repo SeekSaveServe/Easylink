@@ -55,27 +55,6 @@ export default function Lowerhalf({ user, isPublic }) {
     );
   }, []);
   return (
-    <>
     <ProfileTabs user={user}/>
-      {/* <Center>
-        <Typography variant="h5" component="div">
-          {title}
-        </Typography>
-      </Center>
-      <Center>
-        <Typography variant="body2">{bio}</Typography>
-      </Center> */}
-      {/* <Center>
-        <Card>
-          <CardContent> {links} links </CardContent>
-        </Card>
-        <Card>
-          <CardContent> {projects} Projects </CardContent>
-        </Card>
-        <Card>
-          <CardContent> {following} Followers </CardContent>
-        </Card>
-      </Center> */}
-    </>
   );
 }

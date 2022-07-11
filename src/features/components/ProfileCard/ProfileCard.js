@@ -92,20 +92,9 @@ function ProfileCard({ info }) {
   const showEmail = Boolean(info.email) && (info.email_visibility == "everyone" || linkinSlice?.established);
   const showTele = Boolean(info.telegram) && (info.telegram_visibility == "everyone" || linkinSlice?.established)
 
-  const mapName = (d) => d.name; // for join query in links
 
   // comma sep string to array - for isJoin false
-  
 
-  // const user_skills = isJoin
-  //   ? info.user_skills.map(mapName)
-  //   : stringToArray(info.user_skills);
-  // const user_interests = isJoin
-  //   ? info.user_interests.map(mapName)
-  //   : stringToArray(info.user_interests);
-  // const user_communities = isJoin
-  //   ? info.user_communities.map(mapName)
-  //   : stringToArray(info.user_communities);
   const user_skills = info.user_skills;
   const user_interests = info.user_interests;
   const user_communities = info.user_communities;
