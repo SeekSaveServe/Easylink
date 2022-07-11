@@ -35,7 +35,6 @@ export const getFullProjects = async(pids) => {
     .in('pid', pids)
 
     if (error) throw error;
-    console.log("DATA proj fet", data);
     return data.map(formatProfile);
 }
 

@@ -22,8 +22,20 @@ export async function fetchRecommendations(isUser, tags) {
   const reccs = await res.json();
 
   // reccs is an Object with id -> score -> convert to an array of ids sorted by score
-  const sortedIds = Object.keys(reccs).sort((a,b) => reccs[a] - reccs[b]);
-  return isUser ? getFullUsers(sortedIds) : getFullProjects(sortedIds);
+  // const sortedIds = Object.keys(reccs).sort((a,b) => reccs[a] - reccs[b]);
+  const ids = Object.keys(reccs);
+
+  const data = await (isUser ? getFullUsers(ids) : getFullProjects(ids));
+  
+  const getScore = (datum) => { 
+    const id = isUser ? datum.id : datum.pid; 
+    return reccs[id];
+  }
+
+  // sort in descending order
+  // supabase does not preserve the order when using .in, we have to sort after receivng the data
+  const sortedData =  data.sort((a,b) => getScore(b) - getScore(a));
+  return sortedData;
 }
 
 // if selected skills,int, comm (either from user profile or actual search) empty, use all

@@ -20,7 +20,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { getFeedLinks } from "../Links/linksSlice";
 import { getLinks } from "../Links/linksSlice";
 import useIdObject from "../../components/hooks/useIdObject";
-import fetchData, { fetchRecommendations } from "../SearchPage/FetchData";
+import  { fetchRecommendations } from "../SearchPage/FetchData";
 import { deleteKeys, userLoaded } from "../user/userSlice";
 import { Loading } from "../../components/constants/loading";
 import { searchLoaded, selectUniqueTags } from "../SearchPage/searchSlice";
@@ -76,8 +76,8 @@ function RecommendationsList({ filterIndex, fetch }) {
   const pickArray = (first, second) => (first.length == 0 ? second : first);
   async function getRecommendations() {
     
-    const { user_skills, user_interests, user_communities } = user;
-    const { unique_communities, unique_interests, unique_skills } = uniqueTags;
+    const { user_skills, user_interests, user_communities } = user; // the user's selected SIC
+    const { unique_communities, unique_interests, unique_skills } = uniqueTags; // all unique SIC in DB
 
     const fetchSkills = pickArray(user_skills, unique_skills);
     const fetchInterests = pickArray(user_interests, unique_interests);

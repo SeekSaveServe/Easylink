@@ -18,6 +18,7 @@ export const getFullUsers = async(uids) => {
             throw error;
         } 
         return data.map(formatProfile);
+        
 }
 
 // get full user (one only)
