@@ -40,7 +40,7 @@ import {
   isFollowing,
   selectFollowedById,
 } from "../../followers/followerSlice.js";
-import { stringToArray } from "../../../components/constants/formatProfileDatum.js";
+import { formatProfile, stringToArray } from "../../../components/constants/formatProfileDatum.js";
 import useProfileActions from "../../../components/hooks/useProfileActions.js";
 import { isJoin as isJoinFn } from "../../../components/constants/formatProfileDatum.js";
 
@@ -66,6 +66,7 @@ function ConditionalDisplay(props) {
 }
 
 function ProfileCard({ info }) {
+  info = formatProfile(info);
   const isJoin = isJoinFn(info);
   
   const dispatch = useDispatch();
@@ -96,15 +97,18 @@ function ProfileCard({ info }) {
   // comma sep string to array - for isJoin false
   
 
-  const user_skills = isJoin
-    ? info.user_skills.map(mapName)
-    : stringToArray(info.user_skills);
-  const user_interests = isJoin
-    ? info.user_interests.map(mapName)
-    : stringToArray(info.user_interests);
-  const user_communities = isJoin
-    ? info.user_communities.map(mapName)
-    : stringToArray(info.user_communities);
+  // const user_skills = isJoin
+  //   ? info.user_skills.map(mapName)
+  //   : stringToArray(info.user_skills);
+  // const user_interests = isJoin
+  //   ? info.user_interests.map(mapName)
+  //   : stringToArray(info.user_interests);
+  // const user_communities = isJoin
+  //   ? info.user_communities.map(mapName)
+  //   : stringToArray(info.user_communities);
+  const user_skills = info.user_skills;
+  const user_interests = info.user_interests;
+  const user_communities = info.user_communities;
 
   const calculateHide = () => {
     // whether current profile is project

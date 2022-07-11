@@ -2,7 +2,7 @@
  // for user_skills, ints, comm
 
 // in case the array is already correctly formatted (d will be string) don't change
-const mapName = arr => arr.map(d => typeof d === 'object' ? d.name : d);
+export const mapName = arr => arr.map(d => typeof d === 'object' ? d.name : d);
 
 export const isJoin = (user) => typeof(user.user_skills) == 'object'&& user.user_skills != null;
 

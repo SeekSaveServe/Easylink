@@ -87,37 +87,19 @@ function RecommendationsList({ filterIndex, fetch }) {
 
     try {
       setLoading(true);
+      const values = await Promise.all(
+        [
+          fetchRecommendations(true, ["Programming", "Service", "USP"]),
+          fetchRecommendations(false, ["Programming", "Service", "USP"])
+        ]
+      );
+      setRecommendations(interleave(values[0], values[1]));
 
-      Promise.all(
-        [fetchRecommendations(true, ["Programming", "Service", "USP"]),
-        fetchRecommendations(false, ["Programming", "Service", "USP"])]
-      ).then(values => {
-         setRecommendations(interleave(values[0], values[1]));
-         setLoading(false);
-      });
 
-      // const users = await fetchData(
-      //   "userRecommendation",
-      //   "",
-      //   fetchCommunities,
-      //   fetchSkills,
-      //   fetchInterests
-      // );
-      // // console.log("Users from fetchData", users);
-      // const projects = await fetchData(
-      //   "projectRecommendation",
-      //   "",
-      //   fetchCommunities,
-      //   fetchSkills,
-      //   fetchInterests
-      // );
-      // console.log("Projects from fetchData", projects);
-
-      // setRecommendations(interleave(users, projects));
     } catch (error) {
       throw error;
     } finally {
-      //setLoading(false);
+      setLoading(false);
     }
   }
 
