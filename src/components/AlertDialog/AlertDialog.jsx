@@ -55,7 +55,7 @@ export function AlertDialog({ title, description, disagreeText, agreeText, agree
         </DialogContent>
         <DialogActions>
           <Center>
-          <Stack direction="row" spacing={3}>
+          <Stack direction="row" spacing={5}>
             { loading ? <></> : <Button onClick={handleClose}>{disagreeText}</Button> }
             <LoadingButton loading={loading} onClick={handleAgree} color="error"autoFocus>
                 {agreeText}

@@ -10,6 +10,7 @@ import BasicButton from "../BasicButton";
 import LinkableAvatar from "../LinkableAvatar.js";
 import BasicSearchBar from "../BasicSearchBar/BasicSearchBar";
 import { replace } from "../../features/user/userSlice";
+import { signOutFunction } from "../../features/user/userSlice";
 
 export default function BasicNavBar({
   searchInput = "Search...",
@@ -19,12 +20,7 @@ export default function BasicNavBar({
   const userProfile = useSelector((state) => state.user);
   const dispatch = useDispatch();
   const location = useLocation();
-
-  const signOut = async () => {
-    sessionStorage.removeItem("currProject");
-    dispatch(replace({})); // clear userSlice so it doesn't pre-fill signup
-    await supabase.auth.signOut();
-  };
+  const signOut = signOutFunction(dispatch);
 
   return (
     <Box sx={{ flexGrow: 1, backgroundColor: "var(--primary)" }}>

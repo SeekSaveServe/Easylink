@@ -11,6 +11,7 @@ import { update } from "../../user/userSlice";
 import AutoAwesomeIcon from "@mui/icons-material/AutoAwesome";
 import { useAlert } from "../../../components/Alert/AlertContext";
 import useAlertDialog from "../../../components/AlertDialog/AlertDialog";
+import { signOutFunction } from "../../user/userSlice";
 
 export default function SettingsForm({ user, avatarUrl }) {
   // Checking if we are pushing to the user db or projects db
@@ -21,6 +22,7 @@ export default function SettingsForm({ user, avatarUrl }) {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { openDialog, AlertDialog } = useAlertDialog();
+  const signOut = signOutFunction(dispatch);
 
   useEffect(() => {
     if (user?.username) setUserName(user.username);
@@ -148,7 +150,9 @@ export default function SettingsForm({ user, avatarUrl }) {
       .rpc('delete_user', { user_id: user.id });
 
     if (error) throw error;
-    navigate('/', { replace: true });
+    signOut();
+
+    //navigate('/', { replace: true });
     } catch (error) {
       console.log("Err deleting user", error);
     }
@@ -199,7 +203,7 @@ export default function SettingsForm({ user, avatarUrl }) {
         <AlertDialog 
         title={`Delete user: "${user.username}"?`}
         description={`WARNING: This will delete the user "${user.username}" and all associated data, including all owned projects and profile settings.
-        You will be re-directed to the sign-up page after deletion. This action is irreversible.`}
+        You will be re-directed to the log-in page after deletion. This action is irreversible.`}
         disagreeText={"Cancel"}
         agreeText={"Delete User"}
         agreeAction={handleDelete}
