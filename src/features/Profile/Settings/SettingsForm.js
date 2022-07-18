@@ -200,18 +200,23 @@ export default function SettingsForm({ user, avatarUrl }) {
           Change Password
         </BasicButton>  
 
-        <AlertDialog 
-        title={`Delete user: "${user.username}"?`}
-        description={`WARNING: This will delete the user "${user.username}" and all associated data, including all owned projects and profile settings.
-        You will be re-directed to the log-in page after deletion. This action is irreversible.`}
-        disagreeText={"Cancel"}
-        agreeText={"Delete User"}
-        agreeAction={handleDelete}
-        />
+        { "pid" in user ? <></> : 
+            <>
+            <AlertDialog 
+            title={`Delete user: "${user.username}"?`}
+            description={`WARNING: This will delete the user "${user.username}" and all associated data, including all owned projects and profile settings.
+            You will be re-directed to the log-in page after deletion. This action is irreversible.`}
+            disagreeText={"Cancel"}
+            agreeText={"Delete User"}
+            agreeAction={handleDelete}
+            />
 
-        <BasicButton bg="red" sx={{mt:8}} onClick={openDialog}>
-          Delete User
-        </BasicButton>
+          <BasicButton bg="red" sx={{mt:8}} onClick={openDialog}>
+            Delete User
+          </BasicButton> 
+          </> 
+        }
+        
       </form>
     </div>
   );
