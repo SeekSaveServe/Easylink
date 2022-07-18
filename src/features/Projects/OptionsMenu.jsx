@@ -7,12 +7,14 @@ import { selectProjectById } from "./projectsSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { replace } from "../user/userSlice";
 import { clearLinks } from "../Links/linksSlice";
-
+import useAlertDialog from "../../components/AlertDialog/AlertDialog";
 // parentId: the pid of the project this menu is associated with
 // for use specifically in ProjectTree
 function OptionsMenu({ parentId }) {
   const dispatch = useDispatch();
   const project = useSelector((state) => selectProjectById(state, parentId));
+
+  const { openDialog, AlertDialog } = useAlertDialog();
 
   const navigate = useNavigate();
   const [anchorEl, setAnchorEl] = useState(null);
@@ -44,6 +46,8 @@ function OptionsMenu({ parentId }) {
     }
 
     window.location.reload()
+
+
     // navigate('/projects', { state: { isProject: true } })
   }
 
@@ -56,6 +60,13 @@ function OptionsMenu({ parentId }) {
 
   return (
     <div>
+      <AlertDialog 
+        title={`Delete project "${project.username}"?`}
+        description={`This will delete the project "${project.username}" and all associated sub-projects.`}
+        disagreeText={"Cancel"}
+        agreeText={"Delete project"}
+        agreeAction={handleDelete}
+      />
       <IconButton
         id="basic-button"
         aria-controls={open ? 'basic-menu' : undefined}
@@ -77,7 +88,7 @@ function OptionsMenu({ parentId }) {
       >
         <MenuItem onClick={handleSwitchProject}>Switch to project</MenuItem>
         <MenuItem onClick={addSubProject}>Add sub-project</MenuItem>
-        <MenuItem onClick={handleDelete}>Delete</MenuItem>
+        <MenuItem onClick={openDialog}>Delete</MenuItem>
       </Menu>
     </div>
   );
