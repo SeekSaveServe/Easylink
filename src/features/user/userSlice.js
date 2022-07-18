@@ -67,7 +67,7 @@ export const userSlice = createSlice({
         // replace user with object from action.payload completely 
         // any keys in user not in object are deleted
         replace: (state, action) => {
-            updateHelper(action.payload, state);
+            updateHelper(initialState, state);
         },
 
         // action.payload: list of keys to delete
