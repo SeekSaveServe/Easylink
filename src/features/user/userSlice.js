@@ -4,6 +4,11 @@ import { userReq } from '../../components/constants/requestStrings';
 import { formatProfile, formatProfileDatum } from '../../components/constants/formatProfileDatum';
 import updateHelper from '../../components/constants/updateHelper';
 
+export const signOutFunction = dispatch => async () => {
+    sessionStorage.removeItem("currProject");
+    dispatch(replace({})); // clear userSlice so it doesn't pre-fill signup
+    await supabase.auth.signOut();
+  };
 // Async Thunks
 
 // get full users given many uids (get in one query instead of re-running getFullUser)
@@ -62,7 +67,7 @@ export const userSlice = createSlice({
         // replace user with object from action.payload completely 
         // any keys in user not in object are deleted
         replace: (state, action) => {
-            updateHelper(action.payload, state);
+            updateHelper(initialState, state);
         },
 
         // action.payload: list of keys to delete
