@@ -200,7 +200,7 @@ export default function SettingsForm({ user, avatarUrl }) {
           Change Password
         </BasicButton>  
 
-        { "pid" in user ? <></> : 
+        { "pid" in user || user.loading == 'idle' ? <></> : 
             <>
             <AlertDialog 
             title={`Delete user: "${user.username}"?`}
