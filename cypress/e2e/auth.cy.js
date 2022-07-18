@@ -27,25 +27,4 @@ describe('signing in and signing out', () => {
 
     cy.url().should('eq', Cypress.config().baseUrl)
   });
-
-  // it('user can sign out', () => {
-  //   cy.visit('/');
-
-  //   // type in email and password
-  //   cy.findByRole('textbox', {
-  //     name: /email/i
-  //   }).type(email);
-
-  //   cy.findByLabelText(/password/i).type(password);
-
-  //   cy.findByRole('button', {
-  //     name: /sign in/i
-  //   }).click();
-    
-  //   // Can see welcome message with username
-  //   cy.contains(`Welcome, ${username}`)
-
-    
-    
-  // });
 })
