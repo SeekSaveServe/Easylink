@@ -10,6 +10,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { update } from "../../user/userSlice";
 import AutoAwesomeIcon from "@mui/icons-material/AutoAwesome";
 import { useAlert } from "../../../components/Alert/AlertContext";
+import useAlertDialog from "../../../components/AlertDialog/AlertDialog";
 
 export default function SettingsForm({ user, avatarUrl }) {
   // Checking if we are pushing to the user db or projects db
@@ -18,6 +19,8 @@ export default function SettingsForm({ user, avatarUrl }) {
   // States for registration
   const showAlert = useAlert();
   const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const { openDialog, AlertDialog } = useAlertDialog();
 
   useEffect(() => {
     if (user?.username) setUserName(user.username);
@@ -136,6 +139,22 @@ export default function SettingsForm({ user, avatarUrl }) {
     }
   }
 
+  async function handleDelete() {
+    if (!user?.id || user.id === "") return;
+    console.log("Del user", user.id);
+
+    try {
+    const { data, error } = await supabase
+      .rpc('delete_user', { user_id: user.id });
+
+    if (error) throw error;
+    navigate('/', { replace: true });
+    } catch (error) {
+      console.log("Err deleting user", error);
+    }
+  }
+
+
   return (
     <div className={styles.Left}>
       <form>
@@ -173,8 +192,21 @@ export default function SettingsForm({ user, avatarUrl }) {
         <BasicButton bg="secondary" onClick={handleSubmit}>
           Update Account
         </BasicButton>
-        <BasicButton bg="red" onClick={onPasswordChange}>
+        <BasicButton bg="var(--primary)" onClick={onPasswordChange}>
           Change Password
+        </BasicButton>  
+
+        <AlertDialog 
+        title={`Delete user: "${user.username}"?`}
+        description={`WARNING: This will delete the user "${user.username}" and all associated data, including all owned projects and profile settings.
+        You will be re-directed to the sign-up page after deletion. This action is irreversible.`}
+        disagreeText={"Cancel"}
+        agreeText={"Delete User"}
+        agreeAction={handleDelete}
+        />
+
+        <BasicButton bg="red" sx={{mt:8}} onClick={openDialog}>
+          Delete User
         </BasicButton>
       </form>
     </div>
