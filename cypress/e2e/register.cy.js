@@ -198,7 +198,6 @@ describe('create an account', () => {
                 getStore(cy)
                     .then(store => { console.log(store.user); return store.user; })
                     .should('deep.equal', user);
-            // cy.findByRole('alert'); - to check if alert has come up
         });
     });
 
