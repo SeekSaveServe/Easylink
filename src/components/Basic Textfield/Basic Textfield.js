@@ -9,11 +9,15 @@ const bgOptions = {
 // provide custom sx to override
 function BasicTextfield(props) {
   const { icon, variant = "outlined", ...rest } = props;
+  const label = rest.label.replace(" ", "");
   // bg is either in {primary, secondary} or a valid color
 
   return ( 
     <TextField 
       variant={props.variant} 
+      inputProps={{
+        'data-label': label
+      }}
       InputProps={icon ? {
        startAdornment: (
          <InputAdornment position="start">

@@ -43,7 +43,7 @@ export default function Checkmarks({
         <InputLabel id="demo-multiple-checkbox-label"> {label} </InputLabel>
         <Select
           labelId="demo-multiple-checkbox-label"
-          id="demo-multiple-checkbox"
+          id={`${label.toLowerCase()}-dropdown`}
           multiple
           value={selectedTags}
           onChange={handleChange}

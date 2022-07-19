@@ -85,6 +85,8 @@ const result = {
     }
 };
 
+const user = result.user;
+
 function getStore(cy) {
     return cy.window().its('store').invoke('getState')
 }
@@ -98,20 +100,85 @@ describe('create an account', () => {
         
         cy.findByRole('textbox', {
             name: /username/i
-        }).type(username);
+        }).type(user.username);
 
         cy.findByRole('textbox', {
             name: /email/i
         }).type(email);
 
+        // have to use labels to find the elements
+        cy.get("[data-label=Password]").type(user.password);
+        cy.get("[data-label=ConfirmPassword]").type(user.password);
+
+        // important that the button says 'create account' - test change if text needs to change
+        cy.findByRole('button', {
+            name: /create account/i
+        }).click();
+
+        cy.findByRole('textbox', {
+            name: /telegram/i
+            }).type(user.telegram, { force: true })
+
+        // for some reason when a dropdown is opened it hides everything
+            // Skills: Finance
+            // interests: Sports, Service
+            // Communities: USP
+
+          cy.get('[id^=skills]').click();
+
+            cy.findByRole('option', {
+            name: /finance/i
+            }).click();
+        
+            
+          cy.get('[id^=interests]').click({ force: true });
+
+            cy.findByRole('option', {
+                name: /sports/i
+                }).click();
+            
+            cy.findByRole('option', {
+                name: /service/i
+                }).click();
+            
+            
+          cy.get('[id^=communities]').click({ force: true });
+        
+            cy.findByRole('option', {
+                name: /usp/i
+                }).click();
+            
+            
+            
+            cy.contains('Next').click({ force: true });
+            
+            // end of dropdowns
+
+            // type title, bio
+            cy.findByRole('textbox', {
+                name: /title/i
+              }).type(user.title);
+
+
+            cy.findByRole('textbox', {
+            name: /bio/i
+            }).type(user.bio);
+
+            cy.contains('Everyone').click(); // clicks the first Everyone under Tele
+
+            // to force saving to redux store
+            cy.contains('Back').click({ force: true });
+            cy.contains('Next').click({ force: true });
+
+            getStore(cy)
+                .then(store => { console.log(store.user); return store.user; })
+                .should('deep.equal', user);
+        
 
         
-        
 
 
-        
-
-        //cy.window().its('store').invoke('getState').then((obj) => console.log("STORE", obj))
+        // cy.findByRole('alert'); - to check if alert has come up
     });
 
 });
