@@ -10,7 +10,7 @@ import TooltipIconButton from "../TooltipIconButton/TooltipIconButton";
 import { AddLinkOutlined, LeakRemoveOutlined, RssFeedOutlined, DeleteOutlined, CancelOutlined } from "@mui/icons-material";
 import { formatProfile } from "../constants/formatProfileDatum";
 import UserActionEMAUpdate, { buildInteractingMap, formatInteracting } from "../Update_EMA/UserActionEMAUpdate";
-
+import { DoNotDisturb } from "@mui/icons-material";
 
 function ConditionalDisplay(props) {
     const { display, component } = props;
@@ -289,7 +289,7 @@ function useProfileActions(info, setLoading) {
             <TooltipIconButton
                 icon={
                 showDelete ? (
-                    <DeleteOutlined
+                    <DoNotDisturb
                     sx={{ fontSize: 30, color: "error.main" }}
                     />
                 ) : (
@@ -298,7 +298,7 @@ function useProfileActions(info, setLoading) {
                     />
                 )
                 }
-                title={showDelete ? "Delete" : "Not for me"}
+                title={showDelete ? "Cancel request" : "Not for me"}
                 onClick={rejectLink}
             />
         }

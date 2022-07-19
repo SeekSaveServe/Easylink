@@ -55,6 +55,6 @@ export default function Lowerhalf({ user, isPublic }) {
     );
   }, []);
   return (
-    <ProfileTabs user={user}/>
+    <ProfileTabs user={user} isPublic={isPublic}/>
   );
 }
