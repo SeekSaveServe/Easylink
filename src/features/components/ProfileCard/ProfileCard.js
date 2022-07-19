@@ -43,6 +43,8 @@ import {
 import { formatProfile, stringToArray } from "../../../components/constants/formatProfileDatum.js";
 import useProfileActions from "../../../components/hooks/useProfileActions.js";
 import { isJoin as isJoinFn } from "../../../components/constants/formatProfileDatum.js";
+import StatusTag from "../../../components/StatusTag.jsx";
+import contactVisibility from "../../../components/constants/contactVisibility.js";
 
 // assumption: passed in data has structure
 // isJoin == true: { ...user/project, user_skills:[Tag], user_communities:[Tag], user_interests: [Tag] }
@@ -89,8 +91,9 @@ function ProfileCard({ info }) {
 
 
   // TODO: email/tele vis: "afterlink" || "everyone" -> calculate based on if viewing user has linked
-  const showEmail = Boolean(info.email) && (info.email_visibility == "everyone" || linkinSlice?.established);
-  const showTele = Boolean(info.telegram) && (info.telegram_visibility == "everyone" || linkinSlice?.established)
+  // const showEmail = Boolean(info.email) && (info.email_visibility == "everyone" || linkinSlice?.established);
+  // const showTele = Boolean(info.telegram) && (info.telegram_visibility == "everyone" || linkinSlice?.established);
+  const { showEmail, showTele } = contactVisibility(info, linkinSlice);
 
 
   // comma sep string to array - for isJoin false
@@ -240,49 +243,6 @@ function ProfileCard({ info }) {
 
   // Button functions// to insert right fields based on sender / receiver
 
-
-  // Incoming/Outgoing/You rejected/ They rejected
-  function StatusTag() {
-    if (!isLink) return <></>;
-    if (linkinSlice.established) {
-      return (
-        <Tag
-          color="var(--primary)"
-          fontColor={"white"}
-          sx={{ fontSize: "0.7rem", alignSelf: "flex-start", mt: 3 }}
-        >
-          Established
-        </Tag>
-      );
-    }
-
-    if (linkinSlice.pending) {
-      return (
-        <Tag
-          color={linkinSlice.incoming ? "var(--secondary)" : "var(--primary)"}
-          fontColor={"white"}
-          sx={{ fontSize: "0.7rem", alignSelf: "flex-start", mt: 3 }}
-        >
-          {linkinSlice.incoming ? "Incoming" : "Outgoing"}
-        </Tag>
-      );
-    }
-
-    if (linkinSlice.rejected) {
-      return (
-        <Tag
-          color={"error.main"}
-          fontColor={"white"}
-          sx={{ fontSize: "0.7rem", alignSelf: "flex-start", mt: 3 }}
-        >
-          {linkinSlice.incoming ? "You rejected" : "They rejected"}
-        </Tag>
-      );
-    }
-
-    return <></>;
-  }
-
   return (
     <Card className={styles.card}>
       <Box className={styles.card_content}>
@@ -301,7 +261,7 @@ function ProfileCard({ info }) {
             sx={{ ml: 0 }}
           />
 
-          <StatusTag />
+          <StatusTag linkinSlice = {linkinSlice} />
         </Stack>
 
         <CardContent sx={{ mt: 0, width: "100%" }}>

@@ -9,9 +9,14 @@ import { useDispatch } from "react-redux";
 import { getLinks } from "../../Links/linksSlice";
 import { getFollowed } from "../../followers/followerSlice";
 import { CardList } from "../../components/ProfileCardList/ProfileCardList";
+import { Email, Telegram } from "@mui/icons-material";
+import { useSelector } from "react-redux";
+import { selectLinkById } from "../../Links/linksSlice";
+import contactVisibility from "../../../components/constants/contactVisibility";
+import StatusTag from "../../../components/StatusTag";
 
 // user: the user / project for this profile
-function ProfileTabs({ user }) {
+function ProfileTabs({ user, isPublic }) {
     const [selected, setSelected] = useState(0);
     useEffect(() => {
         setSelected(0);
@@ -19,9 +24,38 @@ function ProfileTabs({ user }) {
     const dispatch = useDispatch();
     const idObj = useIdObject();
 
+    const isProject = "pid" in user;
+        // get link in slice if present
+    const linkinSlice = useSelector((state) =>
+        selectLinkById(state, isProject ? user.pid : user.id)
+    );
+
+    let { showEmail, showTele } = contactVisibility(user, linkinSlice);
+    showEmail = showEmail || !isPublic; // if own profile just show
+    showTele = showTele || !isPublic; 
+
     // Lazy evaluation for tabs
     const BioTab = () => {
-        return <Center style={{marginTop:2}}><Typography variant="h5">{user.bio}</Typography></Center>
+        return (
+        <>
+            <Center style={{marginTop:2, marginBottom: 5}}>
+                <Typography variant="h5">{user.bio}</Typography>
+            </Center>
+            
+            
+            { showEmail ? <Center style={{marginTop:2}}>
+                <Email sx={{mr: 1}}/>
+                <Typography variant="subtitle1">{user.email}</Typography>
+            </Center> : <></> }
+
+            { showTele ? <Center style={{marginTop:2}}>
+                <Telegram sx={{mr:1}}/>
+                <Typography variant="subtitle1">{user.telegram}</Typography>
+            </Center> : <></> }
+
+            
+        </>
+        )
     }
     const LinksTab = () => <CardListFromSource sourceFn={() => establishedLinksSource(user)}/>;
     const FollowingTab = () => <CardListFromSource sourceFn={() => followingSource(user)} />;
@@ -32,7 +66,7 @@ function ProfileTabs({ user }) {
     useEffect(() => {
         dispatch(getLinks(idObj));
         dispatch(getFollowed(idObj));
-    })
+    }, [])
 
     const tags = {
         0: { name: "Bio", component: BioTab },
