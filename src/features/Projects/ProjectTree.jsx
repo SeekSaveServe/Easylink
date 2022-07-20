@@ -67,7 +67,7 @@ function ProjectTree() {
     function display() {
       switch (projects.loading) {
         case 'pending':
-          return <div><CircularProgress size={40} sx={{m:3}}/></div>;
+          return <div><CircularProgress size={40} sx={{m:3}} data-testid="loading"/></div>;
         case 'error':
           return <Typography color="error.main">Error</Typography>
         default:

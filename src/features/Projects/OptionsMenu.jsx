@@ -21,7 +21,28 @@ function OptionsMenu({ parentId }) {
   const open = Boolean(anchorEl);
 
   const handleClick = (event) => {
+    console.log("FLAG", window.Cypress?.PROJ_ARG)
+    if (process.env.NODE_ENV !== 'production' && window.Cypress?.PROJ_ARG) {
+      switch(window.Cypress.PROJ_ARG) {
+        case "switch":
+          console.log("Cypress switch");
+          handleSwitchProject();
+          break;
+        case "add":
+          console.log("Cypress add");
+          addSubProject();
+          break;
+        case "delete":
+          console.log("Cypress delete");
+          openDialog();
+          break;
+      }
+
+      return;
+    }
+
     setAnchorEl(event.currentTarget);
+    
   };
   const handleClose = () => {
     setAnchorEl(null);
@@ -73,6 +94,7 @@ function OptionsMenu({ parentId }) {
         aria-haspopup="true"
         aria-expanded={open ? 'true' : undefined}
         onClick={handleClick}
+        data-testid={parentId}
       >
         <MenuIcon fontSize="small"/>
       </IconButton>
@@ -85,6 +107,7 @@ function OptionsMenu({ parentId }) {
         MenuListProps={{
           'aria-labelledby': 'basic-button',
         }}
+        
       >
         <MenuItem onClick={handleSwitchProject}>Switch to project</MenuItem>
         <MenuItem onClick={addSubProject}>Add sub-project</MenuItem>

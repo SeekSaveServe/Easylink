@@ -90,7 +90,7 @@ export default function BasicNavBar({
             refresh={refresh}
           />
 
-          <BasicButton onClick={signOut} bg="secondary" sx={{ width: "100px" }}>
+          <BasicButton onClick={signOut} bg="secondary" sx={{ width: "100px" }} data-testid="sign-out">
             Sign Out
           </BasicButton>
         </Toolbar>

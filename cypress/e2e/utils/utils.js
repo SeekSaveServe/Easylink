@@ -27,3 +27,7 @@ export function signIn(email, password) {
       name: /sign in/i
     }).click();
 }
+
+export function signOut() {
+    getByTestId('sign-out').click();
+}
