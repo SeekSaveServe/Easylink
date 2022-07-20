@@ -1,4 +1,7 @@
 // Test that account creation works as expected
+import { getStore } from "./utils/utils";
+import { alertContains } from "./utils/utils";
+
 const result = {
     "user": {
         "user_skills": [],
@@ -83,20 +86,12 @@ const result = {
 
 const user = result.user;
 
-function getStore(cy) {
-    return cy.window().its('store').invoke('getState')
-}
-
 // Helper functions // 
 // used in many tests
 function getCreateAccount() {
     return cy.findByRole('button', {
         name: /create account/i
     });
-}
-
-function alertContains(text) {
-    return cy.findByRole('alert').contains(text);
 }
 
 function typeUsername(username) {

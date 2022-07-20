@@ -39,18 +39,18 @@ function ProfileTabs({ user, isPublic }) {
         return (
         <>
             <Center style={{marginTop:2, marginBottom: 5}}>
-                <Typography variant="h5">{user.bio}</Typography>
+                <Typography variant="h5" data-testid="bio">{user.bio}</Typography>
             </Center>
             
             
             { showEmail ? <Center style={{marginTop:2}}>
                 <Email sx={{mr: 1}}/>
-                <Typography variant="subtitle1">{user.email}</Typography>
+                <Typography variant="subtitle1" data-testid="email">{user.email}</Typography>
             </Center> : <></> }
 
             { showTele ? <Center style={{marginTop:2}}>
                 <Telegram sx={{mr:1}}/>
-                <Typography variant="subtitle1">{user.telegram}</Typography>
+                <Typography variant="subtitle1" data-testid="telegram">{user.telegram}</Typography>
             </Center> : <></> }
 
             

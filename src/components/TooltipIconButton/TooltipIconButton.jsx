@@ -6,7 +6,7 @@ function TooltipIconButton({ title, icon, ...rest}) {
     }
     return (
         <Tooltip title={<TitleComponent/>} sx={{fontSize:"10rem"}}>
-            <IconButton {...rest}>
+            <IconButton {...rest} data-testid={title.toLowerCase()}>
                 { icon }
             </IconButton>
         </Tooltip>
