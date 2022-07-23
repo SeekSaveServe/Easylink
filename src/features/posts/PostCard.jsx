@@ -1,5 +1,5 @@
 import { Card, CardHeader, CardContent, CardActions, Typography, RadioGroup, FormControlLabel, Radio, Button } from "@mui/material";
-import LinkableAvatar from '../../components/LinkableAvatar.js';
+import LinkableAvatar from '../../components/LinkableAvatar.js/index.js';
 import Tag from "../../components/Tag/Tag.jsx";
 import Emoji from "../../components/Emoji/EmojiButton.jsx";
 import { Box } from "@mui/system";
@@ -89,29 +89,6 @@ function PostCard({ sx, data, ...rest }) {
     const [reaction2, setReaction2] = useState(false);
     const [reaction3, setReaction3] = useState(false);
 
-    // check if they have reacted and set the initial reaction state
-    // async function fetchReactionStatus() {
-    //     if (isPoll || disabled) return; // don't fetch if poll or project owner
-
-    //     // index by pid/uid of current user + posot_id
-    //     const { data: reactionsData, error } = await supabase
-    //         .from('post_reactions')
-    //         .select('*')
-    //         .match({
-    //             ...idObj,
-    //             post_id: data.s_n
-    //         })
-    //         .maybeSingle();
-        
-    //     if (error) console.log(error.error_description || error.message);
-    //     if (!reactionsData) return; // haven't reacted -> maybeSingle returs nnull
-
-    //     console.log('reactions', reactionsData);
-
-    //     setReaction1(reactionsData.reaction1);
-    //     setReaction2(reactionsData.reaction2);
-    //     setReaction3(reactionsData.reaction3);
-    // }
 
     async function getPollOptions() {
         if (!isPoll) return;

@@ -31,3 +31,29 @@ export function signIn(email, password) {
 export function signOut() {
     getByTestId('sign-out').click();
 }
+
+
+// input: { pid: ..} or { id... }
+// output: Promise<Profile> 
+export async function fetchProfile(idObj) {
+
+    const table = 'pid' in idObj ? 'projects' : 'users';
+    const { data, error } = await supabaseTestClient
+        .from(table)
+        .select('*')
+        .match(idObj)
+        .maybeSingle();
+    
+    if (error) throw error;
+    return data;
+}
+
+export function searchForProfileAndClick(profile) {
+    cy.get(`[id=searchBar]`).type(profile.username).type('{enter}');
+    getByTestId('loading').should('not.exist');
+    cy.contains(profile.bio);
+
+    const testId = "pid" in profile ? String(profile.pid) : profile.id.replace(" ", "");
+    getByTestId(testId).click({ force: true }); // get avatar and click
+
+}

@@ -1,5 +1,5 @@
 import { Button, Container, Paper, Typography } from "@mui/material";
-import PostCard from "./PostCard";
+import PostCard from "../posts/PostCard";
 import Scrollable from "../../components/Scrollable";
 import { Center, CircularProgress } from "@chakra-ui/react";
 import { AddCircleOutlined } from "@mui/icons-material";

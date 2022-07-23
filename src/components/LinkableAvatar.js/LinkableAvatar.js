@@ -61,6 +61,7 @@ function LinkableAvatar(props) {
         flexWrap: "wrap",
       }}
       {...rest}
+      data-testid={info ? (info?.pid ? String(info.pid) : info?.id.replace(" ", "")) : "" }
     ></Avatar>
   );
 }

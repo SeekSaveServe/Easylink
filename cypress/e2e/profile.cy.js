@@ -1,6 +1,7 @@
 // Test the clicked Profile (not ProfileCard) that is accessed by clicking a user's avatar
     // Tests for both own Profile and a foreign Profile
-import { getStore, signIn, getByTestId, signOut } from "./utils/utils";
+import { getStore, signIn, getByTestId, signOut, searchForProfileAndClick } from "./utils/utils";
+import { teleVisProfile, emailVisProfile, bothVisProfile, bothNotVisProfile } from "../fixtures/profile";
 
 const email = 'profiletestacct@gmail.com';
 const username="profiletestacct"
@@ -16,8 +17,37 @@ function checkTag(tagArray) {
     tagArray.forEach((tag) => cy.contains(tag));
 }
 
+// assuming on profile page already, check profile against user object passed in and based on whether is a project + is own profile
+function checkProfileAfterNavigate(user, isProject, isOwn) {
+        // has settings icon
+        if (isOwn) {
+            getByTestId("settings")
+        }
+       
+        getByTestId("username").contains(user.username);
+        getByTestId("title").contains(user.title);
+        getByTestId("skills").within(() => checkTag(user.user_skills));
+        getByTestId(isProject ? "related" : "interests").within(() => checkTag(user.user_interests));
+        getByTestId("communities").within(() => checkTag(user.user_communities));
+        getByTestId("bio").within(() => cy.contains(user.bio));
+
+        if (isOwn || user.telegram_visibility === 'everyone') {
+            getByTestId("telegram").within(() => cy.contains(user.telegram));
+        } 
+
+        if (isOwn || user.email_visibility === 'everyone') {
+            getByTestId("email").within(() => cy.contains(user.email));
+        }
+}
+
+function testOtherProfile(profile) {
+    searchForProfileAndClick(profile);
+    const isProject = "pid" in profile;
+    checkProfileAfterNavigate(profile, isProject, false);
+}
+
 // to enable re-use for update profile test
-function checkProfile(isProject) {
+function checkOwnProfile(isProject) {
     // for some reason clicking profile after switching project sometimes causes bug where user data is shown but this 
     // only occurs in cypress test environment, does not occur for real user. but clicking on a different page then clicking again causes correct load
     // without clicking away and clicking again the test sometimes fails even though there is no issue. 
@@ -36,25 +66,13 @@ function checkProfile(isProject) {
 
     // profile now has loading indicator that hides everything if user still loading
     // so checking for presence of username test id should be enough - but change to above if causing issues
-    getByTestId("username");
+    //getByTestId("username");
 
-    // has settings icon
-    getByTestId("settings")
-    
-    
     getByTestId('user-type').contains(isProject ? "PROJECT" : "USER");
     getStore(cy).then((store) => {
         
         const user = store.user;
-        // takes test id from label so sometimes the label changes when profile is for project
-        getByTestId("username").contains(user.username);
-        getByTestId("title").contains(user.title);
-        getByTestId("skills").within(() => checkTag(user.user_skills));
-        getByTestId(isProject ? "related" : "interests").within(() => checkTag(user.user_interests));
-        getByTestId("communities").within(() => checkTag(user.user_communities));
-        getByTestId("bio").within(() => cy.contains(user.bio));
-        getByTestId("email").within(() => cy.contains(user.email));
-        getByTestId("telegram").within(() => cy.contains(user.telegram));
+        checkProfileAfterNavigate(user, isProject, true);
     });
 }
 
@@ -66,7 +84,7 @@ describe('view profile', () => {
 
     context(`user's own profile`, () => {
         it(`has all of the user's information`, () => {
-            checkProfile(false);
+            checkOwnProfile(false);
         });
 
 
@@ -88,8 +106,8 @@ describe('view profile', () => {
                         
                         // doesn't matter what we switch to
                         getByTestId(projects.rootIds[0]).click({ force: true }).then(() => {
-                            cy.contains('Selected project');
-                            checkProfile(true);
+                            //cy.contains('Selected project');
+                            checkOwnProfile(true);
                             
                         })
 
@@ -99,7 +117,28 @@ describe('view profile', () => {
                 });
 
         });
-    })
+    });
+
+    
+
+    // ensure signIn email, pass are not one of the profiles being searched and checked for
+    context(`another user's profile`, () => {
+        it(`has correct information for a profile with public contact details`, () => {
+            testOtherProfile(bothVisProfile);
+        });
+
+        it(`has correct information for a profile with telegram visibility only`, () => {
+            testOtherProfile(teleVisProfile);
+        });
+
+        it(`has correct information for a profile with email visibility only`, () => {
+            testOtherProfile(emailVisProfile);
+        });
+
+        it(`has correct information for a profile with no contact visibility`, () => {
+            testOtherProfile(bothNotVisProfile);
+        });
+    });
     
     afterEach(() => {
         // to make sure local storage etc gets cleared

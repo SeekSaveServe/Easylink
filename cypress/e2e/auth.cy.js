@@ -28,6 +28,6 @@ describe('signing in and signing out', () => {
       name: /sign out/i
     }).click()
 
-    cy.url().should('eq', Cypress.config().baseUrl)
+    cy.url().should('eq', Cypress.config().baseUrl);
   });
 })
