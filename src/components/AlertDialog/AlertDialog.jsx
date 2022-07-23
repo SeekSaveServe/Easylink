@@ -56,8 +56,8 @@ export function AlertDialog({ title, description, disagreeText, agreeText, agree
         <DialogActions>
           <Center>
           <Stack direction="row" spacing={5}>
-            { loading ? <></> : <Button onClick={handleClose}>{disagreeText}</Button> }
-            <LoadingButton loading={loading} onClick={handleAgree} color="error"autoFocus>
+            { loading ? <></> : <Button onClick={handleClose} data-testid="dialog-cancel">{disagreeText}</Button> }
+            <LoadingButton loading={loading} onClick={handleAgree} color="error"autoFocus data-testid="dialog-action">
                 {agreeText}
             </LoadingButton>
           </Stack>

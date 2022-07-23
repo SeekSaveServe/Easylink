@@ -34,7 +34,7 @@ function OptionsMenu({ parentId }) {
           break;
         case "delete":
           console.log("Cypress delete");
-          openDialog();
+          handleDelete();
           break;
       }
 

@@ -82,3 +82,22 @@ export function clickDropdownOption(text) {
         name: text
         }).click();
 }
+
+// assuming on projects page already: provide access to store.projects after loading done
+    // does a check for if on projects page
+export function getProjectsStore(callback) {
+    cy.contains('Feed').click({ force: true });
+    cy.contains('Projects').click({ force: true });
+    
+    cy.url().should('include', '/projects');
+    getByTestId('loading').should('not.exist')
+    .then(() => {
+        getStore(cy).then((store) => {
+            const projects = store.projects;
+            cy.log(projects);
+
+            callback(projects);
+
+        });
+    });
+}

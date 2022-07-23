@@ -1,4 +1,4 @@
-import { clickDropdownOption, getByTestId, signIn, signOut } from "./utils/utils";
+import { clickDropdownOption, getByTestId, getProjectsStore, projectsStore, signIn, signOut } from "./utils/utils";
 import { user, addProject } from '../fixtures/projects';
 
 // Test for basic project management features (excluding posts/polls)
@@ -8,7 +8,8 @@ describe('add and delete project', () => {
         signIn(user.email, user.password);
     });
 
-    it('user can add a project, switch to it and delete it', () => {
+    // switching is already tested for profile, no need to test again
+    it('user can add a project and delete it', () => {
         cy.contains('Projects').click();
         getByTestId("add-project").click();
 
@@ -29,7 +30,29 @@ describe('add and delete project', () => {
 
         getByTestId('start-linking').click({ force: true });
 
+        cy.contains('Feed').click({ force: true });
+        cy.contains('Projects').click({ force: true });
+
+        getProjectsStore((projects) => {
+            expect(projects.rootIds).to.have.lengthOf.above(0);
+
+            window.Cypress.PROJ_ARG = "delete";
+
+            let idDelete = -1;
+            for (const rootId of projects.rootIds) {
+                if (projects.entities[rootId].username === addProject.username) {
+                    idDelete = rootId;
+                    break;
+                }
+            }
+
+            getByTestId(idDelete).click({ force: true });
+        });
+
         
+
+
+
     });
     
     afterEach(() => signOut());
