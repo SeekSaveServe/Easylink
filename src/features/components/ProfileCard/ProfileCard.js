@@ -184,6 +184,7 @@ function ProfileCard({ info }) {
           alignItems: "center",
           mr: 1,
         }}
+        data-testid="email"
       >
         <Email sx={{ mr: 0.7 }} /> {email}
       </Typography>
@@ -202,6 +203,7 @@ function ProfileCard({ info }) {
           alignItems: "center",
           mr: 0,
         }}
+        data-testid="telegram"
       >
         <Telegram sx={{ mr: 0.5 }} /> {telegram}
       </Typography>
@@ -241,10 +243,11 @@ function ProfileCard({ info }) {
     return formatDistance(new Date(info.created_at), new Date()) + " ago";
   };
 
-  // Button functions// to insert right fields based on sender / receiver
+  const idSuffix = isProject ? String(info.pid) : info.id.replace(" ", "");
 
+  
   return (
-    <Card className={styles.card}>
+    <Card className={styles.card} data-testid={`card-${idSuffix}`}>
       <Box className={styles.card_content}>
         <Stack direction="row" alignContent="center">
           {/* TODO: replace subheader with calc based on created_at  */}
@@ -259,6 +262,7 @@ function ProfileCard({ info }) {
               />
             }
             sx={{ ml: 0 }}
+            data-testid="username"
           />
 
           <StatusTag linkinSlice = {linkinSlice} />
@@ -266,7 +270,7 @@ function ProfileCard({ info }) {
 
         <CardContent sx={{ mt: 0, width: "100%" }}>
           {info.title ? (
-            <Typography variant="h5" sx={{ fontSize: "1.4rem" }} gutterBottom>
+            <Typography variant="h5" sx={{ fontSize: "1.4rem" }} data-testid="title" gutterBottom>
               {" "}
               {info.title}
             </Typography>
@@ -277,13 +281,14 @@ function ProfileCard({ info }) {
             variant="body1"
             color="text.secondary"
             sx={{ fontSize: "1rem", width: "100%" }}
+            data-testid="bio"
           >
             <Bio />
             {interests()} {skills()}{" "}
           </Typography>
 
           {info.user_communities.length > 0 ? (
-            <Typography variant="body1" color="text.secondary" sx={{ mt: 2 }}>
+            <Typography variant="body1" color="text.secondary" sx={{ mt: 2 }} data-testid="communities">
               Communities: {communities()}{" "}
             </Typography>
           ) : (
@@ -302,6 +307,7 @@ function ProfileCard({ info }) {
                 variant="subtitle1"
                 className={styles.tag}
                 sx={{ backgroundColor: "var(--tag-grey)" }}
+                data-testid="type"
               >
                 {isProject ? "Project" : "User"}
               </Typography>

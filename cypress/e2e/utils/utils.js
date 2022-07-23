@@ -48,12 +48,31 @@ export async function fetchProfile(idObj) {
     return data;
 }
 
-export function searchForProfileAndClick(profile) {
+export function searchForProfile(profile) {
     cy.get(`[id=searchBar]`).type(profile.username).type('{enter}');
     getByTestId('loading').should('not.exist');
-    cy.contains(profile.bio);
+    //cy.contains(profile.bio);
+    return getByTestId(`card-${idSuffix(profile)}`);
+}
+
+export function idSuffix(profile) {
+    const isProject = "pid" in profile;
+    return isProject ? String(profile.pid) : profile.id.replace(" ", "");
+}
+
+export function searchForProfileAndClick(profile) {
+    searchForProfile(profile);
 
     const testId = "pid" in profile ? String(profile.pid) : profile.id.replace(" ", "");
     getByTestId(testId).click({ force: true }); // get avatar and click
+}
 
+
+export function checkTag(tagArray) {
+    if (tagArray.length == 0) {
+        cy.contains("Nothing to show");
+        return;
+    }
+
+    tagArray.forEach((tag) => cy.contains(tag));
 }

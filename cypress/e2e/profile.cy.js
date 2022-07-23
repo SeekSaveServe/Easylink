@@ -1,11 +1,8 @@
 // Test the clicked Profile (not ProfileCard) that is accessed by clicking a user's avatar
     // Tests for both own Profile and a foreign Profile
 import { getStore, signIn, getByTestId, signOut, searchForProfileAndClick } from "./utils/utils";
-import { teleVisProfile, emailVisProfile, bothVisProfile, bothNotVisProfile } from "../fixtures/profile";
+import { teleVisProfileProject, emailVisProfileProject, bothVisProfileProject, bothNotVisProfileProject, username, email, password } from "../fixtures/profile";
 
-const email = 'profiletestacct@gmail.com';
-const username="profiletestacct"
-const password = '661266';
 
 // if empty, check that the respective element has "Nothing to show" (after user has loaded)
 function checkTag(tagArray) {
@@ -106,9 +103,7 @@ describe('view profile', () => {
                         
                         // doesn't matter what we switch to
                         getByTestId(projects.rootIds[0]).click({ force: true }).then(() => {
-                            //cy.contains('Selected project');
                             checkOwnProfile(true);
-                            
                         })
 
                         
@@ -123,20 +118,20 @@ describe('view profile', () => {
 
     // ensure signIn email, pass are not one of the profiles being searched and checked for
     context(`another user's profile`, () => {
-        it(`has correct information for a profile with public contact details`, () => {
-            testOtherProfile(bothVisProfile);
+        it(`has correct information for a profile with public contact visibility`, () => {
+            testOtherProfile(bothVisProfileProject);
         });
 
         it(`has correct information for a profile with telegram visibility only`, () => {
-            testOtherProfile(teleVisProfile);
+            testOtherProfile(teleVisProfileProject);
         });
 
         it(`has correct information for a profile with email visibility only`, () => {
-            testOtherProfile(emailVisProfile);
+            testOtherProfile(emailVisProfileProject);
         });
 
         it(`has correct information for a profile with no contact visibility`, () => {
-            testOtherProfile(bothNotVisProfile);
+            testOtherProfile(bothNotVisProfileProject);
         });
     });
     
