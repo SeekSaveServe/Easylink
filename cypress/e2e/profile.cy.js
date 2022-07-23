@@ -114,8 +114,6 @@ describe('view profile', () => {
         });
     });
 
-    
-
     // ensure signIn email, pass are not one of the profiles being searched and checked for
     context(`another user's profile`, () => {
         it(`has correct information for a profile with public contact visibility`, () => {

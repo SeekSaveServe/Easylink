@@ -389,6 +389,7 @@ function AddProject() {
                 sx={{ width: "40%", mt: 1 }}
                 onClick={onClick}
                 loading={loading}
+                data-testid="start-linking"
               >
                 Start Linking!
               </BasicLoadingButton>

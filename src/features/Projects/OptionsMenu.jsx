@@ -8,6 +8,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { replace } from "../user/userSlice";
 import { clearLinks } from "../Links/linksSlice";
 import useAlertDialog from "../../components/AlertDialog/AlertDialog";
+import { getUserProfile } from "../user/userSlice";
 // parentId: the pid of the project this menu is associated with
 // for use specifically in ProjectTree
 function OptionsMenu({ parentId }) {
@@ -21,7 +22,6 @@ function OptionsMenu({ parentId }) {
   const open = Boolean(anchorEl);
 
   const handleClick = (event) => {
-    console.log("FLAG", window.Cypress?.PROJ_ARG)
     if (process.env.NODE_ENV !== 'production' && window.Cypress?.PROJ_ARG) {
       switch(window.Cypress.PROJ_ARG) {
         case "switch":
@@ -65,6 +65,9 @@ function OptionsMenu({ parentId }) {
     if (error) {
       throw error;
     }
+
+    await dispatch(getUserProfile(supabase.auth.user().id));
+    sessionStorage.removeItem("currProject");
 
     window.location.reload()
 

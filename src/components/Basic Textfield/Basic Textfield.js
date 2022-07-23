@@ -16,7 +16,8 @@ function BasicTextfield(props) {
     <TextField 
       variant={props.variant} 
       inputProps={{
-        'data-label': label
+        'data-label': label,
+        'data-testid': label
       }}
       InputProps={icon ? {
        startAdornment: (

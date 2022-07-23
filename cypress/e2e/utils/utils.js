@@ -29,7 +29,7 @@ export function signIn(email, password) {
 }
 
 export function signOut() {
-    getByTestId('sign-out').click();
+    getByTestId('sign-out').click({ force: true });
 }
 
 
@@ -75,4 +75,10 @@ export function checkTag(tagArray) {
     }
 
     tagArray.forEach((tag) => cy.contains(tag));
+}
+
+export function clickDropdownOption(text) {
+    cy.findByRole('option', {
+        name: text
+        }).click();
 }

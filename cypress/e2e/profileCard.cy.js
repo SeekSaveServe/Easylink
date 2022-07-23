@@ -62,37 +62,37 @@ describe('view profile card by searching', () => {
     });
 
     context('for other profile cards of users', () => {
-        it('shows correct info for profile with public contact visibility', () => {
+        it('shows correct info, actions for profile with public contact visibility', () => {
             searchAndTestProfileCard(bothVisProfileUser, false);
         });
 
-        it('shows correct info for profile with telegram visibility only', () => {
+        it('shows correct info, actions for profile with telegram visibility only', () => {
             searchAndTestProfileCard(teleVisProfileUser, false);
         });
 
-        it('shows correct info for profile with email visibility only', () => {
+        it('shows correct info, actions for profile with email visibility only', () => {
             searchAndTestProfileCard(emailVisProfileUser, false);
         }); 
 
-        it('shows correct info for profile with no contact visibility', () => {
+        it('shows correct info, actions for profile with no contact visibility', () => {
             searchAndTestProfileCard(bothNotVisProfileUser, false);
         }); 
     }); 
 
     context('for other profile cards of projects', () => {
-        it('shows correct info for profile with public contact visibility', () => {
+        it('shows correct info, actions for profile with public contact visibility', () => {
             searchAndTestProfileCard(bothVisProfileProject, false);
         });
 
-        it('shows correct info for profile with telegram visibility only', () => {
+        it('shows correct info, actions for profile with telegram visibility only', () => {
             searchAndTestProfileCard(teleVisProfileProject, false);
         });
 
-        it('shows correct info for profile with email visibility only', () => {
+        it('shows correct info, actions for profile with email visibility only', () => {
             searchAndTestProfileCard(emailVisProfileProject, false);
         }); 
 
-        it('shows correct info for profile with no contact visibility', () => {
+        it('shows correct info, actions for profile with no contact visibility', () => {
             searchAndTestProfileCard(bothNotVisProfileProject, false);
         }); 
     }); 

@@ -89,6 +89,7 @@ function ProjectTree() {
             startIcon={<AddCircleOutlined/>} 
             size="normal"
             onClick={() => navigate("/addproject") }
+            data-testid="add-project"
             >Add root project</Button>
           { display() }
         </Paper>
