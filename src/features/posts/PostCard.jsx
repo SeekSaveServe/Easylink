@@ -99,7 +99,7 @@ function PostCard({ sx, data, ...rest }) {
         }
 
         const show = window.Cypress && process.env.NODE_ENV !== 'production';
-        if (true) {
+        if (show) {
             return <Button id="delete-post" onClick={deletePost}>Delete</Button>
         } else {
             return <></>;
