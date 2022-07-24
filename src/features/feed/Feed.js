@@ -29,7 +29,7 @@ function Feed() {
   useEffect(() => {
     // dispatch(getUniqueTags());
     dispatch(getFollowed(idObj));
-  }, [])
+  }, [user])
   
   const userProfile = useSelector((state) => state.user);
   // to trigger recommendationlist to refresh
