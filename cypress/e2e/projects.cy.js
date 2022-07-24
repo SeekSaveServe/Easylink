@@ -3,11 +3,11 @@ import { user, addProject, addSubProject } from '../fixtures/projects';
 
 // assumes we are on add project form already
 function addGivenProject(addProject) {
-    getByTestId('Username').type(addProject.username);
-    getByTestId('Title').type(addProject.title);
-    getByTestId('Bio').type(addProject.bio);
-    cy.get(`input[data-testid^=Telegram]`).type(addProject.telegram);
-    cy.get(`input[data-testid^=Email]`).type(addProject.email);
+    getByTestId('Username').type(addProject.username, { force: true });
+    getByTestId('Title').type(addProject.title, { force: true });
+    getByTestId('Bio').type(addProject.bio, { force: true });
+    cy.get(`input[data-testid^=Telegram]`).type(addProject.telegram, { force: true });
+    cy.get(`input[data-testid^=Email]`).type(addProject.email, { force: true });
 
     cy.get('[id^=skills]').click({ force: true });
     addProject.user_skills.forEach(skill => clickDropdownOption(skill));
@@ -46,7 +46,7 @@ describe('add and delete project', () => {
         signIn(user.email, user.password);
     });
 
-    context('with valid inputs', () => {
+    context.only('with valid inputs', () => {
         // switching is already tested for profile, no need to test again
         it('user can add a project and delete it', () => {
             cy.contains('Projects').click();
@@ -107,7 +107,7 @@ describe('add and delete project', () => {
     });
 
     // no username, end date < start date
-    context.only('with invalid inputs', () => {
+    context('with invalid inputs', () => {
         it('shows error when no username', () => {
             cy.contains('Projects').click();
             getByTestId("add-project").click();
@@ -115,18 +115,24 @@ describe('add and delete project', () => {
             alertContains("Please enter a username");
         });
 
-        it.only('shows error when end date before start date', () => {
+        it('shows error when end date before start date', () => {
             cy.contains('Projects').click();
             getByTestId("add-project").click();
+
+            getByTestId('Username').type('random');
 
             cy.findByRole('textbox', {
                 name: /start date/i
             }).type('25/07/2022');
 
-            //getByTestId('start-linking').click({ force: true });
+            cy.findByRole('textbox', {
+                name: /end date/i
+            }).type('23/07/2022');
+
+            getByTestId('start-linking').click({ force: true });
 
             
-            //alertContains("Please enter a username");
+            alertContains("End date should be same as or after start date");
         });
     });
     
