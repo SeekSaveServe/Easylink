@@ -1,4 +1,4 @@
-import { afterProjectsLoad, clickDropdownOption, getByTestId, getProjectsStore, projectsStore, signIn, signOut } from "./utils/utils";
+import { afterProjectsLoad, alertContains, clickDropdownOption, getByTestId, getProjectsStore, projectsStore, signIn, signOut } from "./utils/utils";
 import { user, addProject, addSubProject } from '../fixtures/projects';
 
 // assumes we are on add project form already
@@ -106,8 +106,28 @@ describe('add and delete project', () => {
         });  
     });
 
+    // no username, end date < start date
     context.only('with invalid inputs', () => {
+        it('shows error when no username', () => {
+            cy.contains('Projects').click();
+            getByTestId("add-project").click();
+            getByTestId('start-linking').click({ force: true });
+            alertContains("Please enter a username");
+        });
 
+        it.only('shows error when end date before start date', () => {
+            cy.contains('Projects').click();
+            getByTestId("add-project").click();
+
+            cy.findByRole('textbox', {
+                name: /start date/i
+            }).type('25/07/2022');
+
+            //getByTestId('start-linking').click({ force: true });
+
+            
+            //alertContains("Please enter a username");
+        });
     });
     
     

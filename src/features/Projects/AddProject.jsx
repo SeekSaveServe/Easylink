@@ -99,9 +99,9 @@ function AddProject() {
 
     if (username.trim() == "") {
       errorMsg = "Please enter a username";
-    } else if (!startDate && endDate) {
-      errorMsg = "Please enter a start date";
-    } else if (endDate && endDate - startDate < 0) {
+    } 
+    
+    else if (endDate && endDate - startDate < 0) {
       errorMsg = "End date should be same as or after start date";
     }
 
@@ -267,23 +267,27 @@ function AddProject() {
               <Stack direction="row" spacing={3} sx={{ mt: 1 }}>
                 <DatePicker
                   label="Start date"
+                  inputFormat="dd/MM/yyyy"
                   value={startDate}
                   onChange={(newValue) => {
+                    console.log(newValue);
                     setStartDate(newValue);
                   }}
                   renderInput={(params) => (
-                    <TextField {...params} size="small" />
+                    <TextField {...params} size="small" data-testid="start-date"/>
                   )}
+                  data-testid="start-date"
                 />
 
                 <DatePicker
                   label="End date"
+                  inputFormat="dd/MM/yyyy"
                   value={endDate}
                   onChange={(newValue) => {
                     setEndDate(newValue);
                   }}
                   renderInput={(params) => (
-                    <TextField {...params} size="small" />
+                    <TextField {...params} size="small"  data-testid="end-date"/>
                   )}
                 />
               </Stack>
