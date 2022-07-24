@@ -109,10 +109,15 @@ function RecommendationsList() {
 
   }
 
+  const resultsIndicator = () => {
+    if (loading) return "Loading...";
+    return `${recommendations.length} Search Results`;
+  }
+
   return (
     <Box className={scroll.scroll_parent}>
       <Typography variant="h6" color="292929">
-        {recommendations.length} Search Results
+        { resultsIndicator() }
       </Typography>
 
       <Box className={scroll.scroll_child}>
