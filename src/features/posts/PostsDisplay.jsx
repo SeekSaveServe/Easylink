@@ -2,7 +2,7 @@
 import Scrollable from "../../components/Scrollable"
 import { CircularProgress } from "@mui/material";
 import { Typography } from "@mui/material";
-import PostCard from "../Projects/PostCard";
+import PostCard from "./PostCard";
 
 // Posts: an array of { ...post, pid, username, avatar_url } - pid,username, avatar from the project that made the post
 const filterMap = {

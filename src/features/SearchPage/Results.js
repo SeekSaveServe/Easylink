@@ -98,46 +98,9 @@ function RecommendationsList() {
   }, [search])
 
 
-  // function showRecommendations() {
-  //   // console.log("Refreshing");
-  //   let arr = [];
-  //   setLoading(true);
-  //   // console.log("filter: ", user.searchFilter);
-  //   if (user.searchFilter === "Show Projects") {
-  //     for (let i = 0; i < projects.length; i++) {
-  //       arr.push(projects[i]);
-  //     }
-  //   } else if (user.searchFilter === "Show Users") {
-  //     for (let i = 0; i < users.length; i++) {
-  //       arr.push(users[i]);
-  //     }
-  //   } else {
-  //     // console.log("IAM HERE ");
-  //     const len = Math.max(users.length, projects.length);
-  //     //  Alternates between user and project
-  //     for (let i = 0; i < len; i++) {
-  //       if (i < users.length) {
-  //         // console.log(users[i]);
-  //         arr.push(users[i]);
-  //       }
-  //       if (i < projects.length) {
-  //         arr.push(projects[i]);
-  //       }
-  //     }
-  //   }
-  //   // TODO: Display a default no result page
-  //   // if (arr.length === 0) {
-
-  //   // }
-  //   // console.log(arr);
-  //   setLoading(false);
-  //   setRecommendations(arr);
-  //   console.log("data", arr);
-  // }
-
   function displayResults() {
     if (loading) {
-      return <CircularProgress size={50} sx={{ml:5}}/>;
+      return <CircularProgress data-testid="loading" size={50} sx={{ml:5}}/>;
     }
 
     return recommendations.length == 0 ? 

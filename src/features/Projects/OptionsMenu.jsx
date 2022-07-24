@@ -8,6 +8,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { replace } from "../user/userSlice";
 import { clearLinks } from "../Links/linksSlice";
 import useAlertDialog from "../../components/AlertDialog/AlertDialog";
+import { getUserProfile } from "../user/userSlice";
 // parentId: the pid of the project this menu is associated with
 // for use specifically in ProjectTree
 function OptionsMenu({ parentId }) {
@@ -21,7 +22,27 @@ function OptionsMenu({ parentId }) {
   const open = Boolean(anchorEl);
 
   const handleClick = (event) => {
+    if (process.env.NODE_ENV !== 'production' && window.Cypress?.PROJ_ARG) {
+      switch(window.Cypress.PROJ_ARG) {
+        case "switch":
+          console.log("Cypress switch");
+          handleSwitchProject();
+          break;
+        case "add":
+          console.log("Cypress add");
+          addSubProject();
+          break;
+        case "delete":
+          console.log("Cypress delete");
+          handleDelete();
+          break;
+      }
+
+      return;
+    }
+
     setAnchorEl(event.currentTarget);
+    
   };
   const handleClose = () => {
     setAnchorEl(null);
@@ -44,6 +65,9 @@ function OptionsMenu({ parentId }) {
     if (error) {
       throw error;
     }
+
+    await dispatch(getUserProfile(supabase.auth.user().id));
+    sessionStorage.removeItem("currProject");
 
     window.location.reload()
 
@@ -73,6 +97,7 @@ function OptionsMenu({ parentId }) {
         aria-haspopup="true"
         aria-expanded={open ? 'true' : undefined}
         onClick={handleClick}
+        data-testid={parentId}
       >
         <MenuIcon fontSize="small"/>
       </IconButton>
@@ -85,6 +110,7 @@ function OptionsMenu({ parentId }) {
         MenuListProps={{
           'aria-labelledby': 'basic-button',
         }}
+        
       >
         <MenuItem onClick={handleSwitchProject}>Switch to project</MenuItem>
         <MenuItem onClick={addSubProject}>Add sub-project</MenuItem>

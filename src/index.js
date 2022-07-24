@@ -143,6 +143,9 @@ root.render(
   </React.StrictMode>
 );
 
+if (window.Cypress && process.env.NODE_ENV !== 'production') {
+  window.store = store;
+} 
 // ReactDOM.render(<App />, document.getElementById("root"));
 // If you want to start measuring performance in your app, pass a function
 // to log results (for example: reportWebVitals(console.log))

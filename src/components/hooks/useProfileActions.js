@@ -300,6 +300,7 @@ function useProfileActions(info, setLoading) {
                 }
                 title={showDelete ? "Cancel request" : "Not for me"}
                 onClick={rejectLink}
+                data-testid="notforme"
             />
         }
        />;

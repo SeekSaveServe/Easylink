@@ -1,5 +1,5 @@
 import { Button, Container, Paper, Typography } from "@mui/material";
-import PostCard from "./PostCard";
+import PostCard from "../posts/PostCard";
 import Scrollable from "../../components/Scrollable";
 import { Center, CircularProgress } from "@chakra-ui/react";
 import { AddCircleOutlined } from "@mui/icons-material";
@@ -83,7 +83,7 @@ function Posts() {
             const dataWithProject = data.map((post, idx) => {
                 post = {
                     ...post,
-                    projects: { pid, username: project.username, avatar_url: project.avatar_url }
+                    projects: project
                 }
                 return post;
             });
@@ -110,6 +110,7 @@ function Posts() {
                 startIcon={<AddCircleOutlined/>} 
                 size="normal"
                 sx={{textTransform: "none"}}
+                data-testid="add-announcement"
                 > Add announcement</Button>
             </Link>
         </Center>

@@ -15,8 +15,8 @@ import { selectLinkById } from "../Links/linksSlice";
 
 // everything until before tabs
 export default function Upperhalf({ user, isPublic }) {
-  const title = user.username;
-  const subtitle = user.title;
+  const username = user.username;
+  const title = user.title;
   const isProject = "pid" in user;
   const [loading, setLoading] = useState(false);
 
@@ -51,7 +51,7 @@ export default function Upperhalf({ user, isPublic }) {
     return (
       <Center style={{marginBottom:1}}>
         <Stack>
-          <Stack direction="row" spacing={1}>
+          <Stack direction="row" spacing={1} data-testid={header.toLowerCase()}>
           <Typography variant="subtitle1">{header}</Typography>
             {tagFn()}
           </Stack>
@@ -67,12 +67,12 @@ export default function Upperhalf({ user, isPublic }) {
           <Center>
             <Stack spacing={0.5}>
                 <Center><DisplayAvatar src={user?.avatar_url} sx={{ height: 70, width: 70, mt:-1}}/></Center>
-                <Typography variant="h5" component="div" sx={{textAlign: "center"}}>
-                    {title}
+                <Typography variant="h5" component="div" sx={{textAlign: "center"}} data-testid="username">
+                    {username}
                 </Typography>
 
-                <Typography variant="subtitle1" component="div" sx={{textAlign:"center"}}>
-                    {subtitle}
+                <Typography variant="subtitle1" component="div" sx={{textAlign:"center"}} data-testid="title">
+                    {title}
                 </Typography>
             </Stack>
           </Center>
@@ -82,7 +82,7 @@ export default function Upperhalf({ user, isPublic }) {
           { tagDisplay(isProject ? "Related interests:" : "Interests:", interests) }
           <Center>
             <Typography variant="subtitle1">
-              Communities: <Typography component="span" color="gray">{user.user_communities.length == 0 ? <DefaultMsg/> : 
+              Communities: <Typography component="span" color="gray" data-testid="communities">{user.user_communities.length == 0 ? <DefaultMsg/> : 
                 user.user_communities.join(', ')}</Typography>
             </Typography> 
           </Center>

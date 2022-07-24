@@ -16,6 +16,7 @@ const followerAdapter = createEntityAdapter({
 })
 
 // get user / project objects corresponding to followers
+// for use in profile tabs (followers)
 export const getFollowersForProject = async(selectId) => {
     // invalid selectId: null or undefined
     if (selectId == null) {

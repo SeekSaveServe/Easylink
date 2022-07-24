@@ -67,11 +67,11 @@ function ProjectTree() {
     function display() {
       switch (projects.loading) {
         case 'pending':
-          return <div><CircularProgress size={40} sx={{m:3}}/></div>;
+          return <div><CircularProgress size={40} sx={{m:3}} data-testid="loading"/></div>;
         case 'error':
           return <Typography color="error.main">Error</Typography>
         default:
-          return projects.ids.length == 0 ? <Typography color="gray" variant="subtitle1" sx={{ml:2, mt:1}}> No projects </Typography> : (
+          return projects.ids.length == 0 ? <Typography color="gray" variant="subtitle1" sx={{ml:2, mt:1}} data-testid="no-projects"> No projects </Typography> : (
             <TreeView defaultCollapseIcon={<ArrowCircleDownOutlined size="large"/>} defaultExpandIcon={<ArrowCircleRightOutlined size="large"/>}>
               { returnTree({ idMapping: projects.entities, rootIds: projects.rootIds }) }
             </TreeView>
@@ -82,13 +82,14 @@ function ProjectTree() {
     
 
     return (
-        <Paper elevation={3} className={styles.paper}>
+        <Paper elevation={3} className={styles.paper} data-testid="projects-display">
            <Button 
             variant="outlined" 
             sx={{textTransform: 'none', width: '20%', pl:1, ml:1}} 
             startIcon={<AddCircleOutlined/>} 
             size="normal"
             onClick={() => navigate("/addproject") }
+            data-testid="add-project"
             >Add root project</Button>
           { display() }
         </Paper>

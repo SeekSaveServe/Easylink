@@ -26,15 +26,22 @@ export const projReq = `
   `;
 
 // to request posts with relevant project info
+// export const postsReqWithProject = `
+// *,
+// projects!posts_pid_fkey (
+//     pid,
+//     username,
+//     avatar_url
+// )
+// `
+
+
 export const postsReqWithProject = `
 *,
 projects!posts_pid_fkey (
-    pid,
-    username,
-    avatar_url
+    ${projReq}
 )
 `
-
 export const isUser = (datum) => "id" in datum;
 export const matchObj = (datum) => isUser(datum) ?  { uid: datum.id } : { pid: datum.pid };
 

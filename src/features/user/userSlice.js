@@ -3,6 +3,7 @@ import { supabase } from '../../supabaseClient';
 import { userReq } from '../../components/constants/requestStrings';
 import { formatProfile, formatProfileDatum } from '../../components/constants/formatProfileDatum';
 import updateHelper from '../../components/constants/updateHelper';
+import { Loading } from '../../components/constants/loading';
 
 export const signOutFunction = dispatch => async () => {
     sessionStorage.removeItem("currProject");
@@ -68,6 +69,7 @@ export const userSlice = createSlice({
         // any keys in user not in object are deleted
         replace: (state, action) => {
             updateHelper(action.payload, state);
+            state.loading = Loading.FULFILLED;
         },
 
         clearUser: (state, _) => {
