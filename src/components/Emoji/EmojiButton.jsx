@@ -146,7 +146,7 @@ export default function EmojiButton({ postId, label, symbol, disabled, name, sta
     }
 
     return (
-        <Box className={styles.box} onClick={click}>
+        <Box className={styles.box} onClick={click} data-testid={name}>
             <span
             className={selected ? styles.selected : styles.emoji}
             role="img"

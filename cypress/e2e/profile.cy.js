@@ -1,6 +1,6 @@
 // Test the clicked Profile (not ProfileCard) that is accessed by clicking a user's avatar
     // Tests for both own Profile and a foreign Profile
-import { getStore, signIn, getByTestId, signOut, searchForProfileAndClick } from "./utils/utils";
+import { getStore, signIn, getByTestId, signOut, searchForProfileAndClick, switchToFirstProject } from "./utils/utils";
 import { teleVisProfileProject, emailVisProfileProject, bothVisProfileProject, bothNotVisProfileProject, username, email, password } from "../fixtures/profile";
 
 
@@ -87,30 +87,7 @@ describe('view profile', () => {
 
         // assume there is at least one project to switch to
         it(`has all of a project's information after switching`, () => {
-            cy.contains('Projects').click();// may break if something else in the DOM has Projects before load but unlikely
-
-            // once loading indicator is gone do the tests
-            getByTestId('loading').should('not.exist')
-                .then(() => {
-                    getStore(cy).then((store) => {
-                        const projects = store.projects;
-                        cy.log(projects);
-
-                        // test fails if 0 projects
-                        expect(projects.rootIds).to.have.lengthOf.above(0);
-
-                        window.Cypress.PROJ_ARG = "switch";
-                        
-                        // doesn't matter what we switch to
-                        getByTestId(projects.rootIds[0]).click({ force: true }).then(() => {
-                            checkOwnProfile(true);
-                        })
-
-                        
-
-                    });
-                });
-
+            switchToFirstProject(() => checkOwnProfile(true));
         });
     });
 

@@ -110,6 +110,7 @@ function Posts() {
                 startIcon={<AddCircleOutlined/>} 
                 size="normal"
                 sx={{textTransform: "none"}}
+                data-testid="add-announcement"
                 > Add announcement</Button>
             </Link>
         </Center>

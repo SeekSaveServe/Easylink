@@ -61,6 +61,7 @@ function PollRadio({ submitted, optionDatum, idx }) {
     // projects : contains data for project that made the post/poll
     // post : structure follows DB schema
 function PostCard({ sx, data, ...rest }) {  
+    console.log(data);
     const idObj = useIdObject();
 
     // if data has the projects field (due to join in feed) use that instead
@@ -89,6 +90,21 @@ function PostCard({ sx, data, ...rest }) {
     const [reaction2, setReaction2] = useState(false);
     const [reaction3, setReaction3] = useState(false);
 
+    // delete button for testing, not specified in features yet
+    function DeleteButton() {
+        async function deletePost() {
+            await supabase.from('posts')
+                .delete()
+                .match({ s_n: data.s_n });
+        }
+
+        const show = window.Cypress && process.env.NODE_ENV !== 'production';
+        if (true) {
+            return <Button id="delete-post" onClick={deletePost}>Delete</Button>
+        } else {
+            return <></>;
+        }
+    }
 
     async function getPollOptions() {
         if (!isPoll) return;
@@ -198,14 +214,14 @@ function PostCard({ sx, data, ...rest }) {
     }
 
     return (
-        <Card {...rest} sx={{width:"100%", ...sx}}>
+        <Card {...rest} sx={{width:"100%", ...sx}} data-testid={data.body.replace(" ", "")}>
             <CardHeader avatar={<LinkableAvatar src={avatarUrl}/>} title={title} subheader={<p style={{margin:0}}>{dateString}</p>}>
             </CardHeader>
 
             {/* <LoadingButton onClick={rpcTest}>rpc</LoadingButton> */}
 
-            <CardContent sx={{paddingTop:0, paddingBottom:0}}>
-                <Tag color="var(--tag-grey)" variant="body2" sx={{marginBottom:3}}>{isPoll ? "Poll" : "Post"}</Tag>
+            <CardContent sx={{paddingTop:0, paddingBottom:0}} data-testid="post-body">
+                <Tag color="var(--tag-grey)" variant="body2" sx={{marginBottom:3}} data-testid="post-type">{isPoll ? "Poll" : "Post"}</Tag>
                 <Typography variant="body1">{body}</Typography>
 
                 {isPoll ?
@@ -229,6 +245,9 @@ function PostCard({ sx, data, ...rest }) {
                 : disabled ? <></> : <LoadingButton loading={submitLoading} variant="outlined" sx={{ ml:1,mb:1}} onClick={handleSubmit}>{submitted ? "Unsubmit" : "Submit"}</LoadingButton> 
                 }
             </CardActions>
+
+            { DeleteButton() }
+            
         </Card>
     )
 

@@ -107,3 +107,26 @@ export function afterProjectsLoad(callback) {
         callback();
     });
 }
+
+export function switchToFirstProject(callback) {
+    cy.contains('Projects').click();// may break if something else in the DOM has Projects before load but unlikely
+
+            // once loading indicator is gone do the tests
+    getByTestId('loading').should('not.exist')
+        .then(() => {
+            getStore(cy).then((store) => {
+                const projects = store.projects;
+                cy.log(projects);
+
+                // test fails if 0 projects
+                expect(projects.rootIds).to.have.lengthOf.above(0);
+
+                window.Cypress.PROJ_ARG = "switch";
+                
+                // doesn't matter what we switch to
+                getByTestId(projects.rootIds[0]).click({ force: true }).then(() => {
+                    callback();
+                })
+            });
+        });
+}
