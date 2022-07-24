@@ -88,7 +88,7 @@ export function clickDropdownOption(text) {
 export function getProjectsStore(callback) {
     cy.contains('Feed').click({ force: true });
     cy.contains('Projects').click({ force: true });
-    
+
     cy.url().should('include', '/projects');
     getByTestId('loading').should('not.exist')
     .then(() => {
@@ -99,5 +99,11 @@ export function getProjectsStore(callback) {
             callback(projects);
 
         });
+    });
+}
+
+export function afterProjectsLoad(callback) {
+    getByTestId('loading').should('not.exist').then(() => {
+        callback();
     });
 }

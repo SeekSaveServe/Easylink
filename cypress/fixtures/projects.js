@@ -36,3 +36,16 @@ export const addProject = {
     user_interests: ["Sports"],
     user_communities: ["USP"],
 }
+
+export const addSubProject = {
+    username: "Test add sub project",
+    title: "Test sub project title",
+    bio: "Test sub project bio",
+    telegram: "subtest",
+    email: "subtest@gmail.com",
+    start_date: "18/07/2022",
+    end_date: "25/07/2022",
+    user_skills: ["Writing"],
+    user_interests: ["Service"],
+    user_communities: ["GUI"],
+}

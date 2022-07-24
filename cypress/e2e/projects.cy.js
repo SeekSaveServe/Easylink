@@ -1,5 +1,43 @@
-import { clickDropdownOption, getByTestId, getProjectsStore, projectsStore, signIn, signOut } from "./utils/utils";
-import { user, addProject } from '../fixtures/projects';
+import { afterProjectsLoad, clickDropdownOption, getByTestId, getProjectsStore, projectsStore, signIn, signOut } from "./utils/utils";
+import { user, addProject, addSubProject } from '../fixtures/projects';
+
+// assumes we are on add project form already
+function addGivenProject(addProject) {
+    getByTestId('Username').type(addProject.username);
+    getByTestId('Title').type(addProject.title);
+    getByTestId('Bio').type(addProject.bio);
+    cy.get(`input[data-testid^=Telegram]`).type(addProject.telegram);
+    cy.get(`input[data-testid^=Email]`).type(addProject.email);
+
+    cy.get('[id^=skills]').click({ force: true });
+    addProject.user_skills.forEach(skill => clickDropdownOption(skill));
+
+    cy.get('[id^=interests]').click({ force: true });
+    addProject.user_interests.forEach(interest => clickDropdownOption(interest));
+
+    cy.get('[id^=communities]').click({ force: true });
+    addProject.user_communities.forEach(comm => clickDropdownOption(comm));
+
+    getByTestId('start-linking').click({ force: true });
+
+    cy.contains('Feed').click({ force: true });
+    cy.contains('Projects').click({ force: true });
+}
+
+function getIdOfAddedProject(addedProject, callback) {
+
+    getProjectsStore((projects) => {
+        let idDelete = -1;
+        for (const projectId of Object.keys(projects.entities)) {
+            if (projects.entities[projectId].username === addProject.username) {
+                idDelete = projectId;
+                break;
+            }
+        }
+
+        callback(idDelete);
+    })
+}
 
 // Test for basic project management features (excluding posts/polls)
 describe('add and delete project', () => {
@@ -8,52 +46,70 @@ describe('add and delete project', () => {
         signIn(user.email, user.password);
     });
 
-    // switching is already tested for profile, no need to test again
-    it('user can add a project and delete it', () => {
-        cy.contains('Projects').click();
-        getByTestId("add-project").click();
+    context('with valid inputs', () => {
+        // switching is already tested for profile, no need to test again
+        it('user can add a project and delete it', () => {
+            cy.contains('Projects').click();
+            getByTestId("add-project").click();
 
-        getByTestId('Username').type(addProject.username);
-        getByTestId('Title').type(addProject.title);
-        getByTestId('Bio').type(addProject.bio);
-        cy.get(`input[data-testid^=Telegram]`).type(addProject.telegram);
-        cy.get(`input[data-testid^=Email]`).type(addProject.email);
+            addGivenProject(addProject);
 
-        cy.get('[id^=skills]').click({ force: true });
-        addProject.user_skills.forEach(skill => clickDropdownOption(skill));
+            getProjectsStore((projects) => {
+                expect(projects.rootIds).to.have.lengthOf.above(0);
 
-        cy.get('[id^=interests]').click({ force: true });
-        addProject.user_interests.forEach(interest => clickDropdownOption(interest));
+                window.Cypress.PROJ_ARG = "delete";
 
-        cy.get('[id^=communities]').click({ force: true });
-        addProject.user_communities.forEach(comm => clickDropdownOption(comm));
-
-        getByTestId('start-linking').click({ force: true });
-
-        cy.contains('Feed').click({ force: true });
-        cy.contains('Projects').click({ force: true });
-
-        getProjectsStore((projects) => {
-            expect(projects.rootIds).to.have.lengthOf.above(0);
-
-            window.Cypress.PROJ_ARG = "delete";
-
-            let idDelete = -1;
-            for (const rootId of projects.rootIds) {
-                if (projects.entities[rootId].username === addProject.username) {
-                    idDelete = rootId;
-                    break;
+                let idDelete = -1;
+                console.log(Object.keys(projects.entities));
+                for (const projectId of Object.keys(projects.entities)) {
+                    if (projects.entities[projectId].username === addProject.username) {
+                        idDelete = projectId;
+                        break;
+                    }
                 }
-            }
 
-            getByTestId(idDelete).click({ force: true });
+                getByTestId(idDelete).click({ force: true });
+                getByTestId('no-projects');
+            });
         });
 
-        
+        it('user can add a project with subproject, and deleting the root project deletes both', () => {
+            // Add root project
+            cy.contains('Projects').click();
+            getByTestId("add-project").click();
 
+            addGivenProject(addProject);
 
+            // Add sub project
+            afterProjectsLoad(() => {
+                window.Cypress.PROJ_ARG = "add";
+                getIdOfAddedProject(addProject, (addedId) => {
+                    getByTestId(addedId).click({ force: true });
+                    addGivenProject(addSubProject);
+                });
+            });
+
+            // sub project exists
+            getIdOfAddedProject(addSubProject, (addedId) => {
+                console.log("Sub proj exist");
+                expect(addedId).to.not.equal(-1);
+            })
+
+            // delete root project
+            getIdOfAddedProject(addProject, (addedId) => {
+                window.Cypress.PROJ_ARG = "delete";
+                getByTestId(addedId).click({ force: true })
+            })
+
+            getByTestId('no-projects');
+            
+        });  
+    });
+
+    context.only('with invalid inputs', () => {
 
     });
+    
     
     afterEach(() => signOut());
 });
