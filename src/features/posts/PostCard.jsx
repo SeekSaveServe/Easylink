@@ -61,7 +61,6 @@ function PollRadio({ submitted, optionDatum, idx }) {
     // projects : contains data for project that made the post/poll
     // post : structure follows DB schema
 function PostCard({ sx, data, ...rest }) {  
-    console.log(data);
     const idObj = useIdObject();
 
     // if data has the projects field (due to join in feed) use that instead
@@ -215,7 +214,7 @@ function PostCard({ sx, data, ...rest }) {
 
     return (
         <Card {...rest} sx={{width:"100%", ...sx}} data-testid={data.body.replace(" ", "")}>
-            <CardHeader avatar={<LinkableAvatar src={avatarUrl}/>} title={title} subheader={<p style={{margin:0}}>{dateString}</p>}>
+            <CardHeader avatar={<LinkableAvatar src={avatarUrl} info={data.projects}/>} title={title} subheader={<p style={{margin:0}}>{dateString}</p>}>
             </CardHeader>
 
             {/* <LoadingButton onClick={rpcTest}>rpc</LoadingButton> */}

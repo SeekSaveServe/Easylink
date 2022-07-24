@@ -48,6 +48,11 @@ export async function fetchProfile(idObj) {
     return data;
 }
 
+// get profile card on page
+export function getProfileCard(profile) {
+    return getByTestId(`card-${idSuffix(profile)}`);
+}
+
 export function searchForProfile(profile) {
     cy.get(`[id=searchBar]`).type(profile.username).type('{enter}');
     getByTestId('loading').should('not.exist');

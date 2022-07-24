@@ -83,7 +83,7 @@ function Posts() {
             const dataWithProject = data.map((post, idx) => {
                 post = {
                     ...post,
-                    projects: { pid, username: project.username, avatar_url: project.avatar_url }
+                    projects: project
                 }
                 return post;
             });
