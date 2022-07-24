@@ -1,6 +1,7 @@
 // Test that account creation works as expected
-import { getStore } from "./utils/utils";
+import { getStore, signIn } from "./utils/utils";
 import { alertContains } from "./utils/utils";
+import { getByTestId } from "./utils/utils";
 
 const result = {
     "user": {
@@ -119,7 +120,7 @@ function typeConfirmPassword(confirm) {
 describe('create an account', () => {
     context('with valid inputs', () => {
         // if I click start linking I need to delete the user after every test, instead check redux store has correct info
-        it('user can create an account with valid inputs', () => {
+        it(`user can create an account with valid inputs, delete the account, and can't login again after deletion`, () => {
             cy.visit('/');
             cy.findByRole('button', {
                 name: /sign up/i
@@ -193,6 +194,31 @@ describe('create an account', () => {
                 getStore(cy)
                     .then(store => { console.log(store.user); return store.user; })
                     .should('deep.equal', user);
+
+                
+                
+
+                cy.findByRole('heading', {
+                    name: /start linking!/i
+                  }).click({ force: true })
+                
+                cy.findByRole('banner').within(() => {
+                    getByTestId("PersonIcon").click({ force: true });
+                });
+
+                cy.get('[id="settings-button"]').click({ force: true })
+
+                cy.findByRole('button', {
+                    name: /delete user/i
+                }).click({ force: true });
+
+
+                cy.contains("Sign in").then(() => {
+                    // can't login after delete
+                    signIn(user.email, user.password);
+                    alertContains("Invalid login");
+                })
+                
         });
     });
 

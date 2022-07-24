@@ -59,18 +59,31 @@ describe('action buttons', () => {
     context('on project profile cards', () => {
         it('when link is pressed, status on profile card changes, link is hidden, and user can cancel request', () => {
             searchForProfile(bothVisProfileProject).within(() => {
-                getByTestId(ADD_LINK).click({ force: true })
+                getByTestId(ADD_LINK).click({ force: true }).then(() => {
+                    // cy.contains(OUTGOING);
+                    // getByTestId(ADD_LINK).should('not.exist');
+                    // getByTestId(CANCEL_REQUEST).click({ force: true });
+                    // getByTestId(ADD_LINK).should('exist');
+                })
             });
-    
-            // // only one profile on the page (searching by username, username is unique)
+
             cy.contains(OUTGOING);
             getByTestId(ADD_LINK).should('not.exist');
+
+            getByTestId(CANCEL_REQUEST).click({ force: true }).then(() => {
+                getByTestId(ADD_LINK).should('exist');
+            })
+            
+    
+            // // only one profile on the page (searching by username, username is unique)
+            // cy.contains(OUTGOING);
+            // getByTestId(ADD_LINK).should('not.exist');
     
             // // reset to neutral state 
-            getByTestId(CANCEL_REQUEST).click({ force: true });
+            // getByTestId(CANCEL_REQUEST).click({ force: true });
     
             // // after cancel, link comes back (return to neutral state)
-            getByTestId(ADD_LINK).should('exist');
+            // getByTestId(ADD_LINK).should('exist');
     
         });
 

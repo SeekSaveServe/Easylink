@@ -46,7 +46,7 @@ describe('add and delete project', () => {
         signIn(user.email, user.password);
     });
 
-    context.only('with valid inputs', () => {
+    context('with valid inputs', () => {
         // switching is already tested for profile, no need to test again
         it('user can add a project and delete it', () => {
             cy.contains('Projects').click();

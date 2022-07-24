@@ -22,6 +22,15 @@ export default function SettingsForm({ user, avatarUrl }) {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { openDialog, AlertDialog } = useAlertDialog();
+
+  const deleteUserClick = () => {
+    if (window.Cypress && process.env.NODE_ENV !== 'production') {
+      handleDelete();
+    } else {
+      openDialog();
+    }
+  }
+
   const signOut = signOutFunction(dispatch);
 
   useEffect(() => {
@@ -211,7 +220,7 @@ export default function SettingsForm({ user, avatarUrl }) {
             agreeAction={handleDelete}
             />
 
-          <BasicButton bg="red" sx={{mt:8}} onClick={openDialog}>
+          <BasicButton bg="red" sx={{mt:8}} onClick={deleteUserClick}>
             Delete User
           </BasicButton> 
           </> 

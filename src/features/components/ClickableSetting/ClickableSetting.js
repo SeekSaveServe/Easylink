@@ -8,6 +8,6 @@ export default function ClickableSetting(props) {
     navigate("/Settings", { replace: true });
   };
 
-  return <TooltipIconButton title="Settings" icon={<Settings sx={{ fontSize:35}}/>} onClick={onClick}/>
+  return <TooltipIconButton id="settings-button" title="Settings" icon={<Settings sx={{ fontSize:35}}/>} onClick={onClick}/>
   // return <Settings {...props} onClick={onClick} />;
 }
