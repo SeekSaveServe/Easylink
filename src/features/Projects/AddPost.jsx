@@ -115,7 +115,7 @@ function AddPost() {
             navigate("/projects", { state: {isProject: true} });
         }
         
-        showAlert("Added post!", "success");
+        showAlert(`Added ${isPost ? "post" : "poll"}!`, "success");
     }
 
     return (
