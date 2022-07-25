@@ -2,7 +2,17 @@
  // for user_skills, ints, comm
 
 // in case the array is already correctly formatted (d will be string) don't change
-export const mapName = arr => arr.map(d => typeof d === 'object' ? d.name : d);
+// export const mapName = arr => arr.map(d => typeof d === 'object' ? d.name : d);
+
+// to fix bug when supabase returns duplicate entries for tags
+export const mapName = arr => { 
+    let set = new Set();
+    arr
+    .map(d => typeof d === 'object' ? d.name : d)
+    .forEach(x => set.add(x));
+
+    return Array.from(set).sort();
+}
 
 export const isJoin = (user) => typeof(user.user_skills) == 'object'&& user.user_skills != null;
 
