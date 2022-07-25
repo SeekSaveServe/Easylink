@@ -6,7 +6,7 @@ import styles from "./../components/right/Right.module.css";
 function Left() {
   return (
     <div className={styles.right}>
-      <h1 className={styles.message}> Already Have an Account?</h1>
+      <h1 className={styles.message}> Already have an account?</h1>
       <Link to="/" style={{ textDecoration: "none" }}>
         <BasicButton bg="secondary">
         {" "}
