@@ -73,7 +73,7 @@ export default function Left({ avatarUrl, set_AvatarUrl, user }) {
       <Center>
         <Typography variant="body2">{title}</Typography>
       </Center>
-      <Center>
+      {/* <Center>
         <Card>
           <CardContent> {links} links </CardContent>
         </Card>
@@ -83,7 +83,7 @@ export default function Left({ avatarUrl, set_AvatarUrl, user }) {
         <Card>
           <CardContent> {following} Followers </CardContent>
         </Card>
-      </Center>
+      </Center> */}
     </div>
   );
 }
