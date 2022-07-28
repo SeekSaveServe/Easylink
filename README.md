@@ -27,7 +27,7 @@
 | Item | Link                               |
 |------------|-------------------------------------------|
 |Poster    | [Poster Link](https://drive.google.com/file/d/1oNQk4ZUF8r40zXbpuJWs2pjOzV-xuV8N/view?usp=sharing) |
-| Detailed Doc       | [Docs Link](https://docs.google.com/document/d/14df0svuI6hbuEBz3AFaZRu9XlCSBOMxT6ttG6P3Rrt8/edit?usp=sharing) |
+| Detailed Doc       | [Docs Link](https://docs.google.com/document/d/1cl5UlUWiaSHjYw9b2MGFVVl5rn8m9iF1QC61ECDWzIk/edit?usp=sharing) |
 | Video Overview | [Video Link](https://drive.google.com/file/d/1zjdBnr4mDW9adcGxWh4uDSPeoicFEeRm/view?usp=sharing) |
 | Figma Prototype | [Figma Link](https://tinyurl.com/Easylink-figma) |
 <br/>
